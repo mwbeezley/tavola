@@ -1,0 +1,6 @@
+[build]
+  publish = "."
+  command = "echo '<script>window.ANTHROPIC_API_KEY=\"'$ANTHROPIC_API_KEY'\";</script>' > api-key.js && sed -i.bak 's|</head>|<script src=\"/api-key.js\"></script></head>|' index.html && rm index.html.bak"
+
+# Inject environment variables into the HTML at build time
+# The ANTHROPIC_API_KEY will be set in Netlify's environment variables UI
