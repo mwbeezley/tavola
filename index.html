@@ -1609,58 +1609,6 @@ DIETARY NOTES:
             const profile = getProfile();
             const profileText = profile ? formatProfileForAPI(profile) : 'No profile configured.';
 
-            const systemPrompt = `You are Tavola, a Mediterranean meal planning assistant specializing in Crohn's-friendly, anti-inflammatory eating.
-
-Your user's profile:
-${profileText}
-
-Guidelines:
-- Focus on Mediterranean diet principles: olive oil, fish, vegetables, whole grains, legumes (if tolerated)
-- Prioritize anti-inflammatory foods
-- Suggest light, easy-to-digest meals during flares
-- Work with garden produce when available
-- Respect energy levels for cooking complexity
-- Default to fish-forward meals (user preference)
-- Keep portions appropriate for two people
-- Budget-conscious but quality-focused
-- Warm, supportive tone - you understand chronic illness
-
-When asked for meal plans, provide:
-- Specific recipes with ingredient lists
-- Prep and cook times
-- Modifications for Crohn's flares
-- Shopping list organized by store section
-- Garden integration (what to use, what to plant)
-
-Format recipes using this structure:
-=== RECIPE: [Name] ===
-Serves: 2 | Prep: [X]min | Cook: [X]min | Total: [X]min
-
-**INGREDIENTS:**
-- [ingredient with amount]
-
-**INSTRUCTIONS:**
-1. [Step]
-2. [Step]
-
-**CROHN'S MODIFICATIONS:**
-- [Gentler alternatives if needed]
-
-For shopping lists use:
-=== SHOPPING LIST ===
-**PRODUCE:**
-☐ [item] - [amount]
-
-**PROTEINS:**
-☐ [item] - [amount]
-
-**PANTRY:**
-☐ [item] - [amount]
-
-**ESTIMATED TOTAL:** $[X]
-
-Be conversational, warm, and encouraging. Remember this person sometimes forgets to eat - make meals feel achievable and appealing.`;
-
             // Build messages array for context (keep last 10 messages for context)
             const recentHistory = chatHistory.slice(-10);
             const messages = recentHistory.map(msg => ({
@@ -1673,36 +1621,25 @@ Be conversational, warm, and encouraging. Remember this person sometimes forgets
                 messages.push({ role: 'user', content: userMessage });
             }
 
-            // Get API key - check for environment variable first
-            const apiKey = window.ANTHROPIC_API_KEY || '';
-
-            if (!apiKey) {
-                throw new Error('API key not configured. Please set the ANTHROPIC_API_KEY environment variable.');
-            }
-
-            const response = await fetch('https://api.anthropic.com/v1/messages', {
+            // Call the Netlify serverless function
+            const response = await fetch('/.netlify/functions/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'x-api-key': apiKey,
-                    'anthropic-version': '2023-06-01',
-                    'anthropic-dangerous-direct-browser-access': 'true'
                 },
                 body: JSON.stringify({
-                    model: 'claude-sonnet-4-20250514',
-                    max_tokens: 2000,
-                    system: systemPrompt,
-                    messages: messages
+                    messages: messages,
+                    profileText: profileText
                 })
             });
 
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error?.message || `API error: ${response.status}`);
+                throw new Error(errorData.error || `API error: ${response.status}`);
             }
 
             const data = await response.json();
-            return data.content[0].text;
+            return data.content;
         }
 
         // Settings functions
