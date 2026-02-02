@@ -6,13 +6,15 @@
     <title>Tavola - Mediterranean Meal Planning</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --cerulean: #007BA7;
             --cerulean-dark: #006691;
+            --cerulean-light: #3399bf;
             --seafoam: #7FD8BE;
             --seafoam-light: #b8e8d8;
+            --seafoam-dark: #5cb89a;
             --navy: #1A2332;
             --cream: #FFF8E7;
             --white: #FFFFFF;
@@ -20,10 +22,25 @@
             --gray-medium: #e0e0e0;
             --gray-text: #666;
             --warning: #d4a574;
+            --danger: #cc4444;
+            --success: #4caf50;
             --shadow: 0 2px 8px rgba(26, 35, 50, 0.08);
             --shadow-lg: 0 4px 16px rgba(26, 35, 50, 0.12);
             --radius: 12px;
             --radius-sm: 8px;
+            --radius-lg: 16px;
+        }
+
+        .dark-mode {
+            --cream: #1A1A1A;
+            --white: #2A2A2A;
+            --navy: #E8E8E8;
+            --gray-light: #333;
+            --gray-medium: #444;
+            --gray-text: #aaa;
+            --cerulean: #3399bf;
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
         }
 
         * {
@@ -33,64 +50,192 @@
         }
 
         body {
-            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--cream);
             color: var(--navy);
             line-height: 1.6;
             min-height: 100vh;
+            padding-bottom: 80px;
         }
 
         .container {
             max-width: 900px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 16px;
         }
+
+        /* Typography */
+        h1, h2, h3 { font-family: 'Lora', serif; font-weight: 500; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 2rem; font-weight: 700; color: var(--cerulean); text-decoration: none; }
 
         /* Header */
         .header {
             background: var(--white);
             border-bottom: 1px solid var(--gray-medium);
-            padding: 16px 0;
+            padding: 12px 0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-
         .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--cerulean);
-            text-decoration: none;
-        }
-
-        .header-actions {
+        .header-right {
             display: flex;
-            gap: 12px;
+            align-items: center;
+            gap: 8px;
         }
-
-        .btn-link {
+        .icon-btn {
             background: none;
             border: none;
-            color: var(--cerulean);
+            padding: 8px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            color: var(--navy);
+            font-size: 1.2rem;
+            transition: background 0.2s;
+        }
+        .icon-btn:hover { background: var(--gray-light); }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            border-top: 1px solid var(--gray-medium);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+            z-index: 100;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 12px;
+            border: none;
+            background: none;
+            color: var(--gray-text);
+            font-size: 0.7rem;
             font-family: inherit;
-            font-size: 0.95rem;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            min-width: 60px;
+        }
+        .nav-item span.icon { font-size: 1.3rem; margin-bottom: 2px; }
+        .nav-item.active { color: var(--cerulean); background: var(--seafoam-light); }
+        .nav-item:hover:not(.active) { background: var(--gray-light); }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--radius);
+            font-family: inherit;
+            font-size: 1rem;
             font-weight: 500;
             cursor: pointer;
-            padding: 8px 12px;
+            transition: all 0.2s;
+            border: none;
+            min-height: 44px;
+        }
+        .btn-primary { background: var(--cerulean); color: white; }
+        .btn-primary:hover { background: var(--cerulean-dark); }
+        .btn-secondary { background: var(--white); color: var(--cerulean); border: 2px solid var(--cerulean); }
+        .btn-secondary:hover { background: var(--seafoam-light); }
+        .btn-ghost { background: transparent; color: var(--cerulean); }
+        .btn-ghost:hover { background: var(--seafoam-light); }
+        .btn-sm { padding: 8px 16px; font-size: 0.9rem; }
+        .btn-icon { padding: 10px; min-width: 44px; display: flex; align-items: center; justify-content: center; }
+
+        /* Cards */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            margin-bottom: 16px;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .card-title { font-size: 1.1rem; color: var(--cerulean); }
+
+        /* Forms */
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-weight: 500; margin-bottom: 6px; font-size: 0.95rem; }
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-medium);
             border-radius: var(--radius-sm);
-            transition: background-color 0.2s;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--navy);
+            background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: var(--cerulean);
+            box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.15);
+        }
+        .form-textarea { min-height: 80px; resize: vertical; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+        /* Checkbox & Radio */
+        .checkbox-item, .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            cursor: pointer;
+        }
+        .checkbox-item input, .radio-item input {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--cerulean);
+            cursor: pointer;
         }
 
-        .btn-link:hover {
-            background-color: var(--seafoam-light);
+        /* Tags */
+        .tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            background: var(--seafoam-light);
+            color: var(--navy);
+            margin-right: 6px;
+            margin-bottom: 6px;
         }
+        .tag-crohns { background: #e8f5e9; color: #2e7d32; }
+        .tag-quick { background: #fff3e0; color: #ef6c00; }
+        .tag-mediterranean { background: #e3f2fd; color: #1565c0; }
+
+        /* Sections */
+        .section { padding: 20px 0; }
+        .section-title {
+            font-family: 'Lora', serif;
+            font-size: 1.4rem;
+            color: var(--cerulean);
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--seafoam);
+        }
+
+        /* Views - hide all by default */
+        .view { display: none; }
+        .view.active { display: block; }
 
         /* Welcome Screen */
         .welcome-screen {
@@ -102,476 +247,372 @@
             text-align: center;
             padding: 40px 20px;
         }
-
-        .welcome-logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 4rem;
-            font-weight: 700;
-            color: var(--cerulean);
-            margin-bottom: 16px;
-        }
-
-        .welcome-subtitle {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.5rem;
-            font-weight: 400;
-            color: var(--navy);
-            margin-bottom: 12px;
-        }
-
-        .welcome-description {
-            font-size: 1.1rem;
-            color: var(--gray-text);
-            max-width: 500px;
-            margin-bottom: 40px;
-        }
-
-        .btn-primary {
-            background-color: var(--cerulean);
-            color: var(--white);
-            border: none;
-            padding: 16px 40px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            font-family: inherit;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: background-color 0.2s, transform 0.1s;
-            min-height: 44px;
-        }
-
-        .btn-primary:hover {
-            background-color: var(--cerulean-dark);
-        }
-
-        .btn-primary:active {
-            transform: scale(0.98);
-        }
-
-        .btn-secondary {
-            background-color: var(--white);
-            color: var(--cerulean);
-            border: 2px solid var(--cerulean);
-            padding: 14px 32px;
-            font-size: 1rem;
-            font-weight: 600;
-            font-family: inherit;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: background-color 0.2s;
-            min-height: 44px;
-        }
-
-        .btn-secondary:hover {
-            background-color: var(--seafoam-light);
-        }
-
-        /* Form Styles */
-        .intake-form {
-            padding: 32px 0 60px;
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .form-header h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2rem;
-            font-weight: 500;
-            color: var(--navy);
-            margin-bottom: 8px;
-        }
-
-        .form-header p {
-            color: var(--gray-text);
-            font-size: 1.05rem;
-        }
-
-        .form-section {
-            background: var(--white);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            padding: 28px;
-            margin-bottom: 24px;
-        }
-
-        .form-section h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 500;
-            color: var(--cerulean);
-            margin-bottom: 20px;
-            padding-bottom: 12px;
-            border-bottom: 2px solid var(--seafoam);
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group:last-child {
-            margin-bottom: 0;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 8px;
-            color: var(--navy);
-        }
-
-        .form-group input[type="text"],
-        .form-group textarea,
-        .form-group select {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--gray-medium);
-            border-radius: var(--radius-sm);
-            font-family: inherit;
-            font-size: 1rem;
-            color: var(--navy);
-            background: var(--white);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus,
-        .form-group select:focus {
-            outline: none;
-            border-color: var(--cerulean);
-            box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.15);
-        }
-
-        .form-group textarea {
-            min-height: 80px;
-            resize: vertical;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Checkbox Styles */
-        .checkbox-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .checkbox-category {
-            background: var(--gray-light);
-            border-radius: var(--radius-sm);
-            padding: 16px;
-        }
-
-        .category-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .category-header input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--cerulean);
-            cursor: pointer;
-        }
-
-        .category-header label {
-            font-weight: 600;
-            color: var(--navy);
-            cursor: pointer;
-            margin: 0;
-        }
-
-        .category-options {
-            margin-top: 12px;
-            margin-left: 30px;
-            display: none;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .category-options.expanded {
-            display: flex;
-        }
-
-        .category-options label {
-            display: flex;
-            align-items: flex-start;
-            gap: 8px;
-            font-weight: 400;
-            cursor: pointer;
-            margin: 0;
-        }
-
-        .category-options input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--cerulean);
-            cursor: pointer;
-            margin-top: 2px;
-            flex-shrink: 0;
-        }
-
-        .warning-note {
-            background: linear-gradient(135deg, #fff5eb 0%, #fff0e0 100%);
-            border-left: 3px solid var(--warning);
-            padding: 10px 14px;
-            margin-top: 10px;
-            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-            font-size: 0.9rem;
-            color: #8b6914;
-        }
-
-        /* Radio Buttons */
-        .radio-group {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-        }
-
-        .radio-option {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .radio-option input[type="radio"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--cerulean);
-            cursor: pointer;
-        }
-
-        .radio-option label {
-            font-weight: 400;
-            cursor: pointer;
-            margin: 0;
-        }
-
-        /* Form Actions */
-        .form-actions {
-            display: flex;
-            justify-content: center;
-            gap: 16px;
-            margin-top: 32px;
-        }
+        .welcome-logo { font-family: 'Dancing Script', cursive; font-size: 4rem; color: var(--cerulean); margin-bottom: 8px; }
+        .welcome-subtitle { font-family: 'Lora', serif; font-size: 1.3rem; color: var(--navy); margin-bottom: 8px; }
+        .welcome-tagline { color: var(--gray-text); margin-bottom: 32px; max-width: 400px; }
 
         /* Chat Interface */
-        .chat-container {
-            display: flex;
-            flex-direction: column;
-            height: calc(100vh - 73px);
-        }
-
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            padding: 24px 0;
-            scroll-behavior: smooth;
-        }
-
-        .message {
-            margin-bottom: 16px;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .message-user {
-            display: flex;
-            justify-content: flex-end;
-        }
-
-        .message-user .message-content {
+        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 140px); }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px 0; }
+        .message { margin-bottom: 16px; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .message-user { display: flex; justify-content: flex-end; }
+        .message-user .message-bubble {
             background: var(--seafoam);
             color: var(--navy);
             border-radius: var(--radius) var(--radius) 4px var(--radius);
-            max-width: 80%;
-            padding: 14px 18px;
+            max-width: 85%;
+            padding: 12px 16px;
         }
-
-        .message-assistant {
-            display: flex;
-            justify-content: flex-start;
-        }
-
-        .message-assistant .message-content {
+        .message-assistant { display: flex; justify-content: flex-start; }
+        .message-assistant .message-bubble {
             background: var(--white);
             border: 1px solid var(--seafoam);
             border-radius: var(--radius) var(--radius) var(--radius) 4px;
-            max-width: 85%;
-            padding: 18px 20px;
+            max-width: 90%;
+            padding: 16px;
             box-shadow: var(--shadow);
         }
-
-        .message-content p {
-            margin-bottom: 12px;
+        .chat-input-area {
+            background: var(--white);
+            border-top: 1px solid var(--gray-medium);
+            padding: 12px 0;
         }
-
-        .message-content p:last-child {
-            margin-bottom: 0;
-        }
-
-        .message-content pre {
-            background: var(--gray-light);
-            padding: 16px;
-            border-radius: var(--radius-sm);
-            overflow-x: auto;
-            font-size: 0.9rem;
-            margin: 12px 0;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-
-        .message-content ul, .message-content ol {
-            margin: 12px 0;
-            padding-left: 24px;
-        }
-
-        .message-content li {
-            margin-bottom: 6px;
-        }
-
-        .message-content strong {
-            color: var(--cerulean);
-        }
-
-        .thinking {
+        .chat-input-wrapper {
             display: flex;
-            align-items: center;
             gap: 8px;
-            color: var(--gray-text);
-            font-style: italic;
-            padding: 14px 18px;
+            align-items: flex-end;
         }
-
-        .thinking-dots {
-            display: flex;
-            gap: 4px;
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius);
+            padding: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: none;
+            min-height: 48px;
+            max-height: 120px;
         }
-
-        .thinking-dots span {
-            width: 6px;
-            height: 6px;
-            background: var(--cerulean);
+        .chat-input:focus { outline: none; border-color: var(--cerulean); }
+        .voice-btn {
+            width: 48px;
+            height: 48px;
             border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out;
+            border: none;
+            background: var(--gray-light);
+            color: var(--navy);
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
-
-        .thinking-dots span:nth-child(1) { animation-delay: 0s; }
-        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
-        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
-            40% { transform: scale(1); opacity: 1; }
+        .voice-btn:hover { background: var(--gray-medium); }
+        .voice-btn.recording { background: var(--danger); color: white; animation: pulse 1s infinite; }
+        @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+        .send-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: var(--radius);
+            border: none;
+            background: var(--cerulean);
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: background 0.2s;
         }
+        .send-btn:hover { background: var(--cerulean-dark); }
+        .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* Quick Actions */
         .quick-actions {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 16px;
+            gap: 8px;
+            margin-top: 12px;
         }
-
         .quick-action {
             background: var(--white);
             border: 1px solid var(--seafoam);
-            padding: 10px 16px;
+            padding: 8px 14px;
             border-radius: 20px;
-            font-family: inherit;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             color: var(--navy);
             cursor: pointer;
             transition: all 0.2s;
         }
+        .quick-action:hover { background: var(--seafoam-light); border-color: var(--cerulean); }
 
-        .quick-action:hover {
-            background: var(--seafoam-light);
-            border-color: var(--cerulean);
+        /* Thinking Animation */
+        .thinking { display: flex; align-items: center; gap: 8px; color: var(--gray-text); font-style: italic; padding: 12px 16px; }
+        .thinking-dots { display: flex; gap: 4px; }
+        .thinking-dots span {
+            width: 6px; height: 6px;
+            background: var(--cerulean);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
         }
+        .thinking-dots span:nth-child(1) { animation-delay: 0s; }
+        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; } 40% { transform: scale(1); opacity: 1; } }
 
-        /* Chat Input */
-        .chat-input-container {
+        /* Recipe Card */
+        .recipe-card {
             background: var(--white);
-            border-top: 1px solid var(--gray-medium);
-            padding: 16px 0 24px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            margin: 16px 0;
         }
-
-        .chat-input-wrapper {
+        .recipe-header {
+            background: linear-gradient(135deg, var(--cerulean) 0%, var(--seafoam-dark) 100%);
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        .recipe-title { font-family: 'Lora', serif; font-size: 1.5rem; margin-bottom: 8px; }
+        .recipe-actions {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            display: flex;
+            gap: 8px;
+        }
+        .recipe-action-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-size: 1rem;
+        }
+        .recipe-action-btn:hover { background: rgba(255,255,255,0.3); }
+        .recipe-action-btn.favorited { background: var(--danger); }
+        .recipe-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .recipe-meta-item { display: flex; align-items: center; gap: 4px; }
+        .recipe-tags { padding: 12px 20px; background: var(--gray-light); }
+        .recipe-body { padding: 20px; }
+        .recipe-section { margin-bottom: 24px; }
+        .recipe-section-title {
+            font-family: 'Lora', serif;
+            font-size: 1.1rem;
+            color: var(--cerulean);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .ingredient-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .ingredient-item:last-child { border-bottom: none; }
+        .ingredient-checkbox {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--cerulean);
+            cursor: pointer;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .ingredient-text.checked { text-decoration: line-through; color: var(--gray-text); }
+        .instruction-step {
             display: flex;
             gap: 12px;
-            align-items: flex-end;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-light);
         }
-
-        .chat-input {
-            flex: 1;
-            border: 1px solid var(--gray-medium);
-            border-radius: var(--radius);
-            padding: 14px 16px;
-            font-family: inherit;
-            font-size: 1rem;
-            color: var(--navy);
-            resize: none;
-            min-height: 52px;
-            max-height: 150px;
-            line-height: 1.5;
-        }
-
-        .chat-input:focus {
-            outline: none;
-            border-color: var(--cerulean);
-            box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.15);
-        }
-
-        .chat-input::placeholder {
-            color: var(--gray-text);
-        }
-
-        .send-btn {
+        .instruction-step:last-child { border-bottom: none; }
+        .step-number {
+            width: 28px;
+            height: 28px;
             background: var(--cerulean);
-            color: var(--white);
-            border: none;
-            width: 52px;
-            height: 52px;
-            border-radius: var(--radius);
-            cursor: pointer;
+            color: white;
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.2s;
+            font-weight: 600;
+            font-size: 0.9rem;
             flex-shrink: 0;
         }
-
-        .send-btn:hover:not(:disabled) {
-            background: var(--cerulean-dark);
+        .recipe-notes {
+            background: var(--seafoam-light);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-top: 16px;
         }
+        .recipe-notes-title { font-weight: 600; margin-bottom: 8px; color: var(--cerulean); }
 
-        .send-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
+        /* Nonna's Tip */
+        .nonna-tip {
+            background: linear-gradient(135deg, var(--cream) 0%, var(--seafoam-light) 100%);
+            border-left: 4px solid var(--cerulean);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 16px;
+            margin: 16px 0;
         }
+        .nonna-tip-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; color: var(--cerulean); }
+        .nonna-tip-text { font-style: italic; color: var(--navy); }
+        .nonna-tip-signature { text-align: right; margin-top: 8px; color: var(--gray-text); font-size: 0.9rem; }
 
-        .send-btn svg {
-            width: 22px;
-            height: 22px;
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--gray-light);
+            padding: 4px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            overflow-x: auto;
         }
+        .tab {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--gray-text);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .tab.active { background: var(--white); color: var(--cerulean); box-shadow: var(--shadow); }
+        .tab:hover:not(.active) { color: var(--navy); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px 24px;
+            color: var(--gray-text);
+        }
+        .empty-state-icon { font-size: 3rem; margin-bottom: 16px; }
+        .empty-state-title { font-family: 'Lora', serif; font-size: 1.2rem; color: var(--navy); margin-bottom: 8px; }
+
+        /* Grid */
+        .grid { display: grid; gap: 16px; }
+        .grid-2 { grid-template-columns: repeat(2, 1fr); }
+        .grid-3 { grid-template-columns: repeat(3, 1fr); }
+        @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+        /* Favorites Card */
+        .favorite-card {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .favorite-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .favorite-card-banner {
+            height: 80px;
+            background: linear-gradient(135deg, var(--cerulean) 0%, var(--seafoam-dark) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        .favorite-card-body { padding: 12px; }
+        .favorite-card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; }
+        .favorite-card-meta { font-size: 0.8rem; color: var(--gray-text); }
+        .favorite-card-rating { color: #ffc107; font-size: 0.85rem; }
+
+        /* Pantry Item */
+        .pantry-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            box-shadow: var(--shadow);
+        }
+        .pantry-item-icon { font-size: 1.5rem; }
+        .pantry-item-info { flex: 1; }
+        .pantry-item-name { font-weight: 500; }
+        .pantry-item-qty { font-size: 0.85rem; color: var(--gray-text); }
+        .pantry-status { width: 10px; height: 10px; border-radius: 50%; }
+        .pantry-status.fresh { background: var(--success); }
+        .pantry-status.soon { background: #ffc107; }
+        .pantry-status.expiring { background: var(--danger); }
+
+        /* Shopping List */
+        .shopping-section { margin-bottom: 20px; }
+        .shopping-section-title {
+            font-weight: 600;
+            color: var(--cerulean);
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-medium);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .shopping-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .shopping-item.checked { opacity: 0.5; }
+        .shopping-item.checked .shopping-item-name { text-decoration: line-through; }
+        .shopping-item-checkbox { width: 22px; height: 22px; accent-color: var(--cerulean); }
+        .shopping-item-name { flex: 1; }
+        .shopping-item-qty { color: var(--gray-text); font-size: 0.9rem; }
+
+        /* Week Planner */
+        .week-day {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow);
+        }
+        .week-day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .week-day-name { font-weight: 600; color: var(--cerulean); }
+        .week-day-date { font-size: 0.85rem; color: var(--gray-text); }
+        .week-day-meal {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+        }
+        .week-day-empty {
+            padding: 24px;
+            text-align: center;
+            color: var(--gray-text);
+            border: 2px dashed var(--gray-medium);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        .week-day-empty:hover { border-color: var(--cerulean); color: var(--cerulean); }
 
         /* Modal */
         .modal-overlay {
@@ -590,43 +631,24 @@
             visibility: hidden;
             transition: opacity 0.3s, visibility 0.3s;
         }
-
-        .modal-overlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
+        .modal-overlay.active { opacity: 1; visibility: visible; }
         .modal {
             background: var(--white);
-            border-radius: var(--radius);
-            max-width: 600px;
+            border-radius: var(--radius-lg);
             width: 100%;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
             box-shadow: var(--shadow-lg);
-            transform: scale(0.95);
-            transition: transform 0.3s;
         }
-
-        .modal-overlay.active .modal {
-            transform: scale(1);
-        }
-
         .modal-header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--gray-medium);
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--gray-medium);
         }
-
-        .modal-header h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            font-weight: 500;
-            color: var(--navy);
-        }
-
+        .modal-title { font-family: 'Lora', serif; font-size: 1.2rem; }
         .modal-close {
             background: none;
             border: none;
@@ -634,150 +656,103 @@
             color: var(--gray-text);
             cursor: pointer;
             padding: 4px;
-            line-height: 1;
         }
-
-        .modal-close:hover {
-            color: var(--navy);
-        }
-
-        .modal-body {
-            padding: 24px;
-        }
-
-        .modal-actions {
-            padding: 16px 24px;
+        .modal-body { padding: 20px; }
+        .modal-footer {
+            padding: 16px 20px;
             border-top: 1px solid var(--gray-medium);
             display: flex;
             justify-content: flex-end;
             gap: 12px;
         }
 
-        /* Hidden utility */
-        .hidden {
-            display: none !important;
-        }
-
-        /* Error state */
-        .error-message {
-            background: #fff0f0;
-            border: 1px solid #ffcccc;
-            color: #cc0000;
-            padding: 14px 18px;
-            border-radius: var(--radius);
-            margin: 12px 0;
-        }
-
-        /* Settings Menu */
-        .settings-dropdown {
-            position: relative;
-        }
-
-        .settings-menu {
-            position: absolute;
-            top: 100%;
-            right: 0;
-            background: var(--white);
-            border-radius: var(--radius-sm);
-            box-shadow: var(--shadow-lg);
-            min-width: 180px;
-            opacity: 0;
-            visibility: hidden;
-            transform: translateY(-10px);
-            transition: all 0.2s;
-            z-index: 50;
-        }
-
-        .settings-menu.active {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(4px);
-        }
-
-        .settings-menu button {
-            display: block;
-            width: 100%;
-            text-align: left;
-            padding: 12px 16px;
-            background: none;
-            border: none;
-            font-family: inherit;
-            font-size: 0.95rem;
-            color: var(--navy);
+        /* Toggle Switch */
+        .toggle {
+            display: flex;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
-            transition: background-color 0.2s;
         }
-
-        .settings-menu button:hover {
-            background: var(--gray-light);
-        }
-
-        .settings-menu button:first-child {
-            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-        }
-
-        .settings-menu button:last-child {
-            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
-        }
-
-        .settings-menu .danger {
-            color: #cc0000;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .welcome-logo {
-                font-size: 3rem;
-            }
-
-            .welcome-subtitle {
-                font-size: 1.25rem;
-            }
-
-            .form-section {
-                padding: 20px;
-            }
-
-            .message-user .message-content,
-            .message-assistant .message-content {
-                max-width: 90%;
-            }
-        }
-
-        /* Scrollbar styling */
-        .chat-messages::-webkit-scrollbar {
-            width: 6px;
-        }
-
-        .chat-messages::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .chat-messages::-webkit-scrollbar-thumb {
+        .toggle-switch {
+            width: 50px;
+            height: 28px;
             background: var(--gray-medium);
-            border-radius: 3px;
+            border-radius: 14px;
+            position: relative;
+            transition: background 0.3s;
         }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+        }
+        .toggle input { display: none; }
+        .toggle input:checked + .toggle-switch { background: var(--cerulean); }
+        .toggle input:checked + .toggle-switch::after { transform: translateX(22px); }
 
-        .chat-messages::-webkit-scrollbar-thumb:hover {
-            background: var(--gray-text);
+        /* Flare Mode Banner */
+        .flare-banner {
+            background: linear-gradient(135deg, #fff3e0 0%, #ffecb3 100%);
+            border-left: 4px solid #ff9800;
+            padding: 16px;
+            margin-bottom: 16px;
+            border-radius: 0 var(--radius) var(--radius) 0;
+        }
+        .flare-banner-title { font-weight: 600; color: #e65100; margin-bottom: 4px; }
+        .flare-banner-text { font-size: 0.9rem; color: #bf360c; }
+
+        /* Accordion */
+        .accordion-item { border: 1px solid var(--gray-medium); border-radius: var(--radius-sm); margin-bottom: 8px; overflow: hidden; }
+        .accordion-header {
+            padding: 14px 16px;
+            background: var(--gray-light);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+        }
+        .accordion-header:hover { background: var(--gray-medium); }
+        .accordion-icon { transition: transform 0.3s; }
+        .accordion-item.open .accordion-icon { transform: rotate(180deg); }
+        .accordion-body { padding: 16px; display: none; }
+        .accordion-item.open .accordion-body { display: block; }
+
+        /* Utilities */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .text-muted { color: var(--gray-text); }
+        .mb-0 { margin-bottom: 0; }
+        .mb-8 { margin-bottom: 8px; }
+        .mb-16 { margin-bottom: 16px; }
+        .mt-16 { margin-top: 16px; }
+        .flex { display: flex; }
+        .flex-between { justify-content: space-between; }
+        .flex-center { align-items: center; }
+        .gap-8 { gap: 8px; }
+        .gap-16 { gap: 16px; }
+
+        /* Print Styles */
+        @media print {
+            .header, .bottom-nav, .chat-input-area, .recipe-actions, .btn { display: none !important; }
+            body { padding: 0; background: white; }
+            .recipe-card { box-shadow: none; border: 1px solid #ddd; }
         }
     </style>
 </head>
 <body>
-    <!-- Header (shown after welcome) -->
+    <!-- Header -->
     <header class="header hidden" id="app-header">
         <div class="container header-content">
-            <a href="#" class="logo" onclick="showChat(); return false;">Tavola</a>
-            <div class="header-actions">
-                <button class="btn-link" onclick="openEditProfile()">Edit Profile</button>
-                <div class="settings-dropdown">
-                    <button class="btn-link" onclick="toggleSettings(event)">Settings ▾</button>
-                    <div class="settings-menu" id="settings-menu">
-                        <button onclick="exportChatHistory()">Export Chat</button>
-                        <button onclick="clearChatHistory()">Clear Chat</button>
-                        <button onclick="confirmResetAll()" class="danger">Reset Everything</button>
-                    </div>
-                </div>
+            <a href="#" class="logo" onclick="navigateTo('home'); return false;">Tavola</a>
+            <div class="header-right">
+                <button class="icon-btn" onclick="navigateTo('settings')" title="Settings">⚙️</button>
             </div>
         </div>
     </header>
@@ -785,31 +760,26 @@
     <!-- Welcome Screen -->
     <main class="welcome-screen" id="welcome-screen">
         <h1 class="welcome-logo">Tavola</h1>
-        <p class="welcome-subtitle">Your Mediterranean Meal Planning Assistant</p>
-        <p class="welcome-description">
-            Gentle, delicious meal planning designed for your health needs.
-            Let's create a personalized experience that works with your body, your garden, and your energy levels.
-        </p>
-        <button class="btn-primary" onclick="showIntakeForm()">Get Started</button>
+        <p class="welcome-subtitle">Mediterranean Meal Planning</p>
+        <p class="welcome-tagline">Gentle, delicious meals designed for your health. Meet Nonna, your personal cooking companion.</p>
+        <button class="btn btn-primary" onclick="showIntakeForm()">Get Started</button>
     </main>
 
     <!-- Intake Form -->
-    <main class="intake-form hidden" id="intake-form">
-        <div class="container">
-            <div class="form-header">
-                <h1>Let's Get to Know You</h1>
-                <p>This helps me suggest meals that work for your body and lifestyle</p>
+    <main class="view" id="intake-form">
+        <div class="container section">
+            <div class="text-center mb-16">
+                <h1 class="section-title" style="border: none; text-align: center;">Let's Get to Know You</h1>
+                <p class="text-muted">This helps Nonna suggest meals that work for your body</p>
             </div>
-
             <form id="profile-form" onsubmit="saveProfile(event)">
                 <!-- Health Conditions -->
-                <section class="form-section">
-                    <h2>Health Conditions</h2>
-
+                <div class="card">
+                    <h2 class="card-title">🩺 Health Conditions</h2>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="crohns-severity">Crohn's Disease Severity</label>
-                            <select id="crohns-severity" name="crohnsSeverity">
+                            <label>Crohn's Severity</label>
+                            <select class="form-select" name="crohnsSeverity">
                                 <option value="">Select...</option>
                                 <option value="mild">Mild</option>
                                 <option value="moderate">Moderate</option>
@@ -818,165 +788,101 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="crohns-triggers">Specific Crohn's Triggers</label>
-                            <input type="text" id="crohns-triggers" name="crohnsTriggers" placeholder="e.g., raw vegetables, nuts, dairy">
+                            <label>Crohn's Triggers</label>
+                            <input type="text" class="form-input" name="crohnsTriggers" placeholder="e.g., raw veggies, nuts, dairy">
                         </div>
                     </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="fibro-energy">Fibromyalgia Energy Level</label>
-                            <select id="fibro-energy" name="fibroEnergy">
+                            <label>Fibromyalgia Energy</label>
+                            <select class="form-select" name="fibroEnergy">
                                 <option value="">Select...</option>
                                 <option value="low">Low</option>
                                 <option value="moderate">Moderate</option>
-                                <option value="variable">Variable (changes day to day)</option>
+                                <option value="variable">Variable</option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="thyroid-type">Thyroid Condition Type</label>
-                            <input type="text" id="thyroid-type" name="thyroidType" placeholder="e.g., Hashimoto's, hypothyroid">
+                            <label>Thyroid Condition</label>
+                            <input type="text" class="form-input" name="thyroidType" placeholder="e.g., Hashimoto's">
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="thyroid-restrictions">Thyroid-Related Dietary Restrictions</label>
-                        <input type="text" id="thyroid-restrictions" name="thyroidRestrictions" placeholder="e.g., limit cruciferous vegetables, iodine considerations">
+                        <label>Other Conditions or Notes</label>
+                        <textarea class="form-textarea" name="otherConditions" placeholder="Anything else Nonna should know..."></textarea>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="other-conditions">Other Health Conditions</label>
-                        <textarea id="other-conditions" name="otherConditions" placeholder="Any other health considerations I should know about..."></textarea>
+                <!-- Cooking for Two -->
+                <div class="card">
+                    <h2 class="card-title">👥 Cooking for Two</h2>
+                    <label class="toggle mb-16">
+                        <input type="checkbox" name="cookingForTwo" id="cookingForTwoToggle" onchange="toggleCookingForTwo()">
+                        <span class="toggle-switch"></span>
+                        <span>I'm cooking for someone else too</span>
+                    </label>
+                    <div id="cookingForTwoFields" class="hidden">
+                        <div class="form-group">
+                            <label>Their Name or Relationship</label>
+                            <input type="text" class="form-input" name="partnerName" placeholder="e.g., John, Partner, Mom">
+                        </div>
+                        <div class="form-group">
+                            <label>Their Dietary Restrictions</label>
+                            <div class="grid grid-2">
+                                <label class="checkbox-item"><input type="checkbox" name="partnerRestrictions" value="diabetes"> Diabetes</label>
+                                <label class="checkbox-item"><input type="checkbox" name="partnerRestrictions" value="heart"> Heart Disease</label>
+                                <label class="checkbox-item"><input type="checkbox" name="partnerRestrictions" value="glutenFree"> Gluten-Free</label>
+                                <label class="checkbox-item"><input type="checkbox" name="partnerRestrictions" value="lactose"> Lactose Intolerant</label>
+                                <label class="checkbox-item"><input type="checkbox" name="partnerRestrictions" value="vegetarian"> Vegetarian</label>
+                                <label class="checkbox-item"><input type="checkbox" name="partnerRestrictions" value="none"> No Restrictions</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Their Allergies</label>
+                            <input type="text" class="form-input" name="partnerAllergies" placeholder="e.g., shellfish, tree nuts">
+                        </div>
+                        <div class="form-group">
+                            <label>Foods They Love</label>
+                            <input type="text" class="form-input" name="partnerLoves" placeholder="e.g., spicy food, cheese, garlic">
+                        </div>
                     </div>
-                </section>
+                </div>
 
                 <!-- Protein Preferences -->
-                <section class="form-section">
-                    <h2>Protein Preferences</h2>
-                    <p style="color: var(--gray-text); margin-bottom: 16px;">Check the categories you eat, then select your specific preferences</p>
-
-                    <div class="checkbox-group" id="protein-preferences">
-                        <!-- Seafood -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-seafood" onchange="toggleCategory('seafood')">
-                                <label for="cat-seafood">Seafood</label>
-                            </div>
-                            <div class="category-options" id="options-seafood">
-                                <label><input type="checkbox" name="proteins" value="white-fish"> White Fish (tilapia, cod, halibut, branzino, sea bass, snapper)</label>
-                                <label><input type="checkbox" name="proteins" value="fatty-fish"> Fatty Fish (salmon, mackerel, sardines, trout)</label>
-                                <label><input type="checkbox" name="proteins" value="shellfish"> Shellfish (shrimp, scallops, mussels)</label>
-                            </div>
-                        </div>
-
-                        <!-- Poultry -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-poultry" onchange="toggleCategory('poultry')">
-                                <label for="cat-poultry">Poultry</label>
-                            </div>
-                            <div class="category-options" id="options-poultry">
-                                <label><input type="checkbox" name="proteins" value="chicken-breast"> Chicken breast (lean)</label>
-                                <label><input type="checkbox" name="proteins" value="chicken-thighs"> Chicken thighs (more flavor)</label>
-                                <label><input type="checkbox" name="proteins" value="ground-turkey"> Ground turkey</label>
-                                <label><input type="checkbox" name="proteins" value="whole-chicken"> Whole chicken/rotisserie</label>
-                            </div>
-                        </div>
-
-                        <!-- Pork -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-pork" onchange="toggleCategory('pork')">
-                                <label for="cat-pork">Pork</label>
-                            </div>
-                            <div class="category-options" id="options-pork">
-                                <label><input type="checkbox" name="proteins" value="pork-chops"> Pork chops</label>
-                                <label><input type="checkbox" name="proteins" value="pork-tenderloin"> Pork tenderloin (lean)</label>
-                                <label><input type="checkbox" name="proteins" value="ground-pork"> Ground pork</label>
-                                <label><input type="checkbox" name="proteins" value="italian-sausage"> Italian sausage</label>
-                            </div>
-                        </div>
-
-                        <!-- Beef -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-beef" onchange="toggleCategory('beef')">
-                                <label for="cat-beef">Beef</label>
-                            </div>
-                            <div class="category-options" id="options-beef">
-                                <label><input type="checkbox" name="proteins" value="ground-beef"> Ground beef</label>
-                                <label><input type="checkbox" name="proteins" value="steaks"> Steaks (sirloin, flank)</label>
-                                <label><input type="checkbox" name="proteins" value="stew-meat"> Stew meat/chuck roast</label>
-                                <div class="warning-note">⚠️ Note: Red meat can trigger inflammation for some people with Crohn's</div>
-                            </div>
-                        </div>
-
-                        <!-- Lamb -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-lamb" onchange="toggleCategory('lamb')">
-                                <label for="cat-lamb">Lamb</label>
-                            </div>
-                            <div class="category-options" id="options-lamb">
-                                <label><input type="checkbox" name="proteins" value="ground-lamb"> Ground lamb</label>
-                                <label><input type="checkbox" name="proteins" value="lamb-chops"> Lamb chops</label>
-                                <label><input type="checkbox" name="proteins" value="lamb-shoulder"> Lamb shoulder</label>
-                            </div>
-                        </div>
-
-                        <!-- Plant-Based -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-plant" onchange="toggleCategory('plant')">
-                                <label for="cat-plant">Plant-Based Proteins</label>
-                            </div>
-                            <div class="category-options" id="options-plant">
-                                <label><input type="checkbox" name="proteins" value="chickpeas"> Chickpeas/garbanzo beans</label>
-                                <label><input type="checkbox" name="proteins" value="white-beans"> White beans (cannellini)</label>
-                                <label><input type="checkbox" name="proteins" value="lentils"> Lentils</label>
-                                <label><input type="checkbox" name="proteins" value="tofu-tempeh"> Tofu/tempeh</label>
-                                <div class="warning-note">⚠️ Note: Legumes may cause gas during Crohn's flares</div>
-                            </div>
-                        </div>
-
-                        <!-- Eggs & Dairy -->
-                        <div class="checkbox-category">
-                            <div class="category-header">
-                                <input type="checkbox" id="cat-eggs-dairy" onchange="toggleCategory('eggs-dairy')">
-                                <label for="cat-eggs-dairy">Eggs & Dairy</label>
-                            </div>
-                            <div class="category-options" id="options-eggs-dairy">
-                                <label><input type="checkbox" name="proteins" value="eggs"> Eggs (all styles)</label>
-                                <label><input type="checkbox" name="proteins" value="greek-yogurt"> Greek yogurt</label>
-                                <label><input type="checkbox" name="proteins" value="hard-cheeses"> Hard cheeses (parmesan, aged cheddar)</label>
-                                <label><input type="checkbox" name="proteins" value="feta"> Feta cheese</label>
-                            </div>
-                        </div>
+                <div class="card">
+                    <h2 class="card-title">🥩 Protein Preferences</h2>
+                    <p class="text-muted mb-16">Check all proteins you eat</p>
+                    <div class="grid grid-2">
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="white-fish"> White Fish</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="fatty-fish"> Fatty Fish (salmon)</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="shellfish"> Shellfish</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="chicken"> Chicken</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="turkey"> Turkey</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="pork"> Pork</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="beef"> Beef</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="lamb"> Lamb</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="eggs"> Eggs</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="legumes"> Legumes</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="tofu"> Tofu/Tempeh</label>
+                        <label class="checkbox-item"><input type="checkbox" name="proteins" value="dairy"> Greek Yogurt/Cheese</label>
                     </div>
-                </section>
+                </div>
 
-                <!-- Garden Section -->
-                <section class="form-section">
-                    <h2>Your Garden</h2>
-
+                <!-- Garden -->
+                <div class="card">
+                    <h2 class="card-title">🌱 Your Garden</h2>
                     <div class="form-group">
-                        <label for="currently-growing">What's Currently Growing?</label>
-                        <textarea id="currently-growing" name="currentlyGrowing" placeholder="e.g., tomatoes, zucchini, basil, peppers, cucumbers..."></textarea>
+                        <label>What's Currently Growing?</label>
+                        <textarea class="form-textarea" name="currentlyGrowing" placeholder="e.g., tomatoes, zucchini, basil, peppers..."></textarea>
                     </div>
-
-                    <div class="form-group">
-                        <label for="want-to-plant">What Would You Like to Plant Next?</label>
-                        <textarea id="want-to-plant" name="wantToPlant" placeholder="e.g., winter squash, leafy greens, herbs..."></textarea>
-                    </div>
-
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="growing-zone">Growing Zone (optional)</label>
-                            <input type="text" id="growing-zone" name="growingZone" placeholder="e.g., 7b">
+                            <label>Growing Zone</label>
+                            <input type="text" class="form-input" name="growingZone" placeholder="e.g., 7b">
                         </div>
                         <div class="form-group">
-                            <label for="current-season">Current Season</label>
-                            <select id="current-season" name="currentSeason">
+                            <label>Current Season</label>
+                            <select class="form-select" name="currentSeason">
                                 <option value="spring">Spring</option>
                                 <option value="summer">Summer</option>
                                 <option value="fall">Fall</option>
@@ -984,79 +890,37 @@
                             </select>
                         </div>
                     </div>
-                </section>
+                </div>
 
                 <!-- Cooking Capacity -->
-                <section class="form-section">
-                    <h2>Cooking Capacity</h2>
-
+                <div class="card">
+                    <h2 class="card-title">⏰ Cooking Capacity</h2>
                     <div class="form-group">
-                        <label>Daily Energy Level for Cooking</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="energy-low" name="energyLevel" value="low">
-                                <label for="energy-low">Low (need simple meals)</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="energy-moderate" name="energyLevel" value="moderate">
-                                <label for="energy-moderate">Moderate</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="energy-good" name="energyLevel" value="good">
-                                <label for="energy-good">Good</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="energy-variable" name="energyLevel" value="variable" checked>
-                                <label for="energy-variable">Variable (changes daily)</label>
-                            </div>
-                        </div>
+                        <label>Energy Level for Cooking</label>
+                        <select class="form-select" name="energyLevel">
+                            <option value="low">Low (simple meals)</option>
+                            <option value="moderate">Moderate</option>
+                            <option value="good">Good</option>
+                            <option value="variable" selected>Variable (changes daily)</option>
+                        </select>
                     </div>
-
                     <div class="form-group">
                         <label>Preferred Cooking Time</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="time-quick" name="cookingTime" value="quick">
-                                <label for="time-quick">Quick (15-30 min)</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="time-standard" name="cookingTime" value="standard" checked>
-                                <label for="time-standard">Standard (30-60 min)</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="time-batch" name="cookingTime" value="batch">
-                                <label for="time-batch">Batch cooking</label>
-                            </div>
-                        </div>
+                        <select class="form-select" name="cookingTime">
+                            <option value="quick">Quick (15-30 min)</option>
+                            <option value="standard" selected>Standard (30-60 min)</option>
+                            <option value="batch">Batch Cooking</option>
+                        </select>
                     </div>
-
-                    <div class="form-group">
-                        <label>Cooking Style Preference</label>
-                        <div class="radio-group">
-                            <div class="radio-option">
-                                <input type="radio" id="style-simple" name="cookingStyle" value="simple">
-                                <label for="style-simple">Keep it simple</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="style-adventurous" name="cookingStyle" value="adventurous">
-                                <label for="style-adventurous">Adventurous</label>
-                            </div>
-                            <div class="radio-option">
-                                <input type="radio" id="style-balanced" name="cookingStyle" value="balanced" checked>
-                                <label for="style-balanced">Balanced mix</label>
-                            </div>
-                        </div>
-                    </div>
-                </section>
+                </div>
 
                 <!-- Budget -->
-                <section class="form-section">
-                    <h2>Budget</h2>
-
+                <div class="card">
+                    <h2 class="card-title">💰 Budget</h2>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="weekly-budget">Weekly Grocery Budget</label>
-                            <select id="weekly-budget" name="weeklyBudget">
+                            <label>Weekly Grocery Budget</label>
+                            <select class="form-select" name="weeklyBudget">
                                 <option value="50-75">$50-75</option>
                                 <option value="75-100">$75-100</option>
                                 <option value="100-150" selected>$100-150</option>
@@ -1065,246 +929,510 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label>Shopping Priority</label>
-                            <div class="radio-group" style="flex-direction: column; align-items: flex-start;">
-                                <div class="radio-option">
-                                    <input type="radio" id="priority-quality" name="shoppingPriority" value="quality">
-                                    <label for="priority-quality">Quality ingredients</label>
-                                </div>
-                                <div class="radio-option">
-                                    <input type="radio" id="priority-budget" name="shoppingPriority" value="budget">
-                                    <label for="priority-budget">Budget-friendly</label>
-                                </div>
-                                <div class="radio-option">
-                                    <input type="radio" id="priority-balance" name="shoppingPriority" value="balance" checked>
-                                    <label for="priority-balance">Balance both</label>
-                                </div>
-                            </div>
+                            <label>Priority</label>
+                            <select class="form-select" name="shoppingPriority">
+                                <option value="quality">Quality ingredients</option>
+                                <option value="budget">Budget-friendly</option>
+                                <option value="balance" selected>Balance both</option>
+                            </select>
                         </div>
                     </div>
-                </section>
+                </div>
 
                 <!-- Dietary Notes -->
-                <section class="form-section">
-                    <h2>Additional Dietary Notes</h2>
-
+                <div class="card">
+                    <h2 class="card-title">📝 Dietary Notes</h2>
                     <div class="form-group">
-                        <label for="foods-to-avoid">Foods to Avoid (specific triggers)</label>
-                        <textarea id="foods-to-avoid" name="foodsToAvoid" placeholder="List any specific foods that cause problems for you..."></textarea>
+                        <label>Foods to Avoid</label>
+                        <textarea class="form-textarea" name="foodsToAvoid" placeholder="Specific triggers or dislikes..."></textarea>
                     </div>
-
                     <div class="form-group">
-                        <label for="favorite-flavors">Favorite Flavors & Cuisines</label>
-                        <textarea id="favorite-flavors" name="favoriteFlavors" placeholder="e.g., lemon, garlic, fresh herbs, Greek-style, light and fresh..."></textarea>
+                        <label>Favorite Flavors</label>
+                        <textarea class="form-textarea" name="favoriteFlavors" placeholder="e.g., lemon, garlic, fresh herbs..."></textarea>
                     </div>
-                </section>
-
-                <div class="form-actions">
-                    <button type="submit" class="btn-primary">Save & Start Planning</button>
                 </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Save & Meet Nonna</button>
             </form>
         </div>
     </main>
 
-    <!-- Chat Interface -->
-    <main class="chat-container hidden" id="chat-interface">
-        <div class="container" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
-            <div class="chat-messages" id="chat-messages">
-                <!-- Messages will be inserted here -->
+    <!-- Main App Container -->
+    <main class="view" id="app-main">
+        <div class="container">
+            <!-- Home/Chat View -->
+            <div class="view active" id="view-home">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chat-messages"></div>
+                    <div class="chat-input-area">
+                        <div class="chat-input-wrapper">
+                            <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input">🎤</button>
+                            <textarea class="chat-input" id="chat-input" placeholder="Ask Nonna anything..." rows="1"></textarea>
+                            <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="chat-input-container">
-                <div class="chat-input-wrapper">
-                    <textarea
-                        class="chat-input"
-                        id="chat-input"
-                        placeholder="Ask me about meal planning, recipes, or what to cook tonight..."
-                        rows="1"
-                    ></textarea>
-                    <button class="send-btn" id="send-btn" onclick="sendMessage()">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M22 2L11 13"></path>
-                            <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
-                        </svg>
+
+            <!-- Favorites View -->
+            <div class="view" id="view-favorites">
+                <h2 class="section-title">❤️ Your Favorites</h2>
+                <div class="flex flex-between flex-center mb-16">
+                    <input type="text" class="form-input" id="favorites-search" placeholder="Search recipes..." style="max-width: 300px;" oninput="filterFavorites()">
+                    <select class="form-select" id="favorites-sort" style="max-width: 150px;" onchange="sortFavorites()">
+                        <option value="recent">Recently Added</option>
+                        <option value="rating">Highest Rated</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+                <div class="grid grid-2" id="favorites-grid"></div>
+                <div class="empty-state" id="favorites-empty">
+                    <div class="empty-state-icon">❤️</div>
+                    <div class="empty-state-title">No favorites yet!</div>
+                    <p>Heart a recipe from Nonna to save it here.</p>
+                </div>
+            </div>
+
+            <!-- This Week View -->
+            <div class="view" id="view-week">
+                <div class="flex flex-between flex-center mb-16">
+                    <h2 class="section-title mb-0">📅 This Week</h2>
+                    <button class="btn btn-primary btn-sm" onclick="askNonnaForWeekPlan()">Plan My Week</button>
+                </div>
+                <div id="week-planner"></div>
+                <div class="card mt-16">
+                    <h3 class="card-title">📊 Week Summary</h3>
+                    <div id="week-summary">
+                        <p class="text-muted">Plan some meals to see your weekly summary.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kitchen View -->
+            <div class="view" id="view-kitchen">
+                <h2 class="section-title">🍳 Kitchen</h2>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchKitchenTab('pantry')">Pantry</button>
+                    <button class="tab" onclick="switchKitchenTab('shopping')">Shopping</button>
+                    <button class="tab" onclick="switchKitchenTab('batch')">Batch Prep</button>
+                    <button class="tab" onclick="switchKitchenTab('subs')">Substitutions</button>
+                </div>
+
+                <!-- Pantry Tab -->
+                <div class="tab-content active" id="kitchen-pantry">
+                    <div class="flex flex-between flex-center mb-16">
+                        <span class="text-muted">Track your ingredients</span>
+                        <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add Item</button>
+                    </div>
+                    <div id="pantry-list"></div>
+                    <div class="empty-state" id="pantry-empty">
+                        <div class="empty-state-icon">🥫</div>
+                        <div class="empty-state-title">Pantry is empty</div>
+                        <p>Add items to track your inventory.</p>
+                    </div>
+                    <button class="btn btn-secondary mt-16" onclick="askNonnaWithPantry()" style="width: 100%;">
+                        🍳 What can I make with these?
                     </button>
+                </div>
+
+                <!-- Shopping Tab -->
+                <div class="tab-content" id="kitchen-shopping">
+                    <div class="flex flex-between flex-center mb-16">
+                        <select class="form-select" id="shopping-list-select" style="max-width: 200px;" onchange="loadShoppingList()">
+                            <option value="weekly">Weekly Groceries</option>
+                        </select>
+                        <button class="btn btn-sm btn-primary" onclick="openAddShoppingModal()">+ Add Item</button>
+                    </div>
+                    <div id="shopping-list"></div>
+                    <div class="empty-state" id="shopping-empty">
+                        <div class="empty-state-icon">🛒</div>
+                        <div class="empty-state-title">Shopping list is empty</div>
+                        <p>Add items or generate from meal plan.</p>
+                    </div>
+                    <div class="flex gap-8 mt-16">
+                        <button class="btn btn-secondary" onclick="printShoppingList()" style="flex: 1;">🖨️ Print</button>
+                        <button class="btn btn-secondary" onclick="clearCheckedItems()" style="flex: 1;">Clear Checked</button>
+                    </div>
+                </div>
+
+                <!-- Batch Prep Tab -->
+                <div class="tab-content" id="kitchen-batch">
+                    <div class="card">
+                        <h3 class="card-title">Plan Batch Cooking Session</h3>
+                        <div class="form-group">
+                            <label>What do you want to prep?</label>
+                            <div class="grid grid-2">
+                                <label class="checkbox-item"><input type="checkbox" name="batchItems" value="chicken"> Chicken</label>
+                                <label class="checkbox-item"><input type="checkbox" name="batchItems" value="fish"> Fish</label>
+                                <label class="checkbox-item"><input type="checkbox" name="batchItems" value="grains"> Grains</label>
+                                <label class="checkbox-item"><input type="checkbox" name="batchItems" value="vegetables"> Roasted Veggies</label>
+                                <label class="checkbox-item"><input type="checkbox" name="batchItems" value="sauce"> Sauces</label>
+                                <label class="checkbox-item"><input type="checkbox" name="batchItems" value="soup"> Soup/Broth</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>How much time do you have?</label>
+                            <select class="form-select" id="batch-time">
+                                <option value="1">1 hour</option>
+                                <option value="2" selected>2 hours</option>
+                                <option value="3">3+ hours</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateBatchPlan()" style="width: 100%;">Generate Prep Plan</button>
+                    </div>
+                    <div id="batch-plan-output"></div>
+                </div>
+
+                <!-- Substitutions Tab -->
+                <div class="tab-content" id="kitchen-subs">
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="subs-search" placeholder="I'm out of..." oninput="searchSubstitutions()">
+                    </div>
+                    <div id="subs-results"></div>
+                    <div id="subs-categories">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🧀 Dairy Substitutions</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-body">
+                                <p><strong>Greek Yogurt →</strong> Labneh, sour cream, or omit for Crohn's</p>
+                                <p><strong>Feta Cheese →</strong> Goat cheese, ricotta salata</p>
+                                <p><strong>Parmesan →</strong> Pecorino Romano, nutritional yeast</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🌿 Herb Substitutions</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-body">
+                                <p><strong>Fresh herbs →</strong> Dried at 1/3 the amount</p>
+                                <p><strong>Basil →</strong> Oregano, parsley</p>
+                                <p><strong>Dill →</strong> Fennel fronds, tarragon</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                <span>🍋 Acid Substitutions</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="accordion-body">
+                                <p><strong>Lemon juice →</strong> White wine vinegar + pinch of sugar</p>
+                                <p><strong>Red wine vinegar →</strong> Balsamic, sherry vinegar</p>
+                                <p><strong>White wine →</strong> Chicken broth + splash of vinegar</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Garden View -->
+            <div class="view" id="view-garden">
+                <h2 class="section-title">🌱 Garden</h2>
+                <div class="tabs">
+                    <button class="tab active" onclick="switchGardenTab('inventory')">My Garden</button>
+                    <button class="tab" onclick="switchGardenTab('planting')">Planting Guide</button>
+                    <button class="tab" onclick="switchGardenTab('harvest')">Harvest Log</button>
+                </div>
+
+                <div class="tab-content active" id="garden-inventory">
+                    <div class="flex flex-between flex-center mb-16">
+                        <span class="text-muted">What's growing</span>
+                        <button class="btn btn-sm btn-primary" onclick="openAddPlantModal()">+ Add Plant</button>
+                    </div>
+                    <div id="garden-plants"></div>
+                    <button class="btn btn-secondary mt-16" onclick="askNonnaWithGarden()" style="width: 100%;">
+                        🍅 What can I make with my harvest?
+                    </button>
+                </div>
+
+                <div class="tab-content" id="garden-planting">
+                    <div class="card">
+                        <h3 class="card-title">🌱 Plant Now</h3>
+                        <p class="text-muted mb-16">Recommendations for your zone and season</p>
+                        <div id="planting-suggestions"></div>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="garden-harvest">
+                    <div class="flex flex-between flex-center mb-16">
+                        <span class="text-muted">Track what you've picked</span>
+                        <button class="btn btn-sm btn-primary" onclick="openLogHarvestModal()">+ Log Harvest</button>
+                    </div>
+                    <div id="harvest-log"></div>
+                </div>
+            </div>
+
+            <!-- Crohn's Care View -->
+            <div class="view" id="view-crohns">
+                <h2 class="section-title">🩺 Crohn's Care</h2>
+
+                <button class="btn btn-primary" style="width: 100%; padding: 20px; font-size: 1.1rem; margin-bottom: 20px;" onclick="activateFlareMode()">
+                    😔 I'm Having a Flare - Help Me
+                </button>
+
+                <div class="flare-banner hidden" id="flare-mode-banner">
+                    <div class="flare-banner-title">🌡️ Flare Mode Active</div>
+                    <div class="flare-banner-text">Nonna will only suggest gentle, easy-to-digest meals.</div>
+                    <button class="btn btn-sm btn-ghost mt-8" onclick="deactivateFlareMode()">Exit Flare Mode</button>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">💚 Gentle Meal Ideas</h3>
+                    <div class="quick-actions">
+                        <button class="quick-action" onclick="askNonna('Give me a gentle soup recipe for a flare day')">Soothing Soup</button>
+                        <button class="quick-action" onclick="askNonna('What\\'s an easy-to-digest dinner?')">Easy Dinner</button>
+                        <button class="quick-action" onclick="askNonna('Simple breakfast for low energy')">Simple Breakfast</button>
+                        <button class="quick-action" onclick="askNonna('Gentle smoothie recipe')">Gentle Smoothie</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">🚫 Foods to Avoid During Flare</h3>
+                    <ul style="padding-left: 20px; color: var(--gray-text);">
+                        <li>Raw vegetables (cook them well)</li>
+                        <li>High-fiber foods</li>
+                        <li>Spicy foods</li>
+                        <li>Dairy (if intolerant)</li>
+                        <li>Nuts and seeds</li>
+                        <li>Fried or greasy foods</li>
+                        <li>Alcohol and caffeine</li>
+                    </ul>
+                </div>
+
+                <div class="nonna-tip">
+                    <div class="nonna-tip-header">💡 Nonna's Tip</div>
+                    <div class="nonna-tip-text">"During a flare, keep it simple, cara. Plain rice, tender chicken, and well-cooked vegetables. Your body needs rest and gentle nourishment."</div>
+                    <div class="nonna-tip-signature">— Nonna</div>
+                </div>
+
+                <p class="text-muted text-center" style="font-size: 0.85rem; margin-top: 20px;">
+                    ⚠️ This is not medical advice. Always consult your gastroenterologist about your Crohn's management.
+                </p>
+            </div>
+
+            <!-- Meal History View -->
+            <div class="view" id="view-history">
+                <h2 class="section-title">📖 Meal History</h2>
+                <div class="card">
+                    <h3 class="card-title">📊 Your Stats</h3>
+                    <div class="grid grid-2" id="history-stats">
+                        <div><strong>This Week:</strong> <span id="stat-week">0</span> meals</div>
+                        <div><strong>This Month:</strong> <span id="stat-month">0</span> meals</div>
+                    </div>
+                </div>
+                <div class="flex flex-between flex-center mb-16 mt-16">
+                    <span class="text-muted">Recent meals</span>
+                    <button class="btn btn-sm btn-secondary" onclick="openAddMealModal()">+ Add Meal</button>
+                </div>
+                <div id="history-list"></div>
+                <div class="empty-state" id="history-empty">
+                    <div class="empty-state-icon">📖</div>
+                    <div class="empty-state-title">No meals logged yet</div>
+                    <p>Mark recipes as cooked to track your history.</p>
+                </div>
+            </div>
+
+            <!-- Settings View -->
+            <div class="view" id="view-settings">
+                <h2 class="section-title">⚙️ Settings</h2>
+
+                <div class="card">
+                    <h3 class="card-title">🎨 Appearance</h3>
+                    <label class="toggle">
+                        <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
+                        <span class="toggle-switch"></span>
+                        <span>🌙 Dark Mode</span>
+                    </label>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">👤 Profile</h3>
+                    <button class="btn btn-secondary" onclick="editProfile()" style="width: 100%;">Edit Health Profile</button>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">💾 Data</h3>
+                    <div class="flex flex-between flex-center gap-8" style="flex-wrap: wrap;">
+                        <button class="btn btn-secondary btn-sm" onclick="exportAllData()">Export Data</button>
+                        <button class="btn btn-secondary btn-sm" onclick="importData()">Import Data</button>
+                        <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="confirmClearAllData()">Clear All Data</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3 class="card-title">ℹ️ About</h3>
+                    <p class="text-muted">Tavola v2.0</p>
+                    <p class="text-muted">Mediterranean meal planning with Nonna</p>
+                    <p class="text-muted" style="font-size: 0.85rem; margin-top: 8px;">Made with ❤️ for people managing chronic illness</p>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Edit Profile Modal -->
-    <div class="modal-overlay" id="edit-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Edit Your Profile</h2>
-                <button class="modal-close" onclick="closeEditProfile()">&times;</button>
-            </div>
-            <div class="modal-body" id="edit-modal-body">
-                <!-- Form will be cloned here -->
-            </div>
-        </div>
-    </div>
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav hidden" id="bottom-nav">
+        <button class="nav-item active" onclick="navigateTo('home')">
+            <span class="icon">🏠</span>
+            <span>Home</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('favorites')">
+            <span class="icon">❤️</span>
+            <span>Favorites</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('week')">
+            <span class="icon">📅</span>
+            <span>Week</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('kitchen')">
+            <span class="icon">🍳</span>
+            <span>Kitchen</span>
+        </button>
+        <button class="nav-item" onclick="navigateTo('crohns')">
+            <span class="icon">🩺</span>
+            <span>Care</span>
+        </button>
+    </nav>
 
-    <!-- Confirm Reset Modal -->
-    <div class="modal-overlay" id="reset-modal">
-        <div class="modal">
-            <div class="modal-header">
-                <h2>Reset Everything?</h2>
-                <button class="modal-close" onclick="closeResetModal()">&times;</button>
-            </div>
-            <div class="modal-body">
-                <p>This will delete your profile and all chat history. This action cannot be undone.</p>
-            </div>
-            <div class="modal-actions">
-                <button class="btn-secondary" onclick="closeResetModal()">Cancel</button>
-                <button class="btn-primary" style="background: #cc0000;" onclick="resetAll()">Yes, Reset Everything</button>
-            </div>
-        </div>
+    <!-- Modals will be added dynamically -->
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="modal" id="modal-content"></div>
     </div>
 
     <script>
-        // Storage keys
-        const STORAGE_KEYS = {
+        // ========================================
+        // STORAGE KEYS
+        // ========================================
+        const STORAGE = {
             PROFILE: 'tavola_profile',
-            CHAT_HISTORY: 'tavola_chat_history'
+            CHAT: 'tavola_chat_history',
+            FAVORITES: 'tavola_favorites',
+            PANTRY: 'tavola_pantry',
+            SHOPPING: 'tavola_shopping_lists',
+            MEAL_PLANS: 'tavola_meal_plans',
+            GARDEN: 'tavola_garden',
+            HISTORY: 'tavola_meal_history',
+            PREFS: 'tavola_preferences'
         };
 
-        // State
-        let chatHistory = [];
-        let isProcessing = false;
+        // ========================================
+        // APP STATE
+        // ========================================
+        let state = {
+            currentView: 'home',
+            chatHistory: [],
+            isProcessing: false,
+            isRecording: false,
+            flareMode: false,
+            recognition: null
+        };
 
-        // Initialize app
+        // ========================================
+        // INITIALIZATION
+        // ========================================
         document.addEventListener('DOMContentLoaded', () => {
-            const profile = getProfile();
+            initApp();
+        });
+
+        function initApp() {
+            const profile = getStorage(STORAGE.PROFILE);
             if (profile) {
-                showChat();
+                showApp();
+                loadChatHistory();
+                if (state.chatHistory.length === 0) {
+                    addWelcomeMessage();
+                }
             } else {
                 showWelcome();
             }
 
-            // Set up chat input handlers
-            const chatInput = document.getElementById('chat-input');
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
-            // Auto-resize textarea
-            chatInput.addEventListener('input', () => {
-                chatInput.style.height = 'auto';
-                chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
-            });
-
-            // Close settings when clicking outside
-            document.addEventListener('click', (e) => {
-                const settingsMenu = document.getElementById('settings-menu');
-                if (!e.target.closest('.settings-dropdown')) {
-                    settingsMenu.classList.remove('active');
-                }
-            });
-
-            // Set current season based on date
+            initVoiceRecognition();
+            initChatInput();
+            loadPreferences();
             setCurrentSeason();
-        });
+        }
 
-        // Storage functions
-        function getProfile() {
+        // ========================================
+        // STORAGE HELPERS
+        // ========================================
+        function getStorage(key) {
             try {
-                const data = localStorage.getItem(STORAGE_KEYS.PROFILE);
+                const data = localStorage.getItem(key);
                 return data ? JSON.parse(data) : null;
             } catch (e) {
-                console.error('Error reading profile:', e);
+                console.error('Storage read error:', e);
                 return null;
             }
         }
 
-        function saveProfileToStorage(profile) {
+        function setStorage(key, value) {
             try {
-                localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile));
+                localStorage.setItem(key, JSON.stringify(value));
                 return true;
             } catch (e) {
-                console.error('Error saving profile:', e);
-                if (e.name === 'QuotaExceededError') {
-                    alert('Storage is full. Please clear some data and try again.');
-                }
+                console.error('Storage write error:', e);
                 return false;
             }
         }
 
-        function getChatHistory() {
-            try {
-                const data = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
-                return data ? JSON.parse(data) : [];
-            } catch (e) {
-                console.error('Error reading chat history:', e);
-                return [];
-            }
-        }
-
-        function saveChatHistory(history) {
-            try {
-                localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(history));
-            } catch (e) {
-                console.error('Error saving chat history:', e);
-                // If storage is full, trim older messages
-                if (e.name === 'QuotaExceededError' && history.length > 10) {
-                    history = history.slice(-10);
-                    localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(history));
-                }
-            }
-        }
-
-        // View management
+        // ========================================
+        // VIEW MANAGEMENT
+        // ========================================
         function showWelcome() {
-            document.getElementById('welcome-screen').classList.remove('hidden');
-            document.getElementById('intake-form').classList.add('hidden');
-            document.getElementById('chat-interface').classList.add('hidden');
+            document.getElementById('welcome-screen').style.display = 'flex';
+            document.getElementById('intake-form').classList.remove('active');
+            document.getElementById('app-main').classList.remove('active');
             document.getElementById('app-header').classList.add('hidden');
+            document.getElementById('bottom-nav').classList.add('hidden');
         }
 
         function showIntakeForm() {
-            document.getElementById('welcome-screen').classList.add('hidden');
-            document.getElementById('intake-form').classList.remove('hidden');
-            document.getElementById('chat-interface').classList.add('hidden');
-            document.getElementById('app-header').classList.add('hidden');
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('intake-form').classList.add('active');
+            document.getElementById('app-main').classList.remove('active');
         }
 
-        function showChat() {
-            document.getElementById('welcome-screen').classList.add('hidden');
-            document.getElementById('intake-form').classList.add('hidden');
-            document.getElementById('chat-interface').classList.remove('hidden');
+        function showApp() {
+            document.getElementById('welcome-screen').style.display = 'none';
+            document.getElementById('intake-form').classList.remove('active');
+            document.getElementById('app-main').classList.add('active');
             document.getElementById('app-header').classList.remove('hidden');
-
-            // Load chat history
-            chatHistory = getChatHistory();
-            renderChatHistory();
-
-            // Show welcome message if no history
-            if (chatHistory.length === 0) {
-                addWelcomeMessage();
-            }
-
-            // Focus input
-            setTimeout(() => {
-                document.getElementById('chat-input').focus();
-            }, 100);
+            document.getElementById('bottom-nav').classList.remove('hidden');
+            navigateTo('home');
         }
 
-        // Form functions
-        function toggleCategory(category) {
-            const checkbox = document.getElementById(`cat-${category}`);
-            const options = document.getElementById(`options-${category}`);
+        function navigateTo(view) {
+            state.currentView = view;
 
-            if (checkbox.checked) {
-                options.classList.add('expanded');
-                // Check all sub-options by default
-                options.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
-            } else {
-                options.classList.remove('expanded');
-                // Uncheck all sub-options
-                options.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            // Update views
+            document.querySelectorAll('#app-main > .container > .view').forEach(v => v.classList.remove('active'));
+            const targetView = document.getElementById(`view-${view}`);
+            if (targetView) targetView.classList.add('active');
+
+            // Update nav
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            const navItems = document.querySelectorAll('.nav-item');
+            const viewMap = { home: 0, favorites: 1, week: 2, kitchen: 3, crohns: 4, garden: 3, history: 4, settings: -1 };
+            if (viewMap[view] >= 0 && navItems[viewMap[view]]) {
+                navItems[viewMap[view]].classList.add('active');
             }
+
+            // Load view data
+            if (view === 'favorites') renderFavorites();
+            if (view === 'week') renderWeekPlanner();
+            if (view === 'kitchen') renderPantry();
+            if (view === 'garden') renderGarden();
+            if (view === 'history') renderHistory();
+        }
+
+        // ========================================
+        // PROFILE MANAGEMENT
+        // ========================================
+        function toggleCookingForTwo() {
+            const toggle = document.getElementById('cookingForTwoToggle');
+            const fields = document.getElementById('cookingForTwoFields');
+            fields.classList.toggle('hidden', !toggle.checked);
         }
 
         function setCurrentSeason() {
@@ -1313,146 +1441,117 @@
             if (month >= 2 && month <= 4) season = 'spring';
             else if (month >= 5 && month <= 7) season = 'summer';
             else if (month >= 8 && month <= 10) season = 'fall';
-
-            document.getElementById('current-season').value = season;
+            const select = document.querySelector('[name="currentSeason"]');
+            if (select) select.value = season;
         }
 
         function saveProfile(e) {
             e.preventDefault();
-
             const form = e.target;
+
             const profile = {
-                // Health conditions
                 crohnsSeverity: form.crohnsSeverity.value,
                 crohnsTriggers: form.crohnsTriggers.value,
                 fibroEnergy: form.fibroEnergy.value,
                 thyroidType: form.thyroidType.value,
-                thyroidRestrictions: form.thyroidRestrictions.value,
                 otherConditions: form.otherConditions.value,
-
-                // Proteins - gather all checked values
-                proteins: Array.from(form.querySelectorAll('input[name="proteins"]:checked'))
-                    .map(cb => cb.value),
-
-                // Garden
+                cookingForTwo: form.cookingForTwo.checked,
+                partnerName: form.partnerName?.value || '',
+                partnerRestrictions: Array.from(form.querySelectorAll('[name="partnerRestrictions"]:checked')).map(c => c.value),
+                partnerAllergies: form.partnerAllergies?.value || '',
+                partnerLoves: form.partnerLoves?.value || '',
+                proteins: Array.from(form.querySelectorAll('[name="proteins"]:checked')).map(c => c.value),
                 currentlyGrowing: form.currentlyGrowing.value,
-                wantToPlant: form.wantToPlant.value,
                 growingZone: form.growingZone.value,
                 currentSeason: form.currentSeason.value,
-
-                // Cooking capacity
                 energyLevel: form.energyLevel.value,
                 cookingTime: form.cookingTime.value,
-                cookingStyle: form.cookingStyle.value,
-
-                // Budget
                 weeklyBudget: form.weeklyBudget.value,
                 shoppingPriority: form.shoppingPriority.value,
-
-                // Dietary notes
                 foodsToAvoid: form.foodsToAvoid.value,
                 favoriteFlavors: form.favoriteFlavors.value,
-
-                // Metadata
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+                createdAt: new Date().toISOString()
             };
 
-            if (saveProfileToStorage(profile)) {
-                showChat();
-            }
+            setStorage(STORAGE.PROFILE, profile);
+            showApp();
         }
 
-        // Profile formatting for API
-        function formatProfileForAPI(profile) {
-            const proteinMap = {
-                'white-fish': 'White fish (tilapia, cod, halibut, branzino, sea bass, snapper)',
-                'fatty-fish': 'Fatty fish (salmon, mackerel, sardines, trout)',
-                'shellfish': 'Shellfish (shrimp, scallops, mussels)',
-                'chicken-breast': 'Chicken breast',
-                'chicken-thighs': 'Chicken thighs',
-                'ground-turkey': 'Ground turkey',
-                'whole-chicken': 'Whole/rotisserie chicken',
-                'pork-chops': 'Pork chops',
-                'pork-tenderloin': 'Pork tenderloin',
-                'ground-pork': 'Ground pork',
-                'italian-sausage': 'Italian sausage',
-                'ground-beef': 'Ground beef',
-                'steaks': 'Steaks',
-                'stew-meat': 'Stew meat/chuck roast',
-                'ground-lamb': 'Ground lamb',
-                'lamb-chops': 'Lamb chops',
-                'lamb-shoulder': 'Lamb shoulder',
-                'chickpeas': 'Chickpeas',
-                'white-beans': 'White beans (cannellini)',
-                'lentils': 'Lentils',
-                'tofu-tempeh': 'Tofu/tempeh',
-                'eggs': 'Eggs',
-                'greek-yogurt': 'Greek yogurt',
-                'hard-cheeses': 'Hard cheeses (parmesan, aged cheddar)',
-                'feta': 'Feta cheese'
-            };
-
-            const proteins = profile.proteins.map(p => proteinMap[p] || p).join(', ');
-
-            return `
-HEALTH PROFILE:
-- Crohn's Disease: ${profile.crohnsSeverity || 'Not specified'} severity
-- Crohn's Triggers: ${profile.crohnsTriggers || 'None specified'}
-- Fibromyalgia Energy: ${profile.fibroEnergy || 'Not specified'}
-- Thyroid: ${profile.thyroidType || 'Not specified'} ${profile.thyroidRestrictions ? `(Restrictions: ${profile.thyroidRestrictions})` : ''}
-- Other Conditions: ${profile.otherConditions || 'None'}
-
-PROTEIN PREFERENCES:
-${proteins || 'No preferences specified'}
-
-GARDEN:
-- Currently Growing: ${profile.currentlyGrowing || 'Nothing specified'}
-- Want to Plant: ${profile.wantToPlant || 'Nothing specified'}
-- Growing Zone: ${profile.growingZone || 'Not specified'}
-- Current Season: ${profile.currentSeason || 'Not specified'}
-
-COOKING CAPACITY:
-- Energy Level: ${profile.energyLevel || 'Variable'}
-- Preferred Cooking Time: ${profile.cookingTime || 'Standard (30-60 min)'}
-- Cooking Style: ${profile.cookingStyle || 'Balanced'}
-
-BUDGET:
-- Weekly Budget: $${profile.weeklyBudget || '100-150'}
-- Priority: ${profile.shoppingPriority || 'Balance both'}
-
-DIETARY NOTES:
-- Foods to Avoid: ${profile.foodsToAvoid || 'None specified'}
-- Favorite Flavors: ${profile.favoriteFlavors || 'Not specified'}
-            `.trim();
-        }
-
-        // Chat functions
-        function addWelcomeMessage() {
-            const profile = getProfile();
-            let welcomeText = "Hi! I'm Tavola, your Mediterranean meal planning assistant. ";
+        function editProfile() {
+            const profile = getStorage(STORAGE.PROFILE);
+            showIntakeForm();
 
             if (profile) {
-                welcomeText += "I've reviewed your profile and I'm here to help you plan delicious, Crohn's-friendly meals that work with your garden and energy levels. ";
+                setTimeout(() => {
+                    const form = document.getElementById('profile-form');
+                    Object.keys(profile).forEach(key => {
+                        const el = form.querySelector(`[name="${key}"]`);
+                        if (el) {
+                            if (el.type === 'checkbox') {
+                                el.checked = profile[key];
+                                if (key === 'cookingForTwo') toggleCookingForTwo();
+                            } else {
+                                el.value = profile[key];
+                            }
+                        }
+                    });
+                    // Handle checkboxes for proteins
+                    if (profile.proteins) {
+                        profile.proteins.forEach(p => {
+                            const cb = form.querySelector(`[name="proteins"][value="${p}"]`);
+                            if (cb) cb.checked = true;
+                        });
+                    }
+                }, 100);
             }
+        }
 
-            welcomeText += "What would you like to plan today?";
+        // ========================================
+        // CHAT FUNCTIONALITY
+        // ========================================
+        function initChatInput() {
+            const input = document.getElementById('chat-input');
+            input.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+            input.addEventListener('input', () => {
+                input.style.height = 'auto';
+                input.style.height = Math.min(input.scrollHeight, 120) + 'px';
+            });
+        }
 
-            const welcomeMessage = {
-                role: 'assistant',
-                content: welcomeText,
-                timestamp: new Date().toISOString()
-            };
+        function loadChatHistory() {
+            state.chatHistory = getStorage(STORAGE.CHAT) || [];
+            renderChatHistory();
+        }
 
-            chatHistory.push(welcomeMessage);
-            saveChatHistory(chatHistory);
-            renderMessage(welcomeMessage, true);
+        function saveChatHistory() {
+            setStorage(STORAGE.CHAT, state.chatHistory);
+        }
+
+        function addWelcomeMessage() {
+            const profile = getStorage(STORAGE.PROFILE);
+            let text = "Ciao, cara! I'm Nonna, your Mediterranean cooking companion. ";
+            if (profile) {
+                text += "I've looked at your profile and I'm ready to help you plan delicious, gentle meals. ";
+            }
+            text += "What would you like to cook today?";
+
+            const msg = { role: 'assistant', content: text, timestamp: new Date().toISOString() };
+            state.chatHistory.push(msg);
+            saveChatHistory();
+            renderMessage(msg, true);
+            renderQuickActions();
         }
 
         function renderChatHistory() {
             const container = document.getElementById('chat-messages');
             container.innerHTML = '';
-            chatHistory.forEach(msg => renderMessage(msg, false));
+            state.chatHistory.forEach(msg => renderMessage(msg, false));
+            if (state.chatHistory.length === 1) renderQuickActions();
         }
 
         function renderMessage(message, animate = true) {
@@ -1461,60 +1560,139 @@ DIETARY NOTES:
             div.className = `message message-${message.role}`;
             if (!animate) div.style.animation = 'none';
 
-            const content = document.createElement('div');
-            content.className = 'message-content';
-            content.innerHTML = formatMessageContent(message.content);
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
 
-            div.appendChild(content);
-
-            // Add quick actions after first assistant message
-            if (message.role === 'assistant' && chatHistory.length <= 1) {
-                const quickActions = document.createElement('div');
-                quickActions.className = 'quick-actions';
-                quickActions.innerHTML = `
-                    <button class="quick-action" onclick="sendQuickAction('I need a meal plan for this week')">Weekly meal plan</button>
-                    <button class="quick-action" onclick="sendQuickAction('What should I make for a quick, gentle dinner?')">Quick dinner idea</button>
-                    <button class="quick-action" onclick="sendQuickAction('What can I make with what\\'s in my garden?')">Use my garden</button>
-                    <button class="quick-action" onclick="sendQuickAction('What should I plant in my garden for Mediterranean meals?')">Garden planning</button>
-                `;
-                content.appendChild(quickActions);
+            // Check if content contains a recipe
+            if (message.role === 'assistant' && message.content.includes('RECIPE:')) {
+                bubble.innerHTML = parseRecipeToCard(message.content);
+            } else {
+                bubble.innerHTML = formatMessageContent(message.content);
             }
 
+            div.appendChild(bubble);
             container.appendChild(div);
             scrollToBottom();
         }
 
         function formatMessageContent(content) {
-            // Convert markdown-like formatting to HTML
-            let html = content
-                // Code blocks
-                .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>')
-                // Bold
+            return content
                 .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-                // Headers (=== style)
-                .replace(/^=== (.*?) ===/gm, '<strong style="font-size: 1.1em; display: block; margin-top: 16px; margin-bottom: 8px; color: var(--cerulean);">$1</strong>')
-                // Lists with checkboxes
-                .replace(/^☐ (.*)$/gm, '<span style="display: block; padding-left: 8px;">☐ $1</span>')
-                // Regular lists
-                .replace(/^- (.*)$/gm, '<li>$1</li>')
-                .replace(/^(\d+)\. (.*)$/gm, '<li>$2</li>')
-                // Line breaks
+                .replace(/^### (.*$)/gm, '<h3 style="color: var(--cerulean); margin: 12px 0 8px;">$1</h3>')
+                .replace(/^## (.*$)/gm, '<h2 style="color: var(--cerulean); margin: 16px 0 8px;">$1</h2>')
+                .replace(/^- (.*$)/gm, '<li>$1</li>')
+                .replace(/^(\d+)\. (.*$)/gm, '<li>$2</li>')
+                .replace(/☐ (.*$)/gm, '<span style="display: block;">☐ $1</span>')
                 .replace(/\n\n/g, '</p><p>')
                 .replace(/\n/g, '<br>');
+        }
 
-            // Wrap in paragraphs if not already structured
-            if (!html.startsWith('<')) {
-                html = '<p>' + html + '</p>';
-            }
+        function parseRecipeToCard(content) {
+            // Extract recipe components
+            const titleMatch = content.match(/RECIPE:\s*(.+?)(?:\n|$)/);
+            const servesMatch = content.match(/Serves:\s*(\d+)/i);
+            const timeMatch = content.match(/Total Time:\s*(\d+)\s*min/i);
+            const prepMatch = content.match(/Prep:\s*(\d+)\s*min/i);
+            const cookMatch = content.match(/Cook:\s*(\d+)\s*min/i);
+            const tagsMatch = content.match(/Tags:\s*(.+?)(?:\n|$)/i);
 
-            return html;
+            // Extract ingredients
+            const ingredientsMatch = content.match(/INGREDIENTS:([\s\S]*?)(?=INSTRUCTIONS:|$)/i);
+            const ingredients = ingredientsMatch ?
+                ingredientsMatch[1].trim().split('\n').filter(l => l.trim().startsWith('-')).map(l => l.replace(/^-\s*/, '').trim()) : [];
+
+            // Extract instructions
+            const instructionsMatch = content.match(/INSTRUCTIONS:([\s\S]*?)(?=CROHN'S|NUTRITIONAL|$)/i);
+            const instructions = instructionsMatch ?
+                instructionsMatch[1].trim().split('\n').filter(l => /^\d+\./.test(l.trim())).map(l => l.replace(/^\d+\.\s*/, '').trim()) : [];
+
+            // Extract Crohn's mods
+            const crohnsMatch = content.match(/CROHN'S MODIFICATIONS:([\s\S]*?)(?=NUTRITIONAL|$)/i);
+            const crohnsMods = crohnsMatch ? crohnsMatch[1].trim() : '';
+
+            const title = titleMatch ? titleMatch[1].trim() : 'Recipe';
+            const serves = servesMatch ? servesMatch[1] : '2';
+            const totalTime = timeMatch ? timeMatch[1] : '30';
+            const prepTime = prepMatch ? prepMatch[1] : '10';
+            const cookTime = cookMatch ? cookMatch[1] : '20';
+            const tags = tagsMatch ? tagsMatch[1].split(',').map(t => t.trim()) : ['Mediterranean'];
+
+            const recipeId = 'recipe_' + Date.now();
+
+            return `
+                <div class="recipe-card" data-recipe-id="${recipeId}">
+                    <div class="recipe-header">
+                        <div class="recipe-title">${title}</div>
+                        <div class="recipe-actions">
+                            <button class="recipe-action-btn" onclick="toggleFavorite('${recipeId}', this)" title="Add to favorites">❤️</button>
+                            <button class="recipe-action-btn" onclick="printRecipe('${recipeId}')" title="Print">🖨️</button>
+                            <button class="recipe-action-btn" onclick="shareRecipe('${recipeId}')" title="Share">🔗</button>
+                        </div>
+                        <div class="recipe-meta">
+                            <div class="recipe-meta-item">⏱️ ${totalTime} min</div>
+                            <div class="recipe-meta-item">👨‍🍳 Prep ${prepTime}m</div>
+                            <div class="recipe-meta-item">🔥 Cook ${cookTime}m</div>
+                            <div class="recipe-meta-item">🍽️ Serves ${serves}</div>
+                        </div>
+                    </div>
+                    <div class="recipe-tags">
+                        ${tags.map(t => `<span class="tag ${t.toLowerCase().includes('crohn') ? 'tag-crohns' : ''}">${t}</span>`).join('')}
+                    </div>
+                    <div class="recipe-body">
+                        <div class="recipe-section">
+                            <div class="recipe-section-title">📝 Ingredients</div>
+                            ${ingredients.map((ing, i) => `
+                                <div class="ingredient-item">
+                                    <input type="checkbox" class="ingredient-checkbox" id="ing_${recipeId}_${i}" onchange="toggleIngredient(this)">
+                                    <label class="ingredient-text" for="ing_${recipeId}_${i}">${ing}</label>
+                                </div>
+                            `).join('')}
+                        </div>
+                        <div class="recipe-section">
+                            <div class="recipe-section-title">👩‍🍳 Instructions</div>
+                            ${instructions.map((step, i) => `
+                                <div class="instruction-step">
+                                    <div class="step-number">${i + 1}</div>
+                                    <div>${step}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+                        ${crohnsMods ? `
+                            <div class="recipe-notes">
+                                <div class="recipe-notes-title">🩺 Crohn's Modifications</div>
+                                <p>${crohnsMods.replace(/\n/g, '<br>')}</p>
+                            </div>
+                        ` : ''}
+                        <button class="btn btn-primary mt-16" onclick="markAsCooked('${recipeId}', '${title}')" style="width: 100%;">
+                            ✅ Mark as Cooked
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleIngredient(checkbox) {
+            const label = checkbox.nextElementSibling;
+            label.classList.toggle('checked', checkbox.checked);
+        }
+
+        function renderQuickActions() {
+            const container = document.getElementById('chat-messages');
+            const actions = document.createElement('div');
+            actions.className = 'quick-actions';
+            actions.innerHTML = `
+                <button class="quick-action" onclick="askNonna('Plan my meals for this week')">🗓️ Plan My Week</button>
+                <button class="quick-action" onclick="askNonna('What can I make with what\\'s in my garden?')">🌱 Use My Garden</button>
+                <button class="quick-action" onclick="askNonna('Give me a quick, easy dinner idea')">⚡ Quick Dinner</button>
+                <button class="quick-action" onclick="askNonna('I need a gentle meal - not feeling great')">🩺 Gentle Meal</button>
+            `;
+            container.appendChild(actions);
+            scrollToBottom();
         }
 
         function scrollToBottom() {
             const container = document.getElementById('chat-messages');
-            setTimeout(() => {
-                container.scrollTop = container.scrollHeight;
-            }, 50);
+            setTimeout(() => container.scrollTop = container.scrollHeight, 50);
         }
 
         function showThinking() {
@@ -1524,10 +1702,8 @@ DIETARY NOTES:
             div.id = 'thinking-message';
             div.innerHTML = `
                 <div class="thinking">
-                    <div class="thinking-dots">
-                        <span></span><span></span><span></span>
-                    </div>
-                    <span>Tavola is thinking...</span>
+                    <div class="thinking-dots"><span></span><span></span><span></span></div>
+                    <span>Nonna is thinking...</span>
                 </div>
             `;
             container.appendChild(div);
@@ -1535,36 +1711,31 @@ DIETARY NOTES:
         }
 
         function hideThinking() {
-            const thinking = document.getElementById('thinking-message');
-            if (thinking) thinking.remove();
+            const el = document.getElementById('thinking-message');
+            if (el) el.remove();
         }
 
         async function sendMessage() {
-            if (isProcessing) return;
+            if (state.isProcessing) return;
 
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
             if (!message) return;
 
-            // Clear input
             input.value = '';
             input.style.height = 'auto';
 
-            // Add user message
-            const userMessage = {
-                role: 'user',
-                content: message,
-                timestamp: new Date().toISOString()
-            };
-            chatHistory.push(userMessage);
-            saveChatHistory(chatHistory);
-            renderMessage(userMessage);
-
-            // Remove quick actions if they exist
+            // Remove quick actions
             document.querySelectorAll('.quick-actions').forEach(el => el.remove());
 
+            // Add user message
+            const userMsg = { role: 'user', content: message, timestamp: new Date().toISOString() };
+            state.chatHistory.push(userMsg);
+            saveChatHistory();
+            renderMessage(userMsg);
+
             // Call API
-            isProcessing = true;
+            state.isProcessing = true;
             document.getElementById('send-btn').disabled = true;
             showThinking();
 
@@ -1572,281 +1743,946 @@ DIETARY NOTES:
                 const response = await callAPI(message);
                 hideThinking();
 
-                const assistantMessage = {
-                    role: 'assistant',
-                    content: response,
-                    timestamp: new Date().toISOString()
-                };
-                chatHistory.push(assistantMessage);
-                saveChatHistory(chatHistory);
-                renderMessage(assistantMessage);
-
+                const assistantMsg = { role: 'assistant', content: response, timestamp: new Date().toISOString() };
+                state.chatHistory.push(assistantMsg);
+                saveChatHistory();
+                renderMessage(assistantMsg);
             } catch (error) {
                 hideThinking();
-                console.error('API Error:', error);
-
-                const errorMessage = {
-                    role: 'assistant',
-                    content: `I'm sorry, I encountered an error: ${error.message}. Please try again.`,
-                    timestamp: new Date().toISOString()
-                };
-                chatHistory.push(errorMessage);
-                saveChatHistory(chatHistory);
-                renderMessage(errorMessage);
+                const errorMsg = { role: 'assistant', content: `Mi dispiace, I had trouble with that: ${error.message}. Let's try again, cara.`, timestamp: new Date().toISOString() };
+                state.chatHistory.push(errorMsg);
+                saveChatHistory();
+                renderMessage(errorMsg);
             }
 
-            isProcessing = false;
+            state.isProcessing = false;
             document.getElementById('send-btn').disabled = false;
-            input.focus();
         }
 
-        function sendQuickAction(text) {
+        function askNonna(text) {
             document.getElementById('chat-input').value = text;
-            sendMessage();
+            navigateTo('home');
+            setTimeout(() => sendMessage(), 100);
         }
 
         async function callAPI(userMessage) {
-            const profile = getProfile();
-            const profileText = profile ? formatProfileForAPI(profile) : 'No profile configured.';
+            const profile = getStorage(STORAGE.PROFILE);
+            const profileText = formatProfileForAPI(profile);
 
-            // Build messages array for context (keep last 10 messages for context)
-            const recentHistory = chatHistory.slice(-10);
-            const messages = recentHistory.map(msg => ({
-                role: msg.role,
-                content: msg.content
+            const messages = state.chatHistory.slice(-10).map(m => ({
+                role: m.role,
+                content: m.content
             }));
 
-            // Add current message if not already in history
-            if (messages.length === 0 || messages[messages.length - 1].content !== userMessage) {
+            if (!messages.length || messages[messages.length - 1].content !== userMessage) {
                 messages.push({ role: 'user', content: userMessage });
             }
 
-            // Call the Netlify serverless function
             const response = await fetch('/.netlify/functions/chat', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    messages: messages,
-                    profileText: profileText
-                })
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ messages, profileText, flareMode: state.flareMode })
             });
 
             if (!response.ok) {
-                const errorData = await response.json().catch(() => ({}));
-                throw new Error(errorData.error || `API error: ${response.status}`);
+                const err = await response.json().catch(() => ({}));
+                throw new Error(err.error || `API error: ${response.status}`);
             }
 
             const data = await response.json();
             return data.content;
         }
 
-        // Settings functions
-        function toggleSettings(e) {
-            e.stopPropagation();
-            const menu = document.getElementById('settings-menu');
-            menu.classList.toggle('active');
-        }
+        function formatProfileForAPI(profile) {
+            if (!profile) return 'No profile configured.';
 
-        function openEditProfile() {
-            const profile = getProfile();
-            const modal = document.getElementById('edit-modal');
-            const modalBody = document.getElementById('edit-modal-body');
+            let text = `
+HEALTH PROFILE:
+- Crohn's: ${profile.crohnsSeverity || 'Not specified'} severity
+- Triggers: ${profile.crohnsTriggers || 'None specified'}
+- Fibromyalgia Energy: ${profile.fibroEnergy || 'Not specified'}
+- Thyroid: ${profile.thyroidType || 'Not specified'}
+- Other: ${profile.otherConditions || 'None'}
 
-            // Clone the form
-            const originalForm = document.getElementById('profile-form');
-            const clonedForm = originalForm.cloneNode(true);
-            clonedForm.id = 'edit-profile-form';
-            clonedForm.onsubmit = (e) => {
-                e.preventDefault();
-                updateProfile(e);
-            };
+PROTEINS: ${profile.proteins?.join(', ') || 'Not specified'}
 
-            // Clear modal and add form
-            modalBody.innerHTML = '';
-            modalBody.appendChild(clonedForm);
+GARDEN: ${profile.currentlyGrowing || 'Nothing specified'}
+Zone: ${profile.growingZone || 'Not specified'}, Season: ${profile.currentSeason}
 
-            // Fill in existing values
-            if (profile) {
-                fillFormWithProfile(clonedForm, profile);
+COOKING: Energy ${profile.energyLevel}, Time preference ${profile.cookingTime}
+BUDGET: $${profile.weeklyBudget}, Priority: ${profile.shoppingPriority}
+AVOID: ${profile.foodsToAvoid || 'None'}
+LOVES: ${profile.favoriteFlavors || 'Not specified'}`;
+
+            if (profile.cookingForTwo) {
+                text += `
+
+COOKING FOR TWO:
+Partner: ${profile.partnerName || 'Partner'}
+Restrictions: ${profile.partnerRestrictions?.join(', ') || 'None'}
+Allergies: ${profile.partnerAllergies || 'None'}
+Loves: ${profile.partnerLoves || 'Not specified'}`;
             }
 
-            // Update button text
-            const submitBtn = clonedForm.querySelector('button[type="submit"]');
-            submitBtn.textContent = 'Save Changes';
-
-            modal.classList.add('active');
+            return text.trim();
         }
 
-        function fillFormWithProfile(form, profile) {
-            // Simple fields
-            const simpleFields = [
-                'crohnsSeverity', 'crohnsTriggers', 'fibroEnergy', 'thyroidType',
-                'thyroidRestrictions', 'otherConditions', 'currentlyGrowing',
-                'wantToPlant', 'growingZone', 'currentSeason', 'weeklyBudget',
-                'foodsToAvoid', 'favoriteFlavors'
-            ];
+        // ========================================
+        // VOICE INPUT
+        // ========================================
+        function initVoiceRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                state.recognition = new SpeechRecognition();
+                state.recognition.continuous = false;
+                state.recognition.interimResults = false;
+                state.recognition.lang = 'en-US';
 
-            simpleFields.forEach(field => {
-                const el = form.querySelector(`[name="${field}"]`);
-                if (el && profile[field]) {
-                    el.value = profile[field];
-                }
-            });
-
-            // Radio buttons
-            const radioFields = ['energyLevel', 'cookingTime', 'cookingStyle', 'shoppingPriority'];
-            radioFields.forEach(field => {
-                if (profile[field]) {
-                    const radio = form.querySelector(`input[name="${field}"][value="${profile[field]}"]`);
-                    if (radio) radio.checked = true;
-                }
-            });
-
-            // Proteins - need to check categories and individual items
-            if (profile.proteins && profile.proteins.length > 0) {
-                const categoryMap = {
-                    seafood: ['white-fish', 'fatty-fish', 'shellfish'],
-                    poultry: ['chicken-breast', 'chicken-thighs', 'ground-turkey', 'whole-chicken'],
-                    pork: ['pork-chops', 'pork-tenderloin', 'ground-pork', 'italian-sausage'],
-                    beef: ['ground-beef', 'steaks', 'stew-meat'],
-                    lamb: ['ground-lamb', 'lamb-chops', 'lamb-shoulder'],
-                    plant: ['chickpeas', 'white-beans', 'lentils', 'tofu-tempeh'],
-                    'eggs-dairy': ['eggs', 'greek-yogurt', 'hard-cheeses', 'feta']
+                state.recognition.onresult = (event) => {
+                    const text = event.results[0][0].transcript;
+                    document.getElementById('chat-input').value = text;
+                    stopRecording();
                 };
 
-                Object.entries(categoryMap).forEach(([category, items]) => {
-                    const hasItems = items.some(item => profile.proteins.includes(item));
-                    if (hasItems) {
-                        const catCheckbox = form.querySelector(`#cat-${category}`);
-                        const optionsDiv = form.querySelector(`#options-${category}`);
-                        if (catCheckbox && optionsDiv) {
-                            catCheckbox.checked = true;
-                            optionsDiv.classList.add('expanded');
+                state.recognition.onerror = (event) => {
+                    console.error('Speech error:', event.error);
+                    stopRecording();
+                };
 
-                            items.forEach(item => {
-                                const itemCheckbox = form.querySelector(`input[value="${item}"]`);
-                                if (itemCheckbox) {
-                                    itemCheckbox.checked = profile.proteins.includes(item);
-                                }
-                            });
-                        }
-                    }
+                state.recognition.onend = () => {
+                    stopRecording();
+                };
+            } else {
+                document.getElementById('voice-btn').style.display = 'none';
+            }
+        }
+
+        function toggleVoiceInput() {
+            if (state.isRecording) {
+                stopRecording();
+            } else {
+                startRecording();
+            }
+        }
+
+        function startRecording() {
+            if (!state.recognition) return;
+            state.isRecording = true;
+            document.getElementById('voice-btn').classList.add('recording');
+            state.recognition.start();
+        }
+
+        function stopRecording() {
+            state.isRecording = false;
+            document.getElementById('voice-btn').classList.remove('recording');
+            if (state.recognition) {
+                try { state.recognition.stop(); } catch (e) {}
+            }
+        }
+
+        // ========================================
+        // FAVORITES
+        // ========================================
+        function getFavorites() {
+            return getStorage(STORAGE.FAVORITES) || [];
+        }
+
+        function saveFavorites(favorites) {
+            setStorage(STORAGE.FAVORITES, favorites);
+        }
+
+        function toggleFavorite(recipeId, btn) {
+            const card = btn.closest('.recipe-card');
+            const title = card.querySelector('.recipe-title').textContent;
+            const content = card.outerHTML;
+
+            let favorites = getFavorites();
+            const existing = favorites.findIndex(f => f.id === recipeId);
+
+            if (existing >= 0) {
+                favorites.splice(existing, 1);
+                btn.classList.remove('favorited');
+            } else {
+                favorites.push({
+                    id: recipeId,
+                    title: title,
+                    content: content,
+                    rating: 0,
+                    notes: '',
+                    addedAt: new Date().toISOString(),
+                    lastCooked: null
                 });
+                btn.classList.add('favorited');
             }
+
+            saveFavorites(favorites);
         }
 
-        function closeEditProfile() {
-            document.getElementById('edit-modal').classList.remove('active');
-        }
+        function renderFavorites() {
+            const favorites = getFavorites();
+            const grid = document.getElementById('favorites-grid');
+            const empty = document.getElementById('favorites-empty');
 
-        function updateProfile(e) {
-            const form = e.target;
-            const oldProfile = getProfile();
-
-            const profile = {
-                // Health conditions
-                crohnsSeverity: form.crohnsSeverity.value,
-                crohnsTriggers: form.crohnsTriggers.value,
-                fibroEnergy: form.fibroEnergy.value,
-                thyroidType: form.thyroidType.value,
-                thyroidRestrictions: form.thyroidRestrictions.value,
-                otherConditions: form.otherConditions.value,
-
-                // Proteins
-                proteins: Array.from(form.querySelectorAll('input[name="proteins"]:checked'))
-                    .map(cb => cb.value),
-
-                // Garden
-                currentlyGrowing: form.currentlyGrowing.value,
-                wantToPlant: form.wantToPlant.value,
-                growingZone: form.growingZone.value,
-                currentSeason: form.currentSeason.value,
-
-                // Cooking capacity
-                energyLevel: form.energyLevel.value,
-                cookingTime: form.cookingTime.value,
-                cookingStyle: form.cookingStyle.value,
-
-                // Budget
-                weeklyBudget: form.weeklyBudget.value,
-                shoppingPriority: form.shoppingPriority.value,
-
-                // Dietary notes
-                foodsToAvoid: form.foodsToAvoid.value,
-                favoriteFlavors: form.favoriteFlavors.value,
-
-                // Metadata
-                createdAt: oldProfile?.createdAt || new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
-
-            if (saveProfileToStorage(profile)) {
-                closeEditProfile();
-                // Add confirmation message to chat
-                const msg = {
-                    role: 'assistant',
-                    content: "I've updated your profile! I'll use your new preferences for future meal suggestions.",
-                    timestamp: new Date().toISOString()
-                };
-                chatHistory.push(msg);
-                saveChatHistory(chatHistory);
-                renderMessage(msg);
-            }
-        }
-
-        function clearChatHistory() {
-            if (confirm('Clear all chat history? Your profile will be kept.')) {
-                chatHistory = [];
-                localStorage.removeItem(STORAGE_KEYS.CHAT_HISTORY);
-                renderChatHistory();
-                addWelcomeMessage();
-                document.getElementById('settings-menu').classList.remove('active');
-            }
-        }
-
-        function exportChatHistory() {
-            const history = getChatHistory();
-            if (history.length === 0) {
-                alert('No chat history to export.');
+            if (favorites.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
                 return;
             }
 
-            const text = history.map(msg => {
-                const role = msg.role === 'user' ? 'You' : 'Tavola';
-                const time = new Date(msg.timestamp).toLocaleString();
-                return `[${time}] ${role}:\n${msg.content}\n`;
-            }).join('\n---\n\n');
+            empty.classList.add('hidden');
+            grid.innerHTML = favorites.map(fav => `
+                <div class="favorite-card" onclick="viewFavorite('${fav.id}')">
+                    <div class="favorite-card-banner">🍽️</div>
+                    <div class="favorite-card-body">
+                        <div class="favorite-card-title">${fav.title}</div>
+                        <div class="favorite-card-meta">
+                            ${fav.lastCooked ? `Last cooked: ${formatDate(fav.lastCooked)}` : 'Not cooked yet'}
+                        </div>
+                        ${fav.rating ? `<div class="favorite-card-rating">${'⭐'.repeat(fav.rating)}</div>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
 
-            const blob = new Blob([text], { type: 'text/plain' });
+        function filterFavorites() {
+            const search = document.getElementById('favorites-search').value.toLowerCase();
+            const favorites = getFavorites().filter(f => f.title.toLowerCase().includes(search));
+            // Re-render with filtered
+            const grid = document.getElementById('favorites-grid');
+            grid.innerHTML = favorites.map(fav => `
+                <div class="favorite-card" onclick="viewFavorite('${fav.id}')">
+                    <div class="favorite-card-banner">🍽️</div>
+                    <div class="favorite-card-body">
+                        <div class="favorite-card-title">${fav.title}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function sortFavorites() {
+            // Implement sorting logic
+            renderFavorites();
+        }
+
+        function viewFavorite(id) {
+            const favorites = getFavorites();
+            const fav = favorites.find(f => f.id === id);
+            if (fav) {
+                openModal(`
+                    <div class="modal-header">
+                        <h2 class="modal-title">${fav.title}</h2>
+                        <button class="modal-close" onclick="closeModal()">×</button>
+                    </div>
+                    <div class="modal-body">
+                        ${fav.content}
+                    </div>
+                `);
+            }
+        }
+
+        // ========================================
+        // WEEK PLANNER
+        // ========================================
+        function renderWeekPlanner() {
+            const container = document.getElementById('week-planner');
+            const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+
+            const today = new Date();
+            const startOfWeek = new Date(today);
+            startOfWeek.setDate(today.getDate() - today.getDay() + 1);
+
+            container.innerHTML = days.map((day, i) => {
+                const date = new Date(startOfWeek);
+                date.setDate(startOfWeek.getDate() + i);
+                const dateStr = date.toISOString().split('T')[0];
+                const meal = mealPlans[dateStr];
+
+                return `
+                    <div class="week-day">
+                        <div class="week-day-header">
+                            <span class="week-day-name">${day}</span>
+                            <span class="week-day-date">${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}</span>
+                        </div>
+                        ${meal ? `
+                            <div class="week-day-meal">
+                                <span style="font-size: 1.5rem;">🍽️</span>
+                                <div>
+                                    <div style="font-weight: 500;">${meal.title}</div>
+                                    <div style="font-size: 0.85rem; color: var(--gray-text);">${meal.time || '30'} min</div>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="week-day-empty" onclick="planMealFor('${dateStr}')">
+                                + Add Meal
+                            </div>
+                        `}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function askNonnaForWeekPlan() {
+            askNonna('Please plan my meals for this week based on my profile, what I have in my garden, and give me variety in proteins.');
+        }
+
+        function planMealFor(date) {
+            askNonna(`Suggest a meal for ${new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' })}`);
+        }
+
+        // ========================================
+        // KITCHEN - PANTRY
+        // ========================================
+        function renderPantry() {
+            const pantry = getStorage(STORAGE.PANTRY) || [];
+            const list = document.getElementById('pantry-list');
+            const empty = document.getElementById('pantry-empty');
+
+            if (pantry.length === 0) {
+                list.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            const categories = { proteins: '🥩', produce: '🥬', grains: '🌾', canned: '🥫', spices: '🧂', oils: '🫒', dairy: '🧀', frozen: '❄️' };
+
+            list.innerHTML = pantry.map(item => {
+                const icon = categories[item.category] || '📦';
+                const statusClass = getExpirationStatus(item.expiration);
+                return `
+                    <div class="pantry-item">
+                        <span class="pantry-item-icon">${icon}</span>
+                        <div class="pantry-item-info">
+                            <div class="pantry-item-name">${item.name}</div>
+                            <div class="pantry-item-qty">${item.quantity} ${item.unit} • ${item.location}</div>
+                        </div>
+                        <div class="pantry-status ${statusClass}"></div>
+                        <button class="icon-btn" onclick="removePantryItem('${item.id}')">🗑️</button>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function getExpirationStatus(expDate) {
+            if (!expDate) return '';
+            const days = Math.ceil((new Date(expDate) - new Date()) / (1000 * 60 * 60 * 24));
+            if (days <= 2) return 'expiring';
+            if (days <= 7) return 'soon';
+            return 'fresh';
+        }
+
+        function openAddPantryModal() {
+            openModal(`
+                <div class="modal-header">
+                    <h2 class="modal-title">Add Pantry Item</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Item Name</label>
+                        <input type="text" class="form-input" id="pantry-name" placeholder="e.g., Chicken breast">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="text" class="form-input" id="pantry-qty" placeholder="e.g., 2">
+                        </div>
+                        <div class="form-group">
+                            <label>Unit</label>
+                            <input type="text" class="form-input" id="pantry-unit" placeholder="e.g., lbs">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-select" id="pantry-category">
+                                <option value="proteins">Proteins</option>
+                                <option value="produce">Produce</option>
+                                <option value="grains">Grains</option>
+                                <option value="canned">Canned</option>
+                                <option value="spices">Spices</option>
+                                <option value="oils">Oils</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="frozen">Frozen</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Location</label>
+                            <select class="form-select" id="pantry-location">
+                                <option value="Fridge">Fridge</option>
+                                <option value="Freezer">Freezer</option>
+                                <option value="Pantry">Pantry</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Expiration Date (optional)</label>
+                        <input type="date" class="form-input" id="pantry-exp">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addPantryItem()">Add Item</button>
+                </div>
+            `);
+        }
+
+        function addPantryItem() {
+            const item = {
+                id: 'pantry_' + Date.now(),
+                name: document.getElementById('pantry-name').value,
+                quantity: document.getElementById('pantry-qty').value,
+                unit: document.getElementById('pantry-unit').value,
+                category: document.getElementById('pantry-category').value,
+                location: document.getElementById('pantry-location').value,
+                expiration: document.getElementById('pantry-exp').value,
+                addedAt: new Date().toISOString()
+            };
+
+            const pantry = getStorage(STORAGE.PANTRY) || [];
+            pantry.push(item);
+            setStorage(STORAGE.PANTRY, pantry);
+            closeModal();
+            renderPantry();
+        }
+
+        function removePantryItem(id) {
+            let pantry = getStorage(STORAGE.PANTRY) || [];
+            pantry = pantry.filter(p => p.id !== id);
+            setStorage(STORAGE.PANTRY, pantry);
+            renderPantry();
+        }
+
+        function askNonnaWithPantry() {
+            const pantry = getStorage(STORAGE.PANTRY) || [];
+            if (pantry.length === 0) {
+                askNonna('I need recipe ideas but my pantry tracker is empty. Can you suggest some staple ingredients I should have?');
+            } else {
+                const items = pantry.map(p => p.name).join(', ');
+                askNonna(`What can I make with these ingredients: ${items}?`);
+            }
+        }
+
+        // ========================================
+        // KITCHEN TABS
+        // ========================================
+        function switchKitchenTab(tab) {
+            document.querySelectorAll('#view-kitchen .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#view-kitchen .tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`kitchen-${tab}`).classList.add('active');
+
+            if (tab === 'pantry') renderPantry();
+            if (tab === 'shopping') renderShoppingList();
+        }
+
+        // ========================================
+        // SHOPPING LIST
+        // ========================================
+        function renderShoppingList() {
+            const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+            const items = lists.weekly || [];
+            const container = document.getElementById('shopping-list');
+            const empty = document.getElementById('shopping-empty');
+
+            if (items.length === 0) {
+                container.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            const sections = { produce: '🥬 Produce', proteins: '🥩 Proteins', dairy: '🥛 Dairy', grains: '🌾 Grains', pantry: '🥫 Pantry', frozen: '❄️ Frozen' };
+
+            const grouped = {};
+            items.forEach(item => {
+                const cat = item.category || 'pantry';
+                if (!grouped[cat]) grouped[cat] = [];
+                grouped[cat].push(item);
+            });
+
+            container.innerHTML = Object.entries(grouped).map(([cat, catItems]) => `
+                <div class="shopping-section">
+                    <div class="shopping-section-title">${sections[cat] || cat}</div>
+                    ${catItems.map(item => `
+                        <div class="shopping-item ${item.checked ? 'checked' : ''}">
+                            <input type="checkbox" class="shopping-item-checkbox" ${item.checked ? 'checked' : ''} onchange="toggleShoppingItem('${item.id}')">
+                            <span class="shopping-item-name">${item.name}</span>
+                            <span class="shopping-item-qty">${item.quantity || ''}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        function toggleShoppingItem(id) {
+            const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+            const item = lists.weekly.find(i => i.id === id);
+            if (item) {
+                item.checked = !item.checked;
+                setStorage(STORAGE.SHOPPING, lists);
+                renderShoppingList();
+            }
+        }
+
+        function openAddShoppingModal() {
+            openModal(`
+                <div class="modal-header">
+                    <h2 class="modal-title">Add Shopping Item</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Item</label>
+                        <input type="text" class="form-input" id="shopping-name" placeholder="e.g., Olive oil">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quantity</label>
+                            <input type="text" class="form-input" id="shopping-qty" placeholder="e.g., 1 bottle">
+                        </div>
+                        <div class="form-group">
+                            <label>Category</label>
+                            <select class="form-select" id="shopping-category">
+                                <option value="produce">Produce</option>
+                                <option value="proteins">Proteins</option>
+                                <option value="dairy">Dairy</option>
+                                <option value="grains">Grains</option>
+                                <option value="pantry">Pantry</option>
+                                <option value="frozen">Frozen</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addShoppingItem()">Add</button>
+                </div>
+            `);
+        }
+
+        function addShoppingItem() {
+            const item = {
+                id: 'shop_' + Date.now(),
+                name: document.getElementById('shopping-name').value,
+                quantity: document.getElementById('shopping-qty').value,
+                category: document.getElementById('shopping-category').value,
+                checked: false
+            };
+
+            const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+            lists.weekly.push(item);
+            setStorage(STORAGE.SHOPPING, lists);
+            closeModal();
+            renderShoppingList();
+        }
+
+        function clearCheckedItems() {
+            const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+            lists.weekly = lists.weekly.filter(i => !i.checked);
+            setStorage(STORAGE.SHOPPING, lists);
+            renderShoppingList();
+        }
+
+        function printShoppingList() {
+            window.print();
+        }
+
+        // ========================================
+        // SUBSTITUTIONS
+        // ========================================
+        function searchSubstitutions() {
+            const query = document.getElementById('subs-search').value.toLowerCase();
+            const results = document.getElementById('subs-results');
+
+            if (!query) {
+                results.innerHTML = '';
+                return;
+            }
+
+            const subs = {
+                'lemon': { sub: 'White wine vinegar + pinch of sugar', ratio: '1:1', crohns: true },
+                'yogurt': { sub: 'Labneh or sour cream', ratio: '1:1', crohns: 'Omit for flare' },
+                'greek yogurt': { sub: 'Labneh, sour cream, or cottage cheese', ratio: '1:1', crohns: 'Small amount or omit' },
+                'basil': { sub: 'Oregano or parsley', ratio: '1:1 fresh, 1:3 dried', crohns: true },
+                'parmesan': { sub: 'Pecorino Romano or nutritional yeast', ratio: '1:1', crohns: true },
+                'olive oil': { sub: 'Avocado oil or melted butter', ratio: '1:1', crohns: true },
+                'white wine': { sub: 'Chicken broth + splash of vinegar', ratio: '1:1', crohns: true },
+                'garlic': { sub: 'Garlic-infused oil (low FODMAP)', ratio: '1 clove = 1 tsp oil', crohns: 'Better tolerated' },
+                'onion': { sub: 'Green part of scallions or chives', ratio: 'To taste', crohns: 'Better tolerated' }
+            };
+
+            const matches = Object.entries(subs).filter(([key]) => key.includes(query));
+
+            if (matches.length === 0) {
+                results.innerHTML = '<p class="text-muted">No substitutions found. Try asking Nonna!</p>';
+                return;
+            }
+
+            results.innerHTML = matches.map(([key, val]) => `
+                <div class="card">
+                    <strong>${key.charAt(0).toUpperCase() + key.slice(1)}</strong>
+                    <p>→ ${val.sub}</p>
+                    <p class="text-muted">Ratio: ${val.ratio}</p>
+                    ${val.crohns !== true ? `<p style="color: var(--success);">💚 Crohn's: ${val.crohns}</p>` : ''}
+                </div>
+            `).join('');
+        }
+
+        function toggleAccordion(header) {
+            const item = header.parentElement;
+            item.classList.toggle('open');
+        }
+
+        // ========================================
+        // BATCH COOKING
+        // ========================================
+        function generateBatchPlan() {
+            const items = Array.from(document.querySelectorAll('[name="batchItems"]:checked')).map(c => c.value);
+            const time = document.getElementById('batch-time').value;
+
+            if (items.length === 0) {
+                alert('Please select at least one item to batch cook.');
+                return;
+            }
+
+            askNonna(`Create a ${time}-hour batch cooking plan for: ${items.join(', ')}. Give me a timeline with what to start when, storage instructions, and how long each will keep.`);
+        }
+
+        // ========================================
+        // GARDEN
+        // ========================================
+        function switchGardenTab(tab) {
+            document.querySelectorAll('#view-garden .tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('#view-garden .tab-content').forEach(c => c.classList.remove('active'));
+
+            event.target.classList.add('active');
+            document.getElementById(`garden-${tab}`).classList.add('active');
+        }
+
+        function renderGarden() {
+            const garden = getStorage(STORAGE.GARDEN) || { plants: [], harvests: [] };
+            const container = document.getElementById('garden-plants');
+
+            if (garden.plants.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🌱</div><div class="empty-state-title">No plants tracked</div><p>Add plants to track your garden.</p></div>';
+                return;
+            }
+
+            container.innerHTML = garden.plants.map(plant => `
+                <div class="pantry-item">
+                    <span class="pantry-item-icon">${getPlantEmoji(plant.name)}</span>
+                    <div class="pantry-item-info">
+                        <div class="pantry-item-name">${plant.name}</div>
+                        <div class="pantry-item-qty">${plant.status} • Planted ${formatDate(plant.plantedAt)}</div>
+                    </div>
+                    <button class="btn btn-sm btn-ghost" onclick="harvestPlant('${plant.id}')">✂️ Harvest</button>
+                </div>
+            `).join('');
+        }
+
+        function getPlantEmoji(name) {
+            const emojis = { tomato: '🍅', zucchini: '🥒', basil: '🌿', pepper: '🫑', cucumber: '🥒', lettuce: '🥬', carrot: '🥕', onion: '🧅', garlic: '🧄' };
+            const lower = name.toLowerCase();
+            for (const [key, emoji] of Object.entries(emojis)) {
+                if (lower.includes(key)) return emoji;
+            }
+            return '🌱';
+        }
+
+        function openAddPlantModal() {
+            openModal(`
+                <div class="modal-header">
+                    <h2 class="modal-title">Add Plant</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Plant Name</label>
+                        <input type="text" class="form-input" id="plant-name" placeholder="e.g., Tomatoes">
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select class="form-select" id="plant-status">
+                            <option value="Just Planted">🌱 Just Planted</option>
+                            <option value="Growing">🌿 Growing</option>
+                            <option value="Ready to Harvest">🍅 Ready to Harvest</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Planting Date</label>
+                        <input type="date" class="form-input" id="plant-date">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="addPlant()">Add Plant</button>
+                </div>
+            `);
+        }
+
+        function addPlant() {
+            const plant = {
+                id: 'plant_' + Date.now(),
+                name: document.getElementById('plant-name').value,
+                status: document.getElementById('plant-status').value,
+                plantedAt: document.getElementById('plant-date').value || new Date().toISOString()
+            };
+
+            const garden = getStorage(STORAGE.GARDEN) || { plants: [], harvests: [] };
+            garden.plants.push(plant);
+            setStorage(STORAGE.GARDEN, garden);
+            closeModal();
+            renderGarden();
+        }
+
+        function askNonnaWithGarden() {
+            const garden = getStorage(STORAGE.GARDEN) || { plants: [] };
+            if (garden.plants.length === 0) {
+                const profile = getStorage(STORAGE.PROFILE);
+                const growing = profile?.currentlyGrowing;
+                if (growing) {
+                    askNonna(`What can I make with these from my garden: ${growing}?`);
+                } else {
+                    askNonna('What vegetables should I plant in my Mediterranean garden?');
+                }
+            } else {
+                const ready = garden.plants.filter(p => p.status.includes('Ready')).map(p => p.name);
+                if (ready.length > 0) {
+                    askNonna(`What can I make with my garden harvest: ${ready.join(', ')}?`);
+                } else {
+                    askNonna(`I have ${garden.plants.map(p => p.name).join(', ')} growing. Any recipe ideas for when they're ready?`);
+                }
+            }
+        }
+
+        // ========================================
+        // CROHN'S CARE
+        // ========================================
+        function activateFlareMode() {
+            state.flareMode = true;
+            document.getElementById('flare-mode-banner').classList.remove('hidden');
+            askNonna("I'm having a Crohn's flare and need gentle meal suggestions. What should I eat?");
+        }
+
+        function deactivateFlareMode() {
+            state.flareMode = false;
+            document.getElementById('flare-mode-banner').classList.add('hidden');
+        }
+
+        // ========================================
+        // MEAL HISTORY
+        // ========================================
+        function renderHistory() {
+            const history = getStorage(STORAGE.HISTORY) || [];
+            const container = document.getElementById('history-list');
+            const empty = document.getElementById('history-empty');
+
+            // Update stats
+            const now = new Date();
+            const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const monthAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+
+            document.getElementById('stat-week').textContent = history.filter(h => new Date(h.date) >= weekAgo).length;
+            document.getElementById('stat-month').textContent = history.filter(h => new Date(h.date) >= monthAgo).length;
+
+            if (history.length === 0) {
+                container.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            container.innerHTML = history.slice().reverse().slice(0, 20).map(meal => `
+                <div class="pantry-item">
+                    <span class="pantry-item-icon">🍽️</span>
+                    <div class="pantry-item-info">
+                        <div class="pantry-item-name">${meal.title}</div>
+                        <div class="pantry-item-qty">${formatDate(meal.date)}${meal.rating ? ' • ' + '⭐'.repeat(meal.rating) : ''}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function markAsCooked(recipeId, title) {
+            const history = getStorage(STORAGE.HISTORY) || [];
+            history.push({
+                id: 'meal_' + Date.now(),
+                recipeId: recipeId,
+                title: title,
+                date: new Date().toISOString(),
+                rating: 0,
+                notes: ''
+            });
+            setStorage(STORAGE.HISTORY, history);
+
+            // Update favorite if exists
+            const favorites = getFavorites();
+            const fav = favorites.find(f => f.id === recipeId);
+            if (fav) {
+                fav.lastCooked = new Date().toISOString();
+                saveFavorites(favorites);
+            }
+
+            alert('Marked as cooked! 🎉');
+        }
+
+        function openAddMealModal() {
+            openModal(`
+                <div class="modal-header">
+                    <h2 class="modal-title">Log a Meal</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>What did you make?</label>
+                        <input type="text" class="form-input" id="meal-title" placeholder="e.g., Lemon Herb Chicken">
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" class="form-input" id="meal-date" value="${new Date().toISOString().split('T')[0]}">
+                    </div>
+                    <div class="form-group">
+                        <label>Notes (optional)</label>
+                        <textarea class="form-textarea" id="meal-notes" placeholder="How was it?"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="logMeal()">Log Meal</button>
+                </div>
+            `);
+        }
+
+        function logMeal() {
+            const meal = {
+                id: 'meal_' + Date.now(),
+                title: document.getElementById('meal-title').value,
+                date: document.getElementById('meal-date').value,
+                notes: document.getElementById('meal-notes').value,
+                rating: 0
+            };
+
+            const history = getStorage(STORAGE.HISTORY) || [];
+            history.push(meal);
+            setStorage(STORAGE.HISTORY, history);
+            closeModal();
+            renderHistory();
+        }
+
+        // ========================================
+        // SETTINGS
+        // ========================================
+        function loadPreferences() {
+            const prefs = getStorage(STORAGE.PREFS) || {};
+            if (prefs.darkMode) {
+                document.body.classList.add('dark-mode');
+                const toggle = document.getElementById('dark-mode-toggle');
+                if (toggle) toggle.checked = true;
+            }
+        }
+
+        function toggleDarkMode() {
+            const toggle = document.getElementById('dark-mode-toggle');
+            document.body.classList.toggle('dark-mode', toggle.checked);
+            const prefs = getStorage(STORAGE.PREFS) || {};
+            prefs.darkMode = toggle.checked;
+            setStorage(STORAGE.PREFS, prefs);
+        }
+
+        function exportAllData() {
+            const data = {};
+            Object.values(STORAGE).forEach(key => {
+                data[key] = getStorage(key);
+            });
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `tavola-chat-${new Date().toISOString().split('T')[0]}.txt`;
-            document.body.appendChild(a);
+            a.download = `tavola-backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
-            document.body.removeChild(a);
             URL.revokeObjectURL(url);
-
-            document.getElementById('settings-menu').classList.remove('active');
         }
 
-        function confirmResetAll() {
-            document.getElementById('settings-menu').classList.remove('active');
-            document.getElementById('reset-modal').classList.add('active');
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                reader.onload = (evt) => {
+                    try {
+                        const data = JSON.parse(evt.target.result);
+                        Object.entries(data).forEach(([key, value]) => {
+                            if (value) setStorage(key, value);
+                        });
+                        alert('Data imported successfully!');
+                        location.reload();
+                    } catch (err) {
+                        alert('Error importing data: ' + err.message);
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
         }
 
-        function closeResetModal() {
-            document.getElementById('reset-modal').classList.remove('active');
+        function confirmClearAllData() {
+            if (confirm('Are you sure you want to clear ALL data? This cannot be undone.')) {
+                Object.values(STORAGE).forEach(key => localStorage.removeItem(key));
+                location.reload();
+            }
         }
 
-        function resetAll() {
-            localStorage.removeItem(STORAGE_KEYS.PROFILE);
-            localStorage.removeItem(STORAGE_KEYS.CHAT_HISTORY);
-            chatHistory = [];
-            closeResetModal();
-            showWelcome();
+        // ========================================
+        // MODAL
+        // ========================================
+        function openModal(content) {
+            document.getElementById('modal-content').innerHTML = content;
+            document.getElementById('modal-overlay').classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.remove('active');
+        }
+
+        // Close modal on overlay click
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeModal();
+        });
+
+        // ========================================
+        // UTILITIES
+        // ========================================
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            const now = new Date();
+            const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+
+            if (diffDays === 0) return 'Today';
+            if (diffDays === 1) return 'Yesterday';
+            if (diffDays < 7) return `${diffDays} days ago`;
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+
+        function shareRecipe(recipeId) {
+            const url = window.location.href.split('?')[0] + '?recipe=' + recipeId;
+            if (navigator.share) {
+                navigator.share({ title: 'Recipe from Tavola', url: url });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('Link copied to clipboard!');
+            }
+        }
+
+        function printRecipe(recipeId) {
+            window.print();
         }
     </script>
 </body>
