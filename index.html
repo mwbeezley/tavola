@@ -1,0 +1,1916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tavola - Mediterranean Meal Planning</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@400;500;600&family=Source+Sans+3:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cerulean: #007BA7;
+            --cerulean-dark: #006691;
+            --seafoam: #7FD8BE;
+            --seafoam-light: #b8e8d8;
+            --navy: #1A2332;
+            --cream: #FFF8E7;
+            --white: #FFFFFF;
+            --gray-light: #f5f5f5;
+            --gray-medium: #e0e0e0;
+            --gray-text: #666;
+            --warning: #d4a574;
+            --shadow: 0 2px 8px rgba(26, 35, 50, 0.08);
+            --shadow-lg: 0 4px 16px rgba(26, 35, 50, 0.12);
+            --radius: 12px;
+            --radius-sm: 8px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--cream);
+            color: var(--navy);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        .header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-medium);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--cerulean);
+            text-decoration: none;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn-link {
+            background: none;
+            border: none;
+            color: var(--cerulean);
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.2s;
+        }
+
+        .btn-link:hover {
+            background-color: var(--seafoam-light);
+        }
+
+        /* Welcome Screen */
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .welcome-logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--cerulean);
+            margin-bottom: 16px;
+        }
+
+        .welcome-subtitle {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 400;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .welcome-description {
+            font-size: 1.1rem;
+            color: var(--gray-text);
+            max-width: 500px;
+            margin-bottom: 40px;
+        }
+
+        .btn-primary {
+            background-color: var(--cerulean);
+            color: var(--white);
+            border: none;
+            padding: 16px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            min-height: 44px;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--cerulean-dark);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--cerulean);
+            border: 2px solid var(--cerulean);
+            padding: 14px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: background-color 0.2s;
+            min-height: 44px;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--seafoam-light);
+        }
+
+        /* Form Styles */
+        .intake-form {
+            padding: 32px 0 60px;
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 500;
+            color: var(--navy);
+            margin-bottom: 8px;
+        }
+
+        .form-header p {
+            color: var(--gray-text);
+            font-size: 1.05rem;
+        }
+
+        .form-section {
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+
+        .form-section h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--cerulean);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--seafoam);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: var(--navy);
+        }
+
+        .form-group input[type="text"],
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--navy);
+            background: var(--white);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--cerulean);
+            box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.15);
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Checkbox Styles */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .checkbox-category {
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            padding: 16px;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-header input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: var(--cerulean);
+            cursor: pointer;
+        }
+
+        .category-header label {
+            font-weight: 600;
+            color: var(--navy);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .category-options {
+            margin-top: 12px;
+            margin-left: 30px;
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .category-options.expanded {
+            display: flex;
+        }
+
+        .category-options label {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-weight: 400;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .category-options input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--cerulean);
+            cursor: pointer;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .warning-note {
+            background: linear-gradient(135deg, #fff5eb 0%, #fff0e0 100%);
+            border-left: 3px solid var(--warning);
+            padding: 10px 14px;
+            margin-top: 10px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 0.9rem;
+            color: #8b6914;
+        }
+
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-option input[type="radio"] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--cerulean);
+            cursor: pointer;
+        }
+
+        .radio-option label {
+            font-weight: 400;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        /* Form Actions */
+        .form-actions {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+        }
+
+        /* Chat Interface */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100vh - 73px);
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 0;
+            scroll-behavior: smooth;
+        }
+
+        .message {
+            margin-bottom: 16px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .message-user {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .message-user .message-content {
+            background: var(--seafoam);
+            color: var(--navy);
+            border-radius: var(--radius) var(--radius) 4px var(--radius);
+            max-width: 80%;
+            padding: 14px 18px;
+        }
+
+        .message-assistant {
+            display: flex;
+            justify-content: flex-start;
+        }
+
+        .message-assistant .message-content {
+            background: var(--white);
+            border: 1px solid var(--seafoam);
+            border-radius: var(--radius) var(--radius) var(--radius) 4px;
+            max-width: 85%;
+            padding: 18px 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .message-content p {
+            margin-bottom: 12px;
+        }
+
+        .message-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        .message-content pre {
+            background: var(--gray-light);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            overflow-x: auto;
+            font-size: 0.9rem;
+            margin: 12px 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .message-content ul, .message-content ol {
+            margin: 12px 0;
+            padding-left: 24px;
+        }
+
+        .message-content li {
+            margin-bottom: 6px;
+        }
+
+        .message-content strong {
+            color: var(--cerulean);
+        }
+
+        .thinking {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray-text);
+            font-style: italic;
+            padding: 14px 18px;
+        }
+
+        .thinking-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .thinking-dots span {
+            width: 6px;
+            height: 6px;
+            background: var(--cerulean);
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+
+        .thinking-dots span:nth-child(1) { animation-delay: 0s; }
+        .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1); opacity: 1; }
+        }
+
+        /* Quick Actions */
+        .quick-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+
+        .quick-action {
+            background: var(--white);
+            border: 1px solid var(--seafoam);
+            padding: 10px 16px;
+            border-radius: 20px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            color: var(--navy);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .quick-action:hover {
+            background: var(--seafoam-light);
+            border-color: var(--cerulean);
+        }
+
+        /* Chat Input */
+        .chat-input-container {
+            background: var(--white);
+            border-top: 1px solid var(--gray-medium);
+            padding: 16px 0 24px;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input {
+            flex: 1;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius);
+            padding: 14px 16px;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--navy);
+            resize: none;
+            min-height: 52px;
+            max-height: 150px;
+            line-height: 1.5;
+        }
+
+        .chat-input:focus {
+            outline: none;
+            border-color: var(--cerulean);
+            box-shadow: 0 0 0 3px rgba(0, 123, 167, 0.15);
+        }
+
+        .chat-input::placeholder {
+            color: var(--gray-text);
+        }
+
+        .send-btn {
+            background: var(--cerulean);
+            color: var(--white);
+            border: none;
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+            flex-shrink: 0;
+        }
+
+        .send-btn:hover:not(:disabled) {
+            background: var(--cerulean-dark);
+        }
+
+        .send-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .send-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 35, 50, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--white);
+            border-radius: var(--radius);
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--gray-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 500;
+            color: var(--navy);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 4px;
+            line-height: 1;
+        }
+
+        .modal-close:hover {
+            color: var(--navy);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-actions {
+            padding: 16px 24px;
+            border-top: 1px solid var(--gray-medium);
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        /* Hidden utility */
+        .hidden {
+            display: none !important;
+        }
+
+        /* Error state */
+        .error-message {
+            background: #fff0f0;
+            border: 1px solid #ffcccc;
+            color: #cc0000;
+            padding: 14px 18px;
+            border-radius: var(--radius);
+            margin: 12px 0;
+        }
+
+        /* Settings Menu */
+        .settings-dropdown {
+            position: relative;
+        }
+
+        .settings-menu {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background: var(--white);
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-lg);
+            min-width: 180px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.2s;
+            z-index: 50;
+        }
+
+        .settings-menu.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(4px);
+        }
+
+        .settings-menu button {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 16px;
+            background: none;
+            border: none;
+            font-family: inherit;
+            font-size: 0.95rem;
+            color: var(--navy);
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .settings-menu button:hover {
+            background: var(--gray-light);
+        }
+
+        .settings-menu button:first-child {
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+        }
+
+        .settings-menu button:last-child {
+            border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+        }
+
+        .settings-menu .danger {
+            color: #cc0000;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .welcome-logo {
+                font-size: 3rem;
+            }
+
+            .welcome-subtitle {
+                font-size: 1.25rem;
+            }
+
+            .form-section {
+                padding: 20px;
+            }
+
+            .message-user .message-content,
+            .message-assistant .message-content {
+                max-width: 90%;
+            }
+        }
+
+        /* Scrollbar styling */
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--gray-medium);
+            border-radius: 3px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb:hover {
+            background: var(--gray-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header (shown after welcome) -->
+    <header class="header hidden" id="app-header">
+        <div class="container header-content">
+            <a href="#" class="logo" onclick="showChat(); return false;">Tavola</a>
+            <div class="header-actions">
+                <button class="btn-link" onclick="openEditProfile()">Edit Profile</button>
+                <div class="settings-dropdown">
+                    <button class="btn-link" onclick="toggleSettings(event)">Settings ▾</button>
+                    <div class="settings-menu" id="settings-menu">
+                        <button onclick="exportChatHistory()">Export Chat</button>
+                        <button onclick="clearChatHistory()">Clear Chat</button>
+                        <button onclick="confirmResetAll()" class="danger">Reset Everything</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Welcome Screen -->
+    <main class="welcome-screen" id="welcome-screen">
+        <h1 class="welcome-logo">Tavola</h1>
+        <p class="welcome-subtitle">Your Mediterranean Meal Planning Assistant</p>
+        <p class="welcome-description">
+            Gentle, delicious meal planning designed for your health needs.
+            Let's create a personalized experience that works with your body, your garden, and your energy levels.
+        </p>
+        <button class="btn-primary" onclick="showIntakeForm()">Get Started</button>
+    </main>
+
+    <!-- Intake Form -->
+    <main class="intake-form hidden" id="intake-form">
+        <div class="container">
+            <div class="form-header">
+                <h1>Let's Get to Know You</h1>
+                <p>This helps me suggest meals that work for your body and lifestyle</p>
+            </div>
+
+            <form id="profile-form" onsubmit="saveProfile(event)">
+                <!-- Health Conditions -->
+                <section class="form-section">
+                    <h2>Health Conditions</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="crohns-severity">Crohn's Disease Severity</label>
+                            <select id="crohns-severity" name="crohnsSeverity">
+                                <option value="">Select...</option>
+                                <option value="mild">Mild</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="severe">Severe</option>
+                                <option value="remission">In Remission</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="crohns-triggers">Specific Crohn's Triggers</label>
+                            <input type="text" id="crohns-triggers" name="crohnsTriggers" placeholder="e.g., raw vegetables, nuts, dairy">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="fibro-energy">Fibromyalgia Energy Level</label>
+                            <select id="fibro-energy" name="fibroEnergy">
+                                <option value="">Select...</option>
+                                <option value="low">Low</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="variable">Variable (changes day to day)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="thyroid-type">Thyroid Condition Type</label>
+                            <input type="text" id="thyroid-type" name="thyroidType" placeholder="e.g., Hashimoto's, hypothyroid">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="thyroid-restrictions">Thyroid-Related Dietary Restrictions</label>
+                        <input type="text" id="thyroid-restrictions" name="thyroidRestrictions" placeholder="e.g., limit cruciferous vegetables, iodine considerations">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="other-conditions">Other Health Conditions</label>
+                        <textarea id="other-conditions" name="otherConditions" placeholder="Any other health considerations I should know about..."></textarea>
+                    </div>
+                </section>
+
+                <!-- Protein Preferences -->
+                <section class="form-section">
+                    <h2>Protein Preferences</h2>
+                    <p style="color: var(--gray-text); margin-bottom: 16px;">Check the categories you eat, then select your specific preferences</p>
+
+                    <div class="checkbox-group" id="protein-preferences">
+                        <!-- Seafood -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-seafood" onchange="toggleCategory('seafood')">
+                                <label for="cat-seafood">Seafood</label>
+                            </div>
+                            <div class="category-options" id="options-seafood">
+                                <label><input type="checkbox" name="proteins" value="white-fish"> White Fish (tilapia, cod, halibut, branzino, sea bass, snapper)</label>
+                                <label><input type="checkbox" name="proteins" value="fatty-fish"> Fatty Fish (salmon, mackerel, sardines, trout)</label>
+                                <label><input type="checkbox" name="proteins" value="shellfish"> Shellfish (shrimp, scallops, mussels)</label>
+                            </div>
+                        </div>
+
+                        <!-- Poultry -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-poultry" onchange="toggleCategory('poultry')">
+                                <label for="cat-poultry">Poultry</label>
+                            </div>
+                            <div class="category-options" id="options-poultry">
+                                <label><input type="checkbox" name="proteins" value="chicken-breast"> Chicken breast (lean)</label>
+                                <label><input type="checkbox" name="proteins" value="chicken-thighs"> Chicken thighs (more flavor)</label>
+                                <label><input type="checkbox" name="proteins" value="ground-turkey"> Ground turkey</label>
+                                <label><input type="checkbox" name="proteins" value="whole-chicken"> Whole chicken/rotisserie</label>
+                            </div>
+                        </div>
+
+                        <!-- Pork -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-pork" onchange="toggleCategory('pork')">
+                                <label for="cat-pork">Pork</label>
+                            </div>
+                            <div class="category-options" id="options-pork">
+                                <label><input type="checkbox" name="proteins" value="pork-chops"> Pork chops</label>
+                                <label><input type="checkbox" name="proteins" value="pork-tenderloin"> Pork tenderloin (lean)</label>
+                                <label><input type="checkbox" name="proteins" value="ground-pork"> Ground pork</label>
+                                <label><input type="checkbox" name="proteins" value="italian-sausage"> Italian sausage</label>
+                            </div>
+                        </div>
+
+                        <!-- Beef -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-beef" onchange="toggleCategory('beef')">
+                                <label for="cat-beef">Beef</label>
+                            </div>
+                            <div class="category-options" id="options-beef">
+                                <label><input type="checkbox" name="proteins" value="ground-beef"> Ground beef</label>
+                                <label><input type="checkbox" name="proteins" value="steaks"> Steaks (sirloin, flank)</label>
+                                <label><input type="checkbox" name="proteins" value="stew-meat"> Stew meat/chuck roast</label>
+                                <div class="warning-note">⚠️ Note: Red meat can trigger inflammation for some people with Crohn's</div>
+                            </div>
+                        </div>
+
+                        <!-- Lamb -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-lamb" onchange="toggleCategory('lamb')">
+                                <label for="cat-lamb">Lamb</label>
+                            </div>
+                            <div class="category-options" id="options-lamb">
+                                <label><input type="checkbox" name="proteins" value="ground-lamb"> Ground lamb</label>
+                                <label><input type="checkbox" name="proteins" value="lamb-chops"> Lamb chops</label>
+                                <label><input type="checkbox" name="proteins" value="lamb-shoulder"> Lamb shoulder</label>
+                            </div>
+                        </div>
+
+                        <!-- Plant-Based -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-plant" onchange="toggleCategory('plant')">
+                                <label for="cat-plant">Plant-Based Proteins</label>
+                            </div>
+                            <div class="category-options" id="options-plant">
+                                <label><input type="checkbox" name="proteins" value="chickpeas"> Chickpeas/garbanzo beans</label>
+                                <label><input type="checkbox" name="proteins" value="white-beans"> White beans (cannellini)</label>
+                                <label><input type="checkbox" name="proteins" value="lentils"> Lentils</label>
+                                <label><input type="checkbox" name="proteins" value="tofu-tempeh"> Tofu/tempeh</label>
+                                <div class="warning-note">⚠️ Note: Legumes may cause gas during Crohn's flares</div>
+                            </div>
+                        </div>
+
+                        <!-- Eggs & Dairy -->
+                        <div class="checkbox-category">
+                            <div class="category-header">
+                                <input type="checkbox" id="cat-eggs-dairy" onchange="toggleCategory('eggs-dairy')">
+                                <label for="cat-eggs-dairy">Eggs & Dairy</label>
+                            </div>
+                            <div class="category-options" id="options-eggs-dairy">
+                                <label><input type="checkbox" name="proteins" value="eggs"> Eggs (all styles)</label>
+                                <label><input type="checkbox" name="proteins" value="greek-yogurt"> Greek yogurt</label>
+                                <label><input type="checkbox" name="proteins" value="hard-cheeses"> Hard cheeses (parmesan, aged cheddar)</label>
+                                <label><input type="checkbox" name="proteins" value="feta"> Feta cheese</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Garden Section -->
+                <section class="form-section">
+                    <h2>Your Garden</h2>
+
+                    <div class="form-group">
+                        <label for="currently-growing">What's Currently Growing?</label>
+                        <textarea id="currently-growing" name="currentlyGrowing" placeholder="e.g., tomatoes, zucchini, basil, peppers, cucumbers..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="want-to-plant">What Would You Like to Plant Next?</label>
+                        <textarea id="want-to-plant" name="wantToPlant" placeholder="e.g., winter squash, leafy greens, herbs..."></textarea>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="growing-zone">Growing Zone (optional)</label>
+                            <input type="text" id="growing-zone" name="growingZone" placeholder="e.g., 7b">
+                        </div>
+                        <div class="form-group">
+                            <label for="current-season">Current Season</label>
+                            <select id="current-season" name="currentSeason">
+                                <option value="spring">Spring</option>
+                                <option value="summer">Summer</option>
+                                <option value="fall">Fall</option>
+                                <option value="winter">Winter</option>
+                            </select>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cooking Capacity -->
+                <section class="form-section">
+                    <h2>Cooking Capacity</h2>
+
+                    <div class="form-group">
+                        <label>Daily Energy Level for Cooking</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="energy-low" name="energyLevel" value="low">
+                                <label for="energy-low">Low (need simple meals)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="energy-moderate" name="energyLevel" value="moderate">
+                                <label for="energy-moderate">Moderate</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="energy-good" name="energyLevel" value="good">
+                                <label for="energy-good">Good</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="energy-variable" name="energyLevel" value="variable" checked>
+                                <label for="energy-variable">Variable (changes daily)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Preferred Cooking Time</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="time-quick" name="cookingTime" value="quick">
+                                <label for="time-quick">Quick (15-30 min)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="time-standard" name="cookingTime" value="standard" checked>
+                                <label for="time-standard">Standard (30-60 min)</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="time-batch" name="cookingTime" value="batch">
+                                <label for="time-batch">Batch cooking</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Cooking Style Preference</label>
+                        <div class="radio-group">
+                            <div class="radio-option">
+                                <input type="radio" id="style-simple" name="cookingStyle" value="simple">
+                                <label for="style-simple">Keep it simple</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="style-adventurous" name="cookingStyle" value="adventurous">
+                                <label for="style-adventurous">Adventurous</label>
+                            </div>
+                            <div class="radio-option">
+                                <input type="radio" id="style-balanced" name="cookingStyle" value="balanced" checked>
+                                <label for="style-balanced">Balanced mix</label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Budget -->
+                <section class="form-section">
+                    <h2>Budget</h2>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="weekly-budget">Weekly Grocery Budget</label>
+                            <select id="weekly-budget" name="weeklyBudget">
+                                <option value="50-75">$50-75</option>
+                                <option value="75-100">$75-100</option>
+                                <option value="100-150" selected>$100-150</option>
+                                <option value="150-200">$150-200</option>
+                                <option value="200+">$200+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Shopping Priority</label>
+                            <div class="radio-group" style="flex-direction: column; align-items: flex-start;">
+                                <div class="radio-option">
+                                    <input type="radio" id="priority-quality" name="shoppingPriority" value="quality">
+                                    <label for="priority-quality">Quality ingredients</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="priority-budget" name="shoppingPriority" value="budget">
+                                    <label for="priority-budget">Budget-friendly</label>
+                                </div>
+                                <div class="radio-option">
+                                    <input type="radio" id="priority-balance" name="shoppingPriority" value="balance" checked>
+                                    <label for="priority-balance">Balance both</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Dietary Notes -->
+                <section class="form-section">
+                    <h2>Additional Dietary Notes</h2>
+
+                    <div class="form-group">
+                        <label for="foods-to-avoid">Foods to Avoid (specific triggers)</label>
+                        <textarea id="foods-to-avoid" name="foodsToAvoid" placeholder="List any specific foods that cause problems for you..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="favorite-flavors">Favorite Flavors & Cuisines</label>
+                        <textarea id="favorite-flavors" name="favoriteFlavors" placeholder="e.g., lemon, garlic, fresh herbs, Greek-style, light and fresh..."></textarea>
+                    </div>
+                </section>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">Save & Start Planning</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Chat Interface -->
+    <main class="chat-container hidden" id="chat-interface">
+        <div class="container" style="flex: 1; display: flex; flex-direction: column; height: 100%;">
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will be inserted here -->
+            </div>
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <textarea
+                        class="chat-input"
+                        id="chat-input"
+                        placeholder="Ask me about meal planning, recipes, or what to cook tonight..."
+                        rows="1"
+                    ></textarea>
+                    <button class="send-btn" id="send-btn" onclick="sendMessage()">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M22 2L11 13"></path>
+                            <path d="M22 2L15 22L11 13L2 9L22 2Z"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div class="modal-overlay" id="edit-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Edit Your Profile</h2>
+                <button class="modal-close" onclick="closeEditProfile()">&times;</button>
+            </div>
+            <div class="modal-body" id="edit-modal-body">
+                <!-- Form will be cloned here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Reset Modal -->
+    <div class="modal-overlay" id="reset-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Reset Everything?</h2>
+                <button class="modal-close" onclick="closeResetModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>This will delete your profile and all chat history. This action cannot be undone.</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" onclick="closeResetModal()">Cancel</button>
+                <button class="btn-primary" style="background: #cc0000;" onclick="resetAll()">Yes, Reset Everything</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Storage keys
+        const STORAGE_KEYS = {
+            PROFILE: 'tavola_profile',
+            CHAT_HISTORY: 'tavola_chat_history'
+        };
+
+        // State
+        let chatHistory = [];
+        let isProcessing = false;
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', () => {
+            const profile = getProfile();
+            if (profile) {
+                showChat();
+            } else {
+                showWelcome();
+            }
+
+            // Set up chat input handlers
+            const chatInput = document.getElementById('chat-input');
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            // Auto-resize textarea
+            chatInput.addEventListener('input', () => {
+                chatInput.style.height = 'auto';
+                chatInput.style.height = Math.min(chatInput.scrollHeight, 150) + 'px';
+            });
+
+            // Close settings when clicking outside
+            document.addEventListener('click', (e) => {
+                const settingsMenu = document.getElementById('settings-menu');
+                if (!e.target.closest('.settings-dropdown')) {
+                    settingsMenu.classList.remove('active');
+                }
+            });
+
+            // Set current season based on date
+            setCurrentSeason();
+        });
+
+        // Storage functions
+        function getProfile() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEYS.PROFILE);
+                return data ? JSON.parse(data) : null;
+            } catch (e) {
+                console.error('Error reading profile:', e);
+                return null;
+            }
+        }
+
+        function saveProfileToStorage(profile) {
+            try {
+                localStorage.setItem(STORAGE_KEYS.PROFILE, JSON.stringify(profile));
+                return true;
+            } catch (e) {
+                console.error('Error saving profile:', e);
+                if (e.name === 'QuotaExceededError') {
+                    alert('Storage is full. Please clear some data and try again.');
+                }
+                return false;
+            }
+        }
+
+        function getChatHistory() {
+            try {
+                const data = localStorage.getItem(STORAGE_KEYS.CHAT_HISTORY);
+                return data ? JSON.parse(data) : [];
+            } catch (e) {
+                console.error('Error reading chat history:', e);
+                return [];
+            }
+        }
+
+        function saveChatHistory(history) {
+            try {
+                localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(history));
+            } catch (e) {
+                console.error('Error saving chat history:', e);
+                // If storage is full, trim older messages
+                if (e.name === 'QuotaExceededError' && history.length > 10) {
+                    history = history.slice(-10);
+                    localStorage.setItem(STORAGE_KEYS.CHAT_HISTORY, JSON.stringify(history));
+                }
+            }
+        }
+
+        // View management
+        function showWelcome() {
+            document.getElementById('welcome-screen').classList.remove('hidden');
+            document.getElementById('intake-form').classList.add('hidden');
+            document.getElementById('chat-interface').classList.add('hidden');
+            document.getElementById('app-header').classList.add('hidden');
+        }
+
+        function showIntakeForm() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('intake-form').classList.remove('hidden');
+            document.getElementById('chat-interface').classList.add('hidden');
+            document.getElementById('app-header').classList.add('hidden');
+        }
+
+        function showChat() {
+            document.getElementById('welcome-screen').classList.add('hidden');
+            document.getElementById('intake-form').classList.add('hidden');
+            document.getElementById('chat-interface').classList.remove('hidden');
+            document.getElementById('app-header').classList.remove('hidden');
+
+            // Load chat history
+            chatHistory = getChatHistory();
+            renderChatHistory();
+
+            // Show welcome message if no history
+            if (chatHistory.length === 0) {
+                addWelcomeMessage();
+            }
+
+            // Focus input
+            setTimeout(() => {
+                document.getElementById('chat-input').focus();
+            }, 100);
+        }
+
+        // Form functions
+        function toggleCategory(category) {
+            const checkbox = document.getElementById(`cat-${category}`);
+            const options = document.getElementById(`options-${category}`);
+
+            if (checkbox.checked) {
+                options.classList.add('expanded');
+                // Check all sub-options by default
+                options.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+            } else {
+                options.classList.remove('expanded');
+                // Uncheck all sub-options
+                options.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+            }
+        }
+
+        function setCurrentSeason() {
+            const month = new Date().getMonth();
+            let season = 'winter';
+            if (month >= 2 && month <= 4) season = 'spring';
+            else if (month >= 5 && month <= 7) season = 'summer';
+            else if (month >= 8 && month <= 10) season = 'fall';
+
+            document.getElementById('current-season').value = season;
+        }
+
+        function saveProfile(e) {
+            e.preventDefault();
+
+            const form = e.target;
+            const profile = {
+                // Health conditions
+                crohnsSeverity: form.crohnsSeverity.value,
+                crohnsTriggers: form.crohnsTriggers.value,
+                fibroEnergy: form.fibroEnergy.value,
+                thyroidType: form.thyroidType.value,
+                thyroidRestrictions: form.thyroidRestrictions.value,
+                otherConditions: form.otherConditions.value,
+
+                // Proteins - gather all checked values
+                proteins: Array.from(form.querySelectorAll('input[name="proteins"]:checked'))
+                    .map(cb => cb.value),
+
+                // Garden
+                currentlyGrowing: form.currentlyGrowing.value,
+                wantToPlant: form.wantToPlant.value,
+                growingZone: form.growingZone.value,
+                currentSeason: form.currentSeason.value,
+
+                // Cooking capacity
+                energyLevel: form.energyLevel.value,
+                cookingTime: form.cookingTime.value,
+                cookingStyle: form.cookingStyle.value,
+
+                // Budget
+                weeklyBudget: form.weeklyBudget.value,
+                shoppingPriority: form.shoppingPriority.value,
+
+                // Dietary notes
+                foodsToAvoid: form.foodsToAvoid.value,
+                favoriteFlavors: form.favoriteFlavors.value,
+
+                // Metadata
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            if (saveProfileToStorage(profile)) {
+                showChat();
+            }
+        }
+
+        // Profile formatting for API
+        function formatProfileForAPI(profile) {
+            const proteinMap = {
+                'white-fish': 'White fish (tilapia, cod, halibut, branzino, sea bass, snapper)',
+                'fatty-fish': 'Fatty fish (salmon, mackerel, sardines, trout)',
+                'shellfish': 'Shellfish (shrimp, scallops, mussels)',
+                'chicken-breast': 'Chicken breast',
+                'chicken-thighs': 'Chicken thighs',
+                'ground-turkey': 'Ground turkey',
+                'whole-chicken': 'Whole/rotisserie chicken',
+                'pork-chops': 'Pork chops',
+                'pork-tenderloin': 'Pork tenderloin',
+                'ground-pork': 'Ground pork',
+                'italian-sausage': 'Italian sausage',
+                'ground-beef': 'Ground beef',
+                'steaks': 'Steaks',
+                'stew-meat': 'Stew meat/chuck roast',
+                'ground-lamb': 'Ground lamb',
+                'lamb-chops': 'Lamb chops',
+                'lamb-shoulder': 'Lamb shoulder',
+                'chickpeas': 'Chickpeas',
+                'white-beans': 'White beans (cannellini)',
+                'lentils': 'Lentils',
+                'tofu-tempeh': 'Tofu/tempeh',
+                'eggs': 'Eggs',
+                'greek-yogurt': 'Greek yogurt',
+                'hard-cheeses': 'Hard cheeses (parmesan, aged cheddar)',
+                'feta': 'Feta cheese'
+            };
+
+            const proteins = profile.proteins.map(p => proteinMap[p] || p).join(', ');
+
+            return `
+HEALTH PROFILE:
+- Crohn's Disease: ${profile.crohnsSeverity || 'Not specified'} severity
+- Crohn's Triggers: ${profile.crohnsTriggers || 'None specified'}
+- Fibromyalgia Energy: ${profile.fibroEnergy || 'Not specified'}
+- Thyroid: ${profile.thyroidType || 'Not specified'} ${profile.thyroidRestrictions ? `(Restrictions: ${profile.thyroidRestrictions})` : ''}
+- Other Conditions: ${profile.otherConditions || 'None'}
+
+PROTEIN PREFERENCES:
+${proteins || 'No preferences specified'}
+
+GARDEN:
+- Currently Growing: ${profile.currentlyGrowing || 'Nothing specified'}
+- Want to Plant: ${profile.wantToPlant || 'Nothing specified'}
+- Growing Zone: ${profile.growingZone || 'Not specified'}
+- Current Season: ${profile.currentSeason || 'Not specified'}
+
+COOKING CAPACITY:
+- Energy Level: ${profile.energyLevel || 'Variable'}
+- Preferred Cooking Time: ${profile.cookingTime || 'Standard (30-60 min)'}
+- Cooking Style: ${profile.cookingStyle || 'Balanced'}
+
+BUDGET:
+- Weekly Budget: $${profile.weeklyBudget || '100-150'}
+- Priority: ${profile.shoppingPriority || 'Balance both'}
+
+DIETARY NOTES:
+- Foods to Avoid: ${profile.foodsToAvoid || 'None specified'}
+- Favorite Flavors: ${profile.favoriteFlavors || 'Not specified'}
+            `.trim();
+        }
+
+        // Chat functions
+        function addWelcomeMessage() {
+            const profile = getProfile();
+            let welcomeText = "Hi! I'm Tavola, your Mediterranean meal planning assistant. ";
+
+            if (profile) {
+                welcomeText += "I've reviewed your profile and I'm here to help you plan delicious, Crohn's-friendly meals that work with your garden and energy levels. ";
+            }
+
+            welcomeText += "What would you like to plan today?";
+
+            const welcomeMessage = {
+                role: 'assistant',
+                content: welcomeText,
+                timestamp: new Date().toISOString()
+            };
+
+            chatHistory.push(welcomeMessage);
+            saveChatHistory(chatHistory);
+            renderMessage(welcomeMessage, true);
+        }
+
+        function renderChatHistory() {
+            const container = document.getElementById('chat-messages');
+            container.innerHTML = '';
+            chatHistory.forEach(msg => renderMessage(msg, false));
+        }
+
+        function renderMessage(message, animate = true) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `message message-${message.role}`;
+            if (!animate) div.style.animation = 'none';
+
+            const content = document.createElement('div');
+            content.className = 'message-content';
+            content.innerHTML = formatMessageContent(message.content);
+
+            div.appendChild(content);
+
+            // Add quick actions after first assistant message
+            if (message.role === 'assistant' && chatHistory.length <= 1) {
+                const quickActions = document.createElement('div');
+                quickActions.className = 'quick-actions';
+                quickActions.innerHTML = `
+                    <button class="quick-action" onclick="sendQuickAction('I need a meal plan for this week')">Weekly meal plan</button>
+                    <button class="quick-action" onclick="sendQuickAction('What should I make for a quick, gentle dinner?')">Quick dinner idea</button>
+                    <button class="quick-action" onclick="sendQuickAction('What can I make with what\\'s in my garden?')">Use my garden</button>
+                    <button class="quick-action" onclick="sendQuickAction('What should I plant in my garden for Mediterranean meals?')">Garden planning</button>
+                `;
+                content.appendChild(quickActions);
+            }
+
+            container.appendChild(div);
+            scrollToBottom();
+        }
+
+        function formatMessageContent(content) {
+            // Convert markdown-like formatting to HTML
+            let html = content
+                // Code blocks
+                .replace(/```([\s\S]*?)```/g, '<pre>$1</pre>')
+                // Bold
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                // Headers (=== style)
+                .replace(/^=== (.*?) ===/gm, '<strong style="font-size: 1.1em; display: block; margin-top: 16px; margin-bottom: 8px; color: var(--cerulean);">$1</strong>')
+                // Lists with checkboxes
+                .replace(/^☐ (.*)$/gm, '<span style="display: block; padding-left: 8px;">☐ $1</span>')
+                // Regular lists
+                .replace(/^- (.*)$/gm, '<li>$1</li>')
+                .replace(/^(\d+)\. (.*)$/gm, '<li>$2</li>')
+                // Line breaks
+                .replace(/\n\n/g, '</p><p>')
+                .replace(/\n/g, '<br>');
+
+            // Wrap in paragraphs if not already structured
+            if (!html.startsWith('<')) {
+                html = '<p>' + html + '</p>';
+            }
+
+            return html;
+        }
+
+        function scrollToBottom() {
+            const container = document.getElementById('chat-messages');
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 50);
+        }
+
+        function showThinking() {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = 'message message-assistant';
+            div.id = 'thinking-message';
+            div.innerHTML = `
+                <div class="thinking">
+                    <div class="thinking-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                    <span>Tavola is thinking...</span>
+                </div>
+            `;
+            container.appendChild(div);
+            scrollToBottom();
+        }
+
+        function hideThinking() {
+            const thinking = document.getElementById('thinking-message');
+            if (thinking) thinking.remove();
+        }
+
+        async function sendMessage() {
+            if (isProcessing) return;
+
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Clear input
+            input.value = '';
+            input.style.height = 'auto';
+
+            // Add user message
+            const userMessage = {
+                role: 'user',
+                content: message,
+                timestamp: new Date().toISOString()
+            };
+            chatHistory.push(userMessage);
+            saveChatHistory(chatHistory);
+            renderMessage(userMessage);
+
+            // Remove quick actions if they exist
+            document.querySelectorAll('.quick-actions').forEach(el => el.remove());
+
+            // Call API
+            isProcessing = true;
+            document.getElementById('send-btn').disabled = true;
+            showThinking();
+
+            try {
+                const response = await callAPI(message);
+                hideThinking();
+
+                const assistantMessage = {
+                    role: 'assistant',
+                    content: response,
+                    timestamp: new Date().toISOString()
+                };
+                chatHistory.push(assistantMessage);
+                saveChatHistory(chatHistory);
+                renderMessage(assistantMessage);
+
+            } catch (error) {
+                hideThinking();
+                console.error('API Error:', error);
+
+                const errorMessage = {
+                    role: 'assistant',
+                    content: `I'm sorry, I encountered an error: ${error.message}. Please try again.`,
+                    timestamp: new Date().toISOString()
+                };
+                chatHistory.push(errorMessage);
+                saveChatHistory(chatHistory);
+                renderMessage(errorMessage);
+            }
+
+            isProcessing = false;
+            document.getElementById('send-btn').disabled = false;
+            input.focus();
+        }
+
+        function sendQuickAction(text) {
+            document.getElementById('chat-input').value = text;
+            sendMessage();
+        }
+
+        async function callAPI(userMessage) {
+            const profile = getProfile();
+            const profileText = profile ? formatProfileForAPI(profile) : 'No profile configured.';
+
+            const systemPrompt = `You are Tavola, a Mediterranean meal planning assistant specializing in Crohn's-friendly, anti-inflammatory eating.
+
+Your user's profile:
+${profileText}
+
+Guidelines:
+- Focus on Mediterranean diet principles: olive oil, fish, vegetables, whole grains, legumes (if tolerated)
+- Prioritize anti-inflammatory foods
+- Suggest light, easy-to-digest meals during flares
+- Work with garden produce when available
+- Respect energy levels for cooking complexity
+- Default to fish-forward meals (user preference)
+- Keep portions appropriate for two people
+- Budget-conscious but quality-focused
+- Warm, supportive tone - you understand chronic illness
+
+When asked for meal plans, provide:
+- Specific recipes with ingredient lists
+- Prep and cook times
+- Modifications for Crohn's flares
+- Shopping list organized by store section
+- Garden integration (what to use, what to plant)
+
+Format recipes using this structure:
+=== RECIPE: [Name] ===
+Serves: 2 | Prep: [X]min | Cook: [X]min | Total: [X]min
+
+**INGREDIENTS:**
+- [ingredient with amount]
+
+**INSTRUCTIONS:**
+1. [Step]
+2. [Step]
+
+**CROHN'S MODIFICATIONS:**
+- [Gentler alternatives if needed]
+
+For shopping lists use:
+=== SHOPPING LIST ===
+**PRODUCE:**
+☐ [item] - [amount]
+
+**PROTEINS:**
+☐ [item] - [amount]
+
+**PANTRY:**
+☐ [item] - [amount]
+
+**ESTIMATED TOTAL:** $[X]
+
+Be conversational, warm, and encouraging. Remember this person sometimes forgets to eat - make meals feel achievable and appealing.`;
+
+            // Build messages array for context (keep last 10 messages for context)
+            const recentHistory = chatHistory.slice(-10);
+            const messages = recentHistory.map(msg => ({
+                role: msg.role,
+                content: msg.content
+            }));
+
+            // Add current message if not already in history
+            if (messages.length === 0 || messages[messages.length - 1].content !== userMessage) {
+                messages.push({ role: 'user', content: userMessage });
+            }
+
+            // Get API key - check for environment variable first
+            const apiKey = window.ANTHROPIC_API_KEY || '';
+
+            if (!apiKey) {
+                throw new Error('API key not configured. Please set the ANTHROPIC_API_KEY environment variable.');
+            }
+
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'x-api-key': apiKey,
+                    'anthropic-version': '2023-06-01',
+                    'anthropic-dangerous-direct-browser-access': 'true'
+                },
+                body: JSON.stringify({
+                    model: 'claude-sonnet-4-20250514',
+                    max_tokens: 2000,
+                    system: systemPrompt,
+                    messages: messages
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({}));
+                throw new Error(errorData.error?.message || `API error: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return data.content[0].text;
+        }
+
+        // Settings functions
+        function toggleSettings(e) {
+            e.stopPropagation();
+            const menu = document.getElementById('settings-menu');
+            menu.classList.toggle('active');
+        }
+
+        function openEditProfile() {
+            const profile = getProfile();
+            const modal = document.getElementById('edit-modal');
+            const modalBody = document.getElementById('edit-modal-body');
+
+            // Clone the form
+            const originalForm = document.getElementById('profile-form');
+            const clonedForm = originalForm.cloneNode(true);
+            clonedForm.id = 'edit-profile-form';
+            clonedForm.onsubmit = (e) => {
+                e.preventDefault();
+                updateProfile(e);
+            };
+
+            // Clear modal and add form
+            modalBody.innerHTML = '';
+            modalBody.appendChild(clonedForm);
+
+            // Fill in existing values
+            if (profile) {
+                fillFormWithProfile(clonedForm, profile);
+            }
+
+            // Update button text
+            const submitBtn = clonedForm.querySelector('button[type="submit"]');
+            submitBtn.textContent = 'Save Changes';
+
+            modal.classList.add('active');
+        }
+
+        function fillFormWithProfile(form, profile) {
+            // Simple fields
+            const simpleFields = [
+                'crohnsSeverity', 'crohnsTriggers', 'fibroEnergy', 'thyroidType',
+                'thyroidRestrictions', 'otherConditions', 'currentlyGrowing',
+                'wantToPlant', 'growingZone', 'currentSeason', 'weeklyBudget',
+                'foodsToAvoid', 'favoriteFlavors'
+            ];
+
+            simpleFields.forEach(field => {
+                const el = form.querySelector(`[name="${field}"]`);
+                if (el && profile[field]) {
+                    el.value = profile[field];
+                }
+            });
+
+            // Radio buttons
+            const radioFields = ['energyLevel', 'cookingTime', 'cookingStyle', 'shoppingPriority'];
+            radioFields.forEach(field => {
+                if (profile[field]) {
+                    const radio = form.querySelector(`input[name="${field}"][value="${profile[field]}"]`);
+                    if (radio) radio.checked = true;
+                }
+            });
+
+            // Proteins - need to check categories and individual items
+            if (profile.proteins && profile.proteins.length > 0) {
+                const categoryMap = {
+                    seafood: ['white-fish', 'fatty-fish', 'shellfish'],
+                    poultry: ['chicken-breast', 'chicken-thighs', 'ground-turkey', 'whole-chicken'],
+                    pork: ['pork-chops', 'pork-tenderloin', 'ground-pork', 'italian-sausage'],
+                    beef: ['ground-beef', 'steaks', 'stew-meat'],
+                    lamb: ['ground-lamb', 'lamb-chops', 'lamb-shoulder'],
+                    plant: ['chickpeas', 'white-beans', 'lentils', 'tofu-tempeh'],
+                    'eggs-dairy': ['eggs', 'greek-yogurt', 'hard-cheeses', 'feta']
+                };
+
+                Object.entries(categoryMap).forEach(([category, items]) => {
+                    const hasItems = items.some(item => profile.proteins.includes(item));
+                    if (hasItems) {
+                        const catCheckbox = form.querySelector(`#cat-${category}`);
+                        const optionsDiv = form.querySelector(`#options-${category}`);
+                        if (catCheckbox && optionsDiv) {
+                            catCheckbox.checked = true;
+                            optionsDiv.classList.add('expanded');
+
+                            items.forEach(item => {
+                                const itemCheckbox = form.querySelector(`input[value="${item}"]`);
+                                if (itemCheckbox) {
+                                    itemCheckbox.checked = profile.proteins.includes(item);
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        }
+
+        function closeEditProfile() {
+            document.getElementById('edit-modal').classList.remove('active');
+        }
+
+        function updateProfile(e) {
+            const form = e.target;
+            const oldProfile = getProfile();
+
+            const profile = {
+                // Health conditions
+                crohnsSeverity: form.crohnsSeverity.value,
+                crohnsTriggers: form.crohnsTriggers.value,
+                fibroEnergy: form.fibroEnergy.value,
+                thyroidType: form.thyroidType.value,
+                thyroidRestrictions: form.thyroidRestrictions.value,
+                otherConditions: form.otherConditions.value,
+
+                // Proteins
+                proteins: Array.from(form.querySelectorAll('input[name="proteins"]:checked'))
+                    .map(cb => cb.value),
+
+                // Garden
+                currentlyGrowing: form.currentlyGrowing.value,
+                wantToPlant: form.wantToPlant.value,
+                growingZone: form.growingZone.value,
+                currentSeason: form.currentSeason.value,
+
+                // Cooking capacity
+                energyLevel: form.energyLevel.value,
+                cookingTime: form.cookingTime.value,
+                cookingStyle: form.cookingStyle.value,
+
+                // Budget
+                weeklyBudget: form.weeklyBudget.value,
+                shoppingPriority: form.shoppingPriority.value,
+
+                // Dietary notes
+                foodsToAvoid: form.foodsToAvoid.value,
+                favoriteFlavors: form.favoriteFlavors.value,
+
+                // Metadata
+                createdAt: oldProfile?.createdAt || new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            if (saveProfileToStorage(profile)) {
+                closeEditProfile();
+                // Add confirmation message to chat
+                const msg = {
+                    role: 'assistant',
+                    content: "I've updated your profile! I'll use your new preferences for future meal suggestions.",
+                    timestamp: new Date().toISOString()
+                };
+                chatHistory.push(msg);
+                saveChatHistory(chatHistory);
+                renderMessage(msg);
+            }
+        }
+
+        function clearChatHistory() {
+            if (confirm('Clear all chat history? Your profile will be kept.')) {
+                chatHistory = [];
+                localStorage.removeItem(STORAGE_KEYS.CHAT_HISTORY);
+                renderChatHistory();
+                addWelcomeMessage();
+                document.getElementById('settings-menu').classList.remove('active');
+            }
+        }
+
+        function exportChatHistory() {
+            const history = getChatHistory();
+            if (history.length === 0) {
+                alert('No chat history to export.');
+                return;
+            }
+
+            const text = history.map(msg => {
+                const role = msg.role === 'user' ? 'You' : 'Tavola';
+                const time = new Date(msg.timestamp).toLocaleString();
+                return `[${time}] ${role}:\n${msg.content}\n`;
+            }).join('\n---\n\n');
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tavola-chat-${new Date().toISOString().split('T')[0]}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            document.getElementById('settings-menu').classList.remove('active');
+        }
+
+        function confirmResetAll() {
+            document.getElementById('settings-menu').classList.remove('active');
+            document.getElementById('reset-modal').classList.add('active');
+        }
+
+        function closeResetModal() {
+            document.getElementById('reset-modal').classList.remove('active');
+        }
+
+        function resetAll() {
+            localStorage.removeItem(STORAGE_KEYS.PROFILE);
+            localStorage.removeItem(STORAGE_KEYS.CHAT_HISTORY);
+            chatHistory = [];
+            closeResetModal();
+            showWelcome();
+        }
+    </script>
+</body>
+</html>
