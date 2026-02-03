@@ -2151,10 +2151,12 @@
                         <span class="card-title">Quick Log</span>
                     </div>
                     <div class="quick-log-presets" id="quick-log-presets">
+                        <button class="quick-log-btn" onclick="quickLogWorkout('vrboxing', 45)">🥊 VR Boxing</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('kettlebells', 30)">🏋️ Kettlebells</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('resistancebands', 25)">🧘 Resistance Bands</button>
                         <button class="quick-log-btn" onclick="quickLogWorkout('walking', 30)">🚶 30min Walk</button>
                         <button class="quick-log-btn" onclick="quickLogWorkout('running', 20)">🏃 20min Run</button>
                         <button class="quick-log-btn" onclick="quickLogWorkout('cycling', 30)">🚴 30min Bike</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('strength', 45)">🏋️ 45min Weights</button>
                         <button class="quick-log-btn" onclick="quickLogWorkout('yoga', 30)">🧘 30min Yoga</button>
                         <button class="quick-log-btn" onclick="quickLogWorkout('swimming', 30)">🏊 30min Swim</button>
                     </div>
@@ -6221,6 +6223,9 @@ document.addEventListener('click', (e) => {
 
 // MET values for calorie calculations (Metabolic Equivalent of Task)
 const WORKOUT_TYPES = {
+    vrboxing: { name: 'VR Boxing', icon: '🥊', met: 8.5 },
+    kettlebells: { name: 'Kettlebells', icon: '🏋️', met: 7.0 },
+    resistancebands: { name: 'Resistance Bands', icon: '🧘', met: 4.0 },
     walking: { name: 'Walking', icon: '🚶', met: 3.5 },
     running: { name: 'Running', icon: '🏃', met: 9.8 },
     cycling: { name: 'Cycling', icon: '🚴', met: 7.5 },
@@ -6594,29 +6599,13 @@ function deleteWorkout(workoutId) {
 
 function showDayWorkouts(dateStr) {
     const workouts = getWorkouts().filter(w => w.date === dateStr);
-    const date = new Date(dateStr);
+    const date = new Date(dateStr + 'T12:00:00'); // Add time to avoid timezone issues
     const dateDisplay = date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
-
-    if (workouts.length === 0) {
-        openModal(`
-            <div class="modal-header">
-                <h2 class="modal-title">${dateDisplay}</h2>
-                <button class="modal-close" onclick="closeModal()">×</button>
-            </div>
-            <div class="modal-body">
-                <p class="text-center text-muted">No workouts logged for this day.</p>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary" onclick="closeModal()">OK</button>
-            </div>
-        `);
-        return;
-    }
 
     const totalCalories = workouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
     const totalMinutes = workouts.reduce((sum, w) => sum + (w.duration || 0), 0);
 
-    const workoutList = workouts.map(w => {
+    const workoutList = workouts.length > 0 ? workouts.map(w => {
         const type = WORKOUT_TYPES[w.type] || WORKOUT_TYPES.other;
         return `
             <div class="workout-item">
@@ -6626,9 +6615,27 @@ function showDayWorkouts(dateStr) {
                     <div class="workout-item-meta">${w.duration} min${w.time ? ' at ' + w.time : ''}${w.notes ? ' · ' + w.notes : ''}</div>
                 </div>
                 <div class="workout-item-calories">-${w.caloriesBurned} cal</div>
+                <button class="icon-btn" onclick="deleteDayWorkout('${w.id}', '${dateStr}')" title="Delete">🗑️</button>
             </div>
         `;
-    }).join('');
+    }).join('') : '<p class="text-center text-muted" style="padding: 16px 0;">No workouts logged yet.</p>';
+
+    const statsHtml = workouts.length > 0 ? `
+        <div class="workout-stats" style="margin-bottom: 16px;">
+            <div class="workout-stat">
+                <div class="workout-stat-value">${workouts.length}</div>
+                <div class="workout-stat-label">Workouts</div>
+            </div>
+            <div class="workout-stat">
+                <div class="workout-stat-value">${totalMinutes}</div>
+                <div class="workout-stat-label">Minutes</div>
+            </div>
+            <div class="workout-stat">
+                <div class="workout-stat-value">${totalCalories}</div>
+                <div class="workout-stat-label">Calories</div>
+            </div>
+        </div>
+    ` : '';
 
     openModal(`
         <div class="modal-header">
@@ -6636,26 +6643,98 @@ function showDayWorkouts(dateStr) {
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
-            <div class="workout-stats" style="margin-bottom: 16px;">
-                <div class="workout-stat">
-                    <div class="workout-stat-value">${workouts.length}</div>
-                    <div class="workout-stat-label">Workouts</div>
-                </div>
-                <div class="workout-stat">
-                    <div class="workout-stat-value">${totalMinutes}</div>
-                    <div class="workout-stat-label">Minutes</div>
-                </div>
-                <div class="workout-stat">
-                    <div class="workout-stat-value">${totalCalories}</div>
-                    <div class="workout-stat-label">Calories</div>
-                </div>
-            </div>
+            ${statsHtml}
             ${workoutList}
+            <hr style="margin: 16px 0; border: none; border-top: 1px solid var(--gray-medium);">
+            <button class="btn btn-primary btn-block" onclick="openWorkoutLogModalForDate('${dateStr}')">+ Log Workout for This Day</button>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" onclick="closeModal()">Close</button>
+            <button class="btn btn-secondary" onclick="closeModal()">Close</button>
         </div>
     `);
+}
+
+function deleteDayWorkout(workoutId, dateStr) {
+    const workouts = getWorkouts();
+    const index = workouts.findIndex(w => w.id === workoutId);
+    if (index >= 0) {
+        workouts.splice(index, 1);
+        setStorage(STORAGE.WORKOUTS, workouts);
+        showToast('Workout deleted');
+        showDayWorkouts(dateStr); // Refresh the modal
+        renderWorkoutsView();
+    }
+}
+
+function openWorkoutLogModalForDate(dateStr) {
+    const date = new Date(dateStr + 'T12:00:00');
+    const dateDisplay = date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+    const typeButtons = Object.entries(WORKOUT_TYPES).map(([key, val]) => `
+        <button type="button" class="workout-type-btn" data-type="${key}" onclick="selectWorkoutType('${key}')">
+            <span class="workout-type-icon">${val.icon}</span>
+            <span class="workout-type-name">${val.name}</span>
+        </button>
+    `).join('');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Log Workout - ${dateDisplay}</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Workout Type</label>
+                <div class="workout-type-grid">${typeButtons}</div>
+            </div>
+            <div class="form-group">
+                <label>Duration (minutes)</label>
+                <input type="number" class="form-input" id="workout-duration" value="30" min="1" max="300">
+            </div>
+            <div class="form-group">
+                <label>Notes (optional)</label>
+                <input type="text" class="form-input" id="workout-notes" placeholder="e.g., Morning session, felt great">
+            </div>
+            <div id="workout-calorie-preview" class="text-center text-muted mb-16">
+                Select a workout type to see estimated calories
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="showDayWorkouts('${dateStr}')">Back</button>
+            <button class="btn btn-primary" onclick="submitWorkoutLogForDate('${dateStr}')">Log Workout</button>
+        </div>
+    `);
+}
+
+function submitWorkoutLogForDate(dateStr) {
+    if (!selectedWorkoutType) {
+        showToast('Please select a workout type');
+        return;
+    }
+
+    const duration = parseInt(document.getElementById('workout-duration').value);
+    const notes = document.getElementById('workout-notes').value.trim();
+
+    if (!duration || duration < 1) {
+        showToast('Please enter a valid duration');
+        return;
+    }
+
+    const workout = {
+        id: 'workout_' + Date.now(),
+        type: selectedWorkoutType,
+        duration: duration,
+        caloriesBurned: calculateCaloriesBurned(selectedWorkoutType, duration),
+        date: dateStr,
+        time: '',
+        notes: notes
+    };
+
+    saveWorkout(workout);
+    selectedWorkoutType = null;
+    showToast(`${WORKOUT_TYPES[workout.type]?.icon || '🏅'} Workout logged! (-${workout.caloriesBurned} cal)`);
+    showDayWorkouts(dateStr); // Go back to the day view
+    renderWorkoutsView();
 }
 
 // ========================================
