@@ -2674,6 +2674,9 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
+    // Clean up duplicate recipes on startup
+    cleanupDuplicateRecipes();
+
     const profile = getStorage(STORAGE.PROFILE);
     if (profile) {
         showApp();
@@ -2689,6 +2692,53 @@ function initApp() {
     initChatInput();
     loadPreferences();
     setDailyTip();
+}
+
+function cleanupDuplicateRecipes() {
+    const library = getStorage(STORAGE.RECIPES) || [];
+    if (library.length === 0) return;
+
+    const seen = new Map(); // normalized title -> best recipe
+    const duplicatesRemoved = [];
+
+    // Sort by date (newest first) so we keep the most recent version
+    library.sort((a, b) => new Date(b.dateGenerated) - new Date(a.dateGenerated));
+
+    library.forEach(recipe => {
+        const normalized = normalizeRecipeTitle(recipe.title);
+
+        if (!seen.has(normalized)) {
+            // First occurrence (newest) - keep it
+            seen.set(normalized, recipe);
+        } else {
+            // Duplicate found - merge important data into the kept one
+            const kept = seen.get(normalized);
+
+            // Preserve cooking history, ratings, and favorites from duplicates
+            if (recipe.timesCooked > (kept.timesCooked || 0)) {
+                kept.timesCooked = recipe.timesCooked;
+            }
+            if (recipe.averageRating > (kept.averageRating || 0)) {
+                kept.averageRating = recipe.averageRating;
+            }
+            if (recipe.favorited) {
+                kept.favorited = true;
+            }
+            if (recipe.cookingHistory?.length > 0) {
+                kept.cookingHistory = kept.cookingHistory || [];
+                kept.cookingHistory = [...kept.cookingHistory, ...recipe.cookingHistory];
+            }
+
+            duplicatesRemoved.push(recipe.title);
+        }
+    });
+
+    if (duplicatesRemoved.length > 0) {
+        // Save cleaned library
+        const cleanedLibrary = Array.from(seen.values());
+        setStorage(STORAGE.RECIPES, cleanedLibrary);
+        console.log(`Cleaned up ${duplicatesRemoved.length} duplicate recipes:`, duplicatesRemoved);
+    }
 }
 
 function checkOnboarding() {
@@ -3220,7 +3270,7 @@ function parseRecipeToCard(content) {
     // Process tags - combine extracted tags with auto-detected ones
     const tags = processRecipeTags(rawTags, content, parseInt(totalTime), proteinType);
 
-    // Auto-save to recipe library
+    // Store recipe data temporarily (NOT auto-saved to library)
     const recipeData = {
         id: recipeId,
         title: title,
@@ -3243,7 +3293,9 @@ function parseRecipeToCard(content) {
         favorited: false,
         rawContent: content
     };
-    saveRecipeToLibrary(recipeData);
+    // Store in temporary cache for explicit saving later
+    window.pendingRecipes = window.pendingRecipes || {};
+    window.pendingRecipes[recipeId] = recipeData;
 
     // Build tags HTML
     const tagsHtml = tags.map(tag => {
@@ -3317,9 +3369,9 @@ function parseRecipeToCard(content) {
                 ` : ''}
             </div>
             <div class="recipe-card-actions">
-                <button class="btn btn-secondary btn-sm" onclick="toggleFavoriteFromCard('${recipeId}', null)">❤️ Favorite</button>
-                <button class="btn btn-secondary btn-sm" onclick="openAddToWeekModal('${recipeId}')">📅 Add to Week</button>
-                <button class="btn btn-sm btn-ghost" onclick="openRecipeMoreMenu('${recipeId}')">⋮</button>
+                <button class="btn btn-primary btn-sm" onclick="saveRecipeFromChat('${recipeId}')" id="save-btn-${recipeId}">💾 Save Recipe</button>
+                <button class="btn btn-secondary btn-sm" onclick="favoriteRecipeFromChat('${recipeId}')">❤️ Favorite</button>
+                <button class="btn btn-secondary btn-sm" onclick="addToWeekFromChat('${recipeId}')">📅 Add to Week</button>
             </div>
         </div>
     `;
@@ -3855,13 +3907,121 @@ function stopRecording() {
 // ========================================
 function saveRecipeToLibrary(recipe) {
     const library = getStorage(STORAGE.RECIPES) || [];
-    const existing = library.findIndex(r => r.id === recipe.id);
-    if (existing >= 0) {
-        library[existing] = { ...library[existing], ...recipe };
-    } else {
-        library.unshift(recipe);
+
+    // Check for exact ID match first
+    const existingById = library.findIndex(r => r.id === recipe.id);
+    if (existingById >= 0) {
+        library[existingById] = { ...library[existingById], ...recipe };
+        setStorage(STORAGE.RECIPES, library);
+        return { updated: true, id: recipe.id };
     }
+
+    // Check for duplicate by normalized title (fuzzy matching)
+    const normalizedTitle = normalizeRecipeTitle(recipe.title);
+    const duplicateIdx = library.findIndex(r => normalizeRecipeTitle(r.title) === normalizedTitle);
+
+    if (duplicateIdx >= 0) {
+        // Update existing recipe instead of creating duplicate
+        const existingRecipe = library[duplicateIdx];
+        library[duplicateIdx] = {
+            ...existingRecipe,
+            ...recipe,
+            id: existingRecipe.id, // Keep original ID
+            timesCooked: existingRecipe.timesCooked || 0,
+            rating: existingRecipe.rating || recipe.rating || 0,
+            averageRating: existingRecipe.averageRating || 0,
+            cookingHistory: existingRecipe.cookingHistory || [],
+            favorited: existingRecipe.favorited || recipe.favorited,
+            dateGenerated: existingRecipe.dateGenerated // Keep original date
+        };
+        setStorage(STORAGE.RECIPES, library);
+        return { updated: true, id: existingRecipe.id };
+    }
+
+    // No duplicate found, add as new
+    library.unshift(recipe);
     setStorage(STORAGE.RECIPES, library);
+    return { updated: false, id: recipe.id };
+}
+
+function normalizeRecipeTitle(title) {
+    if (!title) return '';
+    // Remove common suffixes like (COMPLETE), (UPDATED), (FINAL), (PERFECT VERSION), etc.
+    return title
+        .replace(/\s*\((?:COMPLETE|UPDATED|FINAL|PERFECT|NEW|REVISED|V\d+|VERSION\s*\d*)\)\s*$/i, '')
+        .replace(/\s*-\s*(?:COMPLETE|UPDATED|FINAL|PERFECT|NEW|REVISED)$/i, '')
+        .replace(/\s+/g, ' ')
+        .trim()
+        .toLowerCase();
+}
+
+// Save recipe explicitly from chat (when user clicks Save button)
+function saveRecipeFromChat(recipeId) {
+    const pendingRecipe = window.pendingRecipes?.[recipeId];
+    if (!pendingRecipe) {
+        showToast('Recipe not found');
+        return;
+    }
+
+    const result = saveRecipeToLibrary(pendingRecipe);
+
+    // Update button to show saved state
+    const saveBtn = document.getElementById(`save-btn-${recipeId}`);
+    if (saveBtn) {
+        saveBtn.textContent = '✅ Saved!';
+        saveBtn.disabled = true;
+        saveBtn.classList.remove('btn-primary');
+        saveBtn.classList.add('btn-ghost');
+    }
+
+    if (result.updated) {
+        showToast('Recipe updated in library!');
+    } else {
+        showToast('Recipe saved to library!');
+    }
+}
+
+// Favorite recipe from chat (saves and favorites)
+function favoriteRecipeFromChat(recipeId) {
+    const pendingRecipe = window.pendingRecipes?.[recipeId];
+    if (!pendingRecipe) {
+        // Maybe already saved, try to favorite existing
+        toggleFavoriteFromCard(recipeId, null);
+        return;
+    }
+
+    pendingRecipe.favorited = true;
+    saveRecipeToLibrary(pendingRecipe);
+
+    // Update save button
+    const saveBtn = document.getElementById(`save-btn-${recipeId}`);
+    if (saveBtn) {
+        saveBtn.textContent = '✅ Saved!';
+        saveBtn.disabled = true;
+        saveBtn.classList.remove('btn-primary');
+        saveBtn.classList.add('btn-ghost');
+    }
+
+    showToast('❤️ Recipe favorited and saved!');
+}
+
+// Add to week from chat (saves and opens week modal)
+function addToWeekFromChat(recipeId) {
+    const pendingRecipe = window.pendingRecipes?.[recipeId];
+    if (pendingRecipe) {
+        saveRecipeToLibrary(pendingRecipe);
+
+        // Update save button
+        const saveBtn = document.getElementById(`save-btn-${recipeId}`);
+        if (saveBtn) {
+            saveBtn.textContent = '✅ Saved!';
+            saveBtn.disabled = true;
+            saveBtn.classList.remove('btn-primary');
+            saveBtn.classList.add('btn-ghost');
+        }
+    }
+
+    openAddToWeekModal(recipeId);
 }
 
 function getRecipeLibrary() {
