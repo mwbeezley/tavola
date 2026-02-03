@@ -111,16 +111,16 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 6px 8px;
+            padding: 6px 4px;
             border: none;
             background: none;
             color: var(--gray-text);
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-family: inherit;
             cursor: pointer;
             border-radius: var(--radius-sm);
             transition: all 0.2s;
-            min-width: 56px;
+            min-width: 48px;
         }
         .nav-item span.icon { font-size: 1.4rem; margin-bottom: 2px; }
         .nav-item.active { color: var(--cerulean); background: var(--seafoam-light); }
@@ -231,9 +231,378 @@
             margin-right: 6px;
             margin-bottom: 6px;
         }
+        /* Health Tags (Green shades) */
         .tag-crohns { background: #e8f5e9; color: #2e7d32; }
+        .tag-heart { background: #ffebee; color: #c62828; }
+        .tag-bp { background: #fce4ec; color: #ad1457; }
+        .tag-diabetic { background: #fff3e0; color: #e65100; }
+        .tag-anti-inflammatory { background: #e8f5e9; color: #1b5e20; }
+        .tag-low-sodium { background: #f3e5f5; color: #7b1fa2; }
+        .tag-low-carb { background: #fff8e1; color: #ff6f00; }
+        .tag-gut-friendly { background: #e0f2f1; color: #00695c; }
+        .tag-gluten-free { background: #fbe9e7; color: #bf360c; }
+
+        /* Prep Tags (Orange/Yellow shades) */
         .tag-quick { background: #fff3e0; color: #ef6c00; }
+        .tag-meal-prep { background: #fff8e1; color: #f57f17; }
+        .tag-freezer { background: #e3f2fd; color: #0277bd; }
+        .tag-one-pot { background: #f1f8e9; color: #558b2f; }
+
+        /* Flavor/Style Tags (Blue/Purple shades) */
         .tag-mediterranean { background: #e3f2fd; color: #1565c0; }
+        .tag-citrus { background: #fffde7; color: #f9a825; }
+        .tag-garlic { background: #efebe9; color: #5d4037; }
+        .tag-spicy { background: #ffebee; color: #d32f2f; }
+        .tag-comfort { background: #fce4ec; color: #c2185b; }
+        .tag-fresh { background: #e8f5e9; color: #388e3c; }
+
+        /* Protein Tags */
+        .tag-fish { background: #e1f5fe; color: #0277bd; }
+        .tag-chicken { background: #fff8e1; color: #f57c00; }
+        .tag-vegetarian { background: #f1f8e9; color: #689f38; }
+        .tag-high-protein { background: #ffecb3; color: #ff6f00; }
+
+        /* Tag Filter Chips */
+        .tag-filter-section {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-medium);
+        }
+        .tag-filter-label {
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+        .tag-filter-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .tag-filter-chip {
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            border: 1px solid var(--gray-medium);
+            background: var(--white);
+            color: var(--gray-text);
+            transition: all 0.2s;
+        }
+        .tag-filter-chip:hover {
+            border-color: var(--cerulean);
+            color: var(--cerulean);
+        }
+        .tag-filter-chip.active {
+            background: var(--cerulean);
+            color: white;
+            border-color: var(--cerulean);
+        }
+        .tag-filter-clear {
+            font-size: 0.75rem;
+            color: var(--cerulean);
+            cursor: pointer;
+            margin-top: 8px;
+            display: none;
+        }
+        .tag-filter-clear.visible {
+            display: inline-block;
+        }
+        .tag-filter-clear:hover {
+            text-decoration: underline;
+        }
+
+        /* Nutrition Info Box */
+        .nutrition-box {
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            padding: 12px 16px;
+            margin: 12px 0;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            font-size: 0.85rem;
+        }
+        @media (min-width: 500px) {
+            .nutrition-box { grid-template-columns: repeat(6, 1fr); }
+        }
+        .nutrition-item {
+            text-align: center;
+        }
+        .nutrition-value {
+            font-weight: 600;
+            color: var(--cerulean);
+            font-size: 1rem;
+        }
+        .nutrition-label {
+            font-size: 0.7rem;
+            color: var(--gray-text);
+            text-transform: uppercase;
+        }
+
+        /* Health Benefits Box */
+        .health-benefits {
+            background: linear-gradient(135deg, var(--seafoam-light) 0%, #e8f5e9 100%);
+            border-left: 4px solid var(--success);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            padding: 12px 16px;
+            margin: 12px 0;
+        }
+        .health-benefits-title {
+            font-weight: 600;
+            color: var(--success);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .health-benefits-text {
+            font-size: 0.9rem;
+            color: var(--navy);
+        }
+
+        /* Workout Dashboard */
+        .workout-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        @media (min-width: 500px) {
+            .workout-stats { grid-template-columns: repeat(4, 1fr); }
+        }
+        .workout-stat {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 16px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .workout-stat-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--cerulean);
+        }
+        .workout-stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            margin-top: 4px;
+        }
+        .workout-stat.positive .workout-stat-value { color: var(--success); }
+        .workout-stat.negative .workout-stat-value { color: var(--danger); }
+        .workout-stat.balance { grid-column: span 2; }
+        @media (min-width: 500px) {
+            .workout-stat.balance { grid-column: span 1; }
+        }
+
+        /* Calorie Balance Bar */
+        .calorie-balance {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .calorie-balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .calorie-balance-title {
+            font-weight: 600;
+            color: var(--cerulean);
+        }
+        .calorie-balance-net {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        .calorie-balance-net.surplus { color: var(--danger); }
+        .calorie-balance-net.deficit { color: var(--success); }
+        .calorie-balance-net.balanced { color: var(--gray-text); }
+        .calorie-bar-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        .calorie-bar-label {
+            font-size: 0.75rem;
+            color: var(--gray-text);
+            width: 40px;
+        }
+        .calorie-bar {
+            flex: 1;
+            height: 20px;
+            background: var(--gray-light);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .calorie-bar-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .calorie-bar-fill.in { background: linear-gradient(90deg, var(--cerulean), var(--cerulean-light)); }
+        .calorie-bar-fill.out { background: linear-gradient(90deg, var(--success), #81c784); }
+        .calorie-bar-value {
+            font-size: 0.8rem;
+            font-weight: 500;
+            width: 60px;
+            text-align: right;
+        }
+
+        /* Workout Calendar */
+        .workout-calendar {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+        }
+        .workout-calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .workout-calendar-title {
+            font-weight: 600;
+            color: var(--cerulean);
+        }
+        .workout-calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .workout-day-header {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--gray-text);
+            padding: 4px;
+            font-weight: 500;
+        }
+        .workout-day {
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--gray-light);
+        }
+        .workout-day:hover { background: var(--seafoam-light); }
+        .workout-day.today { border: 2px solid var(--cerulean); }
+        .workout-day.has-workout { background: var(--seafoam); }
+        .workout-day.has-workout .workout-day-indicator { display: block; }
+        .workout-day-date { font-weight: 500; }
+        .workout-day-indicator {
+            font-size: 0.6rem;
+            display: none;
+        }
+
+        /* Workout List */
+        .workout-list {
+            background: var(--white);
+            border-radius: var(--radius);
+            padding: 16px;
+            box-shadow: var(--shadow);
+        }
+        .workout-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .workout-list-title {
+            font-weight: 600;
+            color: var(--cerulean);
+        }
+        .workout-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+        .workout-item:last-child { margin-bottom: 0; }
+        .workout-item-icon {
+            font-size: 1.5rem;
+            width: 40px;
+            text-align: center;
+        }
+        .workout-item-details { flex: 1; }
+        .workout-item-name {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        .workout-item-meta {
+            font-size: 0.8rem;
+            color: var(--gray-text);
+        }
+        .workout-item-calories {
+            font-weight: 600;
+            color: var(--success);
+            font-size: 0.9rem;
+        }
+        .workout-item-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        /* Workout Form */
+        .workout-type-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        @media (min-width: 500px) {
+            .workout-type-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        .workout-type-btn {
+            padding: 12px 8px;
+            border: 2px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+            background: var(--white);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .workout-type-btn:hover { border-color: var(--cerulean); }
+        .workout-type-btn.selected {
+            border-color: var(--cerulean);
+            background: var(--seafoam-light);
+        }
+        .workout-type-icon { font-size: 1.5rem; display: block; margin-bottom: 4px; }
+        .workout-type-name { font-size: 0.75rem; }
+
+        /* Quick Log Presets */
+        .quick-log-presets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .quick-log-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--gray-medium);
+            background: var(--white);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-log-btn:hover {
+            border-color: var(--cerulean);
+            background: var(--seafoam-light);
+        }
 
         /* Sections */
         .section { padding: 20px 0; }
@@ -523,10 +892,158 @@
         }
         .library-card-body { padding: 12px; }
         .library-card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; color: var(--navy); }
-        .library-card-meta { font-size: 0.8rem; color: var(--gray-text); display: flex; gap: 12px; margin-bottom: 6px; }
-        .library-card-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+        .library-card-meta { font-size: 0.75rem; color: var(--gray-text); display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
+        .library-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         .library-card-tags .tag { font-size: 0.65rem; padding: 2px 6px; margin: 0; }
-        .library-card-rating { color: #ffc107; font-size: 0.85rem; margin-top: 4px; }
+        .library-card-rating { color: #ffc107; font-size: 0.8rem; margin-bottom: 4px; }
+        .library-card-cooked { font-size: 0.75rem; color: var(--gray-text); margin-top: 2px; }
+        .card-calories {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .card-macros {
+            font-size: 0.7rem;
+            color: var(--gray-text);
+            margin-bottom: 4px;
+        }
+
+        /* Star Rating */
+        .star-rating {
+            display: inline-flex;
+            gap: 2px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        .star-rating.readonly { cursor: default; }
+        .star-rating.small { font-size: 1rem; }
+        .star-rating .star {
+            color: var(--gray-medium);
+            transition: color 0.15s, transform 0.15s;
+        }
+        .star-rating .star.filled { color: #ffc107; }
+        .star-rating .star.half {
+            background: linear-gradient(90deg, #ffc107 50%, var(--gray-medium) 50%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .star-rating:not(.readonly) .star:hover { transform: scale(1.2); }
+        .star-rating-display {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.85rem;
+        }
+        .star-rating-display .stars { color: #ffc107; }
+        .star-rating-display .rating-text { color: var(--gray-text); }
+
+        /* Rating Section in Recipe Card */
+        .recipe-rating-section {
+            padding: 16px 20px;
+            border-top: 1px solid var(--gray-light);
+            background: var(--gray-light);
+        }
+        .recipe-rating-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .recipe-rating-title { font-weight: 500; color: var(--navy); }
+        .recipe-rating-stats { font-size: 0.85rem; color: var(--gray-text); }
+        .recipe-notes-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+            font-family: inherit;
+            font-size: 0.9rem;
+            resize: vertical;
+            min-height: 60px;
+            margin-top: 12px;
+        }
+        .recipe-notes-input:focus {
+            outline: none;
+            border-color: var(--cerulean);
+        }
+
+        /* Cooking History */
+        .cooking-history { margin-top: 16px; }
+        .cooking-history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+            font-size: 0.9rem;
+        }
+        .cooking-history-item:last-child { border-bottom: none; }
+        .cooking-history-date { color: var(--gray-text); }
+        .cooking-history-rating { color: #ffc107; }
+        .cooking-history-notes {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            font-style: italic;
+            margin-top: 4px;
+        }
+
+        /* Bulk Actions */
+        .bulk-actions-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--cerulean);
+            color: white;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .bulk-count { font-weight: 500; }
+        .bulk-buttons { display: flex; gap: 8px; flex-wrap: wrap; }
+        .bulk-buttons .btn { font-size: 0.8rem; padding: 6px 12px; }
+
+        /* Edit Mode Cards */
+        .library-card.edit-mode {
+            position: relative;
+            cursor: pointer;
+        }
+        .library-card.edit-mode::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            width: 24px;
+            height: 24px;
+            border: 2px solid white;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.3);
+            z-index: 10;
+        }
+        .library-card.edit-mode.selected::before {
+            background: var(--cerulean);
+            border-color: var(--cerulean);
+        }
+        .library-card.edit-mode.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 8px;
+            left: 12px;
+            color: white;
+            font-weight: bold;
+            font-size: 1rem;
+            z-index: 11;
+        }
+        .library-card.edit-mode.selected {
+            box-shadow: 0 0 0 3px var(--cerulean);
+        }
 
         /* Week Planner */
         .week-header {
@@ -749,6 +1266,105 @@
         .accordion-body { padding: 16px; display: none; }
         .accordion-item.open .accordion-body { display: block; }
 
+        /* Pantry Items */
+        .pantry-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+        }
+        .pantry-item-icon { font-size: 1.3rem; }
+        .pantry-item-info { flex: 1; }
+        .pantry-item-name { font-weight: 500; }
+        .pantry-item-qty { font-size: 0.85rem; color: var(--gray-text); }
+        .pantry-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+        .pantry-status.fresh { background: var(--success); }
+        .pantry-status.use-soon { background: var(--warning); }
+        .pantry-status.check { background: var(--danger); }
+
+        /* Pantry Scan */
+        .scan-upload-area {
+            border: 2px dashed var(--gray-medium);
+            border-radius: var(--radius);
+            padding: 32px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--gray-light);
+        }
+        .scan-upload-area:hover { border-color: var(--cerulean); background: var(--seafoam-light); }
+        .scan-upload-area.dragover { border-color: var(--cerulean); background: var(--seafoam-light); }
+        .scan-upload-icon { font-size: 3rem; margin-bottom: 12px; }
+        .scan-upload-text { font-weight: 500; margin-bottom: 4px; }
+        .scan-upload-hint { font-size: 0.85rem; color: var(--gray-text); }
+        .scan-preview { max-width: 100%; max-height: 200px; border-radius: var(--radius-sm); margin-top: 16px; }
+        .scan-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
+            text-align: center;
+        }
+        .scan-loading-icon {
+            font-size: 3rem;
+            animation: scanPulse 1.5s ease-in-out infinite;
+        }
+        @keyframes scanPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
+        }
+        .scan-loading-text { margin-top: 16px; color: var(--gray-text); }
+
+        /* Scan Results */
+        .scan-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+        .scan-results-count { font-weight: 600; color: var(--cerulean); }
+        .scan-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+        }
+        .scan-item-checkbox { margin-top: 4px; width: 20px; height: 20px; accent-color: var(--cerulean); }
+        .scan-item-info { flex: 1; }
+        .scan-item-name { font-weight: 500; }
+        .scan-item-details { font-size: 0.85rem; color: var(--gray-text); margin-top: 2px; }
+        .scan-item-badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-right: 4px;
+        }
+        .scan-item-badge.fresh { background: #e8f5e9; color: #2e7d32; }
+        .scan-item-badge.use-soon { background: #fff3e0; color: #ef6c00; }
+        .scan-item-badge.check { background: #ffebee; color: #c62828; }
+        .scan-item-badge.category { background: var(--seafoam-light); color: var(--navy); }
+        .scan-item-actions { display: flex; gap: 4px; }
+        .scan-category-header {
+            font-weight: 600;
+            color: var(--cerulean);
+            padding: 8px 0;
+            margin-top: 12px;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+        .scan-category-header:first-child { margin-top: 0; }
+
         /* Toast */
         .toast {
             position: fixed;
@@ -859,6 +1475,18 @@
         }
         .cook-mode-footer .btn { flex: 1; }
 
+        /* Condition Details */
+        .condition-details {
+            background: var(--gray-light);
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            margin-top: 8px;
+            margin-bottom: 8px;
+            border-left: 3px solid var(--cerulean);
+        }
+        .condition-details .form-group { margin-bottom: 0; }
+        .condition-details .form-row { margin-bottom: 0; }
+
         /* Utilities */
         .hidden { display: none !important; }
         .text-center { text-align: center; }
@@ -935,13 +1563,49 @@
                 <p class="text-muted">This helps Nonna suggest meals that work for your body</p>
             </div>
             <form id="profile-form" onsubmit="saveProfile(event)">
-                <!-- Health Conditions -->
+                <!-- Health Conditions - Expanded -->
                 <div class="card">
                     <h2 class="card-title">🩺 Health Conditions</h2>
-                    <div class="form-row">
+                    <p class="text-muted mb-16">Check all that apply. This helps Nonna tailor recipes to your needs.</p>
+
+                    <!-- Digestive Conditions -->
+                    <div class="form-group">
+                        <label style="font-weight: 600; color: var(--cerulean);">Digestive Conditions</label>
+                        <div class="grid grid-2">
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="crohns" onchange="toggleConditionDetails('crohns')"> Crohn's Disease</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="uc" onchange="toggleConditionDetails('uc')"> Ulcerative Colitis</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="ibs" onchange="toggleConditionDetails('ibs')"> IBS</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="celiac"> Celiac / Gluten Sensitivity</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="lactose"> Lactose Intolerance</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="gerd"> GERD / Acid Reflux</label>
+                        </div>
+                    </div>
+
+                    <!-- Crohn's Details (shown when checked) -->
+                    <div class="condition-details hidden" id="crohns-details">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Crohn's Severity</label>
+                                <select class="form-select" name="crohnsSeverity">
+                                    <option value="">Select...</option>
+                                    <option value="mild">Mild</option>
+                                    <option value="moderate">Moderate</option>
+                                    <option value="severe">Severe</option>
+                                    <option value="remission">In Remission</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Known Triggers</label>
+                                <input type="text" class="form-input" name="crohnsTriggers" placeholder="e.g., raw veggies, nuts, dairy">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- UC Details -->
+                    <div class="condition-details hidden" id="uc-details">
                         <div class="form-group">
-                            <label>Crohn's Severity</label>
-                            <select class="form-select" name="crohnsSeverity">
+                            <label>UC Severity</label>
+                            <select class="form-select" name="ucSeverity">
                                 <option value="">Select...</option>
                                 <option value="mild">Mild</option>
                                 <option value="moderate">Moderate</option>
@@ -949,29 +1613,142 @@
                                 <option value="remission">In Remission</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Crohn's Triggers</label>
-                            <input type="text" class="form-input" name="crohnsTriggers" placeholder="e.g., raw veggies, nuts, dairy">
-                        </div>
                     </div>
-                    <div class="form-row">
+
+                    <!-- IBS Details -->
+                    <div class="condition-details hidden" id="ibs-details">
                         <div class="form-group">
-                            <label>Fibromyalgia Energy</label>
-                            <select class="form-select" name="fibroEnergy">
+                            <label>IBS Type</label>
+                            <select class="form-select" name="ibsType">
                                 <option value="">Select...</option>
-                                <option value="low">Low</option>
-                                <option value="moderate">Moderate</option>
-                                <option value="variable">Variable</option>
+                                <option value="ibs-d">IBS-D (Diarrhea)</option>
+                                <option value="ibs-c">IBS-C (Constipation)</option>
+                                <option value="ibs-m">IBS-M (Mixed)</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label>Thyroid Condition</label>
-                            <input type="text" class="form-input" name="thyroidType" placeholder="e.g., Hashimoto's">
+                    </div>
+
+                    <!-- Cardiovascular & Metabolic -->
+                    <div class="form-group mt-16">
+                        <label style="font-weight: 600; color: var(--cerulean);">Cardiovascular & Metabolic</label>
+                        <div class="grid grid-2">
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="highCholesterol" onchange="toggleConditionDetails('cholesterol')"> High Cholesterol</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="highBP" onchange="toggleConditionDetails('bp')"> High Blood Pressure</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="diabetes" onchange="toggleConditionDetails('diabetes')"> Type 2 Diabetes</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="heartDisease"> Heart Disease</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="kidney" onchange="toggleConditionDetails('kidney')"> Kidney Disease</label>
                         </div>
                     </div>
-                    <div class="form-group">
+
+                    <!-- Cholesterol Details -->
+                    <div class="condition-details hidden" id="cholesterol-details">
+                        <div class="form-group">
+                            <label>Cholesterol Goal</label>
+                            <select class="form-select" name="cholesterolGoal">
+                                <option value="">Select...</option>
+                                <option value="lower-ldl">Lower LDL</option>
+                                <option value="raise-hdl">Raise HDL</option>
+                                <option value="both">Both</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- BP Details -->
+                    <div class="condition-details hidden" id="bp-details">
+                        <div class="form-group">
+                            <label>Sodium Restriction</label>
+                            <select class="form-select" name="sodiumRestriction">
+                                <option value="">Select...</option>
+                                <option value="moderate">Moderate (2300mg/day)</option>
+                                <option value="strict">Strict (1500mg/day)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Diabetes Details -->
+                    <div class="condition-details hidden" id="diabetes-details">
+                        <div class="form-group">
+                            <label>Carb Management</label>
+                            <select class="form-select" name="carbManagement">
+                                <option value="">Select...</option>
+                                <option value="moderate">Moderate Carb</option>
+                                <option value="low-carb">Low Carb</option>
+                                <option value="keto">Very Low Carb / Keto</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Kidney Details -->
+                    <div class="condition-details hidden" id="kidney-details">
+                        <div class="form-group">
+                            <label>Kidney Restrictions</label>
+                            <div class="grid grid-2">
+                                <label class="checkbox-item"><input type="checkbox" name="kidneyRestrictions" value="lowProtein"> Low Protein</label>
+                                <label class="checkbox-item"><input type="checkbox" name="kidneyRestrictions" value="lowSodium"> Low Sodium</label>
+                                <label class="checkbox-item"><input type="checkbox" name="kidneyRestrictions" value="lowPotassium"> Low Potassium</label>
+                                <label class="checkbox-item"><input type="checkbox" name="kidneyRestrictions" value="lowPhosphorus"> Low Phosphorus</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Autoimmune & Inflammatory -->
+                    <div class="form-group mt-16">
+                        <label style="font-weight: 600; color: var(--cerulean);">Autoimmune & Inflammatory</label>
+                        <div class="grid grid-2">
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="fibromyalgia" onchange="toggleConditionDetails('fibro')"> Fibromyalgia</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="rheumatoid"> Rheumatoid Arthritis</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="lupus"> Lupus</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="hashimotos" onchange="toggleConditionDetails('thyroid')"> Hashimoto's / Thyroid</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="psoriatic"> Psoriatic Arthritis</label>
+                            <label class="checkbox-item"><input type="checkbox" name="conditions" value="ms"> Multiple Sclerosis</label>
+                        </div>
+                    </div>
+
+                    <!-- Fibro Details -->
+                    <div class="condition-details hidden" id="fibro-details">
+                        <div class="form-group">
+                            <label>Energy Level</label>
+                            <select class="form-select" name="fibroEnergy">
+                                <option value="">Select...</option>
+                                <option value="low">Usually Low</option>
+                                <option value="moderate">Moderate</option>
+                                <option value="variable">Highly Variable</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Thyroid Details -->
+                    <div class="condition-details hidden" id="thyroid-details">
+                        <div class="form-group">
+                            <label>Thyroid Condition</label>
+                            <input type="text" class="form-input" name="thyroidType" placeholder="e.g., Hashimoto's, Hypothyroid">
+                        </div>
+                    </div>
+
+                    <!-- Food Allergies -->
+                    <div class="form-group mt-16">
+                        <label style="font-weight: 600; color: var(--cerulean);">Food Allergies</label>
+                        <input type="text" class="form-input" name="foodAllergies" placeholder="e.g., shellfish, tree nuts, soy">
+                    </div>
+
+                    <!-- Dietary Goals -->
+                    <div class="form-group mt-16">
+                        <label style="font-weight: 600; color: var(--cerulean);">Dietary Goals (select all that apply)</label>
+                        <div class="grid grid-2">
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="weightLoss"> Weight Loss</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="weightGain"> Weight Gain / Muscle</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="antiInflammatory"> Anti-Inflammatory</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="heartHealthy"> Heart-Healthy</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="bloodSugar"> Blood Sugar Management</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="gutHealth"> Gut Health</label>
+                            <label class="checkbox-item"><input type="checkbox" name="dietaryGoals" value="energy"> More Energy</label>
+                        </div>
+                    </div>
+
+                    <!-- Other Notes -->
+                    <div class="form-group mt-16">
                         <label>Other Conditions or Notes</label>
-                        <textarea class="form-textarea" name="otherConditions" placeholder="Anything else Nonna should know..."></textarea>
+                        <textarea class="form-textarea" name="otherConditions" placeholder="Anything else Nonna should know about your health..."></textarea>
                     </div>
                 </div>
 
@@ -1162,6 +1939,32 @@
                     </div>
                 </div>
 
+                <!-- Today's Activity Summary -->
+                <div class="card" id="dashboard-workout-card">
+                    <div class="card-header">
+                        <h3 class="card-title">💪 Today's Activity</h3>
+                        <button class="btn btn-ghost btn-sm" onclick="navigateTo('workouts')">View All</button>
+                    </div>
+                    <div class="workout-stats" style="margin-bottom: 0;">
+                        <div class="workout-stat">
+                            <div class="workout-stat-value" id="dashboard-calories-in">0</div>
+                            <div class="workout-stat-label">Calories In</div>
+                        </div>
+                        <div class="workout-stat">
+                            <div class="workout-stat-value" id="dashboard-calories-out">0</div>
+                            <div class="workout-stat-label">Calories Out</div>
+                        </div>
+                        <div class="workout-stat balance">
+                            <div class="workout-stat-value" id="dashboard-calorie-net">0</div>
+                            <div class="workout-stat-label">Net Balance</div>
+                        </div>
+                        <div class="workout-stat">
+                            <div class="workout-stat-value" id="dashboard-workouts-today">0</div>
+                            <div class="workout-stat-label">Workouts Today</div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Recent Activity -->
                 <div class="card">
                     <h3 class="card-title">📋 Recent Activity</h3>
@@ -1215,7 +2018,21 @@
 
             <!-- RECIPES LIBRARY View (NEW) -->
             <div class="view" id="view-recipes">
-                <h2 class="section-title">📚 Recipe Library</h2>
+                <div class="flex flex-between flex-center mb-16">
+                    <h2 class="section-title" style="margin-bottom: 0; border: none;">📚 Recipe Library</h2>
+                    <button class="btn btn-sm btn-ghost" id="recipes-edit-btn" onclick="toggleRecipeEditMode()">Edit</button>
+                </div>
+                <!-- Bulk Actions Bar (hidden by default) -->
+                <div class="bulk-actions-bar hidden" id="recipes-bulk-bar">
+                    <span class="bulk-count"><span id="bulk-selected-count">0</span> selected</span>
+                    <div class="bulk-buttons">
+                        <button class="btn btn-sm btn-ghost" onclick="bulkSelectAll()">Select All</button>
+                        <button class="btn btn-sm btn-ghost" onclick="bulkDeselectAll()">Deselect</button>
+                        <button class="btn btn-sm btn-secondary" onclick="bulkAddToFavorites()">❤️ Favorite</button>
+                        <button class="btn btn-sm btn-secondary" onclick="bulkRemoveFromFavorites()">💔 Unfavorite</button>
+                        <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="bulkDeleteRecipes()">🗑️ Delete</button>
+                    </div>
+                </div>
                 <div class="flex flex-between flex-center mb-16 gap-8" style="flex-wrap: wrap;">
                     <input type="text" class="form-input" id="recipes-search" placeholder="Search recipes..." style="max-width: 250px; flex: 1;" oninput="filterRecipeLibrary()">
                     <div class="filter-dropdown" id="recipe-filters">
@@ -1225,7 +2042,8 @@
                                 <label>Sort by</label>
                                 <select class="form-select" id="recipes-sort" onchange="filterRecipeLibrary()">
                                     <option value="recent">Recent</option>
-                                    <option value="rating">Rating</option>
+                                    <option value="rating">Highest Rated</option>
+                                    <option value="cooked">Most Cooked</option>
                                     <option value="time">Cook Time</option>
                                     <option value="name">Name A-Z</option>
                                 </select>
@@ -1250,6 +2068,11 @@
                                     <option value="long">Long (60+min)</option>
                                 </select>
                             </div>
+                            <div class="tag-filter-section">
+                                <span class="tag-filter-label">Filter by Tags</span>
+                                <div class="tag-filter-chips" id="tag-filter-chips"></div>
+                                <span class="tag-filter-clear" id="tag-filter-clear" onclick="clearTagFilters()">Clear tag filters</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1271,6 +2094,91 @@
                             <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input">🎤</button>
                             <textarea class="chat-input" id="chat-input" placeholder="Ask Nonna anything..." rows="1"></textarea>
                             <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORKOUTS View -->
+            <div class="view" id="view-workouts">
+                <h2 class="section-title">💪 Workouts</h2>
+
+                <!-- Calorie Balance -->
+                <div class="calorie-balance" id="calorie-balance">
+                    <div class="calorie-balance-header">
+                        <span class="calorie-balance-title">Today's Calorie Balance</span>
+                        <span class="calorie-balance-net balanced" id="calorie-net">0 cal</span>
+                    </div>
+                    <div class="calorie-bar-container">
+                        <span class="calorie-bar-label">In</span>
+                        <div class="calorie-bar">
+                            <div class="calorie-bar-fill in" id="calories-in-bar" style="width: 0%"></div>
+                        </div>
+                        <span class="calorie-bar-value" id="calories-in-value">0</span>
+                    </div>
+                    <div class="calorie-bar-container">
+                        <span class="calorie-bar-label">Out</span>
+                        <div class="calorie-bar">
+                            <div class="calorie-bar-fill out" id="calories-out-bar" style="width: 0%"></div>
+                        </div>
+                        <span class="calorie-bar-value" id="calories-out-value">0</span>
+                    </div>
+                </div>
+
+                <!-- Week Stats -->
+                <div class="workout-stats">
+                    <div class="workout-stat">
+                        <div class="workout-stat-value" id="workout-count-week">0</div>
+                        <div class="workout-stat-label">Workouts This Week</div>
+                    </div>
+                    <div class="workout-stat">
+                        <div class="workout-stat-value" id="workout-minutes-week">0</div>
+                        <div class="workout-stat-label">Minutes Active</div>
+                    </div>
+                    <div class="workout-stat">
+                        <div class="workout-stat-value" id="workout-calories-week">0</div>
+                        <div class="workout-stat-label">Calories Burned</div>
+                    </div>
+                    <div class="workout-stat">
+                        <div class="workout-stat-value" id="workout-streak">0</div>
+                        <div class="workout-stat-label">Day Streak</div>
+                    </div>
+                </div>
+
+                <!-- Quick Log -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Quick Log</span>
+                    </div>
+                    <div class="quick-log-presets" id="quick-log-presets">
+                        <button class="quick-log-btn" onclick="quickLogWorkout('walking', 30)">🚶 30min Walk</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('running', 20)">🏃 20min Run</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('cycling', 30)">🚴 30min Bike</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('strength', 45)">🏋️ 45min Weights</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('yoga', 30)">🧘 30min Yoga</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('swimming', 30)">🏊 30min Swim</button>
+                    </div>
+                    <button class="btn btn-primary btn-block" onclick="openWorkoutLogModal()">+ Log Custom Workout</button>
+                </div>
+
+                <!-- Weekly Calendar -->
+                <div class="workout-calendar">
+                    <div class="workout-calendar-header">
+                        <span class="workout-calendar-title">This Week</span>
+                    </div>
+                    <div class="workout-calendar-grid" id="workout-calendar-grid"></div>
+                </div>
+
+                <!-- Today's Workouts -->
+                <div class="workout-list">
+                    <div class="workout-list-header">
+                        <span class="workout-list-title">Today's Activity</span>
+                    </div>
+                    <div id="workout-list-today">
+                        <div class="empty-state" style="padding: 20px;">
+                            <div class="empty-state-icon">🏃</div>
+                            <div class="empty-state-title">No workouts logged today</div>
+                            <p class="empty-state-text">Log a workout to track your calorie burn!</p>
                         </div>
                     </div>
                 </div>
@@ -1332,13 +2240,16 @@
                     <div class="tab-content active" id="kitchen-pantry">
                         <div class="flex flex-between flex-center mb-16">
                             <span class="text-muted">Track your ingredients</span>
-                            <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add</button>
+                            <div class="flex gap-8">
+                                <button class="btn btn-sm btn-secondary" onclick="openPantryScanModal()">📷 Scan</button>
+                                <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add</button>
+                            </div>
                         </div>
                         <div id="pantry-list"></div>
                         <div class="empty-state" id="pantry-empty">
                             <div class="empty-state-icon">🥫</div>
                             <div class="empty-state-title">Pantry is empty</div>
-                            <p>Add items to track your inventory.</p>
+                            <p>Add items manually or scan with your camera.</p>
                         </div>
                         <button class="btn btn-secondary mt-16 btn-block" onclick="askNonnaWithPantry()">🍳 What can I make?</button>
                     </div>
@@ -1591,6 +2502,10 @@
             <span class="icon">💬</span>
             <span>Chat</span>
         </button>
+        <button class="nav-item" onclick="navigateTo('workouts')" data-view="workouts">
+            <span class="icon">💪</span>
+            <span>Workouts</span>
+        </button>
         <button class="nav-item" onclick="navigateTo('more')" data-view="more">
             <span class="icon">⋮</span>
             <span>More</span>
@@ -1639,7 +2554,8 @@ const STORAGE = {
     GARDEN: 'tavola_garden',
     HISTORY: 'tavola_meal_history',
     PREFS: 'tavola_preferences',
-    ONBOARDING: 'tavola_onboarding_done'
+    ONBOARDING: 'tavola_onboarding_done',
+    WORKOUTS: 'tavola_workouts'
 };
 
 // ========================================
@@ -1653,7 +2569,10 @@ let state = {
     isRecording: false,
     flareMode: false,
     recognition: null,
-    cookMode: { active: false, recipe: null, currentStep: 0 }
+    cookMode: { active: false, recipe: null, currentStep: 0 },
+    recipeEditMode: false,
+    selectedRecipes: new Set(),
+    selectedTagFilters: new Set()
 };
 
 // Nonna's Tips
@@ -1772,6 +2691,7 @@ function navigateTo(view) {
     if (view === 'favorites') renderFavorites();
     if (view === 'week') renderWeekPlanner();
     if (view === 'recipes') renderRecipeLibrary();
+    if (view === 'workouts') renderWorkoutsView();
 }
 
 function showMoreMenu() {
@@ -1824,12 +2744,37 @@ function updateDashboard() {
     // Recent activity
     updateRecentActivity();
 
+    // Update workout dashboard card
+    updateDashboardWorkoutCard();
+
     // Flare mode indicator
     const flareBanner = document.getElementById('home-flare-banner');
     if (state.flareMode) {
         flareBanner.classList.remove('hidden');
     } else {
         flareBanner.classList.add('hidden');
+    }
+}
+
+function updateDashboardWorkoutCard() {
+    const caloriesIn = getTodaysCaloriesIn();
+    const caloriesOut = getTodaysCaloriesOut();
+    const netCalories = caloriesIn - caloriesOut;
+    const todaysWorkouts = getTodaysWorkouts();
+
+    document.getElementById('dashboard-calories-in').textContent = caloriesIn;
+    document.getElementById('dashboard-calories-out').textContent = caloriesOut;
+    document.getElementById('dashboard-calorie-net').textContent = `${netCalories > 0 ? '+' : ''}${netCalories}`;
+    document.getElementById('dashboard-workouts-today').textContent = todaysWorkouts.length;
+
+    // Update net balance color
+    const netEl = document.getElementById('dashboard-calorie-net');
+    if (netCalories > 200) {
+        netEl.style.color = 'var(--danger)';
+    } else if (netCalories < -200) {
+        netEl.style.color = 'var(--success)';
+    } else {
+        netEl.style.color = 'var(--cerulean)';
     }
 }
 
@@ -1869,31 +2814,83 @@ function toggleCookingForTwo() {
     fields.classList.toggle('hidden', !toggle.checked);
 }
 
+function toggleConditionDetails(conditionId) {
+    const detailsEl = document.getElementById(`${conditionId}-details`);
+    if (!detailsEl) return;
+
+    // Find the checkbox that controls this
+    const checkboxMap = {
+        'crohns': 'crohns',
+        'uc': 'uc',
+        'ibs': 'ibs',
+        'cholesterol': 'highCholesterol',
+        'bp': 'highBP',
+        'diabetes': 'diabetes',
+        'kidney': 'kidney',
+        'fibro': 'fibromyalgia',
+        'thyroid': 'hashimotos'
+    };
+
+    const checkboxValue = checkboxMap[conditionId];
+    const checkbox = document.querySelector(`[name="conditions"][value="${checkboxValue}"]`);
+
+    if (checkbox) {
+        detailsEl.classList.toggle('hidden', !checkbox.checked);
+    }
+}
+
 function saveProfile(e) {
     e.preventDefault();
     const form = e.target;
 
     const profile = {
-        crohnsSeverity: form.crohnsSeverity.value,
-        crohnsTriggers: form.crohnsTriggers.value,
-        fibroEnergy: form.fibroEnergy.value,
-        thyroidType: form.thyroidType.value,
-        otherConditions: form.otherConditions.value,
-        cookingForTwo: form.cookingForTwo.checked,
+        // Health conditions (checkboxes)
+        conditions: Array.from(form.querySelectorAll('[name="conditions"]:checked')).map(c => c.value),
+
+        // Condition-specific details
+        crohnsSeverity: form.crohnsSeverity?.value || '',
+        crohnsTriggers: form.crohnsTriggers?.value || '',
+        ucSeverity: form.ucSeverity?.value || '',
+        ibsType: form.ibsType?.value || '',
+        cholesterolGoal: form.cholesterolGoal?.value || '',
+        sodiumRestriction: form.sodiumRestriction?.value || '',
+        carbManagement: form.carbManagement?.value || '',
+        kidneyRestrictions: Array.from(form.querySelectorAll('[name="kidneyRestrictions"]:checked')).map(c => c.value),
+        fibroEnergy: form.fibroEnergy?.value || '',
+        thyroidType: form.thyroidType?.value || '',
+
+        // Food allergies
+        foodAllergies: form.foodAllergies?.value || '',
+
+        // Dietary goals
+        dietaryGoals: Array.from(form.querySelectorAll('[name="dietaryGoals"]:checked')).map(c => c.value),
+
+        // Other notes
+        otherConditions: form.otherConditions?.value || '',
+
+        // Cooking for two
+        cookingForTwo: form.cookingForTwo?.checked || false,
         partnerName: form.partnerName?.value || '',
         partnerRestrictions: Array.from(form.querySelectorAll('[name="partnerRestrictions"]:checked')).map(c => c.value),
         partnerAllergies: form.partnerAllergies?.value || '',
         partnerLoves: form.partnerLoves?.value || '',
+
+        // Proteins
         proteins: Array.from(form.querySelectorAll('[name="proteins"]:checked')).map(c => c.value),
-        currentlyGrowing: form.currentlyGrowing.value,
-        growingZone: form.growingZone.value,
-        currentSeason: form.currentSeason.value,
-        energyLevel: form.energyLevel.value,
-        cookingTime: form.cookingTime.value,
-        weeklyBudget: form.weeklyBudget.value,
-        shoppingPriority: form.shoppingPriority.value,
-        foodsToAvoid: form.foodsToAvoid.value,
-        favoriteFlavors: form.favoriteFlavors.value,
+
+        // Garden
+        currentlyGrowing: form.currentlyGrowing?.value || '',
+        growingZone: form.growingZone?.value || '',
+        currentSeason: form.currentSeason?.value || '',
+
+        // Cooking preferences
+        energyLevel: form.energyLevel?.value || '',
+        cookingTime: form.cookingTime?.value || '',
+        weeklyBudget: form.weeklyBudget?.value || '',
+        shoppingPriority: form.shoppingPriority?.value || '',
+        foodsToAvoid: form.foodsToAvoid?.value || '',
+        favoriteFlavors: form.favoriteFlavors?.value || '',
+
         createdAt: new Date().toISOString()
     };
 
@@ -1908,20 +2905,75 @@ function editProfile() {
     if (profile) {
         setTimeout(() => {
             const form = document.getElementById('profile-form');
-            Object.keys(profile).forEach(key => {
+
+            // Restore simple fields
+            const simpleFields = ['crohnsSeverity', 'crohnsTriggers', 'ucSeverity', 'ibsType',
+                'cholesterolGoal', 'sodiumRestriction', 'carbManagement', 'fibroEnergy',
+                'thyroidType', 'foodAllergies', 'otherConditions', 'partnerName',
+                'partnerAllergies', 'partnerLoves', 'currentlyGrowing', 'growingZone',
+                'currentSeason', 'energyLevel', 'cookingTime', 'weeklyBudget',
+                'shoppingPriority', 'foodsToAvoid', 'favoriteFlavors'];
+
+            simpleFields.forEach(key => {
                 const el = form.querySelector(`[name="${key}"]`);
-                if (el) {
-                    if (el.type === 'checkbox') {
-                        el.checked = profile[key];
-                        if (key === 'cookingForTwo') toggleCookingForTwo();
-                    } else {
-                        el.value = profile[key];
-                    }
-                }
+                if (el && profile[key]) el.value = profile[key];
             });
+
+            // Restore cookingForTwo toggle
+            if (profile.cookingForTwo) {
+                const toggle = form.querySelector('[name="cookingForTwo"]');
+                if (toggle) {
+                    toggle.checked = true;
+                    toggleCookingForTwo();
+                }
+            }
+
+            // Restore condition checkboxes and show details
+            if (profile.conditions) {
+                profile.conditions.forEach(c => {
+                    const cb = form.querySelector(`[name="conditions"][value="${c}"]`);
+                    if (cb) {
+                        cb.checked = true;
+                        // Trigger details show
+                        const detailsMap = {
+                            'crohns': 'crohns', 'uc': 'uc', 'ibs': 'ibs',
+                            'highCholesterol': 'cholesterol', 'highBP': 'bp',
+                            'diabetes': 'diabetes', 'kidney': 'kidney',
+                            'fibromyalgia': 'fibro', 'hashimotos': 'thyroid'
+                        };
+                        if (detailsMap[c]) toggleConditionDetails(detailsMap[c]);
+                    }
+                });
+            }
+
+            // Restore dietary goals
+            if (profile.dietaryGoals) {
+                profile.dietaryGoals.forEach(g => {
+                    const cb = form.querySelector(`[name="dietaryGoals"][value="${g}"]`);
+                    if (cb) cb.checked = true;
+                });
+            }
+
+            // Restore proteins
             if (profile.proteins) {
                 profile.proteins.forEach(p => {
                     const cb = form.querySelector(`[name="proteins"][value="${p}"]`);
+                    if (cb) cb.checked = true;
+                });
+            }
+
+            // Restore partner restrictions
+            if (profile.partnerRestrictions) {
+                profile.partnerRestrictions.forEach(r => {
+                    const cb = form.querySelector(`[name="partnerRestrictions"][value="${r}"]`);
+                    if (cb) cb.checked = true;
+                });
+            }
+
+            // Restore kidney restrictions
+            if (profile.kidneyRestrictions) {
+                profile.kidneyRestrictions.forEach(r => {
+                    const cb = form.querySelector(`[name="kidneyRestrictions"][value="${r}"]`);
                     if (cb) cb.checked = true;
                 });
             }
@@ -2046,19 +3098,31 @@ function parseRecipeToCard(content) {
     const prepMatch = content.match(/Prep:\s*(\d+)\s*min/i);
     const cookMatch = content.match(/Cook:\s*(\d+)\s*min/i);
 
+    // Extract tags from content
+    const tagsMatch = content.match(/\*?\*?TAGS\*?\*?:?\s*(.+?)(?:\n|$)/i);
+    const rawTags = tagsMatch ? tagsMatch[1].split(/[,;]/).map(t => t.trim()).filter(t => t) : [];
+
+    // Extract nutrition
+    const nutritionMatch = content.match(/\*?\*?NUTRITION[^:]*\*?\*?:?([\s\S]*?)(?=\*?\*?INGREDIENTS|$)/i);
+    const nutrition = parseNutrition(nutritionMatch ? nutritionMatch[1] : '');
+
+    // Extract health benefits
+    const healthMatch = content.match(/\*?\*?WHY THIS HELPS[^:]*\*?\*?:?([\s\S]*?)(?=\*?\*?MODIFICATIONS|FLARE|GARDEN|---|$)/i);
+    const healthBenefits = healthMatch ? healthMatch[1].trim() : '';
+
     // Extract ingredients
     const ingredientsMatch = content.match(/\*?\*?INGREDIENTS\*?\*?:?([\s\S]*?)(?=\*?\*?INSTRUCTIONS|$)/i);
     const ingredients = ingredientsMatch ?
         ingredientsMatch[1].trim().split('\n').filter(l => l.trim().startsWith('-')).map(l => l.replace(/^-\s*/, '').trim()) : [];
 
     // Extract instructions
-    const instructionsMatch = content.match(/\*?\*?INSTRUCTIONS\*?\*?:?([\s\S]*?)(?=\*?\*?FLARE|GARDEN|STORAGE|CROHN|NUTRITIONAL|---|$)/i);
+    const instructionsMatch = content.match(/\*?\*?INSTRUCTIONS\*?\*?:?([\s\S]*?)(?=\*?\*?WHY THIS|FLARE|GARDEN|STORAGE|MODIFICATIONS|CROHN|---|$)/i);
     const instructions = instructionsMatch ?
         instructionsMatch[1].trim().split('\n').filter(l => /^\d+\./.test(l.trim())).map(l => l.replace(/^\d+\.\s*/, '').trim()) : [];
 
-    // Extract flare mods
-    const flareMatch = content.match(/\*?\*?FLARE\s*MODIFICATIONS?\*?\*?:?([\s\S]*?)(?=\*?\*?GARDEN|STORAGE|---|$)/i);
-    const flareMods = flareMatch ? flareMatch[1].trim() : '';
+    // Extract modifications (combined flare mods and other modifications)
+    const modsMatch = content.match(/\*?\*?(?:FLARE\s*)?MODIFICATIONS?\*?\*?:?([\s\S]*?)(?=\*?\*?GARDEN|STORAGE|---|$)/i);
+    const modifications = modsMatch ? modsMatch[1].trim() : '';
 
     const title = titleMatch ? titleMatch[1].trim().replace(/===\s*$/, '').trim() : 'Recipe';
     const serves = servesMatch ? servesMatch[1] : '2';
@@ -2066,15 +3130,18 @@ function parseRecipeToCard(content) {
     const prepTime = prepMatch ? prepMatch[1] : '10';
     const cookTime = cookMatch ? cookMatch[1] : '20';
 
-    // Generate unique ID and save to library
+    // Generate unique ID
     const recipeId = 'recipe_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
 
     // Determine protein type
-    const proteinTypes = { fish: /fish|cod|salmon|tilapia|shrimp/i, chicken: /chicken/i, pork: /pork/i, beef: /beef/i, vegetarian: /vegetarian|vegan|tofu/i };
+    const proteinTypes = { fish: /fish|cod|salmon|tilapia|shrimp|tuna|halibut/i, chicken: /chicken/i, pork: /pork/i, beef: /beef/i, vegetarian: /vegetarian|vegan|tofu|tempeh/i };
     let proteinType = 'other';
     for (const [type, regex] of Object.entries(proteinTypes)) {
         if (regex.test(content)) { proteinType = type; break; }
     }
+
+    // Process tags - combine extracted tags with auto-detected ones
+    const tags = processRecipeTags(rawTags, content, parseInt(totalTime), proteinType);
 
     // Auto-save to recipe library
     const recipeData = {
@@ -2082,14 +3149,16 @@ function parseRecipeToCard(content) {
         title: title,
         ingredients: ingredients,
         instructions: instructions,
-        flareMods: flareMods,
+        modifications: modifications,
+        healthBenefits: healthBenefits,
+        nutrition: nutrition,
         metadata: {
             prepTime: parseInt(prepTime),
             cookTime: parseInt(cookTime),
             totalTime: parseInt(totalTime),
             serves: parseInt(serves),
             proteinType: proteinType,
-            tags: ['Mediterranean']
+            tags: tags
         },
         dateGenerated: new Date().toISOString(),
         timesCooked: 0,
@@ -2098,6 +3167,32 @@ function parseRecipeToCard(content) {
         rawContent: content
     };
     saveRecipeToLibrary(recipeData);
+
+    // Build tags HTML
+    const tagsHtml = tags.map(tag => {
+        const tagClass = getTagClass(tag);
+        return `<span class="tag ${tagClass}">${tag}</span>`;
+    }).join('');
+
+    // Build nutrition HTML
+    const nutritionHtml = nutrition.calories ? `
+        <div class="nutrition-box">
+            <div class="nutrition-item"><div class="nutrition-value">${nutrition.calories}</div><div class="nutrition-label">Calories</div></div>
+            <div class="nutrition-item"><div class="nutrition-value">${nutrition.protein}g</div><div class="nutrition-label">Protein</div></div>
+            <div class="nutrition-item"><div class="nutrition-value">${nutrition.carbs}g</div><div class="nutrition-label">Carbs</div></div>
+            <div class="nutrition-item"><div class="nutrition-value">${nutrition.fat}g</div><div class="nutrition-label">Fat</div></div>
+            <div class="nutrition-item"><div class="nutrition-value">${nutrition.fiber}g</div><div class="nutrition-label">Fiber</div></div>
+            <div class="nutrition-item"><div class="nutrition-value">${nutrition.sodium}mg</div><div class="nutrition-label">Sodium</div></div>
+        </div>
+    ` : '';
+
+    // Build health benefits HTML
+    const healthHtml = healthBenefits ? `
+        <div class="health-benefits">
+            <div class="health-benefits-title">💚 Why This Helps Your Health</div>
+            <div class="health-benefits-text">${healthBenefits.replace(/\n/g, '<br>')}</div>
+        </div>
+    ` : '';
 
     return `
         <div class="recipe-card" data-recipe-id="${recipeId}">
@@ -2110,12 +3205,14 @@ function parseRecipeToCard(content) {
                 <div class="recipe-meta">
                     <div class="recipe-meta-item">⏱️ ${totalTime} min</div>
                     <div class="recipe-meta-item">🍽️ Serves ${serves}</div>
+                    ${nutrition.calories ? `<div class="recipe-meta-item">🔥 ${nutrition.calories} cal</div>` : ''}
                 </div>
             </div>
             <div class="recipe-tags">
-                <span class="tag tag-mediterranean">Mediterranean</span>
-                ${parseInt(totalTime) <= 30 ? '<span class="tag tag-quick">Quick</span>' : ''}
+                ${tagsHtml || '<span class="tag tag-mediterranean">Mediterranean</span>'}
             </div>
+            ${nutritionHtml}
+            ${healthHtml}
             <div class="recipe-body">
                 <div class="recipe-section">
                     <div class="recipe-section-title">📝 Ingredients</div>
@@ -2135,10 +3232,10 @@ function parseRecipeToCard(content) {
                         </div>
                     `).join('')}
                 </div>
-                ${flareMods ? `
+                ${modifications ? `
                     <div class="recipe-notes">
-                        <div class="recipe-notes-title">🩺 Flare Modifications</div>
-                        <p>${flareMods.replace(/\n/g, '<br>').replace(/^-\s*/gm, '• ')}</p>
+                        <div class="recipe-notes-title">🔄 Modifications</div>
+                        <p>${modifications.replace(/\n/g, '<br>').replace(/^-\s*/gm, '• ')}</p>
                     </div>
                 ` : ''}
             </div>
@@ -2149,6 +3246,90 @@ function parseRecipeToCard(content) {
             </div>
         </div>
     `;
+}
+
+function parseNutrition(text) {
+    const nutrition = { calories: '', protein: '', carbs: '', fat: '', fiber: '', sodium: '' };
+    if (!text) return nutrition;
+
+    const caloriesMatch = text.match(/Calories?[:\s]*~?(\d+)/i);
+    const proteinMatch = text.match(/Protein[:\s]*(\d+)/i);
+    const carbsMatch = text.match(/Carbs?[:\s]*(\d+)/i);
+    const fatMatch = text.match(/Fat[:\s]*(\d+)/i);
+    const fiberMatch = text.match(/Fiber[:\s]*(\d+)/i);
+    const sodiumMatch = text.match(/Sodium[:\s]*(\d+)/i);
+
+    if (caloriesMatch) nutrition.calories = caloriesMatch[1];
+    if (proteinMatch) nutrition.protein = proteinMatch[1];
+    if (carbsMatch) nutrition.carbs = carbsMatch[1];
+    if (fatMatch) nutrition.fat = fatMatch[1];
+    if (fiberMatch) nutrition.fiber = fiberMatch[1];
+    if (sodiumMatch) nutrition.sodium = sodiumMatch[1];
+
+    return nutrition;
+}
+
+function processRecipeTags(rawTags, content, totalTime, proteinType) {
+    const tags = new Set();
+
+    // Add raw tags from content
+    rawTags.forEach(tag => tags.add(tag));
+
+    // Auto-detect tags based on content
+    if (totalTime <= 30) tags.add('Quick');
+    if (/mediterranean/i.test(content)) tags.add('Mediterranean');
+    if (/anti.?inflammatory/i.test(content)) tags.add('Anti-Inflammatory');
+    if (/crohn|ibd|digestive/i.test(content)) tags.add("Crohn's-Friendly");
+    if (/heart.?healthy|cardiovascular/i.test(content)) tags.add('Heart-Healthy');
+    if (/low.?sodium/i.test(content)) tags.add('Low-Sodium');
+    if (/low.?carb|keto/i.test(content)) tags.add('Low-Carb');
+    if (/diabetic|blood.?sugar/i.test(content)) tags.add('Diabetic-Friendly');
+    if (/gluten.?free/i.test(content)) tags.add('Gluten-Free');
+    if (/high.?protein/i.test(content)) tags.add('High-Protein');
+    if (/one.?pot|sheet.?pan/i.test(content)) tags.add('One-Pot');
+    if (/meal.?prep|batch/i.test(content)) tags.add('Meal Prep');
+    if (/freezer/i.test(content)) tags.add('Freezer-Friendly');
+
+    // Protein-based tags
+    if (proteinType === 'fish') tags.add('Fish');
+    if (proteinType === 'chicken') tags.add('Chicken');
+    if (proteinType === 'vegetarian') tags.add('Vegetarian');
+
+    // Ensure at least Mediterranean tag
+    if (tags.size === 0 || (tags.size === 1 && tags.has('Quick'))) {
+        tags.add('Mediterranean');
+    }
+
+    return Array.from(tags).slice(0, 6); // Limit to 6 tags
+}
+
+function getTagClass(tag) {
+    const tagClasses = {
+        "Crohn's-Friendly": 'tag-crohns',
+        'Heart-Healthy': 'tag-heart',
+        'BP-Friendly': 'tag-bp',
+        'Diabetic-Friendly': 'tag-diabetic',
+        'Anti-Inflammatory': 'tag-anti-inflammatory',
+        'Low-Sodium': 'tag-low-sodium',
+        'Low-Carb': 'tag-low-carb',
+        'Gut-Friendly': 'tag-gut-friendly',
+        'Gluten-Free': 'tag-gluten-free',
+        'Quick': 'tag-quick',
+        'Meal Prep': 'tag-meal-prep',
+        'Freezer-Friendly': 'tag-freezer',
+        'One-Pot': 'tag-one-pot',
+        'Mediterranean': 'tag-mediterranean',
+        'Citrus': 'tag-citrus',
+        'Garlic': 'tag-garlic',
+        'Spicy': 'tag-spicy',
+        'Comfort': 'tag-comfort',
+        'Fresh': 'tag-fresh',
+        'Fish': 'tag-fish',
+        'Chicken': 'tag-chicken',
+        'Vegetarian': 'tag-vegetarian',
+        'High-Protein': 'tag-high-protein'
+    };
+    return tagClasses[tag] || 'tag-mediterranean';
 }
 
 function parseWeekPlanToCard(content) {
@@ -2309,6 +3490,8 @@ async function callAPI(userMessage) {
     const profileText = formatProfileForAPI(profile);
     const history = getStorage(STORAGE.HISTORY) || [];
     const recentMeals = history.slice(0, 5).map(h => `${h.title} (${formatRelativeDate(h.date)})`).join(', ');
+    const recipeRatings = formatRecipeRatingsForAPI();
+    const workoutData = formatWorkoutDataForAPI();
 
     const messages = state.chatHistory.slice(-10).map(m => ({
         role: m.role,
@@ -2322,7 +3505,7 @@ async function callAPI(userMessage) {
     const response = await fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages, profileText, flareMode: state.flareMode, recentMeals })
+        body: JSON.stringify({ messages, profileText, flareMode: state.flareMode, recentMeals, recipeRatings, workoutData })
     });
 
     if (!response.ok) {
@@ -2337,35 +3520,148 @@ async function callAPI(userMessage) {
 function formatProfileForAPI(profile) {
     if (!profile) return 'No profile configured.';
 
-    let text = `
-HEALTH PROFILE:
-- Crohn's: ${profile.crohnsSeverity || 'Not specified'} severity
-- Triggers: ${profile.crohnsTriggers || 'None specified'}
-- Fibromyalgia Energy: ${profile.fibroEnergy || 'Not specified'}
-- Thyroid: ${profile.thyroidType || 'Not specified'}
-- Other: ${profile.otherConditions || 'None'}
+    const conditions = profile.conditions || [];
+    let text = 'HEALTH CONDITIONS:\n';
 
-PROTEINS: ${profile.proteins?.join(', ') || 'Not specified'}
+    // Digestive conditions
+    if (conditions.includes('crohns')) {
+        text += `- Crohn's Disease: ${profile.crohnsSeverity || 'severity not specified'}`;
+        if (profile.crohnsTriggers) text += `. Triggers: ${profile.crohnsTriggers}`;
+        text += '\n  → Prioritize: low-fiber when flaring, well-cooked vegetables, lean proteins, bone broth\n  → Avoid: raw vegetables, nuts, seeds, high-fiber foods during flares\n';
+    }
+    if (conditions.includes('uc')) {
+        text += `- Ulcerative Colitis: ${profile.ucSeverity || 'severity not specified'}\n  → Similar to Crohn's: low-fiber during flares, gentle foods\n`;
+    }
+    if (conditions.includes('ibs')) {
+        text += `- IBS: ${profile.ibsType || 'type not specified'}\n  → Consider low-FODMAP options, avoid trigger foods\n`;
+    }
+    if (conditions.includes('celiac')) {
+        text += '- Celiac/Gluten Sensitivity: ALL recipes must be gluten-free\n';
+    }
+    if (conditions.includes('lactose')) {
+        text += '- Lactose Intolerance: Avoid or limit dairy, suggest lactose-free alternatives\n';
+    }
+    if (conditions.includes('gerd')) {
+        text += '- GERD/Acid Reflux: Avoid tomatoes, citrus, spicy foods, large meals. Smaller portions.\n';
+    }
 
-GARDEN: ${profile.currentlyGrowing || 'Nothing specified'}
-Zone: ${profile.growingZone || 'Not specified'}, Season: ${profile.currentSeason}
+    // Cardiovascular conditions
+    if (conditions.includes('highCholesterol')) {
+        text += `- High Cholesterol: Goal is ${profile.cholesterolGoal || 'general improvement'}\n  → Prioritize: olive oil, fish (omega-3), oats, nuts, legumes, vegetables\n  → Limit: saturated fat, red meat, full-fat dairy\n`;
+    }
+    if (conditions.includes('highBP')) {
+        text += `- High Blood Pressure: Sodium restriction ${profile.sodiumRestriction || 'moderate'}\n  → Prioritize: DASH diet, potassium-rich foods, herbs instead of salt\n  → Limit: salt, processed foods, canned goods (unless low-sodium)\n`;
+    }
+    if (conditions.includes('diabetes')) {
+        text += `- Type 2 Diabetes: Carb management ${profile.carbManagement || 'moderate'}\n  → Prioritize: complex carbs, high fiber, protein, healthy fats, low-glycemic foods\n  → Always include carb counts in recipes, note glycemic impact\n`;
+    }
+    if (conditions.includes('heartDisease')) {
+        text += '- Heart Disease: Heart-healthy focus, limit sodium and saturated fat\n';
+    }
+    if (conditions.includes('kidney')) {
+        const kidneyRestrictions = profile.kidneyRestrictions?.join(', ') || 'general';
+        text += `- Kidney Disease: Restrictions: ${kidneyRestrictions}\n  → May need to limit: protein, sodium, potassium, phosphorus based on stage\n`;
+    }
 
-COOKING: Energy ${profile.energyLevel}, Time preference ${profile.cookingTime}
-BUDGET: $${profile.weeklyBudget}, Priority: ${profile.shoppingPriority}
-AVOID: ${profile.foodsToAvoid || 'None'}
-LOVES: ${profile.favoriteFlavors || 'Not specified'}`;
+    // Autoimmune conditions
+    if (conditions.includes('fibromyalgia')) {
+        text += `- Fibromyalgia: Energy level ${profile.fibroEnergy || 'variable'}\n  → Suggest easy, low-effort recipes on low-energy days. Anti-inflammatory focus.\n`;
+    }
+    if (conditions.includes('rheumatoid') || conditions.includes('lupus') || conditions.includes('psoriatic') || conditions.includes('ms')) {
+        const autoimmune = [];
+        if (conditions.includes('rheumatoid')) autoimmune.push('Rheumatoid Arthritis');
+        if (conditions.includes('lupus')) autoimmune.push('Lupus');
+        if (conditions.includes('psoriatic')) autoimmune.push('Psoriatic Arthritis');
+        if (conditions.includes('ms')) autoimmune.push('MS');
+        text += `- Autoimmune (${autoimmune.join(', ')}): Anti-inflammatory diet essential\n  → Prioritize: omega-3 rich fish, colorful vegetables, turmeric, ginger, olive oil\n  → Limit: processed foods, refined sugars, potential inflammatory triggers\n`;
+    }
+    if (conditions.includes('hashimotos')) {
+        text += `- Hashimoto's/Thyroid: ${profile.thyroidType || 'thyroid condition'}\n  → Consider: selenium-rich foods, limit goitrogens if indicated\n`;
+    }
+
+    // Food allergies
+    if (profile.foodAllergies) {
+        text += `\nFOOD ALLERGIES (CRITICAL - NEVER include these): ${profile.foodAllergies}\n`;
+    }
+
+    // Dietary goals
+    if (profile.dietaryGoals?.length > 0) {
+        const goalDescriptions = {
+            'weightLoss': 'Weight Loss (calorie-conscious, high protein)',
+            'weightGain': 'Weight Gain/Muscle Building (calorie-dense, high protein)',
+            'antiInflammatory': 'Anti-Inflammatory Focus',
+            'heartHealthy': 'Heart-Healthy (Mediterranean)',
+            'bloodSugar': 'Blood Sugar Management',
+            'gutHealth': 'Gut Health Restoration',
+            'energy': 'Increased Energy'
+        };
+        text += `\nDIETARY GOALS: ${profile.dietaryGoals.map(g => goalDescriptions[g] || g).join(', ')}\n`;
+    }
+
+    // Other notes
+    if (profile.otherConditions) {
+        text += `\nOTHER NOTES: ${profile.otherConditions}\n`;
+    }
+
+    // Standard profile info
+    text += `
+PROTEINS EATEN: ${profile.proteins?.join(', ') || 'Not specified'}
+FOODS TO AVOID: ${profile.foodsToAvoid || 'None specified'}
+FAVORITE FLAVORS: ${profile.favoriteFlavors || 'Not specified'}
+
+GARDEN: ${profile.currentlyGrowing || 'Nothing growing'}
+Zone: ${profile.growingZone || 'Not specified'}, Season: ${profile.currentSeason || 'Not specified'}
+
+COOKING PREFERENCES:
+- Energy Level: ${profile.energyLevel || 'Not specified'}
+- Time Available: ${profile.cookingTime || 'Not specified'}
+- Budget: $${profile.weeklyBudget || 'Not specified'}/week
+- Shopping Priority: ${profile.shoppingPriority || 'Not specified'}`;
 
     if (profile.cookingForTwo) {
         text += `
 
 COOKING FOR TWO:
 Partner: ${profile.partnerName || 'Partner'}
-Restrictions: ${profile.partnerRestrictions?.join(', ') || 'None'}
-Allergies: ${profile.partnerAllergies || 'None'}
-Loves: ${profile.partnerLoves || 'Not specified'}`;
+Their Restrictions: ${profile.partnerRestrictions?.join(', ') || 'None'}
+Their Allergies: ${profile.partnerAllergies || 'None'}
+Foods They Love: ${profile.partnerLoves || 'Not specified'}`;
     }
 
     return text.trim();
+}
+
+function formatRecipeRatingsForAPI() {
+    const library = getRecipeLibrary();
+    if (!library || library.length === 0) return 'No recipes saved yet.';
+
+    // Get favorites and highly rated recipes
+    const favorites = library.filter(r => r.favorited);
+    const highRated = library.filter(r => (r.averageRating || r.rating || 0) >= 4);
+    const lowRated = library.filter(r => (r.averageRating || r.rating || 0) > 0 && (r.averageRating || r.rating || 0) <= 2);
+    const mostCooked = library.filter(r => (r.timesCooked || 0) >= 3).sort((a, b) => b.timesCooked - a.timesCooked);
+
+    let text = '';
+
+    if (favorites.length > 0) {
+        text += `FAVORITES (${favorites.length}): ${favorites.slice(0, 5).map(r => r.title).join(', ')}`;
+        if (favorites.length > 5) text += `, and ${favorites.length - 5} more`;
+        text += '\n';
+    }
+
+    if (highRated.length > 0) {
+        text += `HIGHLY RATED (4-5 stars): ${highRated.slice(0, 5).map(r => `${r.title} (${r.averageRating || r.rating}★)`).join(', ')}\n`;
+    }
+
+    if (mostCooked.length > 0) {
+        text += `FREQUENTLY COOKED: ${mostCooked.slice(0, 3).map(r => `${r.title} (${r.timesCooked}x)`).join(', ')}\n`;
+    }
+
+    if (lowRated.length > 0) {
+        text += `LOWER RATED (avoid suggesting unless asked): ${lowRated.map(r => r.title).join(', ')}\n`;
+    }
+
+    return text || 'No recipes rated yet.';
 }
 
 // ========================================
@@ -2436,6 +3732,9 @@ function renderRecipeLibrary() {
     const grid = document.getElementById('recipes-grid');
     const empty = document.getElementById('recipes-empty');
 
+    // Populate tag filter chips
+    populateTagFilterChips();
+
     if (library.length === 0) {
         grid.innerHTML = '';
         empty.classList.remove('hidden');
@@ -2443,30 +3742,71 @@ function renderRecipeLibrary() {
     }
 
     empty.classList.add('hidden');
-    grid.innerHTML = library.map(recipe => renderLibraryCard(recipe)).join('');
+    filterRecipeLibrary(); // Use filter function to respect any active filters
 }
 
 function renderLibraryCard(recipe) {
     const meta = recipe.metadata || {};
+    const avgRating = recipe.averageRating || recipe.rating || 0;
+    const timesCooked = recipe.timesCooked || 0;
+    const nutrition = recipe.nutrition || {};
+
+    // Generate star display
+    const starDisplay = avgRating > 0 ? renderStarsDisplay(avgRating) : '';
+    const cookedText = timesCooked > 0 ? `Cooked ${timesCooked}x` : '';
+
+    // Get tags and apply styling
+    const tags = meta.tags || [];
+    const tagsHtml = tags.slice(0, 4).map(tag => {
+        const tagClass = getTagClass(tag);
+        return `<span class="tag ${tagClass}">${tag}</span>`;
+    }).join('');
+
+    // Nutrition display
+    const caloriesHtml = nutrition.calories ? `<span class="card-calories">🔥 ${nutrition.calories} cal</span>` : '';
+    const macrosHtml = (nutrition.protein || nutrition.carbs || nutrition.fat) ?
+        `<div class="card-macros">${nutrition.protein ? nutrition.protein + 'g protein' : ''}${nutrition.carbs ? ' · ' + nutrition.carbs + 'g carbs' : ''}${nutrition.fat ? ' · ' + nutrition.fat + 'g fat' : ''}</div>` : '';
+
+    const isEditMode = state.recipeEditMode;
+    const isSelected = state.selectedRecipes?.has(recipe.id);
+    const editModeClass = isEditMode ? 'edit-mode' : '';
+    const selectedClass = isSelected ? 'selected' : '';
+    const clickHandler = isEditMode ? `toggleRecipeSelection('${recipe.id}')` : `viewRecipeDetail('${recipe.id}')`;
+
     return `
-        <div class="library-card" onclick="viewRecipeDetail('${recipe.id}')">
+        <div class="library-card ${editModeClass} ${selectedClass}" onclick="${clickHandler}" data-recipe-id="${recipe.id}">
             <div class="library-card-banner">
                 🍽️
                 ${recipe.favorited ? '<span class="library-card-favorite">❤️</span>' : ''}
+                ${caloriesHtml}
             </div>
             <div class="library-card-body">
                 <div class="library-card-title">${recipe.title}</div>
+                ${starDisplay ? `<div class="library-card-rating">${starDisplay}</div>` : ''}
                 <div class="library-card-meta">
                     <span>⏱️ ${meta.totalTime || 30}min</span>
                     <span>🍽️ ${meta.serves || 2}</span>
+                    ${cookedText ? `<span>👨‍🍳 ${cookedText}</span>` : ''}
                 </div>
+                ${macrosHtml}
                 <div class="library-card-tags">
-                    ${(meta.tags || []).slice(0, 2).map(t => `<span class="tag">${t}</span>`).join('')}
+                    ${tagsHtml || '<span class="tag tag-mediterranean">Mediterranean</span>'}
                 </div>
-                ${recipe.rating ? `<div class="library-card-rating">${'⭐'.repeat(recipe.rating)}</div>` : ''}
             </div>
         </div>
     `;
+}
+
+function renderStarsDisplay(rating) {
+    const fullStars = Math.floor(rating);
+    const hasHalf = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalf ? 1 : 0);
+
+    let stars = '★'.repeat(fullStars);
+    if (hasHalf) stars += '½';
+    stars += '☆'.repeat(emptyStars);
+
+    return `${stars} (${rating.toFixed(1)})`;
 }
 
 function filterRecipeLibrary() {
@@ -2499,11 +3839,30 @@ function filterRecipeLibrary() {
         });
     }
 
+    // Filter by tags
+    if (state.selectedTagFilters.size > 0) {
+        library = library.filter(r => {
+            const recipeTags = r.metadata?.tags || [];
+            // Recipe must have ALL selected tags
+            return Array.from(state.selectedTagFilters).every(tag =>
+                recipeTags.some(t => t.toLowerCase() === tag.toLowerCase())
+            );
+        });
+    }
+
     // Sort
-    if (sort === 'rating') library.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-    else if (sort === 'time') library.sort((a, b) => (a.metadata?.totalTime || 30) - (b.metadata?.totalTime || 30));
-    else if (sort === 'name') library.sort((a, b) => a.title.localeCompare(b.title));
-    else library.sort((a, b) => new Date(b.dateGenerated) - new Date(a.dateGenerated));
+    if (sort === 'rating') {
+        // Use averageRating first, then single rating for backwards compatibility
+        library.sort((a, b) => (b.averageRating || b.rating || 0) - (a.averageRating || a.rating || 0));
+    } else if (sort === 'cooked') {
+        library.sort((a, b) => (b.timesCooked || 0) - (a.timesCooked || 0));
+    } else if (sort === 'time') {
+        library.sort((a, b) => (a.metadata?.totalTime || 30) - (b.metadata?.totalTime || 30));
+    } else if (sort === 'name') {
+        library.sort((a, b) => a.title.localeCompare(b.title));
+    } else {
+        library.sort((a, b) => new Date(b.dateGenerated) - new Date(a.dateGenerated));
+    }
 
     const grid = document.getElementById('recipes-grid');
     grid.innerHTML = library.map(recipe => renderLibraryCard(recipe)).join('');
@@ -2512,8 +3871,228 @@ function filterRecipeLibrary() {
     empty.classList.toggle('hidden', library.length > 0);
 }
 
+function populateTagFilterChips() {
+    const library = getRecipeLibrary();
+    const allTags = new Map(); // tag -> count
+
+    // Collect all tags from all recipes
+    library.forEach(recipe => {
+        const tags = recipe.metadata?.tags || [];
+        tags.forEach(tag => {
+            allTags.set(tag, (allTags.get(tag) || 0) + 1);
+        });
+    });
+
+    // Sort by frequency, then alphabetically
+    const sortedTags = Array.from(allTags.entries())
+        .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]))
+        .slice(0, 15); // Limit to 15 most common tags
+
+    const container = document.getElementById('tag-filter-chips');
+    if (!container) return;
+
+    container.innerHTML = sortedTags.map(([tag, count]) => {
+        const isActive = state.selectedTagFilters.has(tag);
+        return `<span class="tag-filter-chip ${isActive ? 'active' : ''}" onclick="toggleTagFilter('${tag}')">${tag} (${count})</span>`;
+    }).join('');
+
+    // Show/hide clear button
+    const clearBtn = document.getElementById('tag-filter-clear');
+    if (clearBtn) {
+        clearBtn.classList.toggle('visible', state.selectedTagFilters.size > 0);
+    }
+}
+
+function toggleTagFilter(tag) {
+    if (state.selectedTagFilters.has(tag)) {
+        state.selectedTagFilters.delete(tag);
+    } else {
+        state.selectedTagFilters.add(tag);
+    }
+    populateTagFilterChips();
+    filterRecipeLibrary();
+}
+
+function clearTagFilters() {
+    state.selectedTagFilters.clear();
+    populateTagFilterChips();
+    filterRecipeLibrary();
+}
+
 function toggleFilterDropdown() {
     document.getElementById('recipe-filters').classList.toggle('open');
+}
+
+// ========================================
+// BULK RECIPE MANAGEMENT
+// ========================================
+function toggleRecipeEditMode() {
+    state.recipeEditMode = !state.recipeEditMode;
+    state.selectedRecipes = new Set();
+
+    const editBtn = document.getElementById('recipes-edit-btn');
+    const bulkBar = document.getElementById('recipes-bulk-bar');
+
+    if (state.recipeEditMode) {
+        editBtn.textContent = 'Done';
+        editBtn.classList.add('btn-primary');
+        editBtn.classList.remove('btn-ghost');
+        bulkBar.classList.remove('hidden');
+    } else {
+        editBtn.textContent = 'Edit';
+        editBtn.classList.remove('btn-primary');
+        editBtn.classList.add('btn-ghost');
+        bulkBar.classList.add('hidden');
+    }
+
+    filterRecipeLibrary(); // Re-render cards with edit mode
+    updateBulkCount();
+}
+
+function toggleRecipeSelection(recipeId) {
+    if (state.selectedRecipes.has(recipeId)) {
+        state.selectedRecipes.delete(recipeId);
+    } else {
+        state.selectedRecipes.add(recipeId);
+    }
+
+    // Update card visual
+    const card = document.querySelector(`.library-card[data-recipe-id="${recipeId}"]`);
+    if (card) {
+        card.classList.toggle('selected', state.selectedRecipes.has(recipeId));
+    }
+
+    updateBulkCount();
+}
+
+function updateBulkCount() {
+    const countEl = document.getElementById('bulk-selected-count');
+    if (countEl) {
+        countEl.textContent = state.selectedRecipes.size;
+    }
+}
+
+function bulkSelectAll() {
+    const library = getRecipeLibrary();
+    library.forEach(r => state.selectedRecipes.add(r.id));
+    filterRecipeLibrary();
+    updateBulkCount();
+}
+
+function bulkDeselectAll() {
+    state.selectedRecipes.clear();
+    filterRecipeLibrary();
+    updateBulkCount();
+}
+
+function bulkAddToFavorites() {
+    if (state.selectedRecipes.size === 0) {
+        showToast('No recipes selected');
+        return;
+    }
+
+    const library = getRecipeLibrary();
+    let count = 0;
+    state.selectedRecipes.forEach(id => {
+        const recipe = library.find(r => r.id === id);
+        if (recipe && !recipe.favorited) {
+            recipe.favorited = true;
+            count++;
+        }
+    });
+
+    setStorage(STORAGE.RECIPES, library);
+    filterRecipeLibrary();
+    renderFavorites();
+    showToast(`❤️ ${count} recipe${count !== 1 ? 's' : ''} added to favorites`);
+}
+
+function bulkRemoveFromFavorites() {
+    if (state.selectedRecipes.size === 0) {
+        showToast('No recipes selected');
+        return;
+    }
+
+    const library = getRecipeLibrary();
+    let count = 0;
+    state.selectedRecipes.forEach(id => {
+        const recipe = library.find(r => r.id === id);
+        if (recipe && recipe.favorited) {
+            recipe.favorited = false;
+            count++;
+        }
+    });
+
+    setStorage(STORAGE.RECIPES, library);
+    filterRecipeLibrary();
+    renderFavorites();
+    showToast(`${count} recipe${count !== 1 ? 's' : ''} removed from favorites`);
+}
+
+function bulkDeleteRecipes() {
+    if (state.selectedRecipes.size === 0) {
+        showToast('No recipes selected');
+        return;
+    }
+
+    const count = state.selectedRecipes.size;
+
+    // Check if any are planned
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    const weekDates = getWeekDates(state.currentWeekOffset);
+    const plannedIds = new Set(weekDates.map(d => mealPlans[d]?.recipeId).filter(Boolean));
+
+    const plannedSelection = [...state.selectedRecipes].filter(id => plannedIds.has(id));
+
+    if (plannedSelection.length > 0) {
+        openModal(`
+            <div class="modal-header">
+                <h2 class="modal-title">Cannot Delete All</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>${plannedSelection.length} of the selected recipes are planned for this week. Remove them from your meal plan first.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+        `);
+        return;
+    }
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Delete ${count} Recipe${count !== 1 ? 's' : ''}?</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p>This will permanently delete <strong>${count} recipe${count !== 1 ? 's' : ''}</strong> from your library.</p>
+            <p class="text-muted mt-8">This action cannot be undone. All ratings and cooking history will be lost.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" style="background: var(--danger);" onclick="confirmBulkDelete()">Delete ${count} Recipe${count !== 1 ? 's' : ''}</button>
+        </div>
+    `);
+}
+
+function confirmBulkDelete() {
+    let library = getRecipeLibrary();
+    const deletedCount = state.selectedRecipes.size;
+
+    // Store for potential undo
+    const deletedRecipes = library.filter(r => state.selectedRecipes.has(r.id));
+
+    library = library.filter(r => !state.selectedRecipes.has(r.id));
+    setStorage(STORAGE.RECIPES, library);
+
+    state.selectedRecipes.clear();
+    closeModal();
+    filterRecipeLibrary();
+    renderFavorites();
+    updateBulkCount();
+
+    showToast(`🗑️ ${deletedCount} recipe${deletedCount !== 1 ? 's' : ''} deleted`);
 }
 
 function viewRecipeDetail(recipeId) {
@@ -3015,6 +4594,592 @@ function askNonnaWithPantry() {
 }
 
 // ========================================
+// PANTRY PHOTO SCANNING
+// ========================================
+let pantryScanState = {
+    imageData: null,
+    imageType: null,
+    detectedItems: [],
+    selectedItems: new Set()
+};
+
+function openPantryScanModal() {
+    pantryScanState = {
+        imageData: null,
+        imageType: null,
+        detectedItems: [],
+        selectedItems: new Set()
+    };
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">📷 Scan Your Pantry</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="scan-modal-body">
+            <p class="text-muted mb-16">Take a photo or upload an image of your fridge, pantry, or spice rack. Nonna will identify the items for you!</p>
+
+            <div class="scan-upload-area" id="scan-upload-area" onclick="document.getElementById('pantry-image-input').click()">
+                <div class="scan-upload-icon">📸</div>
+                <div class="scan-upload-text">Tap to take photo or upload</div>
+                <div class="scan-upload-hint">Supports: JPG, PNG, WebP</div>
+            </div>
+
+            <input type="file" id="pantry-image-input" accept="image/*" capture="environment" style="display: none;" onchange="handlePantryImageSelect(event)">
+
+            <img id="scan-preview" class="scan-preview hidden" alt="Preview">
+
+            <div class="nonna-tip mt-16">
+                <div class="nonna-tip-header">💡 Tips for best results</div>
+                <div class="nonna-tip-text">
+                    • Use good lighting<br>
+                    • Capture labels when possible<br>
+                    • Take multiple photos for different areas
+                </div>
+            </div>
+
+            <p class="text-muted mt-16" style="font-size: 0.8rem;">🔒 Photos are analyzed securely and not stored.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" id="scan-analyze-btn" onclick="analyzePantryImage()" disabled>Analyze Photo</button>
+        </div>
+    `);
+
+    // Set up drag and drop
+    setTimeout(() => {
+        const uploadArea = document.getElementById('scan-upload-area');
+        if (uploadArea) {
+            uploadArea.addEventListener('dragover', handleDragOver);
+            uploadArea.addEventListener('dragleave', handleDragLeave);
+            uploadArea.addEventListener('drop', handleDrop);
+        }
+    }, 100);
+}
+
+function handleDragOver(e) {
+    e.preventDefault();
+    e.currentTarget.classList.add('dragover');
+}
+
+function handleDragLeave(e) {
+    e.currentTarget.classList.remove('dragover');
+}
+
+function handleDrop(e) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+
+    const files = e.dataTransfer.files;
+    if (files.length > 0 && files[0].type.startsWith('image/')) {
+        processImageFile(files[0]);
+    }
+}
+
+function handlePantryImageSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        processImageFile(file);
+    }
+}
+
+function processImageFile(file) {
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+        showToast('Please use JPG, PNG, or WebP images');
+        return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+        showToast('Image too large. Max 10MB.');
+        return;
+    }
+
+    pantryScanState.imageType = file.type;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const base64Full = e.target.result;
+        pantryScanState.imageData = base64Full.split(',')[1]; // Remove data:image/xxx;base64, prefix
+
+        // Show preview
+        const preview = document.getElementById('scan-preview');
+        if (preview) {
+            preview.src = base64Full;
+            preview.classList.remove('hidden');
+        }
+
+        // Update upload area
+        const uploadArea = document.getElementById('scan-upload-area');
+        if (uploadArea) {
+            uploadArea.innerHTML = `
+                <div class="scan-upload-icon">✅</div>
+                <div class="scan-upload-text">Photo ready!</div>
+                <div class="scan-upload-hint">Tap to change photo</div>
+            `;
+        }
+
+        // Enable analyze button
+        const btn = document.getElementById('scan-analyze-btn');
+        if (btn) {
+            btn.disabled = false;
+        }
+    };
+    reader.readAsDataURL(file);
+}
+
+async function analyzePantryImage() {
+    if (!pantryScanState.imageData) {
+        showToast('Please select an image first');
+        return;
+    }
+
+    // Show loading state
+    const modalBody = document.getElementById('scan-modal-body');
+    modalBody.innerHTML = `
+        <div class="scan-loading">
+            <div class="scan-loading-icon">🔍</div>
+            <div class="scan-loading-text">
+                <strong>Nonna is scanning your kitchen...</strong><br>
+                <span class="text-muted">Identifying items and quantities</span>
+            </div>
+        </div>
+    `;
+
+    // Disable buttons during processing
+    const analyzeBtn = document.getElementById('scan-analyze-btn');
+    if (analyzeBtn) analyzeBtn.disabled = true;
+
+    try {
+        const response = await fetch('/.netlify/functions/analyze-pantry-image', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                image: pantryScanState.imageData,
+                imageType: pantryScanState.imageType
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to analyze image');
+        }
+
+        if (data.items && data.items.length > 0) {
+            pantryScanState.detectedItems = data.items;
+            // Select all items by default
+            pantryScanState.selectedItems = new Set(data.items.map((_, i) => i));
+            showScanResults();
+        } else {
+            showScanError(data.message || 'No items detected. Try a clearer photo with better lighting.');
+        }
+
+    } catch (error) {
+        console.error('Scan error:', error);
+        showScanError(error.message || 'Failed to analyze image. Please try again.');
+    }
+}
+
+function showScanError(message) {
+    const modalBody = document.getElementById('scan-modal-body');
+    modalBody.innerHTML = `
+        <div class="empty-state">
+            <div class="empty-state-icon">😕</div>
+            <div class="empty-state-title">Couldn't detect items</div>
+            <p>${message}</p>
+            <button class="btn btn-primary mt-16" onclick="openPantryScanModal()">Try Again</button>
+        </div>
+    `;
+
+    // Update footer
+    const modal = document.querySelector('.modal');
+    const footer = modal.querySelector('.modal-footer');
+    if (footer) {
+        footer.innerHTML = `
+            <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+        `;
+    }
+}
+
+function showScanResults() {
+    const items = pantryScanState.detectedItems;
+
+    // Group items by category
+    const categories = {};
+    items.forEach((item, index) => {
+        const cat = item.category || 'Other';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push({ ...item, index });
+    });
+
+    // Category icons
+    const categoryIcons = {
+        'Produce': '🥬',
+        'Proteins': '🥩',
+        'Dairy': '🧀',
+        'Grains': '🌾',
+        'Canned Goods': '🥫',
+        'Spices': '🧂',
+        'Condiments': '🫙',
+        'Frozen': '❄️',
+        'Beverages': '🥤',
+        'Snacks': '🍿',
+        'Other': '📦'
+    };
+
+    // Status badge helper
+    const getStatusBadge = (status) => {
+        const statusMap = {
+            'Fresh': { class: 'fresh', text: '🟢 Fresh' },
+            'Use Soon': { class: 'use-soon', text: '🟡 Use Soon' },
+            'Check Date': { class: 'check', text: '🔴 Check Date' }
+        };
+        const s = statusMap[status] || statusMap['Fresh'];
+        return `<span class="scan-item-badge ${s.class}">${s.text}</span>`;
+    };
+
+    // Build HTML
+    let html = `
+        <div class="scan-results-header">
+            <span class="scan-results-count">✓ Found ${items.length} items!</span>
+            <div>
+                <button class="btn btn-sm btn-ghost" onclick="selectAllScanItems(true)">Select All</button>
+                <button class="btn btn-sm btn-ghost" onclick="selectAllScanItems(false)">Deselect All</button>
+            </div>
+        </div>
+        <p class="text-muted mb-16">Review and uncheck any incorrect items before adding.</p>
+    `;
+
+    // Render by category
+    Object.keys(categories).sort().forEach(cat => {
+        const catItems = categories[cat];
+        html += `<div class="scan-category-header">${categoryIcons[cat] || '📦'} ${cat} (${catItems.length})</div>`;
+
+        catItems.forEach(item => {
+            const checked = pantryScanState.selectedItems.has(item.index) ? 'checked' : '';
+            html += `
+                <div class="scan-item" id="scan-item-${item.index}">
+                    <input type="checkbox" class="scan-item-checkbox" ${checked} onchange="toggleScanItem(${item.index})">
+                    <div class="scan-item-info">
+                        <div class="scan-item-name">${item.name}</div>
+                        <div class="scan-item-details">
+                            ${item.quantity} · ${item.location || 'Pantry'}
+                            ${getStatusBadge(item.expirationConcern)}
+                            ${item.confidence === 'low' ? '<span class="scan-item-badge">❓ Verify</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="scan-item-actions">
+                        <button class="icon-btn" onclick="editScanItem(${item.index})" title="Edit">✏️</button>
+                        <button class="icon-btn" onclick="removeScanItem(${item.index})" title="Remove">🗑️</button>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    html += `
+        <button class="btn btn-ghost btn-block mt-16" onclick="addManualScanItem()">+ Add item manually</button>
+    `;
+
+    const modalBody = document.getElementById('scan-modal-body');
+    modalBody.innerHTML = html;
+
+    // Update footer
+    const modal = document.querySelector('.modal');
+    const footer = modal.querySelector('.modal-footer');
+    if (footer) {
+        footer.innerHTML = `
+            <button class="btn btn-secondary" onclick="openPantryScanModal()">Scan Another</button>
+            <button class="btn btn-primary" onclick="addScannedItemsToPantry()">Add ${pantryScanState.selectedItems.size} Items</button>
+        `;
+    }
+}
+
+function toggleScanItem(index) {
+    if (pantryScanState.selectedItems.has(index)) {
+        pantryScanState.selectedItems.delete(index);
+    } else {
+        pantryScanState.selectedItems.add(index);
+    }
+    updateScanFooter();
+}
+
+function selectAllScanItems(selectAll) {
+    if (selectAll) {
+        pantryScanState.detectedItems.forEach((_, i) => pantryScanState.selectedItems.add(i));
+    } else {
+        pantryScanState.selectedItems.clear();
+    }
+
+    // Update checkboxes
+    document.querySelectorAll('.scan-item-checkbox').forEach((cb, i) => {
+        cb.checked = selectAll;
+    });
+
+    updateScanFooter();
+}
+
+function updateScanFooter() {
+    const addBtn = document.querySelector('.modal-footer .btn-primary');
+    if (addBtn) {
+        addBtn.textContent = `Add ${pantryScanState.selectedItems.size} Items`;
+        addBtn.disabled = pantryScanState.selectedItems.size === 0;
+    }
+}
+
+function editScanItem(index) {
+    const item = pantryScanState.detectedItems[index];
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Edit Item</h2>
+            <button class="modal-close" onclick="showScanResultsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-input" id="edit-scan-name" value="${item.name}">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" class="form-input" id="edit-scan-qty" value="${item.quantity}">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-select" id="edit-scan-category">
+                    <option value="Produce" ${item.category === 'Produce' ? 'selected' : ''}>Produce</option>
+                    <option value="Proteins" ${item.category === 'Proteins' ? 'selected' : ''}>Proteins</option>
+                    <option value="Dairy" ${item.category === 'Dairy' ? 'selected' : ''}>Dairy</option>
+                    <option value="Grains" ${item.category === 'Grains' ? 'selected' : ''}>Grains</option>
+                    <option value="Canned Goods" ${item.category === 'Canned Goods' ? 'selected' : ''}>Canned Goods</option>
+                    <option value="Spices" ${item.category === 'Spices' ? 'selected' : ''}>Spices</option>
+                    <option value="Condiments" ${item.category === 'Condiments' ? 'selected' : ''}>Condiments</option>
+                    <option value="Frozen" ${item.category === 'Frozen' ? 'selected' : ''}>Frozen</option>
+                    <option value="Beverages" ${item.category === 'Beverages' ? 'selected' : ''}>Beverages</option>
+                    <option value="Snacks" ${item.category === 'Snacks' ? 'selected' : ''}>Snacks</option>
+                    <option value="Other" ${item.category === 'Other' ? 'selected' : ''}>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <select class="form-select" id="edit-scan-location">
+                    <option value="Fridge" ${item.location === 'Fridge' ? 'selected' : ''}>Fridge</option>
+                    <option value="Pantry" ${item.location === 'Pantry' ? 'selected' : ''}>Pantry</option>
+                    <option value="Freezer" ${item.location === 'Freezer' ? 'selected' : ''}>Freezer</option>
+                    <option value="Spice Rack" ${item.location === 'Spice Rack' ? 'selected' : ''}>Spice Rack</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select class="form-select" id="edit-scan-status">
+                    <option value="Fresh" ${item.expirationConcern === 'Fresh' ? 'selected' : ''}>Fresh</option>
+                    <option value="Use Soon" ${item.expirationConcern === 'Use Soon' ? 'selected' : ''}>Use Soon</option>
+                    <option value="Check Date" ${item.expirationConcern === 'Check Date' ? 'selected' : ''}>Check Date</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="showScanResultsModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveScanItemEdit(${index})">Save</button>
+        </div>
+    `);
+}
+
+function saveScanItemEdit(index) {
+    const item = pantryScanState.detectedItems[index];
+    item.name = document.getElementById('edit-scan-name').value.trim();
+    item.quantity = document.getElementById('edit-scan-qty').value.trim();
+    item.category = document.getElementById('edit-scan-category').value;
+    item.location = document.getElementById('edit-scan-location').value;
+    item.expirationConcern = document.getElementById('edit-scan-status').value;
+
+    showScanResultsModal();
+}
+
+function removeScanItem(index) {
+    pantryScanState.detectedItems.splice(index, 1);
+    pantryScanState.selectedItems.delete(index);
+
+    // Reindex selected items
+    const newSelected = new Set();
+    pantryScanState.selectedItems.forEach(i => {
+        if (i < index) newSelected.add(i);
+        else if (i > index) newSelected.add(i - 1);
+    });
+    pantryScanState.selectedItems = newSelected;
+
+    if (pantryScanState.detectedItems.length === 0) {
+        showScanError('All items removed. Scan another photo or add manually.');
+    } else {
+        showScanResults();
+    }
+}
+
+function addManualScanItem() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Add Item</h2>
+            <button class="modal-close" onclick="showScanResultsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-input" id="add-scan-name" placeholder="e.g., Roma tomatoes">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" class="form-input" id="add-scan-qty" placeholder="e.g., 4 tomatoes">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-select" id="add-scan-category">
+                    <option value="Produce">Produce</option>
+                    <option value="Proteins">Proteins</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Canned Goods">Canned Goods</option>
+                    <option value="Spices">Spices</option>
+                    <option value="Condiments">Condiments</option>
+                    <option value="Frozen">Frozen</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Other" selected>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <select class="form-select" id="add-scan-location">
+                    <option value="Pantry" selected>Pantry</option>
+                    <option value="Fridge">Fridge</option>
+                    <option value="Freezer">Freezer</option>
+                    <option value="Spice Rack">Spice Rack</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="showScanResultsModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveManualScanItem()">Add</button>
+        </div>
+    `);
+}
+
+function saveManualScanItem() {
+    const name = document.getElementById('add-scan-name').value.trim();
+    const qty = document.getElementById('add-scan-qty').value.trim() || '1';
+    const category = document.getElementById('add-scan-category').value;
+    const location = document.getElementById('add-scan-location').value;
+
+    if (!name) {
+        showToast('Please enter an item name');
+        return;
+    }
+
+    const newIndex = pantryScanState.detectedItems.length;
+    pantryScanState.detectedItems.push({
+        name,
+        quantity: qty,
+        category,
+        location,
+        expirationConcern: 'Fresh',
+        confidence: 'high'
+    });
+    pantryScanState.selectedItems.add(newIndex);
+
+    showScanResultsModal();
+}
+
+function showScanResultsModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">📷 Scan Results</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="scan-modal-body"></div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="openPantryScanModal()">Scan Another</button>
+            <button class="btn btn-primary" onclick="addScannedItemsToPantry()">Add ${pantryScanState.selectedItems.size} Items</button>
+        </div>
+    `);
+
+    setTimeout(() => showScanResults(), 50);
+}
+
+function addScannedItemsToPantry() {
+    if (pantryScanState.selectedItems.size === 0) {
+        showToast('No items selected');
+        return;
+    }
+
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+
+    // Category to icon mapping
+    const categoryIcons = {
+        'Produce': '🥬',
+        'Proteins': '🥩',
+        'Dairy': '🧀',
+        'Grains': '🌾',
+        'Canned Goods': '🥫',
+        'Spices': '🧂',
+        'Condiments': '🫙',
+        'Frozen': '❄️',
+        'Beverages': '🥤',
+        'Snacks': '🍿',
+        'Other': '📦'
+    };
+
+    // Status mapping
+    const statusMap = {
+        'Fresh': 'fresh',
+        'Use Soon': 'use-soon',
+        'Check Date': 'check'
+    };
+
+    let addedCount = 0;
+    let duplicateCount = 0;
+
+    pantryScanState.selectedItems.forEach(index => {
+        const item = pantryScanState.detectedItems[index];
+
+        // Check for duplicates (case-insensitive name match)
+        const existingIndex = pantry.findIndex(p =>
+            p.name.toLowerCase() === item.name.toLowerCase()
+        );
+
+        if (existingIndex >= 0) {
+            // Update existing item's quantity
+            pantry[existingIndex].qty = item.quantity;
+            pantry[existingIndex].status = statusMap[item.expirationConcern] || 'fresh';
+            duplicateCount++;
+        } else {
+            // Add new item
+            pantry.push({
+                name: item.name,
+                qty: item.quantity,
+                icon: categoryIcons[item.category] || '🥫',
+                status: statusMap[item.expirationConcern] || 'fresh',
+                category: item.category,
+                location: item.location
+            });
+            addedCount++;
+        }
+    });
+
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+
+    // Show confirmation
+    let message = `✅ ${addedCount} items added to pantry!`;
+    if (duplicateCount > 0) {
+        message += ` (${duplicateCount} updated)`;
+    }
+    showToast(message);
+}
+
+// ========================================
 // KITCHEN - SHOPPING
 // ========================================
 function loadShoppingList() {
@@ -3345,26 +5510,133 @@ function renderHistory() {
 }
 
 function markAsCooked(recipeId, title) {
+    // Open rating modal instead of directly marking
+    openRatingModal(recipeId, title);
+}
+
+function openRatingModal(recipeId, title) {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">How was it?</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body text-center">
+            <p style="margin-bottom: 8px; font-size: 1.1rem;">${title}</p>
+            <p class="text-muted mb-16">Rate this recipe so Nonna can remember your favorites!</p>
+
+            <div class="star-rating" id="rating-stars" data-rating="0">
+                <span class="star" data-value="1" onclick="setRatingStars(1)" onmouseover="previewRating(1)" onmouseout="resetRatingPreview()">★</span>
+                <span class="star" data-value="2" onclick="setRatingStars(2)" onmouseover="previewRating(2)" onmouseout="resetRatingPreview()">★</span>
+                <span class="star" data-value="3" onclick="setRatingStars(3)" onmouseover="previewRating(3)" onmouseout="resetRatingPreview()">★</span>
+                <span class="star" data-value="4" onclick="setRatingStars(4)" onmouseover="previewRating(4)" onmouseout="resetRatingPreview()">★</span>
+                <span class="star" data-value="5" onclick="setRatingStars(5)" onmouseover="previewRating(5)" onmouseout="resetRatingPreview()">★</span>
+            </div>
+
+            <div class="form-group mt-16">
+                <label style="text-align: left; display: block;">Notes (optional)</label>
+                <textarea class="recipe-notes-input" id="rating-notes" placeholder="Any thoughts? Modifications you made? Tips for next time..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="submitRating('${recipeId}', '${title.replace(/'/g, "\\'")}', true)">Skip</button>
+            <button class="btn btn-primary" onclick="submitRating('${recipeId}', '${title.replace(/'/g, "\\'")}', false)">Save Rating</button>
+        </div>
+    `);
+}
+
+let currentRatingValue = 0;
+
+function setRatingStars(value) {
+    currentRatingValue = value;
+    const container = document.getElementById('rating-stars');
+    container.dataset.rating = value;
+    updateStarDisplay(value);
+}
+
+function previewRating(value) {
+    updateStarDisplay(value);
+}
+
+function resetRatingPreview() {
+    updateStarDisplay(currentRatingValue);
+}
+
+function updateStarDisplay(value) {
+    const stars = document.querySelectorAll('#rating-stars .star');
+    stars.forEach((star, index) => {
+        star.classList.toggle('filled', index < value);
+    });
+}
+
+function submitRating(recipeId, title, skipped) {
+    const rating = skipped ? 0 : currentRatingValue;
+    const notes = document.getElementById('rating-notes')?.value.trim() || '';
+    const now = new Date().toISOString();
+
+    // Add to meal history
     const history = getStorage(STORAGE.HISTORY) || [];
     history.unshift({
         type: 'cooked',
         title: title,
         recipeId: recipeId,
-        date: new Date().toISOString(),
-        rating: 0
+        date: now,
+        rating: rating,
+        notes: notes
     });
     setStorage(STORAGE.HISTORY, history);
 
-    // Update recipe times cooked
+    // Update recipe with cooking history and rating
     const library = getRecipeLibrary();
     const recipe = library.find(r => r.id === recipeId);
     if (recipe) {
+        // Initialize cooking history if needed
+        if (!recipe.cookingHistory) {
+            recipe.cookingHistory = [];
+        }
+
+        // Add this cook to history
+        recipe.cookingHistory.unshift({
+            date: now,
+            rating: rating,
+            notes: notes
+        });
+
+        // Update aggregate stats
         recipe.timesCooked = (recipe.timesCooked || 0) + 1;
-        recipe.lastCooked = new Date().toISOString();
+        recipe.lastCooked = now;
+
+        // Calculate average rating from all rated cooks
+        const ratedCooks = recipe.cookingHistory.filter(c => c.rating > 0);
+        if (ratedCooks.length > 0) {
+            const sum = ratedCooks.reduce((acc, c) => acc + c.rating, 0);
+            recipe.averageRating = Math.round((sum / ratedCooks.length) * 10) / 10;
+        }
+
+        // Also keep single rating field for backwards compatibility
+        if (rating > 0) {
+            recipe.rating = rating;
+        }
+
         setStorage(STORAGE.RECIPES, library);
     }
 
-    showToast('✅ Marked as cooked! Great job, cara!');
+    closeModal();
+    currentRatingValue = 0;
+
+    if (skipped) {
+        showToast('✅ Marked as cooked!');
+    } else if (rating >= 4) {
+        showToast('✅ Wonderful! Glad you enjoyed it, cara! 🍝');
+    } else if (rating >= 2) {
+        showToast('✅ Thanks for the feedback! Nonna will remember.');
+    } else {
+        showToast('✅ Noted. Nonna will suggest something better next time!');
+    }
+
+    // Refresh views if they're visible
+    renderRecipeLibrary();
+    renderFavorites();
+    renderHistory();
 }
 
 function openAddMealModal() {
@@ -3688,6 +5960,10 @@ function startTimer() {
 // RECIPE CARD MORE MENU
 // ========================================
 function openRecipeMoreMenu(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    const isFavorited = recipe?.favorited;
+
     openModal(`
         <div class="modal-header">
             <h2 class="modal-title">Recipe Options</h2>
@@ -3695,6 +5971,20 @@ function openRecipeMoreMenu(recipeId) {
         </div>
         <div class="modal-body">
             <div class="more-menu">
+                <button class="more-menu-item" onclick="closeModal(); openRatingModal('${recipeId}', '${recipe?.title?.replace(/'/g, "\\'") || 'Recipe'}');">
+                    <span class="icon">⭐</span>
+                    <div class="more-menu-item-content">
+                        <div class="more-menu-item-title">Rate Recipe</div>
+                        <div class="more-menu-item-desc">Mark as cooked and rate</div>
+                    </div>
+                </button>
+                <button class="more-menu-item" onclick="closeModal(); viewCookingHistory('${recipeId}');">
+                    <span class="icon">📋</span>
+                    <div class="more-menu-item-content">
+                        <div class="more-menu-item-title">Cooking History</div>
+                        <div class="more-menu-item-desc">View past ratings and notes</div>
+                    </div>
+                </button>
                 <button class="more-menu-item" onclick="closeModal(); addIngredientsToShopping('${recipeId}');">
                     <span class="icon">🛒</span>
                     <div class="more-menu-item-content">
@@ -3713,13 +6003,137 @@ function openRecipeMoreMenu(recipeId) {
                         <div class="more-menu-item-title">Print Recipe</div>
                     </div>
                 </button>
-                <button class="more-menu-item" onclick="closeModal(); deleteRecipe('${recipeId}');">
+                ${isFavorited ? `
+                <button class="more-menu-item" onclick="closeModal(); removeFromFavorites('${recipeId}');">
+                    <span class="icon">💔</span>
+                    <div class="more-menu-item-content">
+                        <div class="more-menu-item-title">Remove from Favorites</div>
+                        <div class="more-menu-item-desc">Keep in library</div>
+                    </div>
+                </button>
+                ` : ''}
+                <button class="more-menu-item" onclick="closeModal(); confirmDeleteRecipe('${recipeId}');">
                     <span class="icon">🗑️</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Delete from Library</div>
+                        <div class="more-menu-item-desc">Permanently remove</div>
                     </div>
                 </button>
             </div>
+        </div>
+    `);
+}
+
+function viewCookingHistory(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    const history = recipe.cookingHistory || [];
+
+    let historyHtml = '';
+    if (history.length === 0) {
+        historyHtml = `
+            <div class="empty-state">
+                <div class="empty-state-icon">📖</div>
+                <div class="empty-state-title">No cooking history yet</div>
+                <p>Rate this recipe after cooking to track your history.</p>
+            </div>
+        `;
+    } else {
+        historyHtml = history.map(entry => {
+            const date = new Date(entry.date).toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric'
+            });
+            const stars = entry.rating > 0 ? '★'.repeat(entry.rating) + '☆'.repeat(5 - entry.rating) : 'Not rated';
+
+            return `
+                <div class="cooking-history-item">
+                    <div>
+                        <div class="cooking-history-date">${date}</div>
+                        ${entry.notes ? `<div class="cooking-history-notes">"${entry.notes}"</div>` : ''}
+                    </div>
+                    <div class="cooking-history-rating">${stars}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    const avgRating = recipe.averageRating ? `${recipe.averageRating.toFixed(1)} average` : '';
+    const timesCooked = recipe.timesCooked || 0;
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Cooking History</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <h3 style="margin-bottom: 8px;">${recipe.title}</h3>
+            <p class="text-muted mb-16">
+                Cooked ${timesCooked} time${timesCooked !== 1 ? 's' : ''}
+                ${avgRating ? ` · ${avgRating}` : ''}
+            </p>
+            <div class="cooking-history">
+                ${historyHtml}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Close</button>
+            <button class="btn btn-primary" onclick="closeModal(); openRatingModal('${recipeId}', '${recipe.title.replace(/'/g, "\\'")}')">Rate Again</button>
+        </div>
+    `);
+}
+
+function removeFromFavorites(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (recipe) {
+        recipe.favorited = false;
+        setStorage(STORAGE.RECIPES, library);
+        showToast('Removed from favorites');
+        renderRecipeLibrary();
+        renderFavorites();
+    }
+}
+
+function confirmDeleteRecipe(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    // Check if recipe is in current week's meal plan
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    const weekDates = getWeekDates(state.currentWeekOffset);
+    const isPlanned = weekDates.some(date => mealPlans[date]?.recipeId === recipeId);
+
+    if (isPlanned) {
+        openModal(`
+            <div class="modal-header">
+                <h2 class="modal-title">Cannot Delete</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p>This recipe is planned for this week. Remove it from your meal plan first before deleting.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+        `);
+        return;
+    }
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Delete Recipe?</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p><strong>${recipe.title}</strong> will be permanently deleted from your library.</p>
+            <p class="text-muted mt-8">This action cannot be undone. All ratings and cooking history will be lost.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" style="background: var(--danger);" onclick="deleteRecipe('${recipeId}')">Delete</button>
         </div>
     `);
 }
@@ -3741,15 +6155,56 @@ function printRecipe(recipeId) {
     window.print();
 }
 
+let lastDeletedRecipe = null;
+
 function deleteRecipe(recipeId) {
     const library = getRecipeLibrary();
     const index = library.findIndex(r => r.id === recipeId);
     if (index >= 0) {
+        // Store for undo
+        lastDeletedRecipe = { ...library[index] };
+
         library.splice(index, 1);
         setStorage(STORAGE.RECIPES, library);
-        showToast('Recipe deleted');
+        closeModal();
         renderRecipeLibrary();
+        renderFavorites();
+
+        // Show toast with undo option
+        showUndoToast('Recipe deleted', undoDeleteRecipe);
     }
+}
+
+function undoDeleteRecipe() {
+    if (lastDeletedRecipe) {
+        const library = getRecipeLibrary();
+        library.unshift(lastDeletedRecipe);
+        setStorage(STORAGE.RECIPES, library);
+        lastDeletedRecipe = null;
+        renderRecipeLibrary();
+        renderFavorites();
+        showToast('Recipe restored!');
+    }
+}
+
+function showUndoToast(message, undoCallback) {
+    // Remove existing toast
+    const existingToast = document.querySelector('.toast');
+    if (existingToast) existingToast.remove();
+
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.innerHTML = `
+        ${message}
+        <button onclick="this.parentElement.remove(); (${undoCallback.toString()})();" style="margin-left: 12px; background: none; border: none; color: var(--seafoam); cursor: pointer; font-weight: 600;">Undo</button>
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(() => toast.classList.add('show'), 10);
+    setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => toast.remove(), 300);
+    }, 5000);
 }
 
 // Close filter dropdown when clicking outside
@@ -3759,6 +6214,482 @@ document.addEventListener('click', (e) => {
         dropdown.classList.remove('open');
     }
 });
+
+// ========================================
+// WORKOUT TRACKING
+// ========================================
+
+// MET values for calorie calculations (Metabolic Equivalent of Task)
+const WORKOUT_TYPES = {
+    walking: { name: 'Walking', icon: '🚶', met: 3.5 },
+    running: { name: 'Running', icon: '🏃', met: 9.8 },
+    cycling: { name: 'Cycling', icon: '🚴', met: 7.5 },
+    swimming: { name: 'Swimming', icon: '🏊', met: 8.0 },
+    strength: { name: 'Strength Training', icon: '🏋️', met: 6.0 },
+    yoga: { name: 'Yoga', icon: '🧘', met: 3.0 },
+    hiit: { name: 'HIIT', icon: '⚡', met: 12.0 },
+    dancing: { name: 'Dancing', icon: '💃', met: 6.5 },
+    hiking: { name: 'Hiking', icon: '🥾', met: 6.0 },
+    pilates: { name: 'Pilates', icon: '🤸', met: 3.5 },
+    rowing: { name: 'Rowing', icon: '🚣', met: 7.0 },
+    other: { name: 'Other', icon: '🏅', met: 5.0 }
+};
+
+function getWorkouts() {
+    return getStorage(STORAGE.WORKOUTS) || [];
+}
+
+function saveWorkout(workout) {
+    const workouts = getWorkouts();
+    workouts.push(workout);
+    setStorage(STORAGE.WORKOUTS, workouts);
+}
+
+function calculateCaloriesBurned(workoutType, durationMinutes, userWeight = 70) {
+    // Get user weight from profile if available
+    const profile = getStorage(STORAGE.PROFILE);
+    const weight = profile?.weight || userWeight; // in kg
+
+    const met = WORKOUT_TYPES[workoutType]?.met || 5.0;
+    // Formula: Calories = MET × weight (kg) × duration (hours)
+    return Math.round(met * weight * (durationMinutes / 60));
+}
+
+function getTodayStr() {
+    return new Date().toISOString().split('T')[0];
+}
+
+function getWeekStartStr() {
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday as start
+    const weekStart = new Date(now);
+    weekStart.setDate(now.getDate() - diff);
+    return weekStart.toISOString().split('T')[0];
+}
+
+function getTodaysWorkouts() {
+    const today = getTodayStr();
+    return getWorkouts().filter(w => w.date === today);
+}
+
+function getWeekWorkouts() {
+    const weekStart = getWeekStartStr();
+    return getWorkouts().filter(w => w.date >= weekStart);
+}
+
+function getTodaysCaloriesIn() {
+    // Get calories from today's logged meals
+    const today = getTodayStr();
+    const mealHistory = getStorage(STORAGE.HISTORY) || [];
+    const todaysMeals = mealHistory.filter(m => m.date?.startsWith(today));
+
+    // Sum up calories from meals
+    let totalCalories = 0;
+    todaysMeals.forEach(meal => {
+        // Try to get calories from the linked recipe
+        if (meal.recipeId) {
+            const library = getRecipeLibrary();
+            const recipe = library.find(r => r.id === meal.recipeId);
+            if (recipe?.nutrition?.calories) {
+                totalCalories += parseInt(recipe.nutrition.calories) || 0;
+            }
+        }
+    });
+
+    // Also check meal plans for today if meals are marked as cooked
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    if (mealPlans[today]?.status === 'cooked' && mealPlans[today]?.recipeId) {
+        const library = getRecipeLibrary();
+        const recipe = library.find(r => r.id === mealPlans[today].recipeId);
+        if (recipe?.nutrition?.calories) {
+            totalCalories += parseInt(recipe.nutrition.calories) || 0;
+        }
+    }
+
+    return totalCalories;
+}
+
+function getTodaysCaloriesOut() {
+    return getTodaysWorkouts().reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+}
+
+function calculateStreak() {
+    const workouts = getWorkouts();
+    if (workouts.length === 0) return 0;
+
+    // Get unique workout dates
+    const workoutDates = [...new Set(workouts.map(w => w.date))].sort().reverse();
+
+    const today = getTodayStr();
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    // Check if there's a workout today or yesterday to continue streak
+    if (workoutDates[0] !== today && workoutDates[0] !== yesterdayStr) {
+        return 0;
+    }
+
+    let streak = 0;
+    let currentDate = new Date(workoutDates[0]);
+
+    for (const dateStr of workoutDates) {
+        const checkDate = currentDate.toISOString().split('T')[0];
+        if (dateStr === checkDate) {
+            streak++;
+            currentDate.setDate(currentDate.getDate() - 1);
+        } else {
+            break;
+        }
+    }
+
+    return streak;
+}
+
+function renderWorkoutsView() {
+    renderCalorieBalance();
+    renderWeekStats();
+    renderWorkoutCalendar();
+    renderTodaysWorkouts();
+}
+
+function renderCalorieBalance() {
+    const caloriesIn = getTodaysCaloriesIn();
+    const caloriesOut = getTodaysCaloriesOut();
+    const netCalories = caloriesIn - caloriesOut;
+
+    // Update values
+    document.getElementById('calories-in-value').textContent = caloriesIn;
+    document.getElementById('calories-out-value').textContent = caloriesOut;
+
+    // Update net display
+    const netEl = document.getElementById('calorie-net');
+    netEl.textContent = `${netCalories > 0 ? '+' : ''}${netCalories} cal`;
+    netEl.className = 'calorie-balance-net';
+    if (netCalories > 200) netEl.classList.add('surplus');
+    else if (netCalories < -200) netEl.classList.add('deficit');
+    else netEl.classList.add('balanced');
+
+    // Update bars (scale to reasonable daily intake ~2000 cal)
+    const maxCal = 2000;
+    const inPercent = Math.min((caloriesIn / maxCal) * 100, 100);
+    const outPercent = Math.min((caloriesOut / maxCal) * 100, 100);
+
+    document.getElementById('calories-in-bar').style.width = `${inPercent}%`;
+    document.getElementById('calories-out-bar').style.width = `${outPercent}%`;
+}
+
+function renderWeekStats() {
+    const weekWorkouts = getWeekWorkouts();
+
+    // Count unique workout days
+    const workoutDays = new Set(weekWorkouts.map(w => w.date)).size;
+
+    // Total minutes
+    const totalMinutes = weekWorkouts.reduce((sum, w) => sum + (w.duration || 0), 0);
+
+    // Total calories burned
+    const totalCalories = weekWorkouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+
+    // Streak
+    const streak = calculateStreak();
+
+    document.getElementById('workout-count-week').textContent = workoutDays;
+    document.getElementById('workout-minutes-week').textContent = totalMinutes;
+    document.getElementById('workout-calories-week').textContent = totalCalories;
+    document.getElementById('workout-streak').textContent = streak;
+}
+
+function renderWorkoutCalendar() {
+    const container = document.getElementById('workout-calendar-grid');
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+    const weekStart = new Date(today);
+    weekStart.setDate(today.getDate() - diff);
+
+    const workouts = getWorkouts();
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    let html = days.map(d => `<div class="workout-day-header">${d}</div>`).join('');
+
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(weekStart);
+        date.setDate(weekStart.getDate() + i);
+        const dateStr = date.toISOString().split('T')[0];
+        const isToday = dateStr === getTodayStr();
+        const dayWorkouts = workouts.filter(w => w.date === dateStr);
+        const hasWorkout = dayWorkouts.length > 0;
+
+        html += `
+            <div class="workout-day ${isToday ? 'today' : ''} ${hasWorkout ? 'has-workout' : ''}" onclick="showDayWorkouts('${dateStr}')">
+                <span class="workout-day-date">${date.getDate()}</span>
+                <span class="workout-day-indicator">${dayWorkouts.length > 0 ? dayWorkouts.length + ' 🏋️' : ''}</span>
+            </div>
+        `;
+    }
+
+    container.innerHTML = html;
+}
+
+function renderTodaysWorkouts() {
+    const container = document.getElementById('workout-list-today');
+    const todaysWorkouts = getTodaysWorkouts();
+
+    if (todaysWorkouts.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state" style="padding: 20px;">
+                <div class="empty-state-icon">🏃</div>
+                <div class="empty-state-title">No workouts logged today</div>
+                <p class="empty-state-text">Log a workout to track your calorie burn!</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = todaysWorkouts.map(workout => {
+        const type = WORKOUT_TYPES[workout.type] || WORKOUT_TYPES.other;
+        return `
+            <div class="workout-item">
+                <div class="workout-item-icon">${type.icon}</div>
+                <div class="workout-item-details">
+                    <div class="workout-item-name">${type.name}</div>
+                    <div class="workout-item-meta">${workout.duration} min${workout.notes ? ' · ' + workout.notes : ''}</div>
+                </div>
+                <div class="workout-item-calories">-${workout.caloriesBurned} cal</div>
+                <div class="workout-item-actions">
+                    <button class="icon-btn" onclick="deleteWorkout('${workout.id}')" title="Delete">🗑️</button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function quickLogWorkout(type, duration) {
+    const workout = {
+        id: 'workout_' + Date.now(),
+        type: type,
+        duration: duration,
+        caloriesBurned: calculateCaloriesBurned(type, duration),
+        date: getTodayStr(),
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        notes: ''
+    };
+
+    saveWorkout(workout);
+    showToast(`${WORKOUT_TYPES[type]?.icon || '🏅'} Logged ${duration}min ${WORKOUT_TYPES[type]?.name || type}! (-${workout.caloriesBurned} cal)`);
+    renderWorkoutsView();
+}
+
+function openWorkoutLogModal() {
+    const typeButtons = Object.entries(WORKOUT_TYPES).map(([key, val]) => `
+        <button type="button" class="workout-type-btn" data-type="${key}" onclick="selectWorkoutType('${key}')">
+            <span class="workout-type-icon">${val.icon}</span>
+            <span class="workout-type-name">${val.name}</span>
+        </button>
+    `).join('');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Log Workout</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Workout Type</label>
+                <div class="workout-type-grid">${typeButtons}</div>
+            </div>
+            <div class="form-group">
+                <label>Duration (minutes)</label>
+                <input type="number" class="form-input" id="workout-duration" value="30" min="1" max="300">
+            </div>
+            <div class="form-group">
+                <label>Notes (optional)</label>
+                <input type="text" class="form-input" id="workout-notes" placeholder="e.g., Morning jog, felt great">
+            </div>
+            <div id="workout-calorie-preview" class="text-center text-muted mb-16">
+                Select a workout type to see estimated calories
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="submitWorkoutLog()">Log Workout</button>
+        </div>
+    `);
+}
+
+let selectedWorkoutType = null;
+
+function selectWorkoutType(type) {
+    selectedWorkoutType = type;
+
+    // Update button styles
+    document.querySelectorAll('.workout-type-btn').forEach(btn => {
+        btn.classList.toggle('selected', btn.dataset.type === type);
+    });
+
+    // Update calorie preview
+    updateCaloriePreview();
+}
+
+function updateCaloriePreview() {
+    const preview = document.getElementById('workout-calorie-preview');
+    const duration = parseInt(document.getElementById('workout-duration')?.value) || 30;
+
+    if (selectedWorkoutType && preview) {
+        const calories = calculateCaloriesBurned(selectedWorkoutType, duration);
+        preview.innerHTML = `<strong style="color: var(--success);">Estimated burn: ~${calories} calories</strong>`;
+    }
+}
+
+// Update preview when duration changes
+document.addEventListener('input', (e) => {
+    if (e.target.id === 'workout-duration') {
+        updateCaloriePreview();
+    }
+});
+
+function submitWorkoutLog() {
+    if (!selectedWorkoutType) {
+        showToast('Please select a workout type');
+        return;
+    }
+
+    const duration = parseInt(document.getElementById('workout-duration').value);
+    const notes = document.getElementById('workout-notes').value.trim();
+
+    if (!duration || duration < 1) {
+        showToast('Please enter a valid duration');
+        return;
+    }
+
+    const workout = {
+        id: 'workout_' + Date.now(),
+        type: selectedWorkoutType,
+        duration: duration,
+        caloriesBurned: calculateCaloriesBurned(selectedWorkoutType, duration),
+        date: getTodayStr(),
+        time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }),
+        notes: notes
+    };
+
+    saveWorkout(workout);
+    selectedWorkoutType = null;
+    closeModal();
+    showToast(`${WORKOUT_TYPES[workout.type]?.icon || '🏅'} Workout logged! (-${workout.caloriesBurned} cal)`);
+    renderWorkoutsView();
+}
+
+function deleteWorkout(workoutId) {
+    const workouts = getWorkouts();
+    const index = workouts.findIndex(w => w.id === workoutId);
+    if (index >= 0) {
+        workouts.splice(index, 1);
+        setStorage(STORAGE.WORKOUTS, workouts);
+        showToast('Workout deleted');
+        renderWorkoutsView();
+    }
+}
+
+function showDayWorkouts(dateStr) {
+    const workouts = getWorkouts().filter(w => w.date === dateStr);
+    const date = new Date(dateStr);
+    const dateDisplay = date.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+
+    if (workouts.length === 0) {
+        openModal(`
+            <div class="modal-header">
+                <h2 class="modal-title">${dateDisplay}</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center text-muted">No workouts logged for this day.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">OK</button>
+            </div>
+        `);
+        return;
+    }
+
+    const totalCalories = workouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+    const totalMinutes = workouts.reduce((sum, w) => sum + (w.duration || 0), 0);
+
+    const workoutList = workouts.map(w => {
+        const type = WORKOUT_TYPES[w.type] || WORKOUT_TYPES.other;
+        return `
+            <div class="workout-item">
+                <div class="workout-item-icon">${type.icon}</div>
+                <div class="workout-item-details">
+                    <div class="workout-item-name">${type.name}</div>
+                    <div class="workout-item-meta">${w.duration} min${w.time ? ' at ' + w.time : ''}${w.notes ? ' · ' + w.notes : ''}</div>
+                </div>
+                <div class="workout-item-calories">-${w.caloriesBurned} cal</div>
+            </div>
+        `;
+    }).join('');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${dateDisplay}</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="workout-stats" style="margin-bottom: 16px;">
+                <div class="workout-stat">
+                    <div class="workout-stat-value">${workouts.length}</div>
+                    <div class="workout-stat-label">Workouts</div>
+                </div>
+                <div class="workout-stat">
+                    <div class="workout-stat-value">${totalMinutes}</div>
+                    <div class="workout-stat-label">Minutes</div>
+                </div>
+                <div class="workout-stat">
+                    <div class="workout-stat-value">${totalCalories}</div>
+                    <div class="workout-stat-label">Calories</div>
+                </div>
+            </div>
+            ${workoutList}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="closeModal()">Close</button>
+        </div>
+    `);
+}
+
+// ========================================
+// WORKOUT INTEGRATION WITH NONNA
+// ========================================
+function formatWorkoutDataForAPI() {
+    const weekWorkouts = getWeekWorkouts();
+    if (weekWorkouts.length === 0) return '';
+
+    const totalCalories = weekWorkouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+    const totalMinutes = weekWorkouts.reduce((sum, w) => sum + (w.duration || 0), 0);
+    const workoutDays = new Set(weekWorkouts.map(w => w.date)).size;
+    const streak = calculateStreak();
+
+    // Get activity breakdown
+    const activityCounts = {};
+    weekWorkouts.forEach(w => {
+        activityCounts[w.type] = (activityCounts[w.type] || 0) + 1;
+    });
+
+    const activities = Object.entries(activityCounts)
+        .map(([type, count]) => `${WORKOUT_TYPES[type]?.name || type}: ${count}x`)
+        .join(', ');
+
+    return `
+## Workout Activity This Week
+- Workouts: ${workoutDays} days, ${weekWorkouts.length} sessions
+- Total active time: ${totalMinutes} minutes
+- Estimated calories burned: ${totalCalories} cal
+- Activities: ${activities}
+- Current streak: ${streak} days
+${streak >= 3 ? '(Great consistency! Consider celebrating this with a nutritious reward.)' : ''}
+${totalCalories > 1500 ? '(High activity level - may need extra protein and calories for recovery.)' : ''}`;
+}
 </script>
 </body>
 </html>
