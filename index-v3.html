@@ -3462,42 +3462,78 @@ function getTagClass(tag) {
 }
 
 function parseWeekPlanToCard(content) {
-    // Extract days and meals from the content
+    // Extract days and meals from the content (supports multi-meal format)
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const mealPlan = {};
 
     days.forEach(day => {
-        const regex = new RegExp(`\\*?\\*?${day}\\*?\\*?[:\\s]*([^\\n]+)`, 'i');
-        const match = content.match(regex);
-        if (match) {
-            mealPlan[day.toLowerCase()] = match[1].replace(/^[-:*\s]+/, '').trim();
+        mealPlan[day.toLowerCase()] = { breakfast: null, lunch: null, dinner: null, snacks: null };
+
+        // Try to extract multi-meal format first
+        // Pattern: **MONDAY** or MONDAY: followed by meal lines
+        const daySection = content.match(new RegExp(`\\*?\\*?${day}\\*?\\*?[:\\s]*([\\s\\S]*?)(?=\\*?\\*?(?:${days.join('|')})|$)`, 'i'));
+
+        if (daySection) {
+            const section = daySection[1];
+
+            // Extract individual meals with calorie info
+            const breakfastMatch = section.match(/🌅?\s*Breakfast[:\s]*([^(~\n]+)(?:\s*[~(]?\s*(\d+)\s*cal)?/i);
+            const lunchMatch = section.match(/🌞?\s*Lunch[:\s]*([^(~\n]+)(?:\s*[~(]?\s*(\d+)\s*cal)?/i);
+            const dinnerMatch = section.match(/🌙?\s*Dinner[:\s]*([^(~\n]+)(?:\s*[~(]?\s*(\d+)\s*cal)?/i);
+            const snacksMatch = section.match(/🍎?\s*Snacks?[:\s]*([^(~\n]+)(?:\s*[~(]?\s*(\d+)\s*cal)?/i);
+
+            if (breakfastMatch) mealPlan[day.toLowerCase()].breakfast = { title: breakfastMatch[1].trim().replace(/[-*]+$/, '').trim(), calories: breakfastMatch[2] ? parseInt(breakfastMatch[2]) : null };
+            if (lunchMatch) mealPlan[day.toLowerCase()].lunch = { title: lunchMatch[1].trim().replace(/[-*]+$/, '').trim(), calories: lunchMatch[2] ? parseInt(lunchMatch[2]) : null };
+            if (dinnerMatch) mealPlan[day.toLowerCase()].dinner = { title: dinnerMatch[1].trim().replace(/[-*]+$/, '').trim(), calories: dinnerMatch[2] ? parseInt(dinnerMatch[2]) : null };
+            if (snacksMatch) mealPlan[day.toLowerCase()].snacks = { title: snacksMatch[1].trim().replace(/[-*]+$/, '').trim(), calories: snacksMatch[2] ? parseInt(snacksMatch[2]) : null };
+
+            // Fallback: if no specific meals found, treat first line as dinner
+            if (!breakfastMatch && !lunchMatch && !dinnerMatch && !snacksMatch) {
+                const simpleMeal = section.match(/^[-\s]*([^(\n]+)/);
+                if (simpleMeal) {
+                    const mealTitle = simpleMeal[1].replace(/^[-:*\s]+/, '').replace(/[-*]+$/, '').trim();
+                    if (mealTitle && mealTitle.length > 2 && !/^\d+$/.test(mealTitle)) {
+                        mealPlan[day.toLowerCase()].dinner = { title: mealTitle, calories: null };
+                    }
+                }
+            }
         }
     });
 
-    // Save to meal plans
+    // Save to meal plans in new format
     const weekDates = getWeekDates(state.currentWeekOffset);
     const savedPlans = getStorage(STORAGE.MEAL_PLANS) || {};
 
     days.forEach((day, i) => {
         const dateStr = weekDates[i];
-        const meal = mealPlan[day.toLowerCase()];
-        if (meal && meal.length > 0) {
-            savedPlans[dateStr] = {
-                title: meal,
-                recipeId: null,
-                status: 'planned'
-            };
+        const dayData = mealPlan[day.toLowerCase()];
+        const hasMeals = dayData.breakfast || dayData.lunch || dayData.dinner || dayData.snacks;
+
+        if (hasMeals) {
+            savedPlans[dateStr] = {};
+            if (dayData.breakfast) savedPlans[dateStr].breakfast = { ...dayData.breakfast, recipeId: null, status: 'planned' };
+            if (dayData.lunch) savedPlans[dateStr].lunch = { ...dayData.lunch, recipeId: null, status: 'planned' };
+            if (dayData.dinner) savedPlans[dateStr].dinner = { ...dayData.dinner, recipeId: null, status: 'planned' };
+            if (dayData.snacks) savedPlans[dateStr].snacks = { ...dayData.snacks, recipeId: null, status: 'planned' };
         }
     });
     setStorage(STORAGE.MEAL_PLANS, savedPlans);
 
+    // Build display card
+    const planItems = days.map(day => {
+        const d = mealPlan[day.toLowerCase()];
+        const meals = [];
+        if (d.breakfast) meals.push(`🌅 ${d.breakfast.title}`);
+        if (d.lunch) meals.push(`🌞 ${d.lunch.title}`);
+        if (d.dinner) meals.push(`🌙 ${d.dinner.title}`);
+        if (d.snacks) meals.push(`🍎 ${d.snacks.title}`);
+        return meals.length > 0 ? `<div class="week-plan-item"><span><strong>${day}</strong></span><span>${meals.join(' · ')}</span></div>` : '';
+    }).filter(x => x).join('');
+
     return `
         <div class="week-plan-card">
             <h3>✅ Your Week is Planned!</h3>
-            ${days.map(day => {
-                const meal = mealPlan[day.toLowerCase()];
-                return meal ? `<div class="week-plan-item"><span>${day}</span><span>${meal}</span></div>` : '';
-            }).join('')}
+            ${planItems || '<p>No meals extracted - check the format above.</p>'}
             <div class="week-plan-actions">
                 <button class="btn" onclick="navigateTo('week')">📅 View This Week</button>
                 <button class="btn" onclick="generateWeekShoppingList()">🛒 Shopping List</button>
@@ -4541,21 +4577,52 @@ function renderWeekPlanner() {
     days.forEach((day, i) => {
         const dateStr = weekDates[i];
         const dateObj = new Date(dateStr + 'T12:00:00');
-        const dayMeals = mealPlans[dateStr] || {};
+        let dayMeals = mealPlans[dateStr] || {};
 
         // Support legacy single-meal format (migrate to dinner)
-        if (dayMeals.title && !dayMeals.dinner) {
-            dayMeals.dinner = { title: dayMeals.title, calories: dayMeals.calories, recipeId: dayMeals.recipeId, status: dayMeals.status };
+        // Legacy format has title directly on the object, not in a meal slot
+        if (dayMeals.title && typeof dayMeals.title === 'string' && !dayMeals.dinner && !dayMeals.breakfast && !dayMeals.lunch) {
+            // This is legacy format - migrate it
+            const legacyTitle = dayMeals.title;
+            const legacyCalories = dayMeals.calories;
+            const legacyRecipeId = dayMeals.recipeId;
+            const legacyStatus = dayMeals.status;
+
+            // Create new format
+            dayMeals = {
+                dinner: {
+                    title: legacyTitle,
+                    calories: legacyCalories || null,
+                    recipeId: legacyRecipeId || null,
+                    status: legacyStatus || 'planned'
+                }
+            };
+
+            // Save migrated data
+            mealPlans[dateStr] = dayMeals;
+            setStorage(STORAGE.MEAL_PLANS, mealPlans);
         }
 
         const dateDisplay = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-        // Calculate day totals
+        // Calculate day totals - also try to get calories from linked recipes
         let dayCalories = 0;
         mealTypes.forEach(mt => {
             const meal = dayMeals[mt.key];
-            if (meal?.calories) dayCalories += parseInt(meal.calories) || 0;
-            if (meal?.title) hasAnyMeals = true;
+            if (meal?.title) {
+                hasAnyMeals = true;
+                // First try meal's stored calories
+                if (meal.calories) {
+                    dayCalories += parseInt(meal.calories) || 0;
+                } else if (meal.recipeId) {
+                    // Try to get calories from linked recipe
+                    const library = getRecipeLibrary();
+                    const recipe = library.find(r => r.id === meal.recipeId);
+                    if (recipe?.nutrition?.calories) {
+                        dayCalories += parseInt(recipe.nutrition.calories) || 0;
+                    }
+                }
+            }
         });
 
         // Get workout calories for this day
@@ -4568,13 +4635,21 @@ function renderWeekPlanner() {
         mealTypes.forEach(mt => {
             const meal = dayMeals[mt.key];
             if (meal?.title) {
+                // Get calories from meal or linked recipe
+                let displayCalories = meal.calories;
+                if (!displayCalories && meal.recipeId) {
+                    const library = getRecipeLibrary();
+                    const recipe = library.find(r => r.id === meal.recipeId);
+                    displayCalories = recipe?.nutrition?.calories;
+                }
+
                 mealSlotsHtml += `
                     <div class="week-meal-slot">
                         <span class="meal-slot-icon">${mt.icon}</span>
                         <span class="meal-slot-type">${mt.label}</span>
                         <div class="meal-slot-content">
                             <div class="meal-slot-title">${meal.title}</div>
-                            ${meal.calories ? `<span class="meal-slot-calories">${meal.calories} cal</span>` : ''}
+                            ${displayCalories ? `<span class="meal-slot-calories">${displayCalories} cal</span>` : ''}
                         </div>
                         <div class="meal-slot-actions">
                             ${meal.recipeId ? `<button class="icon-btn" onclick="viewRecipeDetail('${meal.recipeId}')" title="View">👁️</button>` : ''}
@@ -4594,13 +4669,14 @@ function renderWeekPlanner() {
             }
         });
 
-        // Day summary
+        // Day summary with improved display
         const netClass = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
-        const summaryHtml = dayCalories > 0 || workoutCalories > 0 ? `
+        const netLabel = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
+        const summaryHtml = (dayCalories > 0 || workoutCalories > 0) ? `
             <div class="week-day-summary">
-                <span class="day-total-calories">🔥 ${dayCalories} cal</span>
-                ${workoutCalories > 0 ? `<span class="day-workout-info">💪 -${workoutCalories} cal</span>` : ''}
-                ${dayCalories > 0 ? `<span class="day-net-calories ${netClass}">Net: ${netCalories > 0 ? '+' : ''}${netCalories}</span>` : ''}
+                <span class="day-total-calories">🔥 ${dayCalories} cal in</span>
+                ${workoutCalories > 0 ? `<span class="day-workout-info">💪 ${workoutCalories} cal burned</span>` : ''}
+                ${dayCalories > 0 || workoutCalories > 0 ? `<span class="day-net-calories ${netClass}">Net: ${netCalories} (${netLabel})</span>` : ''}
             </div>
         ` : '';
 
