@@ -1064,12 +1064,87 @@
             background: var(--white);
             border-radius: var(--radius);
             padding: 16px;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             box-shadow: var(--shadow);
         }
         .week-day-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
         .week-day-name { font-weight: 600; color: var(--cerulean); }
         .week-day-date { font-size: 0.85rem; color: var(--gray-text); }
+        .week-day-meals { display: flex; flex-direction: column; gap: 8px; }
+        .week-meal-slot {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            min-height: 52px;
+        }
+        .week-meal-slot.empty {
+            border: 1px dashed var(--gray-medium);
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .week-meal-slot.empty:hover {
+            border-color: var(--cerulean);
+            background: var(--seafoam-light);
+        }
+        .meal-slot-icon { font-size: 1.1rem; width: 24px; text-align: center; }
+        .meal-slot-type {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--gray-text);
+            font-weight: 500;
+            width: 65px;
+            flex-shrink: 0;
+        }
+        .meal-slot-content { flex: 1; min-width: 0; }
+        .meal-slot-title {
+            font-weight: 500;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .meal-slot-calories {
+            font-size: 0.75rem;
+            color: var(--success);
+            font-weight: 500;
+        }
+        .meal-slot-actions { display: flex; gap: 2px; }
+        .meal-slot-actions .icon-btn { padding: 4px; font-size: 0.9rem; }
+        .meal-slot-add {
+            color: var(--gray-text);
+            font-size: 0.85rem;
+            flex: 1;
+        }
+        .week-day-summary {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-medium);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .day-total-calories {
+            font-weight: 600;
+            color: var(--cerulean);
+        }
+        .day-workout-info {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+        .day-net-calories {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .day-net-calories.deficit { color: var(--success); }
+        .day-net-calories.surplus { color: var(--danger); }
+        .day-net-calories.balanced { color: var(--gray-text); }
+        /* Legacy single meal support */
         .week-day-meal {
             display: flex;
             align-items: center;
@@ -3494,6 +3569,8 @@ async function callAPI(userMessage) {
     const recentMeals = history.slice(0, 5).map(h => `${h.title} (${formatRelativeDate(h.date)})`).join(', ');
     const recipeRatings = formatRecipeRatingsForAPI();
     const workoutData = formatWorkoutDataForAPI();
+    const pantryData = formatPantryForAPI();
+    const gardenData = formatGardenForAPI();
 
     const messages = state.chatHistory.slice(-10).map(m => ({
         role: m.role,
@@ -3507,7 +3584,7 @@ async function callAPI(userMessage) {
     const response = await fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages, profileText, flareMode: state.flareMode, recentMeals, recipeRatings, workoutData })
+        body: JSON.stringify({ messages, profileText, flareMode: state.flareMode, recentMeals, recipeRatings, workoutData, pantryData, gardenData })
     });
 
     if (!response.ok) {
@@ -3664,6 +3741,68 @@ function formatRecipeRatingsForAPI() {
     }
 
     return text || 'No recipes rated yet.';
+}
+
+function formatPantryForAPI() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    if (!pantry || pantry.length === 0) return 'Pantry is empty - no ingredients tracked.';
+
+    // Group by category
+    const categories = {};
+    pantry.forEach(item => {
+        const cat = item.category || 'Other';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(item);
+    });
+
+    let text = 'Available ingredients:\n';
+
+    // Sort categories for consistent output
+    const catOrder = ['Proteins', 'Produce', 'Dairy', 'Grains', 'Pantry Staples', 'Frozen', 'Other'];
+    catOrder.forEach(cat => {
+        if (categories[cat] && categories[cat].length > 0) {
+            text += `**${cat}:** `;
+            text += categories[cat].map(item => {
+                let itemText = item.name;
+                if (item.quantity) itemText += ` (${item.quantity})`;
+                if (item.expirationConcern) itemText += ' ⚠️USE SOON';
+                return itemText;
+            }).join(', ');
+            text += '\n';
+        }
+    });
+
+    // Check for items expiring soon
+    const expiringItems = pantry.filter(i => i.expirationConcern);
+    if (expiringItems.length > 0) {
+        text += `\n⚠️ USE SOON: ${expiringItems.map(i => i.name).join(', ')}`;
+    }
+
+    return text;
+}
+
+function formatGardenForAPI() {
+    const profile = getStorage(STORAGE.PROFILE);
+    const garden = getStorage(STORAGE.GARDEN) || [];
+
+    let text = '';
+
+    // Check profile for currently growing
+    if (profile?.currentlyGrowing) {
+        const growing = profile.currentlyGrowing.split(',').map(s => s.trim()).filter(s => s);
+        if (growing.length > 0) {
+            text += `Currently growing: ${growing.join(', ')}\n`;
+        }
+    }
+
+    // Check garden data for ready to harvest
+    const readyToHarvest = garden.filter(g => g.status === 'ready' || g.readyToHarvest);
+    if (readyToHarvest.length > 0) {
+        text += `🌱 READY TO HARVEST: ${readyToHarvest.map(g => g.name).join(', ')}\n`;
+        text += '(Prioritize these fresh ingredients in recipes!)';
+    }
+
+    return text || 'No garden data available.';
 }
 
 // ========================================
@@ -4223,22 +4362,87 @@ function renderWeekPlanner() {
     const empty = document.getElementById('week-empty');
     const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    const workouts = getStorage(STORAGE.WORKOUTS) || [];
     const weekDates = getWeekDates(state.currentWeekOffset);
 
     // Update title
     document.getElementById('week-title').textContent = getWeekTitle(state.currentWeekOffset);
+
+    const mealTypes = [
+        { key: 'breakfast', icon: '🌅', label: 'Breakfast' },
+        { key: 'lunch', icon: '🌞', label: 'Lunch' },
+        { key: 'dinner', icon: '🌙', label: 'Dinner' },
+        { key: 'snacks', icon: '🍎', label: 'Snacks' }
+    ];
 
     let hasAnyMeals = false;
     let html = '';
 
     days.forEach((day, i) => {
         const dateStr = weekDates[i];
-        const dateObj = new Date(dateStr + 'T12:00:00'); // Add noon for timezone safety
-        const meal = mealPlans[dateStr];
+        const dateObj = new Date(dateStr + 'T12:00:00');
+        const dayMeals = mealPlans[dateStr] || {};
 
-        if (meal) hasAnyMeals = true;
+        // Support legacy single-meal format (migrate to dinner)
+        if (dayMeals.title && !dayMeals.dinner) {
+            dayMeals.dinner = { title: dayMeals.title, calories: dayMeals.calories, recipeId: dayMeals.recipeId, status: dayMeals.status };
+        }
 
         const dateDisplay = dateObj.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+
+        // Calculate day totals
+        let dayCalories = 0;
+        mealTypes.forEach(mt => {
+            const meal = dayMeals[mt.key];
+            if (meal?.calories) dayCalories += parseInt(meal.calories) || 0;
+            if (meal?.title) hasAnyMeals = true;
+        });
+
+        // Get workout calories for this day
+        const dayWorkouts = workouts.filter(w => w.date === dateStr);
+        const workoutCalories = dayWorkouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+        const netCalories = dayCalories - workoutCalories;
+
+        // Build meal slots
+        let mealSlotsHtml = '';
+        mealTypes.forEach(mt => {
+            const meal = dayMeals[mt.key];
+            if (meal?.title) {
+                mealSlotsHtml += `
+                    <div class="week-meal-slot">
+                        <span class="meal-slot-icon">${mt.icon}</span>
+                        <span class="meal-slot-type">${mt.label}</span>
+                        <div class="meal-slot-content">
+                            <div class="meal-slot-title">${meal.title}</div>
+                            ${meal.calories ? `<span class="meal-slot-calories">${meal.calories} cal</span>` : ''}
+                        </div>
+                        <div class="meal-slot-actions">
+                            ${meal.recipeId ? `<button class="icon-btn" onclick="viewRecipeDetail('${meal.recipeId}')" title="View">👁️</button>` : ''}
+                            <button class="icon-btn" onclick="openAddMealSlot('${dateStr}', '${mt.key}', '${day}')" title="Change">✏️</button>
+                            <button class="icon-btn" onclick="removeMealSlot('${dateStr}', '${mt.key}')" title="Remove">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                mealSlotsHtml += `
+                    <div class="week-meal-slot empty" onclick="openAddMealSlot('${dateStr}', '${mt.key}', '${day}')">
+                        <span class="meal-slot-icon">${mt.icon}</span>
+                        <span class="meal-slot-type">${mt.label}</span>
+                        <span class="meal-slot-add">+ Add ${mt.label}</span>
+                    </div>
+                `;
+            }
+        });
+
+        // Day summary
+        const netClass = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
+        const summaryHtml = dayCalories > 0 || workoutCalories > 0 ? `
+            <div class="week-day-summary">
+                <span class="day-total-calories">🔥 ${dayCalories} cal</span>
+                ${workoutCalories > 0 ? `<span class="day-workout-info">💪 -${workoutCalories} cal</span>` : ''}
+                ${dayCalories > 0 ? `<span class="day-net-calories ${netClass}">Net: ${netCalories > 0 ? '+' : ''}${netCalories}</span>` : ''}
+            </div>
+        ` : '';
 
         html += `
             <div class="week-day">
@@ -4246,30 +4450,178 @@ function renderWeekPlanner() {
                     <span class="week-day-name">${day}</span>
                     <span class="week-day-date">${dateDisplay}</span>
                 </div>
-                ${meal ? `
-                    <div class="week-day-meal">
-                        <span style="font-size: 1.5rem;">🍽️</span>
-                        <div class="week-day-meal-info">
-                            <div class="week-day-meal-title">${meal.title}</div>
-                            <div class="week-day-meal-meta">${meal.status === 'cooked' ? '✅ Cooked' : 'Planned'}</div>
-                        </div>
-                        <div class="week-day-meal-actions">
-                            <button class="icon-btn" onclick="viewMealForDay('${dateStr}')" title="View">👁️</button>
-                            <button class="icon-btn" onclick="changeMealForDay('${dateStr}')" title="Change">✏️</button>
-                            <button class="icon-btn" onclick="removeMealForDay('${dateStr}')" title="Remove">🗑️</button>
-                        </div>
-                    </div>
-                ` : `
-                    <div class="week-day-empty" onclick="openAddMealForDay('${dateStr}', '${day}')">
-                        + Add Meal
-                    </div>
-                `}
+                <div class="week-day-meals">
+                    ${mealSlotsHtml}
+                </div>
+                ${summaryHtml}
             </div>
         `;
     });
 
     container.innerHTML = html;
     empty.classList.toggle('hidden', hasAnyMeals || state.currentWeekOffset !== 0);
+}
+
+function openAddMealSlot(dateStr, mealType, dayName) {
+    const mealLabels = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', snacks: 'Snacks' };
+    const label = mealLabels[mealType] || mealType;
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Add ${label} for ${dayName}</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="more-menu">
+                <button class="more-menu-item" onclick="closeModal(); askNonnaForMealSlot('${dateStr}', '${mealType}', '${dayName}');">
+                    <span class="icon">🤖</span>
+                    <div class="more-menu-item-content">
+                        <div class="more-menu-item-title">Ask Nonna</div>
+                        <div class="more-menu-item-desc">Get a ${label.toLowerCase()} suggestion</div>
+                    </div>
+                </button>
+                <button class="more-menu-item" onclick="closeModal(); openChooseFromLibraryForSlot('${dateStr}', '${mealType}');">
+                    <span class="icon">📚</span>
+                    <div class="more-menu-item-content">
+                        <div class="more-menu-item-title">From Library</div>
+                        <div class="more-menu-item-desc">Choose a saved recipe</div>
+                    </div>
+                </button>
+                <button class="more-menu-item" onclick="closeModal(); openManualMealSlotEntry('${dateStr}', '${mealType}');">
+                    <span class="icon">✏️</span>
+                    <div class="more-menu-item-content">
+                        <div class="more-menu-item-title">Quick Entry</div>
+                        <div class="more-menu-item-desc">Type meal name & calories</div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    `);
+}
+
+function askNonnaForMealSlot(dateStr, mealType, dayName) {
+    const mealLabels = { breakfast: 'breakfast', lunch: 'lunch', dinner: 'dinner', snacks: 'snack ideas' };
+    navigateTo('chat');
+    setTimeout(() => {
+        const input = document.getElementById('chat-input');
+        input.value = `Suggest a healthy ${mealLabels[mealType]} for ${dayName}. Check my pantry and use ingredients I have.`;
+        sendMessage();
+    }, 100);
+}
+
+function openChooseFromLibraryForSlot(dateStr, mealType) {
+    const library = getRecipeLibrary();
+    if (library.length === 0) {
+        showToast('No recipes in library yet. Ask Nonna for suggestions!');
+        return;
+    }
+
+    const recipeList = library.slice(0, 20).map(r => `
+        <button class="more-menu-item" onclick="assignRecipeToSlot('${r.id}', '${dateStr}', '${mealType}')">
+            <span class="icon">🍽️</span>
+            <div class="more-menu-item-content">
+                <div class="more-menu-item-title">${r.title}</div>
+                <div class="more-menu-item-desc">${r.nutrition?.calories ? r.nutrition.calories + ' cal' : ''} ${r.metadata?.totalTime ? '· ' + r.metadata.totalTime + 'min' : ''}</div>
+            </div>
+        </button>
+    `).join('');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Choose Recipe</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
+            <div class="more-menu">
+                ${recipeList}
+            </div>
+        </div>
+    `);
+}
+
+function assignRecipeToSlot(recipeId, dateStr, mealType) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+
+    mealPlans[dateStr][mealType] = {
+        title: recipe.title,
+        recipeId: recipe.id,
+        calories: recipe.nutrition?.calories || null,
+        status: 'planned'
+    };
+
+    setStorage(STORAGE.MEAL_PLANS, mealPlans);
+    closeModal();
+    showToast(`Added ${recipe.title} to ${mealType}`);
+    renderWeekPlanner();
+}
+
+function openManualMealSlotEntry(dateStr, mealType) {
+    const mealLabels = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', snacks: 'Snacks' };
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Add ${mealLabels[mealType]}</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Meal Name</label>
+                <input type="text" class="form-input" id="manual-meal-name" placeholder="e.g., Greek Yogurt with Berries">
+            </div>
+            <div class="form-group">
+                <label>Calories (optional)</label>
+                <input type="number" class="form-input" id="manual-meal-calories" placeholder="e.g., 350">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveManualMealSlot('${dateStr}', '${mealType}')">Add</button>
+        </div>
+    `);
+    setTimeout(() => document.getElementById('manual-meal-name')?.focus(), 100);
+}
+
+function saveManualMealSlot(dateStr, mealType) {
+    const title = document.getElementById('manual-meal-name')?.value.trim();
+    const calories = document.getElementById('manual-meal-calories')?.value;
+
+    if (!title) {
+        showToast('Please enter a meal name');
+        return;
+    }
+
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+
+    mealPlans[dateStr][mealType] = {
+        title: title,
+        calories: calories ? parseInt(calories) : null,
+        recipeId: null,
+        status: 'planned'
+    };
+
+    setStorage(STORAGE.MEAL_PLANS, mealPlans);
+    closeModal();
+    showToast(`Added ${title}`);
+    renderWeekPlanner();
+}
+
+function removeMealSlot(dateStr, mealType) {
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    if (mealPlans[dateStr] && mealPlans[dateStr][mealType]) {
+        delete mealPlans[dateStr][mealType];
+        // Clean up empty day
+        if (Object.keys(mealPlans[dateStr]).length === 0) {
+            delete mealPlans[dateStr];
+        }
+        setStorage(STORAGE.MEAL_PLANS, mealPlans);
+        renderWeekPlanner();
+        showToast('Meal removed');
+    }
 }
 
 function openAddMealForDay(dateStr, dayName) {

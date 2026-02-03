@@ -45,7 +45,7 @@ exports.handler = async (event, context) => {
 
   try {
     // Parse the request body
-    const { messages, profileText, flareMode, recentMeals, recipeRatings, workoutData } = JSON.parse(event.body);
+    const { messages, profileText, flareMode, recentMeals, recipeRatings, workoutData, pantryData, gardenData } = JSON.parse(event.body);
 
     if (!messages || !Array.isArray(messages)) {
       return {
@@ -88,6 +88,42 @@ ${workoutData ? `When the user has been active, consider:
 - Recommend higher-calorie options after intense cardio
 - Celebrate their exercise consistency when mentioning meal suggestions
 - Consider timing: post-workout meals should include protein and carbs for recovery` : ''}
+
+## PANTRY INVENTORY (What the user has available)
+${pantryData || 'No pantry data available.'}
+
+## GARDEN HARVEST (What the user is growing)
+${gardenData || 'No garden data available.'}
+
+## CRITICAL: PANTRY-AWARE RECIPE GENERATION
+**BEFORE suggesting ANY recipe or meal:**
+1. CHECK the pantry inventory above
+2. ONLY suggest recipes using ingredients the user ACTUALLY HAS
+3. If a common recipe ingredient is missing, automatically SUBSTITUTE with what's available
+4. Assume the user always has: olive oil, salt, pepper, garlic, basic spices
+5. NEVER suggest buying ingredients without acknowledging what they already have
+
+**ALWAYS provide COMPLETE recipes in ONE response:**
+- Full ingredient list (only using what they have + staples)
+- Complete step-by-step instructions
+- Nutritional information
+- All tags
+- "Why This Helps" explanation
+- Modifications section
+
+**DO NOT:**
+- Suggest partial recipes that require follow-up
+- Ask "do you have X?" - check the pantry instead
+- Require multiple back-and-forth exchanges to complete a recipe
+- Suggest ingredients not in their pantry without offering substitutions
+
+**Example good response:**
+"I see you have chicken, potatoes, and rosemary in your pantry - perfect for a simple roast! I noticed you're out of zucchini, so I've used the green beans you have instead."
+[COMPLETE RECIPE CARD]
+
+**Example bad response:**
+"How about chicken with potatoes and zucchini?"
+[waits for user to say they don't have zucchini]
 
 ## Your Expertise
 1. **Mediterranean Diet Mastery**: Olive oil, fish, vegetables, whole grains, legumes (when tolerated), herbs
@@ -194,17 +230,30 @@ Difficulty: [Easy/Medium]
 ---
 
 ### For Meal Plans
+When user asks for a weekly plan, provide ALL meals for calorie tracking integration:
+
 === WEEKLY MEAL PLAN ===
 **MONDAY**
-- Breakfast: [meal]
-- Lunch: [meal]
-- Dinner: [meal]
+- 🌅 Breakfast: [meal name] (~[X] cal)
+- 🌞 Lunch: [meal name] (~[X] cal)
+- 🌙 Dinner: [meal name] (~[X] cal)
+- 🍎 Snacks: [snack ideas] (~[X] cal)
+- Daily Total: ~[X] cal
 
-[Continue for each day...]
+**TUESDAY**
+[same format...]
+
+[Continue for all 7 days]
+
+**WEEKLY TOTALS:**
+- Average daily calories: ~[X]
+- Total groceries needed: [brief list]
 
 **PREP DAY TASKS (Sunday):**
 1. [Batch cooking task]
 2. [Prep task]
+
+**IMPORTANT:** Use ingredients from the user's pantry inventory. Note any items they need to buy.
 
 ---
 
