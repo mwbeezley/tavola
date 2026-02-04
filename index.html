@@ -1550,6 +1550,126 @@
             cursor: pointer;
         }
 
+        /* Calorie Estimation UI */
+        .calorie-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .calorie-input-row .form-input {
+            flex: 1;
+        }
+        .estimate-btn {
+            padding: 10px 16px;
+            background: var(--seafoam-light);
+            color: var(--navy);
+            border: 1px solid var(--cerulean);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .estimate-btn:hover {
+            background: var(--cerulean);
+            color: white;
+        }
+        .estimate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .estimate-btn.loading {
+            background: var(--gray-light);
+            color: var(--gray-text);
+        }
+        .estimate-result {
+            margin-top: 8px;
+            padding: 10px 12px;
+            background: var(--seafoam-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+        .estimate-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .estimate-result-text {
+            color: var(--navy);
+        }
+        .estimate-result-text .confidence {
+            color: var(--gray-text);
+            font-size: 0.8rem;
+        }
+        .estimate-details-btn {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        .estimate-details-btn:hover {
+            background: var(--gray-light);
+        }
+        .estimate-breakdown {
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-medium);
+        }
+        .estimate-breakdown h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            color: var(--navy);
+        }
+        .estimate-breakdown ul {
+            margin: 0 0 12px 0;
+            padding-left: 20px;
+            font-size: 0.85rem;
+        }
+        .estimate-breakdown li {
+            padding: 2px 0;
+            color: var(--gray-dark);
+        }
+        .estimate-macros {
+            display: flex;
+            gap: 16px;
+            padding-top: 8px;
+            border-top: 1px solid var(--gray-light);
+            font-size: 0.85rem;
+        }
+        .estimate-macros span {
+            color: var(--gray-text);
+        }
+        .estimate-macros strong {
+            color: var(--navy);
+        }
+        .confidence-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .confidence-badge.high {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .confidence-badge.medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        .confidence-badge.low {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .calorie-input-estimated {
+            border-color: var(--success) !important;
+            background: #f8fff8;
+        }
+
         /* Quick Add Delivery Section */
         .quick-add-section {
             margin-top: 16px;
@@ -5199,7 +5319,13 @@ function openManualMealSlotEntry(dateStr, mealType) {
             </div>
             <div class="form-group">
                 <label>Calories (optional)</label>
-                <input type="number" class="form-input" id="manual-meal-calories" placeholder="e.g., 350">
+                <div class="calorie-input-row">
+                    <input type="number" class="form-input" id="manual-meal-calories" placeholder="e.g., 350">
+                    <button type="button" class="estimate-btn" id="estimate-calories-btn" onclick="estimateCalories('manual-meal-name', 'manual-meal-calories')">
+                        🤖 Estimate
+                    </button>
+                </div>
+                <div id="calorie-estimate-result"></div>
             </div>
         </div>
         <div class="modal-footer">
@@ -5301,6 +5427,16 @@ function openManualMealEntry(dateStr) {
                 <label>Meal Name</label>
                 <input type="text" class="form-input" id="manual-meal-input" placeholder="e.g., Grilled Salmon">
             </div>
+            <div class="form-group">
+                <label>Calories (optional)</label>
+                <div class="calorie-input-row">
+                    <input type="number" class="form-input" id="manual-meal-input-calories" placeholder="e.g., 350">
+                    <button type="button" class="estimate-btn" onclick="estimateCalories('manual-meal-input', 'manual-meal-input-calories')">
+                        🤖 Estimate
+                    </button>
+                </div>
+                <div id="calorie-estimate-result-manual"></div>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -5312,11 +5448,18 @@ function openManualMealEntry(dateStr) {
 
 function saveManualMeal(dateStr) {
     const input = document.getElementById('manual-meal-input');
+    const caloriesInput = document.getElementById('manual-meal-input-calories');
     const title = input.value.trim();
+    const calories = caloriesInput?.value;
     if (!title) return;
 
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
-    mealPlans[dateStr] = { title, recipeId: null, status: 'planned' };
+    mealPlans[dateStr] = {
+        title,
+        calories: calories ? parseInt(calories) : null,
+        recipeId: null,
+        status: 'planned'
+    };
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     renderWeekPlanner();
@@ -7834,6 +7977,221 @@ function generateBatchPlan() {
 }
 
 // ========================================
+// CALORIE ESTIMATION
+// ========================================
+
+// Store last estimate for details display
+let lastCalorieEstimate = null;
+
+async function estimateCalories(mealInputId, calorieInputId) {
+    const mealInput = document.getElementById(mealInputId);
+    const calorieInput = document.getElementById(calorieInputId);
+    const mealName = mealInput?.value.trim();
+
+    if (!mealName || mealName.length < 3) {
+        showToast('Please enter a meal description first');
+        return;
+    }
+
+    // Find the estimate button and result container
+    const estimateBtn = mealInput.closest('.modal-body').querySelector('.estimate-btn');
+    const resultContainer = mealInput.closest('.modal-body').querySelector('[id^="calorie-estimate-result"]');
+
+    // Show loading state
+    if (estimateBtn) {
+        estimateBtn.disabled = true;
+        estimateBtn.classList.add('loading');
+        estimateBtn.innerHTML = '⏳ Estimating...';
+    }
+
+    try {
+        const response = await fetch('/.netlify/functions/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: 'user',
+                    content: `Estimate the calories in this meal: "${mealName}". Return ONLY valid JSON with no markdown formatting or code blocks.`
+                }],
+                systemPrompt: `You are a nutritional estimation assistant. Given a meal description, estimate calories and macros.
+
+Return ONLY this JSON structure (no markdown, no code blocks, no explanation, just raw JSON):
+{
+  "calories": <number>,
+  "confidence": "high" | "medium" | "low",
+  "breakdown": ["Item 1: ~X cal", "Item 2: ~Y cal"],
+  "protein": "<number>g",
+  "carbs": "<number>g",
+  "fat": "<number>g",
+  "notes": "optional explanation for low confidence or vague descriptions"
+}
+
+Standard portion sizes to use:
+- Banana: medium (105 cal)
+- Apple: medium (95 cal)
+- Tablespoon: 15ml
+- Teaspoon: 5ml
+- Cup: 240ml
+- Ounce: 28g
+- Chicken breast: 6oz raw (~280 cal)
+- Salmon fillet: 6oz (~350 cal)
+- Pasta: 1 cup cooked (~200 cal)
+- Rice: 1 cup cooked (~200 cal)
+- Bread slice: 1 slice (~80 cal)
+- Egg: large (70 cal)
+- Greek yogurt: 1 cup (~130 cal)
+- Olive oil: 1 tbsp (120 cal)
+- Butter: 1 tbsp (100 cal)
+- Honey: 1 tbsp (64 cal)
+- Cheese: 1 oz (~110 cal)
+
+Guidelines:
+- Be conservative with estimates
+- Round to nearest 5 calories
+- For vague descriptions like "salad" or "sandwich", assume medium portions
+- Set confidence to "low" for vague descriptions and add explanatory notes
+- Set confidence to "high" for specific, detailed descriptions
+- Set confidence to "medium" for reasonably clear descriptions with some ambiguity`
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        let content = data.content?.[0]?.text || data.message || '';
+
+        // Clean up response - remove markdown code blocks if present
+        content = content.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+
+        // Parse JSON from response
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+            throw new Error('Invalid response format');
+        }
+
+        const estimate = JSON.parse(jsonMatch[0]);
+        lastCalorieEstimate = estimate;
+
+        // Update calorie input
+        if (calorieInput) {
+            calorieInput.value = estimate.calories;
+            calorieInput.classList.add('calorie-input-estimated');
+        }
+
+        // Update button to show details
+        if (estimateBtn) {
+            estimateBtn.disabled = false;
+            estimateBtn.classList.remove('loading');
+            estimateBtn.innerHTML = 'ℹ️ Details';
+            estimateBtn.onclick = () => showCalorieEstimateDetails(estimate);
+        }
+
+        // Show result summary
+        if (resultContainer) {
+            const confidenceClass = estimate.confidence || 'medium';
+            resultContainer.innerHTML = `
+                <div class="estimate-result">
+                    <div class="estimate-result-header">
+                        <span class="estimate-result-text">
+                            💡 Estimated: ~${estimate.calories} cal
+                            <span class="confidence">(${estimate.confidence} confidence)</span>
+                        </span>
+                        <span class="confidence-badge ${confidenceClass}">${estimate.confidence}</span>
+                    </div>
+                    ${estimate.notes ? `<div style="margin-top: 6px; font-size: 0.8rem; color: var(--gray-text);">${estimate.notes}</div>` : ''}
+                </div>
+            `;
+        }
+
+        showToast(`Estimated: ~${estimate.calories} calories`);
+
+    } catch (error) {
+        console.error('Calorie estimation error:', error);
+
+        // Reset button
+        if (estimateBtn) {
+            estimateBtn.disabled = false;
+            estimateBtn.classList.remove('loading');
+            estimateBtn.innerHTML = '🤖 Estimate';
+        }
+
+        // Show error in result container
+        if (resultContainer) {
+            resultContainer.innerHTML = `
+                <div style="margin-top: 8px; padding: 8px; background: #ffebee; border-radius: var(--radius-sm); font-size: 0.85rem; color: #c62828;">
+                    Unable to estimate. Please enter calories manually.
+                </div>
+            `;
+        }
+
+        showToast('Unable to estimate. Please enter manually.');
+    }
+}
+
+function showCalorieEstimateDetails(estimate) {
+    if (!estimate) {
+        estimate = lastCalorieEstimate;
+    }
+
+    if (!estimate) {
+        showToast('No estimate available');
+        return;
+    }
+
+    const breakdownHtml = estimate.breakdown && estimate.breakdown.length > 0
+        ? `<ul>${estimate.breakdown.map(item => `<li>${item}</li>`).join('')}</ul>`
+        : '<p style="color: var(--gray-text);">No detailed breakdown available</p>';
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Calorie Breakdown</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="estimate-breakdown">
+                <h4>Total: ~${estimate.calories} calories</h4>
+                ${breakdownHtml}
+
+                <div class="estimate-macros">
+                    <span>Protein: <strong>${estimate.protein || '—'}</strong></span>
+                    <span>Carbs: <strong>${estimate.carbs || '—'}</strong></span>
+                    <span>Fat: <strong>${estimate.fat || '—'}</strong></span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; padding: 12px; background: var(--gray-light); border-radius: var(--radius-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85rem; color: var(--gray-text);">Confidence Level</span>
+                    <span class="confidence-badge ${estimate.confidence || 'medium'}">${estimate.confidence || 'medium'}</span>
+                </div>
+                <p style="margin-top: 8px; font-size: 0.8rem; color: var(--gray-text);">
+                    ${getConfidenceExplanation(estimate.confidence)}
+                </p>
+                ${estimate.notes ? `<p style="margin-top: 8px; font-size: 0.8rem; color: var(--gray-dark);"><strong>Note:</strong> ${estimate.notes}</p>` : ''}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="closeModal()">Close</button>
+        </div>
+    `);
+}
+
+function getConfidenceExplanation(confidence) {
+    switch (confidence) {
+        case 'high':
+            return 'The meal description was detailed and specific, allowing for accurate estimation.';
+        case 'medium':
+            return 'Based on standard portion sizes. Actual calories may vary by ±15%.';
+        case 'low':
+            return 'The description was vague. Consider adding more details for a better estimate.';
+        default:
+            return 'Based on standard portion sizes.';
+    }
+}
+
+// ========================================
 // KITCHEN - SUBSTITUTIONS
 // ========================================
 function searchSubstitutions() {
@@ -8209,6 +8567,16 @@ function openAddMealModal() {
                 <label>What did you eat?</label>
                 <input type="text" class="form-input" id="log-meal-input" placeholder="e.g., Grilled chicken salad">
             </div>
+            <div class="form-group">
+                <label>Calories (optional)</label>
+                <div class="calorie-input-row">
+                    <input type="number" class="form-input" id="log-meal-calories" placeholder="e.g., 350">
+                    <button type="button" class="estimate-btn" id="estimate-calories-btn-log" onclick="estimateCalories('log-meal-input', 'log-meal-calories')">
+                        🤖 Estimate
+                    </button>
+                </div>
+                <div id="calorie-estimate-result-log"></div>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -8219,12 +8587,14 @@ function openAddMealModal() {
 
 function logMealManual() {
     const title = document.getElementById('log-meal-input').value.trim();
+    const calories = document.getElementById('log-meal-calories')?.value;
     if (!title) return;
 
     const history = getStorage(STORAGE.HISTORY) || [];
     history.unshift({
         type: 'cooked',
         title: title,
+        calories: calories ? parseInt(calories) : null,
         date: new Date().toISOString()
     });
     setStorage(STORAGE.HISTORY, history);
