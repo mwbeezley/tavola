@@ -192,6 +192,22 @@
         .action-tile-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
         .action-tile-desc { font-size: 0.8rem; color: var(--gray-text); }
 
+        /* Welcome Banner */
+        .welcome-back-banner {
+            margin-bottom: 16px;
+            padding: 16px 20px;
+            background: linear-gradient(135deg, var(--seafoam-light) 0%, #e8f5e9 100%);
+            border-radius: var(--radius);
+            border-left: 4px solid var(--cerulean);
+        }
+        .welcome-back-banner h2 {
+            margin: 0;
+            font-size: 1.3rem;
+            font-family: 'Lora', serif;
+            color: var(--navy);
+            font-weight: 500;
+        }
+
         /* Stats Bar */
         .stats-bar {
             display: grid;
@@ -2085,6 +2101,17 @@
                 <p class="text-muted">This helps Nonna suggest meals that work for your body</p>
             </div>
             <form id="profile-form" onsubmit="saveProfile(event)">
+                <!-- Name - First Field -->
+                <div class="card">
+                    <h2 class="card-title">👋 What should Nonna call you?</h2>
+                    <div class="form-group">
+                        <input type="text" class="form-input" name="userName" id="profile-name-input" placeholder="Your name..." style="font-size: 1.1rem; padding: 14px;" maxlength="50">
+                    </div>
+                    <p class="text-muted" style="font-size: 0.85rem;">
+                        💡 Nonna will use this to personalize your experience throughout Tavola
+                    </p>
+                </div>
+
                 <!-- Health Conditions - Expanded -->
                 <div class="card">
                     <h2 class="card-title">🩺 Health Conditions</h2>
@@ -2423,6 +2450,11 @@
         <div class="container">
             <!-- HOME/DASHBOARD View (NEW) -->
             <div class="view active" id="view-home">
+                <!-- Welcome Message with User's Name -->
+                <div class="welcome-back-banner" id="welcome-back-banner">
+                    <h2 id="welcome-back-text">Welcome back! 👋</h2>
+                </div>
+
                 <!-- Flare Mode Banner (shown when active) -->
                 <div class="flare-banner hidden" id="home-flare-banner">
                     <div class="flare-banner-title">🌡️ Flare Mode Active</div>
@@ -3039,6 +3071,14 @@
                     </div>
                     <div class="card">
                         <h3 class="card-title">👤 Profile</h3>
+                        <div class="form-group mb-12">
+                            <label class="form-label">Your Name</label>
+                            <div class="flex gap-8">
+                                <input type="text" class="form-input" id="settings-name-input" placeholder="What should Nonna call you?" maxlength="50" style="flex: 1;">
+                                <button class="btn btn-primary btn-sm" onclick="saveNameFromSettings()">Save</button>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.8rem; margin-top: 4px;">This is how Nonna will greet you</p>
+                        </div>
                         <button class="btn btn-secondary btn-block" onclick="editProfile()">Edit Health Profile</button>
                     </div>
                     <div class="card">
@@ -3207,6 +3247,8 @@ function initApp() {
             addWelcomeMessage();
         }
         checkOnboarding();
+        // Check if existing user needs to add their name
+        checkExistingUserName();
     } else {
         showWelcome();
     }
@@ -3362,6 +3404,93 @@ function switchMoreTab(tab) {
     if (tab === 'garden') renderGarden();
     if (tab === 'history') renderHistory();
     if (tab === 'crohns') updateFlareUI();
+    if (tab === 'settings') loadSettingsName();
+}
+
+function loadSettingsName() {
+    const profile = getStorage(STORAGE.PROFILE);
+    const nameInput = document.getElementById('settings-name-input');
+    if (nameInput && profile?.name) {
+        nameInput.value = profile.name;
+    }
+}
+
+function saveNameFromSettings() {
+    const nameInput = document.getElementById('settings-name-input');
+    const newName = nameInput?.value?.trim() || '';
+
+    // Get existing profile or create empty one
+    let profile = getStorage(STORAGE.PROFILE) || {};
+    profile.name = newName;
+    setStorage(STORAGE.PROFILE, profile);
+
+    // Update the dashboard welcome banner
+    updateDashboard();
+
+    // Show confirmation
+    if (newName) {
+        showToast(`Ciao, ${newName}! Nonna will remember you. 💚`);
+    } else {
+        showToast('Name cleared. Nonna will use terms of endearment instead. 💚');
+    }
+}
+
+function checkExistingUserName() {
+    const profile = getStorage(STORAGE.PROFILE);
+    // Only prompt if user has a profile but no name set
+    if (profile && !profile.name && !profile.namePromptDismissed) {
+        showNamePromptModal();
+    }
+}
+
+function showNamePromptModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">👋 Ciao! What should Nonna call you?</h2>
+            <button class="modal-close" onclick="dismissNamePrompt()">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom: 16px;">Nonna would love to greet you by name! This helps make your Tavola experience more personal.</p>
+            <div class="form-group">
+                <input type="text" class="form-input" id="name-prompt-input" placeholder="Your name..." style="font-size: 1.1rem; padding: 14px;" maxlength="50" autofocus>
+            </div>
+            <p class="text-muted" style="font-size: 0.85rem;">💡 You can always change this later in Settings</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="dismissNamePrompt()">Skip for now</button>
+            <button class="btn btn-primary" onclick="saveNameFromPrompt()">Save Name</button>
+        </div>
+    `);
+    // Focus the input after modal renders
+    setTimeout(() => {
+        const input = document.getElementById('name-prompt-input');
+        if (input) input.focus();
+    }, 100);
+}
+
+function saveNameFromPrompt() {
+    const nameInput = document.getElementById('name-prompt-input');
+    const newName = nameInput?.value?.trim() || '';
+
+    if (newName) {
+        let profile = getStorage(STORAGE.PROFILE) || {};
+        profile.name = newName;
+        setStorage(STORAGE.PROFILE, profile);
+        closeModal();
+        updateDashboard();
+        showToast(`Benvenuta, ${newName}! Nonna is delighted to meet you. 💚`);
+    } else {
+        // If empty, just close - they can try again
+        closeModal();
+    }
+}
+
+function dismissNamePrompt() {
+    // Mark as dismissed so we don't prompt again
+    let profile = getStorage(STORAGE.PROFILE) || {};
+    profile.namePromptDismissed = true;
+    setStorage(STORAGE.PROFILE, profile);
+    closeModal();
 }
 
 // ========================================
@@ -3388,6 +3517,27 @@ function updateDashboard() {
     if (profile && profile.currentlyGrowing) {
         const plants = profile.currentlyGrowing.split(',').filter(p => p.trim());
         document.getElementById('stat-garden').textContent = plants.length > 0 ? `${plants.length} plants` : '-';
+    }
+
+    // Welcome banner with user's name
+    const welcomeText = document.getElementById('welcome-back-text');
+    if (welcomeText) {
+        const userName = profile?.name;
+        if (userName) {
+            // Personalized greeting based on time of day
+            const hour = new Date().getHours();
+            let greeting;
+            if (hour < 12) {
+                greeting = `Buongiorno, ${userName}! ☀️`;
+            } else if (hour < 17) {
+                greeting = `Buon pomeriggio, ${userName}! 🌿`;
+            } else {
+                greeting = `Buonasera, ${userName}! 🌙`;
+            }
+            welcomeText.textContent = greeting;
+        } else {
+            welcomeText.textContent = 'Welcome back! 👋';
+        }
     }
 
     // Recent activity
@@ -3493,6 +3643,9 @@ function saveProfile(e) {
     const form = e.target;
 
     const profile = {
+        // User's name (NEW)
+        name: form.userName?.value?.trim() || '',
+
         // Health conditions (checkboxes)
         conditions: Array.from(form.querySelectorAll('[name="conditions"]:checked')).map(c => c.value),
 
@@ -3554,6 +3707,12 @@ function editProfile() {
     if (profile) {
         setTimeout(() => {
             const form = document.getElementById('profile-form');
+
+            // Restore name field first
+            if (profile.name) {
+                const nameInput = form.querySelector('[name="userName"]');
+                if (nameInput) nameInput.value = profile.name;
+            }
 
             // Restore simple fields
             const simpleFields = ['crohnsSeverity', 'crohnsTriggers', 'ucSeverity', 'ibsType',
@@ -3677,7 +3836,8 @@ function saveChatHistory() {
 
 function addWelcomeMessage() {
     const profile = getStorage(STORAGE.PROFILE);
-    let text = "Ciao, cara! I'm Nonna, your Mediterranean cooking companion. ";
+    const userName = profile?.name || 'cara';
+    let text = `Ciao, ${userName}! I'm Nonna, your Mediterranean cooking companion. `;
     if (profile) {
         text += "I've looked at your profile and I'm ready to help you plan delicious, gentle meals. ";
     }
@@ -4210,7 +4370,20 @@ function formatProfileForAPI(profile) {
     if (!profile) return 'No profile configured.';
 
     const conditions = profile.conditions || [];
-    let text = 'HEALTH CONDITIONS:\n';
+    let text = '';
+
+    // User's name - add at the very beginning
+    if (profile.name) {
+        text += `USER'S NAME: ${profile.name}\n`;
+        text += `Always address the user by their name naturally in conversation. Use their name:\n`;
+        text += `- In greetings: "Ciao, ${profile.name}! What would you like to cook today?"\n`;
+        text += `- When praising: "Brava, ${profile.name}! That's a beautiful meal plan."\n`;
+        text += `- When being supportive: "I know it's tough, ${profile.name}, let's keep things gentle today."\n`;
+        text += `- Throughout conversation naturally (not excessively)\n`;
+        text += `You can still use Italian terms of endearment occasionally (bella, cara, tesoro) but primarily use their actual name.\n\n`;
+    }
+
+    text += 'HEALTH CONDITIONS:\n';
 
     // Digestive conditions
     if (conditions.includes('crohns')) {
