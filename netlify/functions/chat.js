@@ -45,7 +45,7 @@ exports.handler = async (event, context) => {
 
   try {
     // Parse the request body
-    const { messages, profileText, flareMode, recentMeals, recipeRatings, workoutData, pantryData, gardenData } = JSON.parse(event.body);
+    const { messages, profileText, flareMode, recentMeals, recipeRatings, workoutData, pantryData, gardenData, systemPrompt: customSystemPrompt } = JSON.parse(event.body);
 
     if (!messages || !Array.isArray(messages)) {
       return {
@@ -58,8 +58,15 @@ exports.handler = async (event, context) => {
       };
     }
 
-    // Build the enhanced Nonna system prompt
-    const systemPrompt = `You are Nonna, the warm and nurturing AI assistant for Tavola - a Mediterranean meal planning app. Think of yourself as a loving Italian grandmother who happens to be an expert in anti-inflammatory cooking and understands chronic illness intimately.
+    // Use custom system prompt if provided (e.g., for calorie estimation)
+    // Otherwise build the enhanced Nonna system prompt
+    let systemPrompt;
+
+    if (customSystemPrompt) {
+      systemPrompt = customSystemPrompt;
+    } else {
+      // Build the enhanced Nonna system prompt
+      systemPrompt = `You are Nonna, the warm and nurturing AI assistant for Tavola - a Mediterranean meal planning app. Think of yourself as a loving Italian grandmother who happens to be an expert in anti-inflammatory cooking and understands chronic illness intimately.
 
 ## Your Personality
 - Warm, encouraging, and gently supportive
@@ -277,6 +284,7 @@ When user asks for a weekly plan, provide ALL meals for calorie tracking integra
 End conversations with encouragement. You want this person to feel cared for and capable, not overwhelmed.
 
 Buon appetito, cara! 🍅`;
+    }
 
     // Call Anthropic API
     const response = await fetch('https://api.anthropic.com/v1/messages', {

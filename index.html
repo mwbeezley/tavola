@@ -8187,7 +8187,7 @@ async function estimateCalories(mealInputId, calorieInputId) {
     if (estimateBtn) {
         estimateBtn.disabled = true;
         estimateBtn.classList.add('loading');
-        estimateBtn.innerHTML = '⏳ Estimating...';
+        estimateBtn.innerHTML = '🔄 Estimating...';
     }
 
     try {
@@ -8197,67 +8197,86 @@ async function estimateCalories(mealInputId, calorieInputId) {
             body: JSON.stringify({
                 messages: [{
                     role: 'user',
-                    content: `Estimate the calories in this meal: "${mealName}". Return ONLY valid JSON with no markdown formatting or code blocks.`
+                    content: `Estimate calories for: "${mealName}"
+
+Return ONLY this JSON (no markdown, no backticks, no explanation):
+{"calories": 150, "confidence": "high", "breakdown": ["Item: X cal"], "protein": "Xg", "carbs": "Xg", "fat": "Xg"}`
                 }],
-                systemPrompt: `You are a nutritional estimation assistant. Given a meal description, estimate calories and macros.
+                systemPrompt: `You are a nutritional estimation assistant. Return ONLY valid JSON with no markdown formatting.
 
-Return ONLY this JSON structure (no markdown, no code blocks, no explanation, just raw JSON):
-{
-  "calories": <number>,
-  "confidence": "high" | "medium" | "low",
-  "breakdown": ["Item 1: ~X cal", "Item 2: ~Y cal"],
-  "protein": "<number>g",
-  "carbs": "<number>g",
-  "fat": "<number>g",
-  "notes": "optional explanation for low confidence or vague descriptions"
-}
-
-Standard portion sizes to use:
-- Banana: medium (105 cal)
-- Apple: medium (95 cal)
-- Tablespoon: 15ml
-- Teaspoon: 5ml
-- Cup: 240ml
-- Ounce: 28g
-- Chicken breast: 6oz raw (~280 cal)
-- Salmon fillet: 6oz (~350 cal)
-- Pasta: 1 cup cooked (~200 cal)
-- Rice: 1 cup cooked (~200 cal)
-- Bread slice: 1 slice (~80 cal)
-- Egg: large (70 cal)
-- Greek yogurt: 1 cup (~130 cal)
-- Olive oil: 1 tbsp (120 cal)
-- Butter: 1 tbsp (100 cal)
-- Honey: 1 tbsp (64 cal)
-- Cheese: 1 oz (~110 cal)
+Standard portions:
+- Banana (medium): 105 cal
+- Apple (medium): 95 cal
+- Greek yogurt (1 cup): 130 cal, low-fat (1 tbsp): 8 cal
+- Honey (1 tsp): 21 cal, (1 tbsp): 64 cal
+- Chicken breast (6oz): 280 cal
+- Salmon (6oz): 350 cal
+- Egg (large): 70 cal
+- Olive oil (1 tbsp): 120 cal
+- Rice/Pasta (1 cup cooked): 200 cal
+- Bread (1 slice): 80 cal
 
 Guidelines:
-- Be conservative with estimates
 - Round to nearest 5 calories
-- For vague descriptions like "salad" or "sandwich", assume medium portions
-- Set confidence to "low" for vague descriptions and add explanatory notes
-- Set confidence to "high" for specific, detailed descriptions
-- Set confidence to "medium" for reasonably clear descriptions with some ambiguity`
+- confidence: "high" for detailed descriptions, "medium" for reasonable, "low" for vague
+- Always provide breakdown array with each component`
             })
         });
 
         if (!response.ok) {
-            throw new Error('API request failed');
+            const errorText = await response.text();
+            console.error('API Error:', response.status, errorText);
+            throw new Error(`API returned ${response.status}`);
         }
 
         const data = await response.json();
-        let content = data.content?.[0]?.text || data.message || '';
+        console.log('Calorie API Response:', data);
+
+        // Handle both response formats: { content: "text" } and { content: [{ text: "..." }] }
+        let content = '';
+        if (typeof data.content === 'string') {
+            content = data.content;
+        } else if (Array.isArray(data.content) && data.content[0]?.text) {
+            content = data.content[0].text;
+        } else if (data.message) {
+            content = data.message;
+        }
+
+        if (!content) {
+            console.error('Empty response content:', data);
+            throw new Error('Empty response from API');
+        }
 
         // Clean up response - remove markdown code blocks if present
         content = content.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
 
-        // Parse JSON from response
-        const jsonMatch = content.match(/\{[\s\S]*\}/);
-        if (!jsonMatch) {
-            throw new Error('Invalid response format');
+        // Try multiple JSON extraction methods
+        let estimate;
+        try {
+            // Method 1: Direct parse (if response is clean JSON)
+            estimate = JSON.parse(content);
+        } catch (e1) {
+            // Method 2: Extract JSON object from response
+            const jsonMatch = content.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                try {
+                    estimate = JSON.parse(jsonMatch[0]);
+                } catch (e2) {
+                    console.error('JSON parse failed:', content);
+                    throw new Error('Could not parse response as JSON');
+                }
+            } else {
+                console.error('No JSON found in response:', content);
+                throw new Error('Invalid response format - no JSON found');
+            }
         }
 
-        const estimate = JSON.parse(jsonMatch[0]);
+        // Validate the estimate has required fields
+        if (!estimate || typeof estimate.calories !== 'number') {
+            console.error('Invalid estimate structure:', estimate);
+            throw new Error('Invalid estimate data');
+        }
+
         lastCalorieEstimate = estimate;
 
         // Update calorie input
@@ -8300,19 +8319,20 @@ Guidelines:
         if (estimateBtn) {
             estimateBtn.disabled = false;
             estimateBtn.classList.remove('loading');
-            estimateBtn.innerHTML = '🤖 Estimate';
+            estimateBtn.innerHTML = '🤖 Retry';
         }
 
-        // Show error in result container
+        // Show helpful error in result container
         if (resultContainer) {
             resultContainer.innerHTML = `
-                <div style="margin-top: 8px; padding: 8px; background: #ffebee; border-radius: var(--radius-sm); font-size: 0.85rem; color: #c62828;">
-                    Unable to estimate. Please enter calories manually.
+                <div style="margin-top: 8px; padding: 10px; background: #fff3e0; border-radius: var(--radius-sm); font-size: 0.85rem; color: #e65100; border-left: 3px solid #ff9800;">
+                    <div style="margin-bottom: 6px;"><strong>Unable to estimate automatically</strong></div>
+                    <div style="color: #666;">💡 Try being more specific (e.g., "1 medium banana, 2 tbsp yogurt") or enter calories manually.</div>
                 </div>
             `;
         }
 
-        showToast('Unable to estimate. Please enter manually.');
+        showToast('Estimation failed. Try more details or enter manually.');
     }
 }
 
