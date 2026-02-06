@@ -2740,22 +2740,23 @@
                 <div class="calorie-balance" id="calorie-balance">
                     <div class="calorie-balance-header">
                         <span class="calorie-balance-title">Today's Calorie Balance</span>
-                        <span class="calorie-balance-net balanced" id="calorie-net">0 cal</span>
+                        <span class="calorie-balance-net balanced" id="calorie-net">🔥 2000 cal deficit</span>
                     </div>
                     <div class="calorie-bar-container">
-                        <span class="calorie-bar-label">In</span>
+                        <span class="calorie-bar-label">🍽️ In</span>
                         <div class="calorie-bar">
                             <div class="calorie-bar-fill in" id="calories-in-bar" style="width: 0%"></div>
                         </div>
                         <span class="calorie-bar-value" id="calories-in-value">0</span>
                     </div>
                     <div class="calorie-bar-container">
-                        <span class="calorie-bar-label">Out</span>
+                        <span class="calorie-bar-label">🔥 Out</span>
                         <div class="calorie-bar">
                             <div class="calorie-bar-fill out" id="calories-out-bar" style="width: 0%"></div>
                         </div>
-                        <span class="calorie-bar-value" id="calories-out-value">0</span>
+                        <span class="calorie-bar-value" id="calories-out-value">2000</span>
                     </div>
+                    <p class="text-muted" style="font-size: 0.7rem; margin-top: 8px; text-align: center;">Base metabolism: 2,000 cal + workout calories</p>
                 </div>
 
                 <!-- Week Stats -->
@@ -5491,11 +5492,12 @@ function renderWeekPlanner() {
 
         // Day summary with improved display - positive deficit is good
         const deficitClass = deficit > 0 ? 'deficit' : deficit < -200 ? 'surplus' : 'balanced';
+        const deficitLabel = deficit > 0 ? `🔥 ${deficit} cal deficit` : deficit < 0 ? `⚠️ ${Math.abs(deficit)} cal surplus` : '✅ balanced';
         const summaryHtml = (dayCalories > 0 || workoutCalories > 0) ? `
             <div class="week-day-summary">
                 <span class="day-total-calories">🍽️ ${dayCalories} cal in</span>
                 <span class="day-workout-info">🔥 ${totalBurn} cal burn${workoutCalories > 0 ? ` (+${workoutCalories} workout)` : ''}</span>
-                <span class="day-net-calories ${deficitClass}">✅ ${deficit > 0 ? '+' : ''}${deficit} deficit</span>
+                <span class="day-net-calories ${deficitClass}">${deficitLabel}</span>
             </div>
         ` : '';
 
@@ -9792,7 +9794,12 @@ function calculateCaloriesBurned(workoutType, durationMinutes, userWeight = 70) 
 }
 
 function getTodayStr() {
-    return new Date().toISOString().split('T')[0];
+    // Use local date, not UTC, to avoid off-by-one errors
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function getWeekStartStr() {
@@ -9801,7 +9808,11 @@ function getWeekStartStr() {
     const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday as start
     const weekStart = new Date(now);
     weekStart.setDate(now.getDate() - diff);
-    return weekStart.toISOString().split('T')[0];
+    // Use local date, not UTC
+    const year = weekStart.getFullYear();
+    const month = String(weekStart.getMonth() + 1).padStart(2, '0');
+    const day = String(weekStart.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function getTodaysWorkouts() {
@@ -9937,11 +9948,16 @@ function renderCalorieBalance() {
 
     // Update net display - positive deficit is good
     const netEl = document.getElementById('calorie-net');
-    netEl.textContent = `${deficit > 0 ? '+' : ''}${deficit} cal deficit`;
-    netEl.className = 'calorie-balance-net';
-    if (deficit > 0) netEl.classList.add('deficit'); // green for deficit
-    else if (deficit < -200) netEl.classList.add('surplus'); // red for surplus
-    else netEl.classList.add('balanced');
+    if (deficit > 0) {
+        netEl.textContent = `🔥 ${deficit} cal deficit`;
+        netEl.className = 'calorie-balance-net deficit';
+    } else if (deficit < 0) {
+        netEl.textContent = `⚠️ ${Math.abs(deficit)} cal surplus`;
+        netEl.className = 'calorie-balance-net surplus';
+    } else {
+        netEl.textContent = `✅ balanced`;
+        netEl.className = 'calorie-balance-net balanced';
+    }
 
     // Update bars (scale to total burn for better visual)
     const maxCal = Math.max(totalBurn, caloriesIn, 2500);
@@ -9989,7 +10005,11 @@ function renderWorkoutCalendar() {
     for (let i = 0; i < 7; i++) {
         const date = new Date(weekStart);
         date.setDate(weekStart.getDate() + i);
-        const dateStr = date.toISOString().split('T')[0];
+        // Use local date format, not UTC
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
         const isToday = dateStr === getTodayStr();
         const dayWorkouts = workouts.filter(w => w.date === dateStr);
         const hasWorkout = dayWorkouts.length > 0;
@@ -10018,7 +10038,11 @@ function renderProgressGraph() {
     for (let i = 6; i >= 0; i--) {
         const date = new Date(today);
         date.setDate(today.getDate() - i);
-        const dateStr = date.toISOString().split('T')[0];
+        // Use local date format, not UTC
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const dateStr = `${year}-${month}-${day}`;
 
         // Get calories consumed for this day
         const caloriesIn = getCaloriesInForDate(dateStr);
