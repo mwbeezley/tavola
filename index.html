@@ -3196,8 +3196,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
-    // Clean up duplicate recipes on startup
+    // Clean up bad data on startup
     cleanupDuplicateRecipes();
+    cleanupBadMealPlans();
+    cleanupBadWorkouts();
 
     const profile = getStorage(STORAGE.PROFILE);
     if (profile) {
@@ -3260,6 +3262,78 @@ function cleanupDuplicateRecipes() {
         const cleanedLibrary = Array.from(seen.values());
         setStorage(STORAGE.RECIPES, cleanedLibrary);
         console.log(`Cleaned up ${duplicatesRemoved.length} duplicate recipes:`, duplicatesRemoved);
+    }
+}
+
+function cleanupBadMealPlans() {
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    let cleaned = false;
+
+    Object.keys(mealPlans).forEach(dateStr => {
+        const dayData = mealPlans[dateStr];
+
+        // Check each meal slot
+        ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(slot => {
+            const meal = dayData[slot];
+            if (meal) {
+                // Remove meals with invalid titles (empty, whitespace, date fragments like ", Feb 2")
+                const title = meal.title || '';
+                const isInvalid = !title.trim() ||
+                    title.match(/^[\s,]*$/) ||  // Empty or just comma/spaces
+                    title.match(/^[\s,]*[A-Z][a-z]{2}\s+\d/) ||  // Date fragment like ", Feb 2"
+                    title === 'undefined';  // Literal "undefined"
+
+                if (isInvalid) {
+                    delete dayData[slot];
+                    cleaned = true;
+                    console.log(`Removed invalid ${slot} entry for ${dateStr}: "${title}"`);
+                }
+            }
+        });
+
+        // Also handle legacy format with invalid title at root
+        if (dayData.title) {
+            const title = dayData.title;
+            const isInvalid = !title.trim() ||
+                title.match(/^[\s,]*$/) ||
+                title.match(/^[\s,]*[A-Z][a-z]{2}\s+\d/) ||
+                title === 'undefined';
+
+            if (isInvalid) {
+                delete mealPlans[dateStr];
+                cleaned = true;
+                console.log(`Removed invalid legacy meal plan for ${dateStr}: "${title}"`);
+            }
+        }
+
+        // Clean up empty days
+        if (Object.keys(dayData).length === 0 ||
+            (Object.keys(dayData).length === 1 && dayData.status)) {
+            delete mealPlans[dateStr];
+            cleaned = true;
+        }
+    });
+
+    if (cleaned) {
+        setStorage(STORAGE.MEAL_PLANS, mealPlans);
+        console.log('Cleaned up invalid meal plan entries');
+    }
+}
+
+function cleanupBadWorkouts() {
+    const workouts = getStorage(STORAGE.WORKOUTS) || [];
+    const cleanedWorkouts = workouts.filter(w => {
+        // Remove workouts with undefined type or invalid data
+        const isValid = w.type && w.type !== 'undefined' && w.duration > 0;
+        if (!isValid) {
+            console.log('Removed invalid workout:', w);
+        }
+        return isValid;
+    });
+
+    if (cleanedWorkouts.length !== workouts.length) {
+        setStorage(STORAGE.WORKOUTS, cleanedWorkouts);
+        console.log(`Cleaned up ${workouts.length - cleanedWorkouts.length} invalid workouts`);
     }
 }
 
@@ -5156,7 +5230,9 @@ function renderWeekPlanner() {
         let mealSlotsHtml = '';
         mealTypes.forEach(mt => {
             const meal = dayMeals[mt.key];
-            if (meal?.title) {
+            // Only show meal if it has a real title (not empty, not just whitespace, not a date fragment)
+            const hasValidTitle = meal?.title && meal.title.trim() && !meal.title.match(/^[\s,]*[A-Z][a-z]{2}\s+\d/);
+            if (hasValidTitle) {
                 // Get calories from meal or linked recipe
                 let displayCalories = meal.calories;
                 if (!displayCalories && meal.recipeId) {
@@ -5191,14 +5267,18 @@ function renderWeekPlanner() {
             }
         });
 
-        // Day summary with improved display
-        const netClass = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
-        const netLabel = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
+        // Day summary with improved display - NEW FORMAT
+        // Base TDEE = 2000 cal/day
+        const baseTDEE = 2000;
+        const totalDailyBurn = baseTDEE + workoutCalories;
+        const deficit = totalDailyBurn - dayCalories;
+        const isDeficit = deficit > 0;
+
         const summaryHtml = (dayCalories > 0 || workoutCalories > 0) ? `
             <div class="week-day-summary">
-                <span class="day-total-calories">🔥 ${dayCalories} cal in</span>
-                ${workoutCalories > 0 ? `<span class="day-workout-info">💪 ${workoutCalories} cal burned</span>` : ''}
-                ${dayCalories > 0 || workoutCalories > 0 ? `<span class="day-net-calories ${netClass}">Net: ${netCalories} (${netLabel})</span>` : ''}
+                <span class="day-total-calories">🔥 Daily Burn: ${totalDailyBurn.toLocaleString()} cal (${baseTDEE} base${workoutCalories > 0 ? ' + ' + workoutCalories + ' workout' : ''})</span>
+                <span class="day-consumed">🍽️ Consumed: ${dayCalories} cal</span>
+                <span class="day-net-calories ${isDeficit ? 'deficit' : 'surplus'}">✅ Net ${isDeficit ? 'Deficit' : 'Surplus'}: ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? '🔥' : '⚠️'}</span>
             </div>
         ` : '';
 
@@ -5467,7 +5547,9 @@ function saveManualMeal(dateStr) {
     if (!title) return;
 
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
-    mealPlans[dateStr] = {
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+    // Default to dinner slot for legacy manual entry
+    mealPlans[dateStr].dinner = {
         title,
         calories: calories ? parseInt(calories) : null,
         recipeId: null,
@@ -5535,7 +5617,14 @@ function addRecipeToDay(dateStr, recipeId) {
     if (!recipe) return;
 
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
-    mealPlans[dateStr] = { title: recipe.title, recipeId: recipeId, status: 'planned' };
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+    // Default to dinner slot for legacy add-to-day
+    mealPlans[dateStr].dinner = {
+        title: recipe.title,
+        calories: recipe.nutrition?.calories || null,
+        recipeId: recipeId,
+        status: 'planned'
+    };
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     renderWeekPlanner();
@@ -7374,7 +7463,7 @@ function getCurrentWeekDates() {
     for (let i = 0; i < 7; i++) {
         const date = new Date(monday);
         date.setDate(monday.getDate() + i);
-        dates.push(date.toISOString().split('T')[0]);
+        dates.push(getLocalDateStr(date));
     }
     return dates;
 }
@@ -9201,7 +9290,15 @@ function calculateCaloriesBurned(workoutType, durationMinutes, userWeight = 70) 
 }
 
 function getTodayStr() {
-    return new Date().toISOString().split('T')[0];
+    return getLocalDateStr(new Date());
+}
+
+// Get YYYY-MM-DD in local timezone (not UTC!) to fix off-by-one date bugs
+function getLocalDateStr(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function getWeekStartStr() {
@@ -9210,7 +9307,7 @@ function getWeekStartStr() {
     const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday as start
     const weekStart = new Date(now);
     weekStart.setDate(now.getDate() - diff);
-    return weekStart.toISOString().split('T')[0];
+    return getLocalDateStr(weekStart);
 }
 
 function getTodaysWorkouts() {
@@ -9269,7 +9366,7 @@ function calculateStreak() {
     const today = getTodayStr();
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const yesterdayStr = getLocalDateStr(yesterday);
 
     // Check if there's a workout today or yesterday to continue streak
     if (workoutDates[0] !== today && workoutDates[0] !== yesterdayStr) {
@@ -9277,10 +9374,10 @@ function calculateStreak() {
     }
 
     let streak = 0;
-    let currentDate = new Date(workoutDates[0]);
+    let currentDate = new Date(workoutDates[0] + 'T12:00:00');
 
     for (const dateStr of workoutDates) {
-        const checkDate = currentDate.toISOString().split('T')[0];
+        const checkDate = getLocalDateStr(currentDate);
         if (dateStr === checkDate) {
             streak++;
             currentDate.setDate(currentDate.getDate() - 1);
@@ -9301,25 +9398,35 @@ function renderWorkoutsView() {
 
 function renderCalorieBalance() {
     const caloriesIn = getTodaysCaloriesIn();
-    const caloriesOut = getTodaysCaloriesOut();
-    const netCalories = caloriesIn - caloriesOut;
+    const workoutCalories = getTodaysCaloriesOut();
 
-    // Update values
+    // NEW FORMAT: Base TDEE + workout = total daily burn
+    const baseTDEE = 2000;
+    const totalDailyBurn = baseTDEE + workoutCalories;
+    const deficit = totalDailyBurn - caloriesIn;
+    const isDeficit = deficit > 0;
+
+    // Update values with new labels
     document.getElementById('calories-in-value').textContent = caloriesIn;
-    document.getElementById('calories-out-value').textContent = caloriesOut;
+    document.getElementById('calories-out-value').textContent = totalDailyBurn;
 
-    // Update net display
+    // Update the labels via inner elements
+    const inLabel = document.querySelector('#calories-in-bar')?.closest('.calorie-balance-item')?.querySelector('.calorie-balance-label');
+    const outLabel = document.querySelector('#calories-out-bar')?.closest('.calorie-balance-item')?.querySelector('.calorie-balance-label');
+    if (inLabel) inLabel.textContent = '🍽️ Consumed';
+    if (outLabel) outLabel.textContent = `🔥 Daily Burn (${baseTDEE}${workoutCalories > 0 ? '+' + workoutCalories : ''})`;
+
+    // Update net display - show as POSITIVE deficit
     const netEl = document.getElementById('calorie-net');
-    netEl.textContent = `${netCalories > 0 ? '+' : ''}${netCalories} cal`;
+    netEl.textContent = `${isDeficit ? '✅' : '⚠️'} ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? 'deficit' : 'surplus'}`;
     netEl.className = 'calorie-balance-net';
-    if (netCalories > 200) netEl.classList.add('surplus');
-    else if (netCalories < -200) netEl.classList.add('deficit');
-    else netEl.classList.add('balanced');
+    if (isDeficit) netEl.classList.add('deficit');
+    else netEl.classList.add('surplus');
 
-    // Update bars (scale to reasonable daily intake ~2000 cal)
-    const maxCal = 2000;
+    // Update bars (scale to total daily burn for better visualization)
+    const maxCal = Math.max(totalDailyBurn, caloriesIn, 2500);
     const inPercent = Math.min((caloriesIn / maxCal) * 100, 100);
-    const outPercent = Math.min((caloriesOut / maxCal) * 100, 100);
+    const outPercent = Math.min((totalDailyBurn / maxCal) * 100, 100);
 
     document.getElementById('calories-in-bar').style.width = `${inPercent}%`;
     document.getElementById('calories-out-bar').style.width = `${outPercent}%`;
@@ -9362,7 +9469,7 @@ function renderWorkoutCalendar() {
     for (let i = 0; i < 7; i++) {
         const date = new Date(weekStart);
         date.setDate(weekStart.getDate() + i);
-        const dateStr = date.toISOString().split('T')[0];
+        const dateStr = getLocalDateStr(date);
         const isToday = dateStr === getTodayStr();
         const dayWorkouts = workouts.filter(w => w.date === dateStr);
         const hasWorkout = dayWorkouts.length > 0;

@@ -42,6 +42,10 @@
             --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             background-color: var(--cream);
@@ -50,7 +54,15 @@
             min-height: 100vh;
             padding-bottom: 80px;
         }
-        .container { max-width: 900px; margin: 0 auto; padding: 0 16px; }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 16px;
+            width: 100%;
+        }
+        main {
+            width: 100%;
+        }
         h1, h2, h3 { font-family: 'Lora', serif; font-weight: 500; }
         .logo { font-family: 'Dancing Script', cursive; font-size: 2rem; font-weight: 700; color: var(--cerulean); text-decoration: none; }
 
@@ -100,6 +112,7 @@
             bottom: 0;
             left: 0;
             right: 0;
+            width: 100%;
             background: var(--white);
             border-top: 1px solid var(--gray-medium);
             display: flex;
@@ -1365,6 +1378,440 @@
         .pantry-status.use-soon { background: var(--warning); }
         .pantry-status.check { background: var(--danger); }
 
+        /* Smart Shopping Generator */
+        .smart-shopping-card {
+            background: linear-gradient(135deg, var(--seafoam-light) 0%, #e8f4f8 100%);
+            border: 1px solid var(--cerulean);
+            padding: 16px;
+        }
+        .smart-shopping-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .smart-shopping-icon { font-size: 1.5rem; }
+        .smart-shopping-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--navy);
+            margin: 0;
+        }
+        .smart-shopping-features {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.85rem;
+        }
+        .smart-shopping-features li {
+            padding: 4px 0;
+            color: var(--gray-dark);
+        }
+        .divider-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+
+        /* Pantry Alerts Section */
+        .pantry-alerts {
+            margin-bottom: 16px;
+        }
+        .pantry-alert-card {
+            background: #fff8e6;
+            border: 1px solid #ffc107;
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-bottom: 8px;
+        }
+        .pantry-alert-card.urgent {
+            background: #ffebee;
+            border-color: #ef5350;
+        }
+        .pantry-alert-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .pantry-alert-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            font-size: 0.9rem;
+        }
+        .pantry-alert-list li {
+            padding: 4px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Shopping List Base */
+        .shopping-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        .shopping-item.checked { opacity: 0.5; }
+        .shopping-item.checked .shopping-item-name { text-decoration: line-through; }
+        .shopping-item-checkbox { width: 22px; height: 22px; accent-color: var(--cerulean); }
+
+        /* Shopping List with Pantry Status */
+        .shopping-item-enhanced {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+        }
+        .shopping-item-enhanced.checked {
+            opacity: 0.6;
+        }
+        .shopping-item-enhanced .shopping-item-checkbox {
+            margin-top: 2px;
+        }
+        .shopping-item-content {
+            flex: 1;
+        }
+        .shopping-item-name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .shopping-item-name {
+            font-weight: 500;
+        }
+        .shopping-item-qty {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+        .shopping-item-pantry-status {
+            font-size: 0.8rem;
+            color: var(--gray-text);
+            margin-top: 4px;
+        }
+        .shopping-item-pantry-status.has-some {
+            color: var(--cerulean);
+        }
+        .shopping-item-pantry-status.missing {
+            color: var(--warning);
+        }
+        .shopping-category-header {
+            font-weight: 600;
+            color: var(--cerulean);
+            padding: 12px 0 8px;
+            margin-top: 8px;
+            border-bottom: 1px solid var(--gray-medium);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .shopping-list-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--seafoam-light);
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+        .shopping-summary-cost {
+            font-weight: 600;
+            color: var(--navy);
+        }
+        .shopping-suggestions {
+            background: #f5f5f5;
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-bottom: 16px;
+        }
+        .shopping-suggestions-header {
+            font-weight: 600;
+            color: var(--gray-dark);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .shopping-suggestion-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--gray-medium);
+        }
+        .shopping-suggestion-item:last-child {
+            border-bottom: none;
+        }
+        .suggestion-add-btn {
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            background: var(--cerulean);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+
+        /* Calorie Estimation UI */
+        .calorie-input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+        }
+        .calorie-input-row .form-input {
+            flex: 1;
+        }
+        .estimate-btn {
+            padding: 10px 16px;
+            background: var(--seafoam-light);
+            color: var(--navy);
+            border: 1px solid var(--cerulean);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .estimate-btn:hover {
+            background: var(--cerulean);
+            color: white;
+        }
+        .estimate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .estimate-btn.loading {
+            background: var(--gray-light);
+            color: var(--gray-text);
+        }
+        .estimate-result {
+            margin-top: 8px;
+            padding: 10px 12px;
+            background: var(--seafoam-light);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+        .estimate-result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .estimate-result-text {
+            color: var(--navy);
+        }
+        .estimate-result-text .confidence {
+            color: var(--gray-text);
+            font-size: 0.8rem;
+        }
+        .estimate-details-btn {
+            font-size: 0.8rem;
+            padding: 4px 10px;
+            background: white;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+        }
+        .estimate-details-btn:hover {
+            background: var(--gray-light);
+        }
+        .estimate-breakdown {
+            margin-top: 12px;
+            padding: 12px;
+            background: white;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--gray-medium);
+        }
+        .estimate-breakdown h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            color: var(--navy);
+        }
+        .estimate-breakdown ul {
+            margin: 0 0 12px 0;
+            padding-left: 20px;
+            font-size: 0.85rem;
+        }
+        .estimate-breakdown li {
+            padding: 2px 0;
+            color: var(--gray-dark);
+        }
+        .estimate-macros {
+            display: flex;
+            gap: 16px;
+            padding-top: 8px;
+            border-top: 1px solid var(--gray-light);
+            font-size: 0.85rem;
+        }
+        .estimate-macros span {
+            color: var(--gray-text);
+        }
+        .estimate-macros strong {
+            color: var(--navy);
+        }
+        .confidence-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .confidence-badge.high {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .confidence-badge.medium {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+        .confidence-badge.low {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .calorie-input-estimated {
+            border-color: var(--success) !important;
+            background: #f8fff8;
+        }
+
+        /* Quick Add Delivery Section */
+        .quick-add-section {
+            margin-top: 16px;
+        }
+        .quick-add-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius);
+        }
+        .quick-add-header:hover {
+            background: var(--seafoam-light);
+        }
+        .quick-add-content {
+            display: none;
+            padding: 16px;
+            background: var(--gray-light);
+            border-radius: 0 0 var(--radius) var(--radius);
+            margin-top: -8px;
+        }
+        .quick-add-content.open {
+            display: block;
+        }
+        .quick-add-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .quick-add-btn {
+            padding: 12px;
+            background: white;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius);
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+        }
+        .quick-add-btn:hover {
+            border-color: var(--cerulean);
+            background: var(--seafoam-light);
+        }
+
+        /* Batch Cooking Pantry Check */
+        .batch-ingredient-check {
+            margin-top: 16px;
+            padding: 16px;
+            background: var(--gray-light);
+            border-radius: var(--radius);
+        }
+        .batch-ingredient-header {
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .batch-ingredient-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 0;
+            font-size: 0.9rem;
+        }
+        .batch-ingredient-status {
+            width: 20px;
+            text-align: center;
+        }
+        .batch-missing-items {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid var(--gray-medium);
+        }
+
+        /* Meal Planning Mode Selection */
+        .planning-mode-selector {
+            margin-bottom: 16px;
+        }
+        .planning-mode-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: var(--gray-light);
+            border-radius: var(--radius);
+            margin-bottom: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .planning-mode-option:hover {
+            background: var(--seafoam-light);
+        }
+        .planning-mode-option.selected {
+            border-color: var(--cerulean);
+            background: var(--seafoam-light);
+        }
+        .planning-mode-option input[type="radio"] {
+            margin-top: 4px;
+        }
+        .planning-mode-content {
+            flex: 1;
+        }
+        .planning-mode-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        .planning-mode-desc {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+        .planning-pantry-summary {
+            background: var(--gray-light);
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+        }
+        .planning-pantry-summary h4 {
+            margin: 0 0 8px 0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         /* Pantry Scan */
         .scan-upload-area {
             border: 2px dashed var(--gray-medium);
@@ -2086,8 +2533,8 @@
                 <div class="empty-state hidden" id="week-empty">
                     <div class="empty-state-icon">📅</div>
                     <div class="empty-state-title">Your week is empty</div>
-                    <p class="empty-state-text">Let's fill it with delicious, healthy meals! Nonna can create a complete weekly plan based on your preferences.</p>
-                    <button class="btn btn-primary" onclick="askNonnaForWeekPlan()">🤖 Ask Nonna to Plan This Week</button>
+                    <p class="empty-state-text">Let's fill it with delicious, healthy meals! Nonna can create a complete weekly plan based on your preferences and pantry.</p>
+                    <button class="btn btn-primary" onclick="openPlanningModeModal()">🤖 Plan This Week</button>
                 </div>
             </div>
 
@@ -2322,15 +2769,74 @@
                                 <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add</button>
                             </div>
                         </div>
+
+                        <!-- What Can I Make Button -->
+                        <button class="btn btn-primary btn-block mb-16" onclick="openWhatCanIMakeModal()" style="padding: 14px; font-size: 1rem;">
+                            🍳 What Can I Make Right Now?
+                        </button>
+
+                        <!-- Pantry Alerts Section -->
+                        <div class="pantry-alerts" id="pantry-alerts"></div>
+
+                        <!-- Quick Add from Delivery -->
+                        <div class="quick-add-section" id="quick-add-section">
+                            <div class="quick-add-header" onclick="toggleQuickAddSection()">
+                                <span>🚚 Quick Add from Delivery</span>
+                                <span class="accordion-icon">▼</span>
+                            </div>
+                            <div class="quick-add-content" id="quick-add-content">
+                                <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 12px;">Just got groceries? Add them quickly:</p>
+                                <div class="quick-add-btns">
+                                    <button class="quick-add-btn" onclick="openDeliveryQuickAdd('misfits')">
+                                        <div style="font-size: 1.2rem;">🥬</div>
+                                        <div style="font-weight: 500;">Misfits Market</div>
+                                    </button>
+                                    <button class="quick-add-btn" onclick="openDeliveryQuickAdd('wholefoods')">
+                                        <div style="font-size: 1.2rem;">🛒</div>
+                                        <div style="font-weight: 500;">Whole Foods</div>
+                                    </button>
+                                    <button class="quick-add-btn" onclick="openDeliveryQuickAdd('csa')">
+                                        <div style="font-size: 1.2rem;">🌱</div>
+                                        <div style="font-weight: 500;">CSA Pickup</div>
+                                    </button>
+                                    <button class="quick-add-btn" onclick="openDeliveryQuickAdd('custom')">
+                                        <div style="font-size: 1.2rem;">➕</div>
+                                        <div style="font-weight: 500;">Custom</div>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="divider-label mb-16 mt-16">Pantry Inventory</div>
+
                         <div id="pantry-list"></div>
                         <div class="empty-state" id="pantry-empty">
                             <div class="empty-state-icon">🥫</div>
                             <div class="empty-state-title">Pantry is empty</div>
                             <p>Add items manually or scan with your camera.</p>
                         </div>
-                        <button class="btn btn-secondary mt-16 btn-block" onclick="askNonnaWithPantry()">🍳 What can I make?</button>
                     </div>
                     <div class="tab-content" id="kitchen-shopping">
+                        <!-- Smart Shopping Generator -->
+                        <div class="card smart-shopping-card mb-16" id="smart-shopping-generator">
+                            <div class="smart-shopping-header">
+                                <span class="smart-shopping-icon">🤖</span>
+                                <h3 class="smart-shopping-title">Generate Smart Shopping List</h3>
+                            </div>
+                            <p class="text-muted mb-12" style="font-size: 0.85rem;">Automatically creates a list based on:</p>
+                            <ul class="smart-shopping-features">
+                                <li>📅 Your weekly meal plan (all meals)</li>
+                                <li>📦 Current pantry inventory</li>
+                                <li>⚠️ Items running low</li>
+                                <li>🌟 Your typical staples</li>
+                            </ul>
+                            <button class="btn btn-primary btn-block mt-12" onclick="generateSmartShoppingList()">
+                                🎯 Generate from This Week
+                            </button>
+                        </div>
+
+                        <div class="divider-label mb-16">Your Shopping Lists</div>
+
                         <div class="flex flex-between flex-center mb-16">
                             <select class="form-select" id="shopping-list-select" style="max-width: 200px;" onchange="loadShoppingList()">
                                 <option value="weekly">Weekly Groceries</option>
@@ -2350,16 +2856,16 @@
                     </div>
                     <div class="tab-content" id="kitchen-batch">
                         <div class="card">
-                            <h3 class="card-title">Plan Batch Cooking</h3>
+                            <h3 class="card-title">🍱 Plan Batch Cooking Session</h3>
                             <div class="form-group">
                                 <label>What to prep?</label>
                                 <div class="grid grid-2">
-                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="chicken"> Chicken</label>
-                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="fish"> Fish</label>
-                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="grains"> Grains</label>
-                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="vegetables"> Veggies</label>
-                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="sauce"> Sauces</label>
-                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="soup"> Soup</label>
+                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="chicken" onchange="checkBatchIngredients()"> Chicken</label>
+                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="fish" onchange="checkBatchIngredients()"> Fish</label>
+                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="grains" onchange="checkBatchIngredients()"> Grains</label>
+                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="vegetables" onchange="checkBatchIngredients()"> Veggies</label>
+                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="sauce" onchange="checkBatchIngredients()"> Sauces</label>
+                                    <label class="checkbox-item"><input type="checkbox" name="batchItems" value="soup" onchange="checkBatchIngredients()"> Soup</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -2370,7 +2876,23 @@
                                     <option value="3">3+ hours</option>
                                 </select>
                             </div>
-                            <button class="btn btn-primary btn-block" onclick="generateBatchPlan()">Generate Plan</button>
+
+                            <!-- Pantry Ingredient Check -->
+                            <div class="batch-ingredient-check" id="batch-ingredient-check" style="display: none;">
+                                <div class="batch-ingredient-header">
+                                    <span>📦</span> Ingredient Check
+                                </div>
+                                <div id="batch-ingredient-list"></div>
+                                <div class="batch-missing-items" id="batch-missing-items" style="display: none;">
+                                    <div style="font-weight: 600; margin-bottom: 8px;">Missing Items:</div>
+                                    <div id="batch-missing-list"></div>
+                                    <button class="btn btn-secondary btn-sm mt-8" onclick="addBatchMissingToShopping()">
+                                        🛒 Add Missing to Shopping List
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary btn-block mt-16" onclick="generateBatchPlan()">Generate Plan</button>
                         </div>
                         <div id="batch-plan-output"></div>
                     </div>
@@ -2674,8 +3196,10 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initApp() {
-    // Clean up duplicate recipes on startup
+    // Clean up bad data on startup
     cleanupDuplicateRecipes();
+    cleanupBadMealPlans();
+    cleanupBadWorkouts();
 
     const profile = getStorage(STORAGE.PROFILE);
     if (profile) {
@@ -2738,6 +3262,78 @@ function cleanupDuplicateRecipes() {
         const cleanedLibrary = Array.from(seen.values());
         setStorage(STORAGE.RECIPES, cleanedLibrary);
         console.log(`Cleaned up ${duplicatesRemoved.length} duplicate recipes:`, duplicatesRemoved);
+    }
+}
+
+function cleanupBadMealPlans() {
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    let cleaned = false;
+
+    Object.keys(mealPlans).forEach(dateStr => {
+        const dayData = mealPlans[dateStr];
+
+        // Check each meal slot
+        ['breakfast', 'lunch', 'dinner', 'snacks'].forEach(slot => {
+            const meal = dayData[slot];
+            if (meal) {
+                // Remove meals with invalid titles (empty, whitespace, date fragments like ", Feb 2")
+                const title = meal.title || '';
+                const isInvalid = !title.trim() ||
+                    title.match(/^[\s,]*$/) ||  // Empty or just comma/spaces
+                    title.match(/^[\s,]*[A-Z][a-z]{2}\s+\d/) ||  // Date fragment like ", Feb 2"
+                    title === 'undefined';  // Literal "undefined"
+
+                if (isInvalid) {
+                    delete dayData[slot];
+                    cleaned = true;
+                    console.log(`Removed invalid ${slot} entry for ${dateStr}: "${title}"`);
+                }
+            }
+        });
+
+        // Also handle legacy format with invalid title at root
+        if (dayData.title) {
+            const title = dayData.title;
+            const isInvalid = !title.trim() ||
+                title.match(/^[\s,]*$/) ||
+                title.match(/^[\s,]*[A-Z][a-z]{2}\s+\d/) ||
+                title === 'undefined';
+
+            if (isInvalid) {
+                delete mealPlans[dateStr];
+                cleaned = true;
+                console.log(`Removed invalid legacy meal plan for ${dateStr}: "${title}"`);
+            }
+        }
+
+        // Clean up empty days
+        if (Object.keys(dayData).length === 0 ||
+            (Object.keys(dayData).length === 1 && dayData.status)) {
+            delete mealPlans[dateStr];
+            cleaned = true;
+        }
+    });
+
+    if (cleaned) {
+        setStorage(STORAGE.MEAL_PLANS, mealPlans);
+        console.log('Cleaned up invalid meal plan entries');
+    }
+}
+
+function cleanupBadWorkouts() {
+    const workouts = getStorage(STORAGE.WORKOUTS) || [];
+    const cleanedWorkouts = workouts.filter(w => {
+        // Remove workouts with undefined type or invalid data
+        const isValid = w.type && w.type !== 'undefined' && w.duration > 0;
+        if (!isValid) {
+            console.log('Removed invalid workout:', w);
+        }
+        return isValid;
+    });
+
+    if (cleanedWorkouts.length !== workouts.length) {
+        setStorage(STORAGE.WORKOUTS, cleanedWorkouts);
+        console.log(`Cleaned up ${workouts.length - cleanedWorkouts.length} invalid workouts`);
     }
 }
 
@@ -4634,7 +5230,9 @@ function renderWeekPlanner() {
         let mealSlotsHtml = '';
         mealTypes.forEach(mt => {
             const meal = dayMeals[mt.key];
-            if (meal?.title) {
+            // Only show meal if it has a real title (not empty, not just whitespace, not a date fragment)
+            const hasValidTitle = meal?.title && meal.title.trim() && !meal.title.match(/^[\s,]*[A-Z][a-z]{2}\s+\d/);
+            if (hasValidTitle) {
                 // Get calories from meal or linked recipe
                 let displayCalories = meal.calories;
                 if (!displayCalories && meal.recipeId) {
@@ -4669,14 +5267,18 @@ function renderWeekPlanner() {
             }
         });
 
-        // Day summary with improved display
-        const netClass = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
-        const netLabel = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
+        // Day summary with improved display - NEW FORMAT
+        // Base TDEE = 2000 cal/day
+        const baseTDEE = 2000;
+        const totalDailyBurn = baseTDEE + workoutCalories;
+        const deficit = totalDailyBurn - dayCalories;
+        const isDeficit = deficit > 0;
+
         const summaryHtml = (dayCalories > 0 || workoutCalories > 0) ? `
             <div class="week-day-summary">
-                <span class="day-total-calories">🔥 ${dayCalories} cal in</span>
-                ${workoutCalories > 0 ? `<span class="day-workout-info">💪 ${workoutCalories} cal burned</span>` : ''}
-                ${dayCalories > 0 || workoutCalories > 0 ? `<span class="day-net-calories ${netClass}">Net: ${netCalories} (${netLabel})</span>` : ''}
+                <span class="day-total-calories">🔥 Daily Burn: ${totalDailyBurn.toLocaleString()} cal (${baseTDEE} base${workoutCalories > 0 ? ' + ' + workoutCalories + ' workout' : ''})</span>
+                <span class="day-consumed">🍽️ Consumed: ${dayCalories} cal</span>
+                <span class="day-net-calories ${isDeficit ? 'deficit' : 'surplus'}">✅ Net ${isDeficit ? 'Deficit' : 'Surplus'}: ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? '🔥' : '⚠️'}</span>
             </div>
         ` : '';
 
@@ -4810,7 +5412,13 @@ function openManualMealSlotEntry(dateStr, mealType) {
             </div>
             <div class="form-group">
                 <label>Calories (optional)</label>
-                <input type="number" class="form-input" id="manual-meal-calories" placeholder="e.g., 350">
+                <div class="calorie-input-row">
+                    <input type="number" class="form-input" id="manual-meal-calories" placeholder="e.g., 350">
+                    <button type="button" class="estimate-btn" id="estimate-calories-btn" onclick="estimateCalories('manual-meal-name', 'manual-meal-calories')">
+                        🤖 Estimate
+                    </button>
+                </div>
+                <div id="calorie-estimate-result"></div>
             </div>
         </div>
         <div class="modal-footer">
@@ -4912,6 +5520,16 @@ function openManualMealEntry(dateStr) {
                 <label>Meal Name</label>
                 <input type="text" class="form-input" id="manual-meal-input" placeholder="e.g., Grilled Salmon">
             </div>
+            <div class="form-group">
+                <label>Calories (optional)</label>
+                <div class="calorie-input-row">
+                    <input type="number" class="form-input" id="manual-meal-input-calories" placeholder="e.g., 350">
+                    <button type="button" class="estimate-btn" onclick="estimateCalories('manual-meal-input', 'manual-meal-input-calories')">
+                        🤖 Estimate
+                    </button>
+                </div>
+                <div id="calorie-estimate-result-manual"></div>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -4923,11 +5541,20 @@ function openManualMealEntry(dateStr) {
 
 function saveManualMeal(dateStr) {
     const input = document.getElementById('manual-meal-input');
+    const caloriesInput = document.getElementById('manual-meal-input-calories');
     const title = input.value.trim();
+    const calories = caloriesInput?.value;
     if (!title) return;
 
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
-    mealPlans[dateStr] = { title, recipeId: null, status: 'planned' };
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+    // Default to dinner slot for legacy manual entry
+    mealPlans[dateStr].dinner = {
+        title,
+        calories: calories ? parseInt(calories) : null,
+        recipeId: null,
+        status: 'planned'
+    };
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     renderWeekPlanner();
@@ -4990,7 +5617,14 @@ function addRecipeToDay(dateStr, recipeId) {
     if (!recipe) return;
 
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
-    mealPlans[dateStr] = { title: recipe.title, recipeId: recipeId, status: 'planned' };
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+    // Default to dinner slot for legacy add-to-day
+    mealPlans[dateStr].dinner = {
+        title: recipe.title,
+        calories: recipe.nutrition?.calories || null,
+        recipeId: recipeId,
+        status: 'planned'
+    };
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     renderWeekPlanner();
@@ -5054,13 +5688,178 @@ function changeMealForDay(dateStr) {
 }
 
 function askNonnaForWeekPlan() {
+    // Open planning mode selection modal
+    openPlanningModeModal();
+}
+
+function openPlanningModeModal() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const garden = getStorage(STORAGE.GARDEN) || [];
+    const profile = getStorage(STORAGE.PROFILE) || {};
+
+    // Build pantry summary
+    let pantrySummary = '';
+    if (pantry.length > 0) {
+        const categories = {};
+        pantry.forEach(item => {
+            const cat = item.category || categorizeIngredient(item.name);
+            if (!categories[cat]) categories[cat] = [];
+            categories[cat].push(item.name);
+        });
+
+        const categoryList = Object.entries(categories).map(([cat, items]) =>
+            `<strong>${cat}:</strong> ${items.slice(0, 4).join(', ')}${items.length > 4 ? '...' : ''}`
+        ).join('<br>');
+
+        pantrySummary = categoryList;
+    } else {
+        pantrySummary = '<em>Pantry is empty. Add items to enable pantry-aware planning.</em>';
+    }
+
+    // Garden summary
+    let gardenSummary = '';
+    if (garden && garden.length > 0) {
+        const gardenItems = garden.map(g => typeof g === 'string' ? g : g.name).slice(0, 5);
+        gardenSummary = `<br><strong>🌱 Garden Ready:</strong> ${gardenItems.join(', ')}${garden.length > 5 ? '...' : ''}`;
+    }
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">📅 Plan This Week</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted mb-16">How should Nonna plan your meals?</p>
+
+            <div class="planning-mode-selector">
+                <label class="planning-mode-option" onclick="selectPlanningMode('use-pantry')">
+                    <input type="radio" name="planning-mode" value="use-pantry">
+                    <div class="planning-mode-content">
+                        <div class="planning-mode-title">🏠 Use What I Have</div>
+                        <div class="planning-mode-desc">Minimize shopping - prioritize pantry ingredients. Best when you want to use up what you have.</div>
+                    </div>
+                </label>
+
+                <label class="planning-mode-option selected" onclick="selectPlanningMode('balanced')">
+                    <input type="radio" name="planning-mode" value="balanced" checked>
+                    <div class="planning-mode-content">
+                        <div class="planning-mode-title">⚖️ Balanced (Recommended)</div>
+                        <div class="planning-mode-desc">Mix pantry items + fresh ingredients. Good variety with moderate shopping.</div>
+                    </div>
+                </label>
+
+                <label class="planning-mode-option" onclick="selectPlanningMode('shop-freely')">
+                    <input type="radio" name="planning-mode" value="shop-freely">
+                    <div class="planning-mode-content">
+                        <div class="planning-mode-title">🛒 Shop Freely</div>
+                        <div class="planning-mode-desc">Ignore pantry - suggest optimal recipes based only on health goals and preferences.</div>
+                    </div>
+                </label>
+            </div>
+
+            <div class="planning-pantry-summary">
+                <h4>📦 Currently in your pantry:</h4>
+                <div style="font-size: 0.85rem; color: var(--gray-dark);">
+                    ${pantrySummary}
+                    ${gardenSummary}
+                </div>
+            </div>
+
+            <div class="form-group mt-16">
+                <label>Meals to plan</label>
+                <div class="grid grid-2" style="gap: 8px;">
+                    <label class="checkbox-item"><input type="checkbox" id="plan-breakfast"> Breakfast</label>
+                    <label class="checkbox-item"><input type="checkbox" id="plan-lunch"> Lunch</label>
+                    <label class="checkbox-item"><input type="checkbox" id="plan-dinner" checked> Dinner</label>
+                    <label class="checkbox-item"><input type="checkbox" id="plan-snacks"> Snacks</label>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="executePlanningMode()">Ask Nonna to Plan</button>
+        </div>
+    `);
+}
+
+function selectPlanningMode(mode) {
+    // Update visual selection
+    document.querySelectorAll('.planning-mode-option').forEach(opt => {
+        opt.classList.remove('selected');
+    });
+    document.querySelector(`input[value="${mode}"]`).closest('.planning-mode-option').classList.add('selected');
+    document.querySelector(`input[value="${mode}"]`).checked = true;
+}
+
+function executePlanningMode() {
+    const mode = document.querySelector('input[name="planning-mode"]:checked').value;
     const weekDates = getWeekDates(state.currentWeekOffset);
     const startDate = new Date(weekDates[0] + 'T12:00:00');
     const endDate = new Date(weekDates[6] + 'T12:00:00');
     const startStr = startDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
     const endStr = endDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric' });
 
-    askNonna(`Plan my meals for the week of ${startStr} to ${endStr}. Give me a complete 7-day dinner plan.`);
+    // Get selected meal types
+    const mealTypes = [];
+    if (document.getElementById('plan-breakfast')?.checked) mealTypes.push('breakfast');
+    if (document.getElementById('plan-lunch')?.checked) mealTypes.push('lunch');
+    if (document.getElementById('plan-dinner')?.checked) mealTypes.push('dinner');
+    if (document.getElementById('plan-snacks')?.checked) mealTypes.push('snacks');
+
+    if (mealTypes.length === 0) {
+        mealTypes.push('dinner'); // Default to dinner
+    }
+
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const garden = getStorage(STORAGE.GARDEN) || [];
+    const profile = getStorage(STORAGE.PROFILE) || {};
+
+    // Build the prompt based on mode
+    let prompt = `Plan my meals for the week of ${startStr} to ${endStr}. Give me a complete 7-day plan for ${mealTypes.join(', ')}.`;
+
+    if (mode === 'use-pantry') {
+        const pantryItems = pantry.map(p => `${p.name} (${p.qty || 'some'})`).join(', ');
+        const gardenItems = garden.length > 0
+            ? garden.map(g => typeof g === 'string' ? g : g.name).join(', ')
+            : '';
+
+        prompt += `
+
+IMPORTANT: I want to minimize shopping this week. Please create meals using primarily these pantry items:
+${pantryItems}
+${gardenItems ? `\nGarden ready to harvest: ${gardenItems}` : ''}
+
+Goal: Use at least 70% of ingredients from my current inventory. Only suggest buying 5-10 fresh items maximum.`;
+    } else if (mode === 'balanced') {
+        const pantryItems = pantry.map(p => p.name).join(', ');
+        const gardenItems = garden.length > 0
+            ? garden.map(g => typeof g === 'string' ? g : g.name).join(', ')
+            : '';
+
+        prompt += `
+
+I'd like a balanced plan that uses some of my pantry items while adding fresh ingredients.
+Current pantry: ${pantryItems || 'minimal pantry staples'}
+${gardenItems ? `Garden ready: ${gardenItems}` : ''}
+
+Goal: Good variety with moderate shopping (15-20 items). Use some pantry items to reduce waste.`;
+    } else {
+        // shop-freely mode
+        prompt += `
+
+Create optimal meal plans based on health goals and variety. Don't worry about what I currently have - suggest the best recipes for my goals.`;
+    }
+
+    // Add health context if available
+    if (profile.healthConditions) {
+        prompt += `\n\nHealth note: I have ${profile.healthConditions}, so please keep meals appropriate.`;
+    }
+    if (profile.dietaryPrefs) {
+        prompt += `\nDietary preferences: ${profile.dietaryPrefs}`;
+    }
+
+    closeModal();
+    askNonna(prompt);
 }
 
 function generateWeekShoppingList() {
@@ -5109,6 +5908,11 @@ function renderPantry() {
     const pantry = getStorage(STORAGE.PANTRY) || [];
     const container = document.getElementById('pantry-list');
     const empty = document.getElementById('pantry-empty');
+
+    // Render alerts first
+    if (typeof renderPantryAlerts === 'function') {
+        renderPantryAlerts();
+    }
 
     if (pantry.length === 0) {
         container.innerHTML = '';
@@ -5182,6 +5986,584 @@ function askNonnaWithPantry() {
         askNonna(`What can I make with these pantry items: ${items}?`);
     }
 }
+
+// ========================================
+// PANTRY ALERTS & STATUS
+// ========================================
+
+function checkPantryStatus() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const needsAttention = {
+        runningLow: [],
+        expiringSoon: [],
+        outOfStock: []
+    };
+
+    // Define typical quantities for staples
+    const stapleThresholds = {
+        'olive oil': { min: 0.25, unit: 'bottles' },
+        'lemons': { min: 2, unit: 'count' },
+        'garlic': { min: 4, unit: 'cloves' },
+        'cherry tomatoes': { min: 1, unit: 'containers' },
+        'eggs': { min: 4, unit: 'count' },
+        'butter': { min: 0.5, unit: 'sticks' }
+    };
+
+    pantry.forEach(item => {
+        // Check if staple and quantity indicator suggests low
+        const qtyStr = (item.qty || '').toLowerCase();
+        const isLow = qtyStr.includes('low') ||
+                      qtyStr.includes('running') ||
+                      qtyStr.includes('almost') ||
+                      qtyStr.includes('last') ||
+                      qtyStr === '0' ||
+                      qtyStr === '';
+
+        // Check expiration/status
+        if (item.status === 'use-soon') {
+            needsAttention.expiringSoon.push(item);
+        } else if (item.status === 'check') {
+            needsAttention.expiringSoon.push(item);
+        }
+
+        // Check for low quantities based on common patterns
+        if (isLow && !needsAttention.expiringSoon.includes(item)) {
+            needsAttention.runningLow.push(item);
+        }
+    });
+
+    return needsAttention;
+}
+
+function renderPantryAlerts() {
+    const alertsContainer = document.getElementById('pantry-alerts');
+    if (!alertsContainer) return;
+
+    const status = checkPantryStatus();
+    const hasAlerts = status.runningLow.length > 0 || status.expiringSoon.length > 0;
+
+    if (!hasAlerts) {
+        alertsContainer.innerHTML = '';
+        return;
+    }
+
+    let html = '';
+
+    // Expiring soon (urgent)
+    if (status.expiringSoon.length > 0) {
+        html += `
+            <div class="pantry-alert-card urgent">
+                <div class="pantry-alert-header">
+                    <span>🔴</span> Use Soon / Expiring (${status.expiringSoon.length})
+                </div>
+                <ul class="pantry-alert-list">
+                    ${status.expiringSoon.map(item => `
+                        <li>
+                            <span>${item.name}${item.qty ? ` (${item.qty})` : ''}</span>
+                            <span style="font-size: 0.8rem; color: var(--gray-text);">${item.status === 'check' ? 'Check date' : 'Use soon'}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    // Running low
+    if (status.runningLow.length > 0) {
+        html += `
+            <div class="pantry-alert-card">
+                <div class="pantry-alert-header">
+                    <span>🟡</span> Running Low (${status.runningLow.length})
+                </div>
+                <ul class="pantry-alert-list">
+                    ${status.runningLow.map(item => `
+                        <li>
+                            <span>${item.name}${item.qty ? ` (${item.qty})` : ''}</span>
+                        </li>
+                    `).join('')}
+                </ul>
+            </div>
+        `;
+    }
+
+    // Add to shopping list button
+    const allAlertItems = [...status.expiringSoon, ...status.runningLow];
+    if (allAlertItems.length > 0) {
+        html += `
+            <button class="btn btn-secondary btn-block mt-8" onclick="addPantryAlertsToShopping()">
+                🛒 Add All to Shopping List
+            </button>
+        `;
+    }
+
+    alertsContainer.innerHTML = html;
+}
+
+function addPantryAlertsToShopping() {
+    const status = checkPantryStatus();
+    const allItems = [...status.expiringSoon, ...status.runningLow];
+
+    if (allItems.length === 0) {
+        showToast('No items need restocking');
+        return;
+    }
+
+    const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+    const listId = 'pantry-restock';
+
+    // Create or update the restock list
+    lists[listId] = {
+        name: 'Pantry Restock',
+        generatedFrom: 'pantry-alerts',
+        createdAt: new Date().toISOString(),
+        items: allItems.map(item => ({
+            name: item.name,
+            quantity: 'Restock',
+            category: item.category || categorizeIngredient(item.name),
+            checked: false,
+            pantryStatus: item.status === 'use-soon' || item.status === 'check' ? 'Expiring soon' : 'Running low',
+            pantryStatusType: 'missing'
+        }))
+    };
+
+    setStorage(STORAGE.SHOPPING, lists);
+
+    // Navigate to shopping list
+    switchKitchenTab('shopping');
+    setTimeout(() => {
+        updateShoppingListDropdown();
+        document.getElementById('shopping-list-select').value = listId;
+        loadEnhancedShoppingList(listId);
+    }, 100);
+
+    showToast(`Added ${allItems.length} items to Pantry Restock list`);
+}
+
+// ========================================
+// WHAT CAN I MAKE? (Enhanced)
+// ========================================
+
+function openWhatCanIMakeModal() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const garden = getStorage(STORAGE.GARDEN) || [];
+
+    if (pantry.length === 0) {
+        showToast('Add items to your pantry first!');
+        openAddPantryModal();
+        return;
+    }
+
+    // Build ingredient summary
+    const categories = {};
+    pantry.forEach(item => {
+        const cat = item.category || categorizeIngredient(item.name);
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push(item.name);
+    });
+
+    let inventorySummary = '';
+    Object.keys(categories).forEach(cat => {
+        inventorySummary += `<strong>${cat}:</strong> ${categories[cat].join(', ')}<br>`;
+    });
+
+    // Add garden items if available
+    if (garden && garden.length > 0) {
+        const gardenItems = garden.map(g => typeof g === 'string' ? g : g.name).join(', ');
+        inventorySummary += `<strong>Garden Ready:</strong> ${gardenItems}<br>`;
+    }
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">🍳 What Can I Make?</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted mb-16">Nonna will suggest recipes using only what you have on hand.</p>
+
+            <div class="card" style="padding: 12px; margin-bottom: 16px; background: var(--seafoam-light);">
+                <div style="font-weight: 600; margin-bottom: 8px;">📦 Your Current Inventory</div>
+                <div style="font-size: 0.85rem; color: var(--gray-dark);">
+                    ${inventorySummary}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Recipe preferences (optional)</label>
+                <div class="grid grid-2" style="gap: 8px;">
+                    <label class="checkbox-item"><input type="checkbox" id="wcim-quick" value="quick"> Quick (under 30 min)</label>
+                    <label class="checkbox-item"><input type="checkbox" id="wcim-easy" value="easy"> Easy prep</label>
+                    <label class="checkbox-item"><input type="checkbox" id="wcim-lowcal" value="lowcal"> Low calorie</label>
+                    <label class="checkbox-item"><input type="checkbox" id="wcim-protein" value="protein"> High protein</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Meal type</label>
+                <select class="form-select" id="wcim-meal-type">
+                    <option value="any">Any meal</option>
+                    <option value="breakfast">Breakfast</option>
+                    <option value="lunch">Lunch</option>
+                    <option value="dinner">Dinner</option>
+                    <option value="snack">Snack</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="askWhatCanIMake()">Ask Nonna</button>
+        </div>
+    `);
+}
+
+function askWhatCanIMake() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const garden = getStorage(STORAGE.GARDEN) || [];
+    const profile = getStorage(STORAGE.PROFILE) || {};
+
+    // Get preferences
+    const isQuick = document.getElementById('wcim-quick')?.checked;
+    const isEasy = document.getElementById('wcim-easy')?.checked;
+    const isLowCal = document.getElementById('wcim-lowcal')?.checked;
+    const isHighProtein = document.getElementById('wcim-protein')?.checked;
+    const mealType = document.getElementById('wcim-meal-type')?.value || 'any';
+
+    // Build ingredient list
+    const ingredients = pantry.map(item => `${item.name} (${item.qty || 'some'})`).join(', ');
+    const gardenItems = garden.length > 0
+        ? garden.map(g => typeof g === 'string' ? g : g.name).join(', ')
+        : '';
+
+    // Build preferences string
+    const prefs = [];
+    if (isQuick) prefs.push('quick (under 30 minutes)');
+    if (isEasy) prefs.push('easy to prepare');
+    if (isLowCal) prefs.push('lower calorie');
+    if (isHighProtein) prefs.push('high protein');
+
+    let prompt = `I want to cook using only what I have in my pantry. Here's my current inventory:
+
+PANTRY: ${ingredients}
+${gardenItems ? `GARDEN (ready to harvest): ${gardenItems}` : ''}
+
+Suggest 5-7 recipes I can make using ONLY these ingredients (plus common staples like olive oil, salt, pepper, basic spices).
+
+${mealType !== 'any' ? `Looking specifically for ${mealType} ideas.` : ''}
+${prefs.length > 0 ? `Preferences: ${prefs.join(', ')}.` : ''}
+${profile.healthConditions ? `Note: I have ${profile.healthConditions}, so keep recipes appropriate.` : ''}
+
+For each recipe:
+1. Recipe name
+2. Brief description (1-2 sentences)
+3. Which of my pantry items it uses
+4. Estimated prep + cook time
+5. Calorie estimate per serving
+
+Present as a numbered list. Make them Mediterranean-focused when possible.`;
+
+    closeModal();
+    askNonna(prompt);
+}
+
+// ========================================
+// QUICK ADD FROM DELIVERY
+// ========================================
+
+function toggleQuickAddSection() {
+    const content = document.getElementById('quick-add-content');
+    const header = document.querySelector('.quick-add-header .accordion-icon');
+    if (content) {
+        content.classList.toggle('open');
+        if (header) {
+            header.style.transform = content.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+        }
+    }
+}
+
+const DELIVERY_TEMPLATES = {
+    misfits: {
+        name: 'Misfits Market Box',
+        icon: '🥬',
+        items: [
+            { name: 'Cherry tomatoes', qty: '1 container', category: 'Produce' },
+            { name: 'Mixed greens', qty: '1 bag', category: 'Produce' },
+            { name: 'Bell peppers', qty: '3-4', category: 'Produce' },
+            { name: 'Zucchini', qty: '2-3', category: 'Produce' },
+            { name: 'Lemons', qty: '4-6', category: 'Produce' },
+            { name: 'Carrots', qty: '1 bag', category: 'Produce' },
+            { name: 'Potatoes', qty: '2 lbs', category: 'Produce' },
+            { name: 'Onions', qty: '3-4', category: 'Produce' },
+            { name: 'Apples', qty: '4-5', category: 'Produce' },
+            { name: 'Sweet potatoes', qty: '2-3', category: 'Produce' }
+        ]
+    },
+    wholefoods: {
+        name: 'Whole Foods Order',
+        icon: '🛒',
+        items: [
+            { name: 'Salmon fillet', qty: '1 lb', category: 'Proteins' },
+            { name: 'Chicken breast', qty: '1.5 lbs', category: 'Proteins' },
+            { name: 'Greek yogurt', qty: '32 oz', category: 'Dairy' },
+            { name: 'Feta cheese', qty: '8 oz', category: 'Dairy' },
+            { name: 'Baby spinach', qty: '1 container', category: 'Produce' },
+            { name: 'Avocados', qty: '3-4', category: 'Produce' },
+            { name: 'Olive oil', qty: '1 bottle', category: 'Pantry' },
+            { name: 'Hummus', qty: '1 container', category: 'Pantry' },
+            { name: 'Whole grain bread', qty: '1 loaf', category: 'Grains' },
+            { name: 'Eggs', qty: '1 dozen', category: 'Proteins' }
+        ]
+    },
+    csa: {
+        name: 'CSA Pickup',
+        icon: '🌱',
+        items: [
+            { name: 'Tomatoes', qty: '1 lb', category: 'Produce' },
+            { name: 'Lettuce', qty: '1 head', category: 'Produce' },
+            { name: 'Cucumbers', qty: '2-3', category: 'Produce' },
+            { name: 'Kale', qty: '1 bunch', category: 'Produce' },
+            { name: 'Fresh herbs', qty: '1 bunch', category: 'Produce' },
+            { name: 'Squash', qty: '2-3', category: 'Produce' },
+            { name: 'Beets', qty: '1 bunch', category: 'Produce' },
+            { name: 'Green beans', qty: '1/2 lb', category: 'Produce' }
+        ]
+    },
+    custom: {
+        name: 'Custom Delivery',
+        icon: '➕',
+        items: []
+    }
+};
+
+function openDeliveryQuickAdd(deliveryType) {
+    const template = DELIVERY_TEMPLATES[deliveryType];
+    if (!template) return;
+
+    if (deliveryType === 'custom') {
+        // Open custom multi-add modal
+        openCustomDeliveryModal();
+        return;
+    }
+
+    const itemsHtml = template.items.map((item, i) => `
+        <label class="scan-item" style="cursor: pointer;">
+            <input type="checkbox" class="scan-item-checkbox" id="delivery-item-${i}" checked>
+            <div class="scan-item-info">
+                <div class="scan-item-name">${item.name}</div>
+                <div class="scan-item-details">${item.qty} | ${item.category}</div>
+            </div>
+        </label>
+    `).join('');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${template.icon} Add ${template.name} Items</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+            <p class="text-muted mb-16">Check what you received:</p>
+
+            <div class="flex gap-8 mb-16">
+                <button class="btn btn-sm btn-secondary" onclick="selectAllDeliveryItems(true)">Select All</button>
+                <button class="btn btn-sm btn-secondary" onclick="selectAllDeliveryItems(false)">Clear</button>
+            </div>
+
+            <div id="delivery-items-list">
+                ${itemsHtml}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveDeliveryItems('${deliveryType}')">Add to Pantry</button>
+        </div>
+        <div class="modal-footer" style="border-top: none; padding-top: 0;">
+            <button class="btn btn-secondary btn-block" onclick="whatCanIMakeWithDelivery('${deliveryType}')">
+                🍳 What Can I Make With These?
+            </button>
+        </div>
+    `);
+}
+
+function selectAllDeliveryItems(selectAll) {
+    document.querySelectorAll('[id^="delivery-item-"]').forEach(checkbox => {
+        checkbox.checked = selectAll;
+    });
+}
+
+function saveDeliveryItems(deliveryType) {
+    const template = DELIVERY_TEMPLATES[deliveryType];
+    if (!template) return;
+
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    let addedCount = 0;
+
+    const categoryIcons = {
+        'Produce': '🥬',
+        'Proteins': '🥩',
+        'Dairy': '🧀',
+        'Pantry': '🥫',
+        'Grains': '🌾'
+    };
+
+    template.items.forEach((item, i) => {
+        const checkbox = document.getElementById(`delivery-item-${i}`);
+        if (checkbox && checkbox.checked) {
+            // Check for duplicates
+            const existing = pantry.find(p =>
+                p.name.toLowerCase() === item.name.toLowerCase()
+            );
+
+            if (!existing) {
+                pantry.push({
+                    name: item.name,
+                    qty: item.qty,
+                    icon: categoryIcons[item.category] || '🥫',
+                    status: 'fresh',
+                    category: item.category
+                });
+                addedCount++;
+            } else {
+                // Update quantity
+                existing.qty = item.qty;
+                existing.status = 'fresh';
+            }
+        }
+    });
+
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+    renderPantryAlerts();
+
+    showToast(`Added ${addedCount} items to pantry!`);
+}
+
+function whatCanIMakeWithDelivery(deliveryType) {
+    const template = DELIVERY_TEMPLATES[deliveryType];
+    if (!template) return;
+
+    // Get selected items
+    const selectedItems = [];
+    template.items.forEach((item, i) => {
+        const checkbox = document.getElementById(`delivery-item-${i}`);
+        if (checkbox && checkbox.checked) {
+            selectedItems.push(item.name);
+        }
+    });
+
+    if (selectedItems.length === 0) {
+        showToast('Select some items first');
+        return;
+    }
+
+    closeModal();
+
+    const prompt = `I just received these ingredients in my ${template.name}:
+
+${selectedItems.join(', ')}
+
+Suggest 3-5 quick Mediterranean recipes I can make this week using these fresh items. Focus on using them before they spoil. Include:
+1. Recipe name
+2. Which delivery items it uses
+3. What else I might need (staples only)
+4. Prep + cook time
+5. Calorie estimate`;
+
+    askNonna(prompt);
+}
+
+function openCustomDeliveryModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">➕ Add Multiple Items</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted mb-16">Enter items one per line (name, quantity - optional):</p>
+
+            <textarea class="form-input" id="custom-delivery-items" rows="10" placeholder="Example:
+Tomatoes, 2 lbs
+Chicken breast
+Olive oil, 1 bottle
+Feta cheese, 8 oz"></textarea>
+
+            <div class="form-group mt-16">
+                <label>Default category</label>
+                <select class="form-select" id="custom-delivery-category">
+                    <option value="Produce">Produce</option>
+                    <option value="Proteins">Proteins</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Pantry">Pantry</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveCustomDeliveryItems()">Add to Pantry</button>
+        </div>
+    `);
+}
+
+function saveCustomDeliveryItems() {
+    const textarea = document.getElementById('custom-delivery-items');
+    const defaultCategory = document.getElementById('custom-delivery-category').value;
+
+    if (!textarea || !textarea.value.trim()) {
+        showToast('Enter some items first');
+        return;
+    }
+
+    const lines = textarea.value.trim().split('\n');
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    let addedCount = 0;
+
+    const categoryIcons = {
+        'Produce': '🥬',
+        'Proteins': '🥩',
+        'Dairy': '🧀',
+        'Pantry': '🥫',
+        'Grains': '🌾',
+        'Other': '📦'
+    };
+
+    lines.forEach(line => {
+        const trimmed = line.trim();
+        if (!trimmed) return;
+
+        // Parse "name, qty" or just "name"
+        const parts = trimmed.split(',').map(p => p.trim());
+        const name = parts[0];
+        const qty = parts[1] || '';
+
+        if (name) {
+            const category = categorizeIngredient(name) || defaultCategory;
+            const existing = pantry.find(p =>
+                p.name.toLowerCase() === name.toLowerCase()
+            );
+
+            if (!existing) {
+                pantry.push({
+                    name: name,
+                    qty: qty,
+                    icon: categoryIcons[category] || '📦',
+                    status: 'fresh',
+                    category: category
+                });
+                addedCount++;
+            }
+        }
+    });
+
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+    renderPantryAlerts();
+
+    showToast(`Added ${addedCount} items to pantry!`);
+}
+
+// Update renderPantry to also render alerts
+const originalRenderPantry = renderPantry;
 
 // ========================================
 // PANTRY PHOTO SCANNING
@@ -5850,8 +7232,829 @@ function printShoppingList() {
 }
 
 // ========================================
+// SMART SHOPPING LIST GENERATOR
+// ========================================
+
+// Price database for Asheville area (estimated prices)
+const PRICE_DATABASE = {
+    // Produce
+    'tomatoes': { price: 3.99, unit: 'lb', category: 'Produce' },
+    'roma tomatoes': { price: 2.99, unit: 'lb', category: 'Produce' },
+    'cherry tomatoes': { price: 4.99, unit: 'container', category: 'Produce' },
+    'spinach': { price: 4.99, unit: 'bag', category: 'Produce' },
+    'baby spinach': { price: 5.99, unit: 'bag', category: 'Produce' },
+    'bell peppers': { price: 1.49, unit: 'each', category: 'Produce' },
+    'red bell pepper': { price: 1.49, unit: 'each', category: 'Produce' },
+    'onion': { price: 0.99, unit: 'each', category: 'Produce' },
+    'onions': { price: 0.99, unit: 'each', category: 'Produce' },
+    'garlic': { price: 0.79, unit: 'bulb', category: 'Produce' },
+    'lemons': { price: 0.79, unit: 'each', category: 'Produce' },
+    'lemon': { price: 0.79, unit: 'each', category: 'Produce' },
+    'zucchini': { price: 1.99, unit: 'each', category: 'Produce' },
+    'cucumber': { price: 1.29, unit: 'each', category: 'Produce' },
+    'carrots': { price: 2.49, unit: 'bag', category: 'Produce' },
+    'avocado': { price: 1.99, unit: 'each', category: 'Produce' },
+    'potatoes': { price: 3.99, unit: 'bag', category: 'Produce' },
+    'sweet potato': { price: 1.49, unit: 'each', category: 'Produce' },
+    'kale': { price: 2.99, unit: 'bunch', category: 'Produce' },
+    'mixed greens': { price: 5.99, unit: 'container', category: 'Produce' },
+    'herbs': { price: 2.99, unit: 'bunch', category: 'Produce' },
+    'basil': { price: 2.99, unit: 'bunch', category: 'Produce' },
+    'parsley': { price: 1.99, unit: 'bunch', category: 'Produce' },
+    'cilantro': { price: 1.49, unit: 'bunch', category: 'Produce' },
+
+    // Proteins
+    'chicken breast': { price: 6.99, unit: 'lb', category: 'Proteins' },
+    'chicken breasts': { price: 6.99, unit: 'lb', category: 'Proteins' },
+    'chicken thighs': { price: 4.99, unit: 'lb', category: 'Proteins' },
+    'salmon': { price: 12.99, unit: 'lb', category: 'Proteins' },
+    'salmon fillet': { price: 12.99, unit: 'lb', category: 'Proteins' },
+    'cod': { price: 10.99, unit: 'lb', category: 'Proteins' },
+    'cod fillet': { price: 10.99, unit: 'lb', category: 'Proteins' },
+    'shrimp': { price: 11.99, unit: 'lb', category: 'Proteins' },
+    'ground beef': { price: 7.99, unit: 'lb', category: 'Proteins' },
+    'ground turkey': { price: 6.99, unit: 'lb', category: 'Proteins' },
+    'eggs': { price: 4.99, unit: 'dozen', category: 'Proteins' },
+    'tofu': { price: 3.49, unit: 'block', category: 'Proteins' },
+
+    // Dairy
+    'greek yogurt': { price: 5.99, unit: 'container', category: 'Dairy' },
+    'feta cheese': { price: 5.99, unit: 'container', category: 'Dairy' },
+    'parmesan': { price: 7.99, unit: 'wedge', category: 'Dairy' },
+    'mozzarella': { price: 4.99, unit: 'ball', category: 'Dairy' },
+    'milk': { price: 4.49, unit: 'gallon', category: 'Dairy' },
+    'butter': { price: 5.49, unit: 'lb', category: 'Dairy' },
+
+    // Pantry Items
+    'olive oil': { price: 12.99, unit: 'bottle', category: 'Pantry' },
+    'chickpeas': { price: 1.49, unit: 'can', category: 'Pantry' },
+    'canned tomatoes': { price: 1.99, unit: 'can', category: 'Pantry' },
+    'diced tomatoes': { price: 1.99, unit: 'can', category: 'Pantry' },
+    'pasta': { price: 2.49, unit: 'box', category: 'Pantry' },
+    'rice': { price: 3.99, unit: 'bag', category: 'Pantry' },
+    'quinoa': { price: 6.99, unit: 'bag', category: 'Pantry' },
+    'lentils': { price: 2.99, unit: 'bag', category: 'Pantry' },
+    'beans': { price: 1.49, unit: 'can', category: 'Pantry' },
+    'black beans': { price: 1.49, unit: 'can', category: 'Pantry' },
+    'white beans': { price: 1.49, unit: 'can', category: 'Pantry' },
+    'tahini': { price: 7.99, unit: 'jar', category: 'Pantry' },
+    'honey': { price: 8.99, unit: 'jar', category: 'Pantry' },
+    'maple syrup': { price: 12.99, unit: 'bottle', category: 'Pantry' },
+    'bread': { price: 4.99, unit: 'loaf', category: 'Pantry' },
+    'pita': { price: 3.49, unit: 'pack', category: 'Pantry' },
+    'tortillas': { price: 3.99, unit: 'pack', category: 'Pantry' }
+};
+
+// Category icons for shopping list display
+const CATEGORY_ICONS = {
+    'Produce': '🥬',
+    'Proteins': '🥩',
+    'Dairy': '🧀',
+    'Pantry': '🥫',
+    'Grains': '🌾',
+    'Canned Goods': '🥫',
+    'Frozen': '🧊',
+    'Spices': '🧂',
+    'Condiments': '🍯',
+    'Beverages': '🥤',
+    'Snacks': '🍪',
+    'Other': '📦'
+};
+
+// Typical Mediterranean staples to suggest
+const TYPICAL_STAPLES = [
+    { name: 'Lemons', category: 'Produce', quantity: '4-6' },
+    { name: 'Olive oil', category: 'Pantry', quantity: '1 bottle' },
+    { name: 'Garlic', category: 'Produce', quantity: '2 bulbs' },
+    { name: 'Cherry tomatoes', category: 'Produce', quantity: '1 container' },
+    { name: 'Fresh herbs (basil/parsley)', category: 'Produce', quantity: '1 bunch' },
+    { name: 'Greek yogurt', category: 'Dairy', quantity: '1 container' },
+    { name: 'Feta cheese', category: 'Dairy', quantity: '1 container' }
+];
+
+// Categorize an ingredient based on name
+function categorizeIngredient(ingredientName) {
+    const name = ingredientName.toLowerCase();
+
+    // Proteins
+    if (/chicken|salmon|cod|fish|shrimp|beef|turkey|pork|lamb|tofu|eggs?|protein/.test(name)) {
+        return 'Proteins';
+    }
+    // Dairy
+    if (/milk|cheese|yogurt|butter|cream|feta|parmesan|mozzarella/.test(name)) {
+        return 'Dairy';
+    }
+    // Produce - Vegetables
+    if (/tomato|spinach|pepper|onion|garlic|zucchini|cucumber|carrot|potato|kale|lettuce|greens|celery|broccoli|cauliflower|mushroom|eggplant|squash|cabbage|asparagus/.test(name)) {
+        return 'Produce';
+    }
+    // Produce - Fruits
+    if (/lemon|lime|orange|apple|banana|berry|grape|melon|avocado/.test(name)) {
+        return 'Produce';
+    }
+    // Produce - Herbs
+    if (/basil|parsley|cilantro|mint|dill|rosemary|thyme|oregano|sage|herb/.test(name)) {
+        return 'Produce';
+    }
+    // Grains
+    if (/rice|pasta|quinoa|bread|tortilla|pita|oat|wheat|grain|flour|couscous/.test(name)) {
+        return 'Grains';
+    }
+    // Canned Goods
+    if (/canned|can of|chickpea|bean|lentil|diced tomato/.test(name)) {
+        return 'Canned Goods';
+    }
+    // Spices
+    if (/spice|cumin|paprika|turmeric|cinnamon|pepper|salt|seasoning/.test(name)) {
+        return 'Spices';
+    }
+    // Condiments/Oils
+    if (/oil|vinegar|sauce|tahini|honey|maple|mustard|mayo/.test(name)) {
+        return 'Pantry';
+    }
+
+    return 'Other';
+}
+
+// Parse quantity from string (returns number or null)
+function parseQuantityNumber(qtyStr) {
+    if (!qtyStr) return null;
+    const str = qtyStr.toString().toLowerCase();
+
+    // Extract first number found
+    const match = str.match(/(\d+\.?\d*)/);
+    if (match) {
+        return parseFloat(match[1]);
+    }
+
+    // Handle text quantities
+    if (str.includes('running low') || str.includes('low')) return 0.25;
+    if (str.includes('half') || str.includes('1/2')) return 0.5;
+    if (str.includes('quarter') || str.includes('1/4')) return 0.25;
+
+    return null;
+}
+
+// Check if ingredient names match (fuzzy match)
+function ingredientsMatch(ing1, ing2) {
+    const name1 = ing1.toLowerCase().trim();
+    const name2 = ing2.toLowerCase().trim();
+
+    // Direct match
+    if (name1 === name2) return true;
+
+    // One contains the other
+    if (name1.includes(name2) || name2.includes(name1)) return true;
+
+    // Remove common suffixes/prefixes and compare
+    const clean1 = name1.replace(/\b(fresh|dried|chopped|diced|minced|sliced|whole|large|small|medium)\b/g, '').trim();
+    const clean2 = name2.replace(/\b(fresh|dried|chopped|diced|minced|sliced|whole|large|small|medium)\b/g, '').trim();
+
+    if (clean1 === clean2) return true;
+    if (clean1.includes(clean2) || clean2.includes(clean1)) return true;
+
+    return false;
+}
+
+// Estimate cost for an item
+function estimateItemCost(itemName, quantity) {
+    const name = itemName.toLowerCase();
+
+    // Try to find a match in the price database
+    for (const [key, priceInfo] of Object.entries(PRICE_DATABASE)) {
+        if (name.includes(key) || key.includes(name)) {
+            const qty = parseQuantityNumber(quantity) || 1;
+            return {
+                unitPrice: priceInfo.price,
+                unit: priceInfo.unit,
+                totalCost: Math.round(priceInfo.price * qty * 100) / 100
+            };
+        }
+    }
+
+    // Default estimate based on category
+    const category = categorizeIngredient(itemName);
+    const defaults = {
+        'Produce': 3.99,
+        'Proteins': 8.99,
+        'Dairy': 5.99,
+        'Pantry': 3.99,
+        'Grains': 3.99,
+        'Canned Goods': 1.99,
+        'Spices': 4.99,
+        'Other': 4.99
+    };
+
+    return {
+        unitPrice: defaults[category] || 4.99,
+        unit: 'item',
+        totalCost: defaults[category] || 4.99
+    };
+}
+
+// Get week dates for current week offset
+function getCurrentWeekDates() {
+    const today = new Date();
+    const dayOfWeek = today.getDay();
+    const monday = new Date(today);
+    monday.setDate(today.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1) + (state.currentWeekOffset * 7));
+
+    const dates = [];
+    for (let i = 0; i < 7; i++) {
+        const date = new Date(monday);
+        date.setDate(monday.getDate() + i);
+        dates.push(getLocalDateStr(date));
+    }
+    return dates;
+}
+
+// Main smart shopping list generator
+function generateSmartShoppingList() {
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const library = getRecipeLibrary();
+    const garden = getStorage(STORAGE.GARDEN) || [];
+
+    // Get current week dates
+    const weekDates = getCurrentWeekDates();
+
+    // 1. Extract all ingredients from all planned meals
+    const allIngredients = [];
+    const mealTypes = ['breakfast', 'lunch', 'dinner', 'snacks'];
+
+    weekDates.forEach(dateStr => {
+        const dayPlan = mealPlans[dateStr];
+        if (!dayPlan) return;
+
+        // Handle both old format (single meal) and new format (multi-meal)
+        if (dayPlan.recipeId) {
+            // Old format - single meal
+            const recipe = library.find(r => r.id === dayPlan.recipeId);
+            if (recipe && recipe.ingredients) {
+                recipe.ingredients.forEach(ing => {
+                    allIngredients.push({
+                        name: typeof ing === 'string' ? ing : ing.name || ing,
+                        source: recipe.title,
+                        date: dateStr
+                    });
+                });
+            }
+        } else {
+            // New format - multi-meal
+            mealTypes.forEach(mealType => {
+                if (dayPlan[mealType]?.recipeId) {
+                    const recipe = library.find(r => r.id === dayPlan[mealType].recipeId);
+                    if (recipe && recipe.ingredients) {
+                        recipe.ingredients.forEach(ing => {
+                            allIngredients.push({
+                                name: typeof ing === 'string' ? ing : ing.name || ing,
+                                source: recipe.title,
+                                date: dateStr,
+                                mealType: mealType
+                            });
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    if (allIngredients.length === 0) {
+        showToast('No recipes with ingredients in your meal plan. Plan some meals first!');
+        return;
+    }
+
+    // 2. Consolidate duplicate ingredients
+    const consolidatedIngredients = [];
+    allIngredients.forEach(ing => {
+        const existing = consolidatedIngredients.find(ci => ingredientsMatch(ci.name, ing.name));
+        if (existing) {
+            existing.sources.push(ing.source);
+            existing.count++;
+        } else {
+            consolidatedIngredients.push({
+                name: ing.name,
+                sources: [ing.source],
+                count: 1
+            });
+        }
+    });
+
+    // 3. Cross-reference with pantry
+    const shoppingItems = [];
+    const skippedItems = []; // Items already in pantry
+
+    consolidatedIngredients.forEach(ingredient => {
+        const inPantry = pantry.find(item => ingredientsMatch(item.name, ingredient.name));
+        const inGarden = garden.find && garden.find(item => ingredientsMatch(item.name || item, ingredient.name));
+
+        if (inGarden) {
+            skippedItems.push({
+                name: ingredient.name,
+                reason: 'Available in garden'
+            });
+        } else if (!inPantry) {
+            // Not in pantry - add to shopping list
+            const category = categorizeIngredient(ingredient.name);
+            const costInfo = estimateItemCost(ingredient.name, '1');
+
+            shoppingItems.push({
+                name: ingredient.name,
+                quantity: ingredient.count > 1 ? `Need for ${ingredient.count} recipes` : '',
+                category: category,
+                pantryStatus: 'Not in pantry',
+                pantryStatusType: 'missing',
+                needed: true,
+                sources: ingredient.sources,
+                estimatedCost: costInfo.totalCost
+            });
+        } else {
+            // In pantry - check status
+            const status = inPantry.status || 'fresh';
+            if (status === 'use-soon' || status === 'check') {
+                shoppingItems.push({
+                    name: ingredient.name,
+                    quantity: 'Restock recommended',
+                    category: categorizeIngredient(ingredient.name),
+                    pantryStatus: `Have ${inPantry.qty || 'some'}, running low`,
+                    pantryStatusType: 'has-some',
+                    needed: true,
+                    sources: ingredient.sources,
+                    estimatedCost: estimateItemCost(ingredient.name, '1').totalCost
+                });
+            } else {
+                skippedItems.push({
+                    name: ingredient.name,
+                    reason: `In pantry: ${inPantry.qty || 'available'}`
+                });
+            }
+        }
+    });
+
+    // 4. Add items running low from pantry (even if not in meal plan)
+    pantry.forEach(item => {
+        if ((item.status === 'use-soon' || item.status === 'check') &&
+            !shoppingItems.find(si => ingredientsMatch(si.name, item.name))) {
+            shoppingItems.push({
+                name: item.name,
+                quantity: 'Restock',
+                category: item.category || categorizeIngredient(item.name),
+                pantryStatus: 'Running low in pantry',
+                pantryStatusType: 'missing',
+                needed: true,
+                sources: ['Pantry restock'],
+                estimatedCost: estimateItemCost(item.name, '1').totalCost
+            });
+        }
+    });
+
+    // 5. Generate suggestions (staples not in list or pantry)
+    const suggestions = [];
+    TYPICAL_STAPLES.forEach(staple => {
+        const inList = shoppingItems.find(si => ingredientsMatch(si.name, staple.name));
+        const inPantry = pantry.find(pi => ingredientsMatch(pi.name, staple.name));
+
+        if (!inList && !inPantry) {
+            suggestions.push({
+                name: staple.name,
+                quantity: staple.quantity,
+                category: staple.category,
+                pantryStatus: 'Typical staple - consider adding',
+                pantryStatusType: 'suggestion',
+                needed: false,
+                estimatedCost: estimateItemCost(staple.name, staple.quantity).totalCost
+            });
+        }
+    });
+
+    // 6. Calculate estimated total
+    const estimatedTotal = shoppingItems.reduce((sum, item) => sum + (item.estimatedCost || 0), 0);
+
+    // 7. Group by category
+    const groupedItems = {};
+    shoppingItems.forEach(item => {
+        if (!groupedItems[item.category]) {
+            groupedItems[item.category] = [];
+        }
+        groupedItems[item.category].push(item);
+    });
+
+    // 8. Create list name with date
+    const startDate = new Date(weekDates[0]);
+    const listName = `Week of ${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+
+    // 9. Save to localStorage
+    const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+    const listId = `smart-${Date.now()}`;
+
+    lists[listId] = {
+        name: listName,
+        generatedFrom: 'meal-plan',
+        createdAt: new Date().toISOString(),
+        estimatedTotal: Math.round(estimatedTotal * 100) / 100,
+        suggestions: suggestions,
+        skippedItems: skippedItems,
+        items: shoppingItems.map(item => ({
+            ...item,
+            checked: false
+        }))
+    };
+
+    setStorage(STORAGE.SHOPPING, lists);
+
+    // 10. Update the dropdown and display
+    updateShoppingListDropdown();
+    document.getElementById('shopping-list-select').value = listId;
+    loadEnhancedShoppingList(listId);
+
+    showToast(`Shopping list created with ${shoppingItems.length} items!`);
+}
+
+// Update the shopping list dropdown with all lists
+function updateShoppingListDropdown() {
+    const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+    const select = document.getElementById('shopping-list-select');
+
+    // Clear existing options
+    select.innerHTML = '<option value="weekly">Weekly Groceries</option>';
+
+    // Add other lists
+    Object.keys(lists).forEach(key => {
+        if (key !== 'weekly') {
+            const list = lists[key];
+            const name = list.name || key;
+            const option = document.createElement('option');
+            option.value = key;
+            option.textContent = name;
+            select.appendChild(option);
+        }
+    });
+}
+
+// Enhanced shopping list display with pantry status
+function loadEnhancedShoppingList(listId) {
+    const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+    const listData = lists[listId];
+
+    if (!listData || !listData.items) {
+        // Fall back to regular loading for simple lists
+        loadShoppingList();
+        return;
+    }
+
+    const container = document.getElementById('shopping-list');
+    const empty = document.getElementById('shopping-empty');
+    const items = listData.items;
+
+    if (items.length === 0) {
+        container.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+    }
+
+    empty.classList.add('hidden');
+
+    let html = '';
+
+    // Summary section
+    if (listData.estimatedTotal) {
+        html += `
+            <div class="shopping-list-summary">
+                <span>Estimated Total</span>
+                <span class="shopping-summary-cost">$${listData.estimatedTotal.toFixed(2)}</span>
+            </div>
+        `;
+    }
+
+    // Suggestions section
+    if (listData.suggestions && listData.suggestions.length > 0) {
+        html += `
+            <div class="shopping-suggestions">
+                <div class="shopping-suggestions-header">
+                    <span>💡</span> Smart Suggestions (optional)
+                </div>
+                ${listData.suggestions.map((sug, i) => `
+                    <div class="shopping-suggestion-item">
+                        <div>
+                            <div style="font-weight: 500;">${sug.name}</div>
+                            <div style="font-size: 0.8rem; color: var(--gray-text);">${sug.quantity} - ${sug.pantryStatus}</div>
+                        </div>
+                        <button class="suggestion-add-btn" onclick="addSuggestionToList('${listId}', ${i})">+ Add</button>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    // Group items by category
+    const grouped = {};
+    items.forEach((item, index) => {
+        const cat = item.category || 'Other';
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push({ ...item, index });
+    });
+
+    // Render by category
+    const categoryOrder = ['Produce', 'Proteins', 'Dairy', 'Grains', 'Canned Goods', 'Pantry', 'Spices', 'Other'];
+    categoryOrder.forEach(category => {
+        if (grouped[category] && grouped[category].length > 0) {
+            const icon = CATEGORY_ICONS[category] || '📦';
+            html += `
+                <div class="shopping-category-header">
+                    <span>${icon}</span>
+                    <span>${category.toUpperCase()}</span>
+                    <span style="font-weight: normal; color: var(--gray-text);">(${grouped[category].length})</span>
+                </div>
+            `;
+
+            grouped[category].forEach(item => {
+                const statusClass = item.pantryStatusType || '';
+                html += `
+                    <div class="shopping-item-enhanced ${item.checked ? 'checked' : ''}">
+                        <input type="checkbox" class="shopping-item-checkbox"
+                            ${item.checked ? 'checked' : ''}
+                            onchange="toggleEnhancedShoppingItem('${listId}', ${item.index})">
+                        <div class="shopping-item-content">
+                            <div class="shopping-item-name-row">
+                                <span class="shopping-item-name">${item.name}</span>
+                                ${item.estimatedCost ? `<span class="shopping-item-qty">~$${item.estimatedCost.toFixed(2)}</span>` : ''}
+                            </div>
+                            ${item.pantryStatus ? `<div class="shopping-item-pantry-status ${statusClass}">${item.pantryStatusType === 'missing' ? '⚠️' : '📍'} ${item.pantryStatus}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    });
+
+    // Handle categories not in the order list
+    Object.keys(grouped).forEach(category => {
+        if (!categoryOrder.includes(category) && grouped[category].length > 0) {
+            const icon = CATEGORY_ICONS[category] || '📦';
+            html += `
+                <div class="shopping-category-header">
+                    <span>${icon}</span>
+                    <span>${category.toUpperCase()}</span>
+                    <span style="font-weight: normal; color: var(--gray-text);">(${grouped[category].length})</span>
+                </div>
+            `;
+
+            grouped[category].forEach(item => {
+                html += `
+                    <div class="shopping-item-enhanced ${item.checked ? 'checked' : ''}">
+                        <input type="checkbox" class="shopping-item-checkbox"
+                            ${item.checked ? 'checked' : ''}
+                            onchange="toggleEnhancedShoppingItem('${listId}', ${item.index})">
+                        <div class="shopping-item-content">
+                            <div class="shopping-item-name-row">
+                                <span class="shopping-item-name">${item.name}</span>
+                            </div>
+                            ${item.pantryStatus ? `<div class="shopping-item-pantry-status">${item.pantryStatus}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    });
+
+    container.innerHTML = html;
+}
+
+// Toggle item in enhanced shopping list
+function toggleEnhancedShoppingItem(listId, index) {
+    const lists = getStorage(STORAGE.SHOPPING) || {};
+    if (lists[listId] && lists[listId].items && lists[listId].items[index]) {
+        lists[listId].items[index].checked = !lists[listId].items[index].checked;
+        setStorage(STORAGE.SHOPPING, lists);
+        loadEnhancedShoppingList(listId);
+    }
+}
+
+// Add a suggestion to the shopping list
+function addSuggestionToList(listId, suggestionIndex) {
+    const lists = getStorage(STORAGE.SHOPPING) || {};
+    if (lists[listId] && lists[listId].suggestions) {
+        const suggestion = lists[listId].suggestions[suggestionIndex];
+        if (suggestion) {
+            // Add to items
+            lists[listId].items.push({
+                ...suggestion,
+                checked: false,
+                needed: true
+            });
+
+            // Remove from suggestions
+            lists[listId].suggestions.splice(suggestionIndex, 1);
+
+            // Update estimated total
+            lists[listId].estimatedTotal = (lists[listId].estimatedTotal || 0) + (suggestion.estimatedCost || 0);
+
+            setStorage(STORAGE.SHOPPING, lists);
+            loadEnhancedShoppingList(listId);
+            showToast(`Added ${suggestion.name} to list`);
+        }
+    }
+}
+
+// Override loadShoppingList to handle both old and new format
+const originalLoadShoppingList = loadShoppingList;
+function loadShoppingList() {
+    const listId = document.getElementById('shopping-list-select').value;
+    const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+
+    // Check if this is an enhanced list (has items array with objects)
+    if (lists[listId] && lists[listId].items && typeof lists[listId].items[0] === 'object' && lists[listId].items[0] !== null && lists[listId].items[0].category) {
+        loadEnhancedShoppingList(listId);
+    } else {
+        // Use original simple list rendering
+        const items = Array.isArray(lists[listId]) ? lists[listId] : (lists[listId]?.items || []);
+        const container = document.getElementById('shopping-list');
+        const empty = document.getElementById('shopping-empty');
+
+        if (!items || items.length === 0) {
+            container.innerHTML = '';
+            empty.classList.remove('hidden');
+            return;
+        }
+
+        empty.classList.add('hidden');
+        container.innerHTML = items.map((item, i) => {
+            const name = typeof item === 'string' ? item : (item.name || item);
+            const checked = typeof item === 'object' ? item.checked : false;
+            return `
+                <div class="shopping-item ${checked ? 'checked' : ''}">
+                    <input type="checkbox" class="shopping-item-checkbox" ${checked ? 'checked' : ''} onchange="toggleShoppingItem('${listId}', ${i})">
+                    <span class="shopping-item-name">${name}</span>
+                </div>
+            `;
+        }).join('');
+    }
+}
+
+// ========================================
 // KITCHEN - BATCH COOKING
 // ========================================
+
+// Typical ingredients needed for each batch cooking category
+const BATCH_COOKING_INGREDIENTS = {
+    chicken: [
+        { name: 'Chicken breast', qty: '2 lbs', alternatives: ['Chicken thighs'] },
+        { name: 'Olive oil', qty: '2 tbsp', alternatives: [] },
+        { name: 'Garlic', qty: '4 cloves', alternatives: ['Garlic powder'] },
+        { name: 'Lemon', qty: '1', alternatives: ['Lemon juice'] },
+        { name: 'Herbs (rosemary/thyme)', qty: '1 bunch', alternatives: ['Dried herbs'] }
+    ],
+    fish: [
+        { name: 'Salmon or Cod', qty: '1.5 lbs', alternatives: ['Any white fish'] },
+        { name: 'Olive oil', qty: '2 tbsp', alternatives: [] },
+        { name: 'Lemon', qty: '2', alternatives: ['Lemon juice'] },
+        { name: 'Dill or parsley', qty: '1 bunch', alternatives: ['Dried herbs'] },
+        { name: 'Capers', qty: '2 tbsp', alternatives: [] }
+    ],
+    grains: [
+        { name: 'Quinoa or Rice', qty: '2 cups dry', alternatives: ['Farro', 'Couscous'] },
+        { name: 'Broth', qty: '4 cups', alternatives: ['Water + salt'] },
+        { name: 'Olive oil', qty: '1 tbsp', alternatives: ['Butter'] }
+    ],
+    vegetables: [
+        { name: 'Bell peppers', qty: '3-4', alternatives: [] },
+        { name: 'Zucchini', qty: '2-3', alternatives: ['Yellow squash'] },
+        { name: 'Onion', qty: '2', alternatives: ['Shallots'] },
+        { name: 'Cherry tomatoes', qty: '1 container', alternatives: ['Roma tomatoes'] },
+        { name: 'Olive oil', qty: '3 tbsp', alternatives: [] },
+        { name: 'Garlic', qty: '4 cloves', alternatives: [] }
+    ],
+    sauce: [
+        { name: 'Canned tomatoes', qty: '2 cans', alternatives: ['Fresh tomatoes'] },
+        { name: 'Onion', qty: '1', alternatives: [] },
+        { name: 'Garlic', qty: '6 cloves', alternatives: [] },
+        { name: 'Olive oil', qty: '3 tbsp', alternatives: [] },
+        { name: 'Basil', qty: '1 bunch', alternatives: ['Dried basil'] },
+        { name: 'Red wine', qty: '1/2 cup', alternatives: ['Balsamic vinegar'] }
+    ],
+    soup: [
+        { name: 'Chicken or vegetable broth', qty: '6 cups', alternatives: [] },
+        { name: 'Onion', qty: '1', alternatives: [] },
+        { name: 'Carrots', qty: '3', alternatives: [] },
+        { name: 'Celery', qty: '3 stalks', alternatives: [] },
+        { name: 'Garlic', qty: '4 cloves', alternatives: [] },
+        { name: 'Potatoes or beans', qty: '2 cups', alternatives: ['Lentils'] }
+    ]
+};
+
+// State to track missing items for batch cooking
+let batchMissingItems = [];
+
+function checkBatchIngredients() {
+    const selectedItems = Array.from(document.querySelectorAll('[name="batchItems"]:checked')).map(c => c.value);
+    const checkContainer = document.getElementById('batch-ingredient-check');
+    const listContainer = document.getElementById('batch-ingredient-list');
+    const missingContainer = document.getElementById('batch-missing-items');
+    const missingList = document.getElementById('batch-missing-list');
+
+    if (selectedItems.length === 0) {
+        checkContainer.style.display = 'none';
+        return;
+    }
+
+    checkContainer.style.display = 'block';
+
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const results = [];
+    batchMissingItems = [];
+
+    // Check each selected category
+    selectedItems.forEach(category => {
+        const ingredients = BATCH_COOKING_INGREDIENTS[category] || [];
+
+        ingredients.forEach(ing => {
+            // Check if ingredient or any alternative is in pantry
+            const inPantry = pantry.find(p =>
+                ingredientsMatch(p.name, ing.name) ||
+                ing.alternatives.some(alt => ingredientsMatch(p.name, alt))
+            );
+
+            const status = inPantry ? 'have' : 'missing';
+            const pantryInfo = inPantry ? `Have ${inPantry.qty || 'some'}` : 'Need to buy';
+
+            // Avoid duplicates
+            const existing = results.find(r => ingredientsMatch(r.name, ing.name));
+            if (!existing) {
+                results.push({
+                    name: ing.name,
+                    qty: ing.qty,
+                    status: status,
+                    pantryInfo: pantryInfo,
+                    category: category
+                });
+
+                if (status === 'missing') {
+                    batchMissingItems.push({
+                        name: ing.name,
+                        qty: ing.qty,
+                        category: categorizeIngredient(ing.name)
+                    });
+                }
+            }
+        });
+    });
+
+    // Render ingredient list
+    listContainer.innerHTML = results.map(item => `
+        <div class="batch-ingredient-item">
+            <span class="batch-ingredient-status">${item.status === 'have' ? '✅' : '❌'}</span>
+            <span style="flex: 1;">${item.name} (${item.qty})</span>
+            <span style="font-size: 0.8rem; color: var(--gray-text);">${item.pantryInfo}</span>
+        </div>
+    `).join('');
+
+    // Show missing items section if any
+    if (batchMissingItems.length > 0) {
+        missingContainer.style.display = 'block';
+        missingList.innerHTML = batchMissingItems.map(item => `
+            <div style="font-size: 0.9rem; padding: 4px 0;">• ${item.name} (${item.qty})</div>
+        `).join('');
+    } else {
+        missingContainer.style.display = 'none';
+    }
+}
+
+function addBatchMissingToShopping() {
+    if (batchMissingItems.length === 0) {
+        showToast('No missing items to add');
+        return;
+    }
+
+    const lists = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+    const listId = 'batch-prep';
+
+    lists[listId] = {
+        name: 'Batch Prep Shopping',
+        generatedFrom: 'batch-cooking',
+        createdAt: new Date().toISOString(),
+        items: batchMissingItems.map(item => ({
+            name: item.name,
+            quantity: item.qty,
+            category: item.category,
+            checked: false,
+            pantryStatus: 'Needed for batch cooking',
+            pantryStatusType: 'missing'
+        }))
+    };
+
+    setStorage(STORAGE.SHOPPING, lists);
+
+    // Navigate to shopping
+    switchKitchenTab('shopping');
+    setTimeout(() => {
+        updateShoppingListDropdown();
+        document.getElementById('shopping-list-select').value = listId;
+        loadEnhancedShoppingList(listId);
+    }, 100);
+
+    showToast(`Added ${batchMissingItems.length} items to Batch Prep Shopping list`);
+}
+
 function generateBatchPlan() {
     const items = Array.from(document.querySelectorAll('[name="batchItems"]:checked')).map(c => c.value);
     const time = document.getElementById('batch-time').value;
@@ -5861,7 +8064,233 @@ function generateBatchPlan() {
         return;
     }
 
-    askNonna(`Create a batch cooking plan for: ${items.join(', ')}. I have ${time} hours available. Give me a step-by-step timeline.`);
+    // Include pantry context in the request
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const pantryContext = pantry.length > 0
+        ? `\n\nMy current pantry includes: ${pantry.map(p => p.name).join(', ')}.`
+        : '';
+
+    // Check for missing items warning
+    const missingWarning = batchMissingItems.length > 0
+        ? `\n\nNote: I may need to buy these items first: ${batchMissingItems.map(i => i.name).join(', ')}.`
+        : '';
+
+    askNonna(`Create a batch cooking plan for: ${items.join(', ')}. I have ${time} hours available. Give me a step-by-step timeline with specific recipes and instructions.${pantryContext}${missingWarning}`);
+}
+
+// ========================================
+// CALORIE ESTIMATION
+// ========================================
+
+// Store last estimate for details display
+let lastCalorieEstimate = null;
+
+async function estimateCalories(mealInputId, calorieInputId) {
+    const mealInput = document.getElementById(mealInputId);
+    const calorieInput = document.getElementById(calorieInputId);
+    const mealName = mealInput?.value.trim();
+
+    if (!mealName || mealName.length < 3) {
+        showToast('Please enter a meal description first');
+        return;
+    }
+
+    // Find the estimate button and result container
+    const estimateBtn = mealInput.closest('.modal-body').querySelector('.estimate-btn');
+    const resultContainer = mealInput.closest('.modal-body').querySelector('[id^="calorie-estimate-result"]');
+
+    // Show loading state
+    if (estimateBtn) {
+        estimateBtn.disabled = true;
+        estimateBtn.classList.add('loading');
+        estimateBtn.innerHTML = '⏳ Estimating...';
+    }
+
+    try {
+        const response = await fetch('/.netlify/functions/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                messages: [{
+                    role: 'user',
+                    content: `Estimate the calories in this meal: "${mealName}". Return ONLY valid JSON with no markdown formatting or code blocks.`
+                }],
+                systemPrompt: `You are a nutritional estimation assistant. Given a meal description, estimate calories and macros.
+
+Return ONLY this JSON structure (no markdown, no code blocks, no explanation, just raw JSON):
+{
+  "calories": <number>,
+  "confidence": "high" | "medium" | "low",
+  "breakdown": ["Item 1: ~X cal", "Item 2: ~Y cal"],
+  "protein": "<number>g",
+  "carbs": "<number>g",
+  "fat": "<number>g",
+  "notes": "optional explanation for low confidence or vague descriptions"
+}
+
+Standard portion sizes to use:
+- Banana: medium (105 cal)
+- Apple: medium (95 cal)
+- Tablespoon: 15ml
+- Teaspoon: 5ml
+- Cup: 240ml
+- Ounce: 28g
+- Chicken breast: 6oz raw (~280 cal)
+- Salmon fillet: 6oz (~350 cal)
+- Pasta: 1 cup cooked (~200 cal)
+- Rice: 1 cup cooked (~200 cal)
+- Bread slice: 1 slice (~80 cal)
+- Egg: large (70 cal)
+- Greek yogurt: 1 cup (~130 cal)
+- Olive oil: 1 tbsp (120 cal)
+- Butter: 1 tbsp (100 cal)
+- Honey: 1 tbsp (64 cal)
+- Cheese: 1 oz (~110 cal)
+
+Guidelines:
+- Be conservative with estimates
+- Round to nearest 5 calories
+- For vague descriptions like "salad" or "sandwich", assume medium portions
+- Set confidence to "low" for vague descriptions and add explanatory notes
+- Set confidence to "high" for specific, detailed descriptions
+- Set confidence to "medium" for reasonably clear descriptions with some ambiguity`
+            })
+        });
+
+        if (!response.ok) {
+            throw new Error('API request failed');
+        }
+
+        const data = await response.json();
+        let content = data.content?.[0]?.text || data.message || '';
+
+        // Clean up response - remove markdown code blocks if present
+        content = content.replace(/```json\s*/gi, '').replace(/```\s*/gi, '').trim();
+
+        // Parse JSON from response
+        const jsonMatch = content.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) {
+            throw new Error('Invalid response format');
+        }
+
+        const estimate = JSON.parse(jsonMatch[0]);
+        lastCalorieEstimate = estimate;
+
+        // Update calorie input
+        if (calorieInput) {
+            calorieInput.value = estimate.calories;
+            calorieInput.classList.add('calorie-input-estimated');
+        }
+
+        // Update button to show details
+        if (estimateBtn) {
+            estimateBtn.disabled = false;
+            estimateBtn.classList.remove('loading');
+            estimateBtn.innerHTML = 'ℹ️ Details';
+            estimateBtn.onclick = () => showCalorieEstimateDetails(estimate);
+        }
+
+        // Show result summary
+        if (resultContainer) {
+            const confidenceClass = estimate.confidence || 'medium';
+            resultContainer.innerHTML = `
+                <div class="estimate-result">
+                    <div class="estimate-result-header">
+                        <span class="estimate-result-text">
+                            💡 Estimated: ~${estimate.calories} cal
+                            <span class="confidence">(${estimate.confidence} confidence)</span>
+                        </span>
+                        <span class="confidence-badge ${confidenceClass}">${estimate.confidence}</span>
+                    </div>
+                    ${estimate.notes ? `<div style="margin-top: 6px; font-size: 0.8rem; color: var(--gray-text);">${estimate.notes}</div>` : ''}
+                </div>
+            `;
+        }
+
+        showToast(`Estimated: ~${estimate.calories} calories`);
+
+    } catch (error) {
+        console.error('Calorie estimation error:', error);
+
+        // Reset button
+        if (estimateBtn) {
+            estimateBtn.disabled = false;
+            estimateBtn.classList.remove('loading');
+            estimateBtn.innerHTML = '🤖 Estimate';
+        }
+
+        // Show error in result container
+        if (resultContainer) {
+            resultContainer.innerHTML = `
+                <div style="margin-top: 8px; padding: 8px; background: #ffebee; border-radius: var(--radius-sm); font-size: 0.85rem; color: #c62828;">
+                    Unable to estimate. Please enter calories manually.
+                </div>
+            `;
+        }
+
+        showToast('Unable to estimate. Please enter manually.');
+    }
+}
+
+function showCalorieEstimateDetails(estimate) {
+    if (!estimate) {
+        estimate = lastCalorieEstimate;
+    }
+
+    if (!estimate) {
+        showToast('No estimate available');
+        return;
+    }
+
+    const breakdownHtml = estimate.breakdown && estimate.breakdown.length > 0
+        ? `<ul>${estimate.breakdown.map(item => `<li>${item}</li>`).join('')}</ul>`
+        : '<p style="color: var(--gray-text);">No detailed breakdown available</p>';
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Calorie Breakdown</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="estimate-breakdown">
+                <h4>Total: ~${estimate.calories} calories</h4>
+                ${breakdownHtml}
+
+                <div class="estimate-macros">
+                    <span>Protein: <strong>${estimate.protein || '—'}</strong></span>
+                    <span>Carbs: <strong>${estimate.carbs || '—'}</strong></span>
+                    <span>Fat: <strong>${estimate.fat || '—'}</strong></span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; padding: 12px; background: var(--gray-light); border-radius: var(--radius-sm);">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.85rem; color: var(--gray-text);">Confidence Level</span>
+                    <span class="confidence-badge ${estimate.confidence || 'medium'}">${estimate.confidence || 'medium'}</span>
+                </div>
+                <p style="margin-top: 8px; font-size: 0.8rem; color: var(--gray-text);">
+                    ${getConfidenceExplanation(estimate.confidence)}
+                </p>
+                ${estimate.notes ? `<p style="margin-top: 8px; font-size: 0.8rem; color: var(--gray-dark);"><strong>Note:</strong> ${estimate.notes}</p>` : ''}
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" onclick="closeModal()">Close</button>
+        </div>
+    `);
+}
+
+function getConfidenceExplanation(confidence) {
+    switch (confidence) {
+        case 'high':
+            return 'The meal description was detailed and specific, allowing for accurate estimation.';
+        case 'medium':
+            return 'Based on standard portion sizes. Actual calories may vary by ±15%.';
+        case 'low':
+            return 'The description was vague. Consider adding more details for a better estimate.';
+        default:
+            return 'Based on standard portion sizes.';
+    }
 }
 
 // ========================================
@@ -6240,6 +8669,16 @@ function openAddMealModal() {
                 <label>What did you eat?</label>
                 <input type="text" class="form-input" id="log-meal-input" placeholder="e.g., Grilled chicken salad">
             </div>
+            <div class="form-group">
+                <label>Calories (optional)</label>
+                <div class="calorie-input-row">
+                    <input type="number" class="form-input" id="log-meal-calories" placeholder="e.g., 350">
+                    <button type="button" class="estimate-btn" id="estimate-calories-btn-log" onclick="estimateCalories('log-meal-input', 'log-meal-calories')">
+                        🤖 Estimate
+                    </button>
+                </div>
+                <div id="calorie-estimate-result-log"></div>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -6250,12 +8689,14 @@ function openAddMealModal() {
 
 function logMealManual() {
     const title = document.getElementById('log-meal-input').value.trim();
+    const calories = document.getElementById('log-meal-calories')?.value;
     if (!title) return;
 
     const history = getStorage(STORAGE.HISTORY) || [];
     history.unshift({
         type: 'cooked',
         title: title,
+        calories: calories ? parseInt(calories) : null,
         date: new Date().toISOString()
     });
     setStorage(STORAGE.HISTORY, history);
@@ -6849,7 +9290,15 @@ function calculateCaloriesBurned(workoutType, durationMinutes, userWeight = 70) 
 }
 
 function getTodayStr() {
-    return new Date().toISOString().split('T')[0];
+    return getLocalDateStr(new Date());
+}
+
+// Get YYYY-MM-DD in local timezone (not UTC!) to fix off-by-one date bugs
+function getLocalDateStr(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
 }
 
 function getWeekStartStr() {
@@ -6858,7 +9307,7 @@ function getWeekStartStr() {
     const diff = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Monday as start
     const weekStart = new Date(now);
     weekStart.setDate(now.getDate() - diff);
-    return weekStart.toISOString().split('T')[0];
+    return getLocalDateStr(weekStart);
 }
 
 function getTodaysWorkouts() {
@@ -6917,7 +9366,7 @@ function calculateStreak() {
     const today = getTodayStr();
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    const yesterdayStr = getLocalDateStr(yesterday);
 
     // Check if there's a workout today or yesterday to continue streak
     if (workoutDates[0] !== today && workoutDates[0] !== yesterdayStr) {
@@ -6925,10 +9374,10 @@ function calculateStreak() {
     }
 
     let streak = 0;
-    let currentDate = new Date(workoutDates[0]);
+    let currentDate = new Date(workoutDates[0] + 'T12:00:00');
 
     for (const dateStr of workoutDates) {
-        const checkDate = currentDate.toISOString().split('T')[0];
+        const checkDate = getLocalDateStr(currentDate);
         if (dateStr === checkDate) {
             streak++;
             currentDate.setDate(currentDate.getDate() - 1);
@@ -6949,25 +9398,35 @@ function renderWorkoutsView() {
 
 function renderCalorieBalance() {
     const caloriesIn = getTodaysCaloriesIn();
-    const caloriesOut = getTodaysCaloriesOut();
-    const netCalories = caloriesIn - caloriesOut;
+    const workoutCalories = getTodaysCaloriesOut();
 
-    // Update values
+    // NEW FORMAT: Base TDEE + workout = total daily burn
+    const baseTDEE = 2000;
+    const totalDailyBurn = baseTDEE + workoutCalories;
+    const deficit = totalDailyBurn - caloriesIn;
+    const isDeficit = deficit > 0;
+
+    // Update values with new labels
     document.getElementById('calories-in-value').textContent = caloriesIn;
-    document.getElementById('calories-out-value').textContent = caloriesOut;
+    document.getElementById('calories-out-value').textContent = totalDailyBurn;
 
-    // Update net display
+    // Update the labels via inner elements
+    const inLabel = document.querySelector('#calories-in-bar')?.closest('.calorie-balance-item')?.querySelector('.calorie-balance-label');
+    const outLabel = document.querySelector('#calories-out-bar')?.closest('.calorie-balance-item')?.querySelector('.calorie-balance-label');
+    if (inLabel) inLabel.textContent = '🍽️ Consumed';
+    if (outLabel) outLabel.textContent = `🔥 Daily Burn (${baseTDEE}${workoutCalories > 0 ? '+' + workoutCalories : ''})`;
+
+    // Update net display - show as POSITIVE deficit
     const netEl = document.getElementById('calorie-net');
-    netEl.textContent = `${netCalories > 0 ? '+' : ''}${netCalories} cal`;
+    netEl.textContent = `${isDeficit ? '✅' : '⚠️'} ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? 'deficit' : 'surplus'}`;
     netEl.className = 'calorie-balance-net';
-    if (netCalories > 200) netEl.classList.add('surplus');
-    else if (netCalories < -200) netEl.classList.add('deficit');
-    else netEl.classList.add('balanced');
+    if (isDeficit) netEl.classList.add('deficit');
+    else netEl.classList.add('surplus');
 
-    // Update bars (scale to reasonable daily intake ~2000 cal)
-    const maxCal = 2000;
+    // Update bars (scale to total daily burn for better visualization)
+    const maxCal = Math.max(totalDailyBurn, caloriesIn, 2500);
     const inPercent = Math.min((caloriesIn / maxCal) * 100, 100);
-    const outPercent = Math.min((caloriesOut / maxCal) * 100, 100);
+    const outPercent = Math.min((totalDailyBurn / maxCal) * 100, 100);
 
     document.getElementById('calories-in-bar').style.width = `${inPercent}%`;
     document.getElementById('calories-out-bar').style.width = `${outPercent}%`;
@@ -7010,7 +9469,7 @@ function renderWorkoutCalendar() {
     for (let i = 0; i < 7; i++) {
         const date = new Date(weekStart);
         date.setDate(weekStart.getDate() + i);
-        const dateStr = date.toISOString().split('T')[0];
+        const dateStr = getLocalDateStr(date);
         const isToday = dateStr === getTodayStr();
         const dayWorkouts = workouts.filter(w => w.date === dateStr);
         const hasWorkout = dayWorkouts.length > 0;
