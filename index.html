@@ -482,6 +482,85 @@
             text-align: right;
         }
 
+        /* Progress Graph */
+        .progress-graph-container {
+            padding: 8px 0;
+        }
+        .progress-graph-legend {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 12px;
+            font-size: 0.75rem;
+            color: var(--gray-text);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+        }
+        .progress-graph {
+            display: flex;
+            align-items: flex-end;
+            gap: 8px;
+            height: 120px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--gray-lighter);
+        }
+        .progress-graph-day {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            height: 100%;
+        }
+        .progress-graph-bars {
+            flex: 1;
+            display: flex;
+            align-items: flex-end;
+            gap: 2px;
+            width: 100%;
+        }
+        .progress-bar {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            min-height: 4px;
+            transition: height 0.3s ease;
+        }
+        .progress-bar.in {
+            background: var(--cerulean);
+        }
+        .progress-bar.out {
+            background: var(--success);
+        }
+        .progress-graph-label {
+            font-size: 0.65rem;
+            color: var(--gray-text);
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+        }
+        .progress-graph-day-label {
+            font-size: 0.65rem;
+            color: var(--gray-text);
+            margin-top: 4px;
+        }
+        .progress-graph-day.today {
+            background: var(--gray-lighter);
+            border-radius: var(--radius-sm);
+            padding: 4px 2px;
+            margin: -4px -2px;
+        }
+        .progress-graph-day.today .progress-graph-day-label {
+            font-weight: 600;
+            color: var(--cerulean);
+        }
+
         /* Workout Calendar */
         .workout-calendar {
             background: var(--white);
@@ -2502,19 +2581,19 @@
                     <div class="workout-stats" style="margin-bottom: 0;">
                         <div class="workout-stat">
                             <div class="workout-stat-value" id="dashboard-calories-in">0</div>
-                            <div class="workout-stat-label">Calories In</div>
+                            <div class="workout-stat-label">🍽️ Consumed</div>
                         </div>
                         <div class="workout-stat">
-                            <div class="workout-stat-value" id="dashboard-calories-out">0</div>
-                            <div class="workout-stat-label">Calories Out</div>
+                            <div class="workout-stat-value" id="dashboard-calories-out">2000</div>
+                            <div class="workout-stat-label">🔥 Daily Burn</div>
                         </div>
                         <div class="workout-stat balance">
-                            <div class="workout-stat-value" id="dashboard-calorie-net">0</div>
-                            <div class="workout-stat-label">Net Balance</div>
+                            <div class="workout-stat-value" id="dashboard-calorie-net">2000</div>
+                            <div class="workout-stat-label">✅ Deficit</div>
                         </div>
                         <div class="workout-stat">
                             <div class="workout-stat-value" id="dashboard-workouts-today">0</div>
-                            <div class="workout-stat-label">Workouts Today</div>
+                            <div class="workout-stat-label">💪 Workouts</div>
                         </div>
                     </div>
                 </div>
@@ -2696,6 +2775,20 @@
                     <div class="workout-stat">
                         <div class="workout-stat-value" id="workout-streak">0</div>
                         <div class="workout-stat-label">Day Streak</div>
+                    </div>
+                </div>
+
+                <!-- Weekly Progress Graph -->
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">📊 7-Day Progress</span>
+                    </div>
+                    <div class="progress-graph-container" id="progress-graph">
+                        <div class="progress-graph-legend">
+                            <span class="legend-item"><span class="legend-color" style="background: var(--cerulean);"></span> Consumed</span>
+                            <span class="legend-item"><span class="legend-color" style="background: var(--success);"></span> Burned</span>
+                        </div>
+                        <div class="progress-graph" id="progress-graph-bars"></div>
                     </div>
                 </div>
 
@@ -3086,10 +3179,31 @@
                         <button class="btn btn-secondary btn-block mb-8" onclick="startOnboarding()">Take App Tour</button>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">💾 Data</h3>
+                        <h3 class="card-title">☁️ Cloud Sync</h3>
+                        <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 12px;">
+                            Sync your data across devices using a unique sync code. No account needed!
+                        </p>
+                        <div class="form-group mb-12">
+                            <label class="form-label">Your Sync Code</label>
+                            <div class="flex gap-8">
+                                <input type="text" class="form-input" id="sync-code-input" placeholder="e.g., nonna-pizza-2024" maxlength="50" style="flex: 1;">
+                                <button class="btn btn-sm" style="background: var(--cerulean); color: white;" onclick="generateSyncCode()">Generate</button>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.75rem; margin-top: 4px;">
+                                Use the same code on all your devices
+                            </p>
+                        </div>
                         <div class="flex gap-8" style="flex-wrap: wrap;">
-                            <button class="btn btn-secondary btn-sm" onclick="exportAllData()">Export</button>
-                            <button class="btn btn-secondary btn-sm" onclick="importData()">Import</button>
+                            <button class="btn btn-primary btn-sm" onclick="uploadToCloud()">⬆️ Upload Data</button>
+                            <button class="btn btn-secondary btn-sm" onclick="downloadFromCloud()">⬇️ Download Data</button>
+                        </div>
+                        <div id="sync-status" style="margin-top: 8px; font-size: 0.8rem;"></div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">💾 Local Data</h3>
+                        <div class="flex gap-8" style="flex-wrap: wrap;">
+                            <button class="btn btn-secondary btn-sm" onclick="exportAllData()">Export File</button>
+                            <button class="btn btn-secondary btn-sm" onclick="importData()">Import File</button>
                             <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="confirmClearAllData()">Clear All</button>
                         </div>
                     </div>
@@ -3404,7 +3518,10 @@ function switchMoreTab(tab) {
     if (tab === 'garden') renderGarden();
     if (tab === 'history') renderHistory();
     if (tab === 'crohns') updateFlareUI();
-    if (tab === 'settings') loadSettingsName();
+    if (tab === 'settings') {
+        loadSettingsName();
+        loadSyncCode();
+    }
 }
 
 function loadSettingsName() {
@@ -3558,20 +3675,24 @@ function updateDashboard() {
 function updateDashboardWorkoutCard() {
     const caloriesIn = getTodaysCaloriesIn();
     const caloriesOut = getTodaysCaloriesOut();
-    const netCalories = caloriesIn - caloriesOut;
     const todaysWorkouts = getTodaysWorkouts();
 
+    // Base metabolic calories (TDEE) - hardcoded at 2000
+    const BASE_CALORIES = 2000;
+    const totalBurn = BASE_CALORIES + caloriesOut;
+    const deficit = totalBurn - caloriesIn;
+
     document.getElementById('dashboard-calories-in').textContent = caloriesIn;
-    document.getElementById('dashboard-calories-out').textContent = caloriesOut;
-    document.getElementById('dashboard-calorie-net').textContent = `${netCalories > 0 ? '+' : ''}${netCalories}`;
+    document.getElementById('dashboard-calories-out').textContent = totalBurn;
+    document.getElementById('dashboard-calorie-net').textContent = deficit;
     document.getElementById('dashboard-workouts-today').textContent = todaysWorkouts.length;
 
-    // Update net balance color
+    // Update net balance color - positive deficit is good (green)
     const netEl = document.getElementById('dashboard-calorie-net');
-    if (netCalories > 200) {
-        netEl.style.color = 'var(--danger)';
-    } else if (netCalories < -200) {
+    if (deficit > 0) {
         netEl.style.color = 'var(--success)';
+    } else if (deficit < -200) {
+        netEl.style.color = 'var(--danger)';
     } else {
         netEl.style.color = 'var(--cerulean)';
     }
@@ -5323,7 +5444,11 @@ function renderWeekPlanner() {
         // Get workout calories for this day
         const dayWorkouts = workouts.filter(w => w.date === dateStr);
         const workoutCalories = dayWorkouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
-        const netCalories = dayCalories - workoutCalories;
+
+        // Calculate with 2000 base TDEE
+        const BASE_CALORIES = 2000;
+        const totalBurn = BASE_CALORIES + workoutCalories;
+        const deficit = totalBurn - dayCalories;
 
         // Build meal slots
         let mealSlotsHtml = '';
@@ -5364,14 +5489,13 @@ function renderWeekPlanner() {
             }
         });
 
-        // Day summary with improved display
-        const netClass = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
-        const netLabel = netCalories > 200 ? 'surplus' : netCalories < -200 ? 'deficit' : 'balanced';
+        // Day summary with improved display - positive deficit is good
+        const deficitClass = deficit > 0 ? 'deficit' : deficit < -200 ? 'surplus' : 'balanced';
         const summaryHtml = (dayCalories > 0 || workoutCalories > 0) ? `
             <div class="week-day-summary">
-                <span class="day-total-calories">🔥 ${dayCalories} cal in</span>
-                ${workoutCalories > 0 ? `<span class="day-workout-info">💪 ${workoutCalories} cal burned</span>` : ''}
-                ${dayCalories > 0 || workoutCalories > 0 ? `<span class="day-net-calories ${netClass}">Net: ${netCalories} (${netLabel})</span>` : ''}
+                <span class="day-total-calories">🍽️ ${dayCalories} cal in</span>
+                <span class="day-workout-info">🔥 ${totalBurn} cal burn${workoutCalories > 0 ? ` (+${workoutCalories} workout)` : ''}</span>
+                <span class="day-net-calories ${deficitClass}">✅ ${deficit > 0 ? '+' : ''}${deficit} deficit</span>
             </div>
         ` : '';
 
@@ -5513,6 +5637,14 @@ function openManualMealSlotEntry(dateStr, mealType) {
                 </div>
                 <div id="calorie-estimate-result"></div>
             </div>
+            <div class="form-group" style="margin-top: 12px;">
+                <label class="toggle" style="justify-content: flex-start; gap: 10px;">
+                    <input type="checkbox" id="save-as-recipe-checkbox">
+                    <span class="toggle-switch"></span>
+                    <span style="font-size: 0.9rem;">📚 Save to Recipe Library</span>
+                </label>
+                <p class="text-muted" style="font-size: 0.75rem; margin-top: 4px;">Save this meal as a recipe so you can easily add it again later</p>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -5525,10 +5657,56 @@ function openManualMealSlotEntry(dateStr, mealType) {
 function saveManualMealSlot(dateStr, mealType) {
     const title = document.getElementById('manual-meal-name')?.value.trim();
     const calories = document.getElementById('manual-meal-calories')?.value;
+    const saveAsRecipe = document.getElementById('save-as-recipe-checkbox')?.checked;
 
     if (!title) {
         showToast('Please enter a meal name');
         return;
+    }
+
+    let recipeId = null;
+
+    // Save as recipe if checkbox is checked
+    if (saveAsRecipe) {
+        const recipe = {
+            id: 'recipe_' + Date.now(),
+            title: title,
+            ingredients: [],
+            instructions: ['Prepared as noted'],
+            nutrition: {
+                calories: calories ? parseInt(calories) : null,
+                protein: null,
+                carbs: null,
+                fat: null
+            },
+            metadata: {
+                prepTime: null,
+                cookTime: null,
+                totalTime: null,
+                difficulty: 'Easy',
+                servings: 1,
+                source: 'manual'
+            },
+            tags: ['Quick Entry', mealType.charAt(0).toUpperCase() + mealType.slice(1)],
+            createdAt: new Date().toISOString(),
+            rating: null,
+            notes: ''
+        };
+
+        // Get calorie estimate data if available
+        if (lastCalorieEstimate) {
+            recipe.nutrition.protein = lastCalorieEstimate.protein || null;
+            recipe.nutrition.carbs = lastCalorieEstimate.carbs || null;
+            recipe.nutrition.fat = lastCalorieEstimate.fat || null;
+            if (lastCalorieEstimate.breakdown) {
+                recipe.ingredients = lastCalorieEstimate.breakdown.map(b => b.replace(/~?\d+\s*cal/i, '').trim());
+            }
+        }
+
+        const library = getRecipeLibrary();
+        library.unshift(recipe);
+        setStorage(STORAGE.RECIPES, library);
+        recipeId = recipe.id;
     }
 
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
@@ -5537,13 +5715,18 @@ function saveManualMealSlot(dateStr, mealType) {
     mealPlans[dateStr][mealType] = {
         title: title,
         calories: calories ? parseInt(calories) : null,
-        recipeId: null,
+        recipeId: recipeId,
         status: 'planned'
     };
 
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
-    showToast(`Added ${title}`);
+
+    if (saveAsRecipe) {
+        showToast(`Added ${title} & saved to library 📚`);
+    } else {
+        showToast(`Added ${title}`);
+    }
     renderWeekPlanner();
 }
 
@@ -8783,6 +8966,14 @@ function openAddMealModal() {
                 </div>
                 <div id="calorie-estimate-result-log"></div>
             </div>
+            <div class="form-group" style="margin-top: 12px;">
+                <label class="toggle" style="justify-content: flex-start; gap: 10px;">
+                    <input type="checkbox" id="log-save-as-recipe-checkbox">
+                    <span class="toggle-switch"></span>
+                    <span style="font-size: 0.9rem;">📚 Save to Recipe Library</span>
+                </label>
+                <p class="text-muted" style="font-size: 0.75rem; margin-top: 4px;">Save this meal as a recipe for easy reuse</p>
+            </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -8794,19 +8985,72 @@ function openAddMealModal() {
 function logMealManual() {
     const title = document.getElementById('log-meal-input').value.trim();
     const calories = document.getElementById('log-meal-calories')?.value;
+    const saveAsRecipe = document.getElementById('log-save-as-recipe-checkbox')?.checked;
     if (!title) return;
+
+    let recipeId = null;
+
+    // Save as recipe if checkbox is checked
+    if (saveAsRecipe) {
+        const recipe = {
+            id: 'recipe_' + Date.now(),
+            title: title,
+            ingredients: [],
+            instructions: ['Prepared as noted'],
+            nutrition: {
+                calories: calories ? parseInt(calories) : null,
+                protein: null,
+                carbs: null,
+                fat: null
+            },
+            metadata: {
+                prepTime: null,
+                cookTime: null,
+                totalTime: null,
+                difficulty: 'Easy',
+                servings: 1,
+                source: 'manual'
+            },
+            tags: ['Quick Entry', 'Logged Meal'],
+            createdAt: new Date().toISOString(),
+            rating: null,
+            notes: ''
+        };
+
+        // Get calorie estimate data if available
+        if (lastCalorieEstimate) {
+            recipe.nutrition.protein = lastCalorieEstimate.protein || null;
+            recipe.nutrition.carbs = lastCalorieEstimate.carbs || null;
+            recipe.nutrition.fat = lastCalorieEstimate.fat || null;
+            if (lastCalorieEstimate.breakdown) {
+                recipe.ingredients = lastCalorieEstimate.breakdown.map(b => b.replace(/~?\d+\s*cal/i, '').trim());
+            }
+        }
+
+        const library = getRecipeLibrary();
+        library.unshift(recipe);
+        setStorage(STORAGE.RECIPES, library);
+        recipeId = recipe.id;
+    }
 
     const history = getStorage(STORAGE.HISTORY) || [];
     history.unshift({
         type: 'cooked',
         title: title,
         calories: calories ? parseInt(calories) : null,
+        recipeId: recipeId,
         date: new Date().toISOString()
     });
     setStorage(STORAGE.HISTORY, history);
     closeModal();
     renderHistory();
-    showToast('Meal logged!');
+    updateDashboardWorkoutCard(); // Update dashboard with new calories
+
+    if (saveAsRecipe) {
+        showToast('Meal logged & saved to library 📚');
+    } else {
+        showToast('Meal logged!');
+    }
 }
 
 function addActivity(type, title) {
@@ -8952,6 +9196,160 @@ function clearAllData() {
     Object.values(STORAGE).forEach(key => localStorage.removeItem(key));
     closeModal();
     location.reload();
+}
+
+// ========================================
+// CLOUD SYNC
+// ========================================
+function generateSyncCode() {
+    // Generate a memorable sync code
+    const adjectives = ['happy', 'sunny', 'golden', 'gentle', 'sweet', 'cozy', 'fresh', 'warm'];
+    const foods = ['pasta', 'pizza', 'olive', 'lemon', 'basil', 'tomato', 'garlic', 'honey'];
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const food = foods[Math.floor(Math.random() * foods.length)];
+    const num = Math.floor(Math.random() * 9000) + 1000;
+
+    const code = `${adj}-${food}-${num}`;
+    document.getElementById('sync-code-input').value = code;
+    localStorage.setItem('tavola_sync_code', code);
+    showToast('Sync code generated! Remember it for other devices.');
+}
+
+async function uploadToCloud() {
+    const syncCode = document.getElementById('sync-code-input')?.value?.trim();
+    const statusEl = document.getElementById('sync-status');
+
+    if (!syncCode || syncCode.length < 3) {
+        showToast('Please enter or generate a sync code first');
+        return;
+    }
+
+    statusEl.innerHTML = '<span style="color: var(--cerulean);">⬆️ Uploading...</span>';
+
+    try {
+        const data = {
+            profile: getStorage(STORAGE.PROFILE),
+            recipes: getStorage(STORAGE.RECIPES),
+            favorites: getStorage(STORAGE.FAVORITES),
+            mealPlans: getStorage(STORAGE.MEAL_PLANS),
+            history: getStorage(STORAGE.HISTORY),
+            pantry: getStorage(STORAGE.PANTRY),
+            shopping: getStorage(STORAGE.SHOPPING),
+            garden: getStorage(STORAGE.GARDEN),
+            workouts: getStorage(STORAGE.WORKOUTS),
+            prefs: getStorage(STORAGE.PREFS)
+        };
+
+        const response = await fetch('/.netlify/functions/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'upload',
+                syncCode: syncCode,
+                data: data
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            localStorage.setItem('tavola_sync_code', syncCode);
+            localStorage.setItem('tavola_last_sync', new Date().toISOString());
+            statusEl.innerHTML = `<span style="color: var(--success);">✅ Uploaded at ${new Date().toLocaleTimeString()}</span>`;
+            showToast('Data uploaded to cloud!');
+        } else if (result.fallback) {
+            // Fallback: use base64 encoded data sharing
+            statusEl.innerHTML = '<span style="color: var(--gray-text);">Cloud sync unavailable. Use Export/Import instead.</span>';
+            showToast('Cloud sync unavailable. Use local export instead.');
+        } else {
+            statusEl.innerHTML = `<span style="color: var(--danger);">❌ ${result.error}</span>`;
+            showToast(result.error || 'Upload failed');
+        }
+    } catch (error) {
+        console.error('Upload error:', error);
+        statusEl.innerHTML = '<span style="color: var(--danger);">❌ Connection error</span>';
+        showToast('Connection error. Try again later.');
+    }
+}
+
+async function downloadFromCloud() {
+    const syncCode = document.getElementById('sync-code-input')?.value?.trim();
+    const statusEl = document.getElementById('sync-status');
+
+    if (!syncCode || syncCode.length < 3) {
+        showToast('Please enter your sync code');
+        return;
+    }
+
+    statusEl.innerHTML = '<span style="color: var(--cerulean);">⬇️ Downloading...</span>';
+
+    try {
+        const response = await fetch('/.netlify/functions/sync', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'download',
+                syncCode: syncCode
+            })
+        });
+
+        const result = await response.json();
+
+        if (result.success && result.data) {
+            // Confirm before overwriting
+            const uploadDate = new Date(result.uploadedAt).toLocaleString();
+            openModal(`
+                <div class="modal-header">
+                    <h2 class="modal-title">☁️ Download Data?</h2>
+                    <button class="modal-close" onclick="closeModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>Found data uploaded on <strong>${uploadDate}</strong></p>
+                    <p class="text-muted" style="margin-top: 8px;">This will replace your current local data. Continue?</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="applyCloudData(${JSON.stringify(result.data).replace(/"/g, '&quot;')})">Download & Apply</button>
+                </div>
+            `);
+            statusEl.innerHTML = `<span style="color: var(--success);">✅ Data found from ${uploadDate}</span>`;
+        } else if (result.fallback) {
+            statusEl.innerHTML = '<span style="color: var(--gray-text);">Cloud sync unavailable. Use Import instead.</span>';
+            showToast('Cloud sync unavailable. Use local import instead.');
+        } else {
+            statusEl.innerHTML = `<span style="color: var(--danger);">❌ ${result.error}</span>`;
+            showToast(result.error || 'No data found');
+        }
+    } catch (error) {
+        console.error('Download error:', error);
+        statusEl.innerHTML = '<span style="color: var(--danger);">❌ Connection error</span>';
+        showToast('Connection error. Try again later.');
+    }
+}
+
+function applyCloudData(data) {
+    if (data.profile) setStorage(STORAGE.PROFILE, data.profile);
+    if (data.recipes) setStorage(STORAGE.RECIPES, data.recipes);
+    if (data.favorites) setStorage(STORAGE.FAVORITES, data.favorites);
+    if (data.mealPlans) setStorage(STORAGE.MEAL_PLANS, data.mealPlans);
+    if (data.history) setStorage(STORAGE.HISTORY, data.history);
+    if (data.pantry) setStorage(STORAGE.PANTRY, data.pantry);
+    if (data.shopping) setStorage(STORAGE.SHOPPING, data.shopping);
+    if (data.garden) setStorage(STORAGE.GARDEN, data.garden);
+    if (data.workouts) setStorage(STORAGE.WORKOUTS, data.workouts);
+    if (data.prefs) setStorage(STORAGE.PREFS, data.prefs);
+
+    closeModal();
+    showToast('Data downloaded! Refreshing...');
+    setTimeout(() => location.reload(), 1000);
+}
+
+function loadSyncCode() {
+    const savedCode = localStorage.getItem('tavola_sync_code');
+    if (savedCode) {
+        const input = document.getElementById('sync-code-input');
+        if (input) input.value = savedCode;
+    }
 }
 
 // ========================================
@@ -9425,8 +9823,12 @@ function getTodaysCaloriesIn() {
     // Sum up calories from meals
     let totalCalories = 0;
     todaysMeals.forEach(meal => {
-        // Try to get calories from the linked recipe
-        if (meal.recipeId) {
+        // First check if meal has directly stored calories (manual entry)
+        if (meal.calories) {
+            totalCalories += parseInt(meal.calories) || 0;
+        }
+        // Otherwise try to get calories from the linked recipe
+        else if (meal.recipeId) {
             const library = getRecipeLibrary();
             const recipe = library.find(r => r.id === meal.recipeId);
             if (recipe?.nutrition?.calories) {
@@ -9435,13 +9837,40 @@ function getTodaysCaloriesIn() {
         }
     });
 
-    // Also check meal plans for today if meals are marked as cooked
+    // Also check meal plans for today - handle new slot format (breakfast, lunch, dinner, snacks)
     const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
-    if (mealPlans[today]?.status === 'cooked' && mealPlans[today]?.recipeId) {
-        const library = getRecipeLibrary();
-        const recipe = library.find(r => r.id === mealPlans[today].recipeId);
-        if (recipe?.nutrition?.calories) {
-            totalCalories += parseInt(recipe.nutrition.calories) || 0;
+    const todayPlan = mealPlans[today];
+    if (todayPlan) {
+        const mealSlots = ['breakfast', 'lunch', 'dinner', 'snacks'];
+        mealSlots.forEach(slot => {
+            const meal = todayPlan[slot];
+            if (meal?.status === 'cooked') {
+                // Check stored calories first
+                if (meal.calories) {
+                    totalCalories += parseInt(meal.calories) || 0;
+                }
+                // Then try linked recipe
+                else if (meal.recipeId) {
+                    const library = getRecipeLibrary();
+                    const recipe = library.find(r => r.id === meal.recipeId);
+                    if (recipe?.nutrition?.calories) {
+                        totalCalories += parseInt(recipe.nutrition.calories) || 0;
+                    }
+                }
+            }
+        });
+
+        // Legacy format support
+        if (todayPlan.status === 'cooked') {
+            if (todayPlan.calories) {
+                totalCalories += parseInt(todayPlan.calories) || 0;
+            } else if (todayPlan.recipeId) {
+                const library = getRecipeLibrary();
+                const recipe = library.find(r => r.id === todayPlan.recipeId);
+                if (recipe?.nutrition?.calories) {
+                    totalCalories += parseInt(recipe.nutrition.calories) || 0;
+                }
+            }
         }
     }
 
@@ -9488,31 +9917,36 @@ function calculateStreak() {
 function renderWorkoutsView() {
     renderCalorieBalance();
     renderWeekStats();
+    renderProgressGraph();
     renderWorkoutCalendar();
     renderTodaysWorkouts();
 }
 
 function renderCalorieBalance() {
     const caloriesIn = getTodaysCaloriesIn();
-    const caloriesOut = getTodaysCaloriesOut();
-    const netCalories = caloriesIn - caloriesOut;
+    const workoutCalories = getTodaysCaloriesOut();
+
+    // Base metabolic calories (TDEE) - hardcoded at 2000
+    const BASE_CALORIES = 2000;
+    const totalBurn = BASE_CALORIES + workoutCalories;
+    const deficit = totalBurn - caloriesIn;
 
     // Update values
     document.getElementById('calories-in-value').textContent = caloriesIn;
-    document.getElementById('calories-out-value').textContent = caloriesOut;
+    document.getElementById('calories-out-value').textContent = totalBurn;
 
-    // Update net display
+    // Update net display - positive deficit is good
     const netEl = document.getElementById('calorie-net');
-    netEl.textContent = `${netCalories > 0 ? '+' : ''}${netCalories} cal`;
+    netEl.textContent = `${deficit > 0 ? '+' : ''}${deficit} cal deficit`;
     netEl.className = 'calorie-balance-net';
-    if (netCalories > 200) netEl.classList.add('surplus');
-    else if (netCalories < -200) netEl.classList.add('deficit');
+    if (deficit > 0) netEl.classList.add('deficit'); // green for deficit
+    else if (deficit < -200) netEl.classList.add('surplus'); // red for surplus
     else netEl.classList.add('balanced');
 
-    // Update bars (scale to reasonable daily intake ~2000 cal)
-    const maxCal = 2000;
+    // Update bars (scale to total burn for better visual)
+    const maxCal = Math.max(totalBurn, caloriesIn, 2500);
     const inPercent = Math.min((caloriesIn / maxCal) * 100, 100);
-    const outPercent = Math.min((caloriesOut / maxCal) * 100, 100);
+    const outPercent = Math.min((totalBurn / maxCal) * 100, 100);
 
     document.getElementById('calories-in-bar').style.width = `${inPercent}%`;
     document.getElementById('calories-out-bar').style.width = `${outPercent}%`;
@@ -9569,6 +10003,123 @@ function renderWorkoutCalendar() {
     }
 
     container.innerHTML = html;
+}
+
+function renderProgressGraph() {
+    const container = document.getElementById('progress-graph-bars');
+    if (!container) return;
+
+    const BASE_CALORIES = 2000;
+    const today = new Date();
+    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+
+    // Get last 7 days data
+    const dayData = [];
+    for (let i = 6; i >= 0; i--) {
+        const date = new Date(today);
+        date.setDate(today.getDate() - i);
+        const dateStr = date.toISOString().split('T')[0];
+
+        // Get calories consumed for this day
+        const caloriesIn = getCaloriesInForDate(dateStr);
+
+        // Get workout calories for this day
+        const workouts = getStorage(STORAGE.WORKOUTS) || [];
+        const dayWorkouts = workouts.filter(w => w.date === dateStr);
+        const workoutCalories = dayWorkouts.reduce((sum, w) => sum + (w.caloriesBurned || 0), 0);
+
+        const totalBurn = BASE_CALORIES + workoutCalories;
+
+        dayData.push({
+            date: dateStr,
+            dayName: days[date.getDay() === 0 ? 6 : date.getDay() - 1],
+            dayShort: date.toLocaleDateString('en-US', { weekday: 'short' }).substring(0, 2),
+            caloriesIn,
+            totalBurn,
+            workoutCalories,
+            isToday: i === 0
+        });
+    }
+
+    // Find max for scaling
+    const maxValue = Math.max(
+        ...dayData.map(d => Math.max(d.caloriesIn, d.totalBurn)),
+        2500
+    );
+
+    // Render bars
+    let html = '';
+    dayData.forEach(day => {
+        const inHeight = Math.max((day.caloriesIn / maxValue) * 100, 2);
+        const outHeight = Math.max((day.totalBurn / maxValue) * 100, 10);
+
+        html += `
+            <div class="progress-graph-day ${day.isToday ? 'today' : ''}">
+                <div class="progress-graph-bars">
+                    <div class="progress-bar in" style="height: ${inHeight}%;" title="Consumed: ${day.caloriesIn} cal"></div>
+                    <div class="progress-bar out" style="height: ${outHeight}%;" title="Burned: ${day.totalBurn} cal"></div>
+                </div>
+                <div class="progress-graph-day-label">${day.dayShort}</div>
+            </div>
+        `;
+    });
+
+    container.innerHTML = html;
+}
+
+function getCaloriesInForDate(dateStr) {
+    // Get calories from history for a specific date
+    const mealHistory = getStorage(STORAGE.HISTORY) || [];
+    const dayMeals = mealHistory.filter(m => m.date?.startsWith(dateStr));
+
+    let totalCalories = 0;
+    dayMeals.forEach(meal => {
+        if (meal.calories) {
+            totalCalories += parseInt(meal.calories) || 0;
+        } else if (meal.recipeId) {
+            const library = getRecipeLibrary();
+            const recipe = library.find(r => r.id === meal.recipeId);
+            if (recipe?.nutrition?.calories) {
+                totalCalories += parseInt(recipe.nutrition.calories) || 0;
+            }
+        }
+    });
+
+    // Also check meal plans for this date
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    const dayPlan = mealPlans[dateStr];
+    if (dayPlan) {
+        const mealSlots = ['breakfast', 'lunch', 'dinner', 'snacks'];
+        mealSlots.forEach(slot => {
+            const meal = dayPlan[slot];
+            if (meal?.status === 'cooked') {
+                if (meal.calories) {
+                    totalCalories += parseInt(meal.calories) || 0;
+                } else if (meal.recipeId) {
+                    const library = getRecipeLibrary();
+                    const recipe = library.find(r => r.id === meal.recipeId);
+                    if (recipe?.nutrition?.calories) {
+                        totalCalories += parseInt(recipe.nutrition.calories) || 0;
+                    }
+                }
+            }
+        });
+
+        // Legacy format
+        if (dayPlan.status === 'cooked') {
+            if (dayPlan.calories) {
+                totalCalories += parseInt(dayPlan.calories) || 0;
+            } else if (dayPlan.recipeId) {
+                const library = getRecipeLibrary();
+                const recipe = library.find(r => r.id === dayPlan.recipeId);
+                if (recipe?.nutrition?.calories) {
+                    totalCalories += parseInt(recipe.nutrition.calories) || 0;
+                }
+            }
+        }
+    }
+
+    return totalCalories;
 }
 
 function renderTodaysWorkouts() {
