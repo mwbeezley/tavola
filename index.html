@@ -6,40 +6,97 @@
     <title>Tavola - Mediterranean Meal Planning</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Lora:wght@400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@400;500;600;700&family=Lora:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
+            /* Mediterranean Color Palette */
+            --olive-green: #6B8E23;
+            --olive-dark: #5a7a1e;
+            --olive-light: #8faf4f;
+            --terracotta: #C65D3B;
+            --terracotta-dark: #a94d31;
+            --terracotta-light: #d87a5c;
+            --mediterranean-blue: #2D5F8D;
+            --sun-yellow: #F4A460;
+
+            /* Legacy colors (keeping for compatibility) */
             --cerulean: #007BA7;
             --cerulean-dark: #006691;
             --cerulean-light: #3399bf;
             --seafoam: #7FD8BE;
             --seafoam-light: #b8e8d8;
             --seafoam-dark: #5cb89a;
-            --navy: #1A2332;
-            --cream: #FFF8E7;
+
+            /* Neutrals */
+            --navy: #3E3B36;
+            --charcoal: #3E3B36;
+            --cream: #FAF8F3;
+            --feta-white: #F8F9FA;
             --white: #FFFFFF;
+            --warm-gray: #8B8680;
             --gray-light: #f5f5f5;
             --gray-medium: #e0e0e0;
             --gray-text: #666;
-            --warning: #ff9800;
-            --danger: #cc4444;
-            --success: #4caf50;
-            --shadow: 0 2px 8px rgba(26, 35, 50, 0.08);
-            --shadow-lg: 0 4px 16px rgba(26, 35, 50, 0.12);
-            --radius: 12px;
-            --radius-sm: 8px;
-            --radius-lg: 16px;
+
+            /* Accents */
+            --tomato-red: #D84315;
+            --basil-green: #4CAF50;
+            --lemon-yellow: #FDD835;
+
+            /* UI States */
+            --warning: #FF9800;
+            --danger: #F44336;
+            --success: #4CAF50;
+            --info: #2196F3;
+
+            /* Shadows (warm tones) */
+            --shadow-sm: 0 1px 2px rgba(62, 59, 54, 0.05);
+            --shadow: 0 2px 8px rgba(62, 59, 54, 0.08);
+            --shadow-md: 0 4px 6px rgba(62, 59, 54, 0.1);
+            --shadow-lg: 0 10px 15px rgba(62, 59, 54, 0.15);
+            --shadow-xl: 0 20px 25px rgba(62, 59, 54, 0.2);
+
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius: 8px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+            --radius-full: 9999px;
+
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+
+            /* Typography */
+            --font-heading: 'Playfair Display', 'Lora', Georgia, serif;
+            --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-accent: 'Montserrat', sans-serif;
+            --font-script: 'Dancing Script', cursive;
         }
         .dark-mode {
             --cream: #1A1A1A;
+            --feta-white: #252525;
             --white: #2A2A2A;
             --navy: #E8E8E8;
+            --charcoal: #E8E8E8;
             --gray-light: #333;
             --gray-medium: #444;
             --gray-text: #aaa;
+            --warm-gray: #888;
             --cerulean: #3399bf;
+            --olive-green: #8faf4f;
+            --terracotta: #d87a5c;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.35);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
@@ -139,30 +196,48 @@
         .nav-item.active { color: var(--cerulean); background: var(--seafoam-light); }
         .nav-item:hover:not(.active) { background: var(--gray-light); }
 
-        /* Buttons */
+        /* Buttons - Mediterranean Design */
         .btn {
-            padding: 12px 24px;
-            border-radius: var(--radius);
-            font-family: inherit;
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-md);
+            font-family: var(--font-body);
             font-size: 1rem;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
             border: none;
             min-height: 44px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: var(--space-sm);
+            box-shadow: var(--shadow-sm);
         }
-        .btn-primary { background: var(--cerulean); color: white; }
-        .btn-primary:hover { background: var(--cerulean-dark); }
-        .btn-secondary { background: var(--white); color: var(--cerulean); border: 2px solid var(--cerulean); }
-        .btn-secondary:hover { background: var(--seafoam-light); }
-        .btn-ghost { background: transparent; color: var(--cerulean); }
-        .btn-ghost:hover { background: var(--seafoam-light); }
-        .btn-sm { padding: 8px 16px; font-size: 0.9rem; min-height: 36px; }
+        .btn-primary {
+            background: var(--olive-green);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--olive-dark);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-1px);
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--olive-green);
+            border: 2px solid var(--olive-green);
+        }
+        .btn-secondary:hover {
+            background: var(--feta-white);
+            box-shadow: var(--shadow-md);
+        }
+        .btn-ghost { background: transparent; color: var(--olive-green); box-shadow: none; }
+        .btn-ghost:hover { background: var(--feta-white); }
+        .btn-danger { background: var(--terracotta); color: white; }
+        .btn-danger:hover { background: var(--terracotta-dark); }
+        .btn-sm { padding: var(--space-sm) var(--space-md); font-size: 0.9rem; min-height: 36px; }
         .btn-block { width: 100%; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
 
         /* Cards */
         .card {
@@ -172,8 +247,8 @@
             padding: 20px;
             margin-bottom: 16px;
         }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .card-title { font-size: 1.1rem; color: var(--cerulean); }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--space-md); }
+        .card-title { font-size: 1.1rem; color: var(--olive-green); font-family: var(--font-heading); }
 
         /* Quick Action Tiles */
         .action-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
@@ -649,24 +724,48 @@
         /* Chat Interface */
         .chat-container { display: flex; flex-direction: column; height: calc(100vh - 180px); }
         .chat-messages { flex: 1; overflow-y: auto; padding: 16px 0; }
-        .message { margin-bottom: 16px; animation: fadeIn 0.3s ease; }
+        .message { margin-bottom: var(--space-lg); animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message-user { display: flex; justify-content: flex-end; }
         .message-user .message-bubble {
-            background: var(--seafoam);
+            background: linear-gradient(135deg, var(--seafoam) 0%, var(--seafoam-light) 100%);
             color: var(--navy);
-            border-radius: var(--radius) var(--radius) 4px var(--radius);
+            border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
             max-width: 85%;
-            padding: 12px 16px;
+            padding: var(--space-md) var(--space-lg);
+            box-shadow: var(--shadow-sm);
         }
         .message-assistant { display: flex; justify-content: flex-start; }
         .message-assistant .message-bubble {
-            background: var(--white);
-            border: 1px solid var(--seafoam);
-            border-radius: var(--radius) var(--radius) var(--radius) 4px;
+            background: var(--feta-white);
+            border-left: 4px solid var(--olive-green);
+            border-radius: var(--radius-lg);
             max-width: 90%;
-            padding: 16px;
+            padding: var(--space-lg);
             box-shadow: var(--shadow);
+            line-height: 1.6;
+        }
+        .message-assistant .message-bubble h2,
+        .message-assistant .message-bubble h3 {
+            font-family: var(--font-heading);
+            color: var(--terracotta);
+            margin: var(--space-md) 0 var(--space-sm);
+        }
+        .message-assistant .message-bubble h2:first-child,
+        .message-assistant .message-bubble h3:first-child { margin-top: 0; }
+        .message-assistant .message-bubble ul { list-style: none; padding-left: 0; }
+        .message-assistant .message-bubble ul li { padding: var(--space-xs) 0; }
+        .message-assistant .message-bubble ul li::before { content: "🫒 "; margin-right: var(--space-xs); }
+        .message-assistant .message-bubble strong { color: var(--olive-green); }
+        .message-assistant .message-bubble em { color: var(--terracotta); font-style: italic; }
+        .nonna-signature {
+            font-style: italic;
+            color: var(--warm-gray);
+            font-size: 0.875rem;
+            margin-top: var(--space-lg);
+            text-align: right;
+            border-top: 1px solid var(--gray-medium);
+            padding-top: var(--space-sm);
         }
         .chat-input-area { background: var(--white); border-top: 1px solid var(--gray-medium); padding: 12px 0; }
         .chat-input-wrapper { display: flex; gap: 8px; align-items: flex-end; }
@@ -711,18 +810,25 @@
         .send-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         /* Quick Actions */
-        .quick-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+        .quick-actions { display: flex; flex-wrap: wrap; gap: var(--space-sm); margin-top: var(--space-md); }
         .quick-action {
             background: var(--white);
-            border: 1px solid var(--seafoam);
-            padding: 8px 14px;
-            border-radius: 20px;
+            border: 2px solid var(--olive-green);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-full);
             font-size: 0.85rem;
-            color: var(--navy);
+            font-weight: 500;
+            color: var(--olive-green);
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow-sm);
         }
-        .quick-action:hover { background: var(--seafoam-light); border-color: var(--cerulean); }
+        .quick-action:hover {
+            background: var(--olive-green);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
 
         /* Thinking Animation - Nonna themed */
         .thinking { display: flex; align-items: center; gap: 12px; color: var(--gray-text); padding: 16px; }
@@ -733,65 +839,104 @@
         @keyframes cook { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
         .thinking-text { font-style: italic; }
 
-        /* Recipe Card */
+        /* Recipe Card - Mediterranean Design */
         .recipe-card {
             background: var(--white);
             border-radius: var(--radius-lg);
             box-shadow: var(--shadow-lg);
             overflow: hidden;
-            margin: 16px 0;
+            margin: var(--space-lg) 0;
+            transition: all 0.3s ease;
+        }
+        .recipe-card:hover {
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-2px);
         }
         .recipe-header {
-            background: linear-gradient(135deg, var(--cerulean) 0%, var(--seafoam-dark) 100%);
+            background: linear-gradient(135deg, var(--olive-green) 0%, var(--mediterranean-blue) 100%);
             color: white;
-            padding: 20px;
+            padding: var(--space-lg);
             position: relative;
         }
-        .recipe-title { font-family: 'Lora', serif; font-size: 1.5rem; margin-bottom: 8px; padding-right: 100px; }
-        .recipe-actions { position: absolute; top: 12px; right: 12px; display: flex; gap: 8px; }
+        .recipe-title {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            margin-bottom: var(--space-sm);
+            padding-right: 100px;
+            line-height: 1.3;
+        }
+        .recipe-actions { position: absolute; top: var(--space-md); right: var(--space-md); display: flex; gap: var(--space-sm); }
         .recipe-action-btn {
             background: rgba(255,255,255,0.2);
             border: none;
-            width: 36px;
-            height: 36px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             color: white;
             cursor: pointer;
-            transition: background 0.2s;
-            font-size: 1rem;
-        }
-        .recipe-action-btn:hover { background: rgba(255,255,255,0.3); }
-        .recipe-action-btn.favorited { background: var(--danger); }
-        .recipe-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; font-size: 0.9rem; }
-        .recipe-meta-item { display: flex; align-items: center; gap: 4px; }
-        .recipe-tags { padding: 12px 20px; background: var(--gray-light); }
-        .recipe-body { padding: 20px; }
-        .recipe-section { margin-bottom: 24px; }
-        .recipe-section-title {
-            font-family: 'Lora', serif;
+            transition: all 0.2s ease;
             font-size: 1.1rem;
-            color: var(--cerulean);
-            margin-bottom: 12px;
+        }
+        .recipe-action-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.05); }
+        .recipe-action-btn.favorited { background: var(--terracotta); }
+        .recipe-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+            margin-top: var(--space-md);
+            font-size: 0.9rem;
+            opacity: 0.95;
+        }
+        .recipe-meta-item { display: flex; align-items: center; gap: var(--space-xs); }
+        .recipe-tags {
+            padding: var(--space-md) var(--space-lg);
+            background: var(--feta-white);
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+        .recipe-tag {
+            background: var(--white);
+            color: var(--charcoal);
+            padding: var(--space-xs) var(--space-md);
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            font-family: var(--font-accent);
+            border: 1px solid var(--gray-medium);
+        }
+        .recipe-tag.protein { background: var(--terracotta); color: white; border: none; }
+        .recipe-tag.cuisine { background: var(--mediterranean-blue); color: white; border: none; }
+        .recipe-tag.diet { background: var(--olive-green); color: white; border: none; }
+        .recipe-body { padding: var(--space-lg); }
+        .recipe-section { margin-bottom: var(--space-xl); }
+        .recipe-section-title {
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+            color: var(--terracotta);
+            margin-bottom: var(--space-md);
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: var(--space-sm);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid var(--olive-light);
         }
         .ingredient-item {
             display: flex;
             align-items: flex-start;
-            gap: 10px;
-            padding: 8px 0;
+            gap: var(--space-sm);
+            padding: var(--space-sm) 0;
             border-bottom: 1px solid var(--gray-light);
         }
         .ingredient-item:last-child { border-bottom: none; }
-        .ingredient-checkbox { width: 22px; height: 22px; accent-color: var(--cerulean); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
-        .ingredient-text.checked { text-decoration: line-through; color: var(--gray-text); }
-        .instruction-step { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-light); }
+        .ingredient-checkbox { width: 22px; height: 22px; accent-color: var(--olive-green); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
+        .ingredient-text.checked { text-decoration: line-through; color: var(--warm-gray); }
+        .instruction-step { display: flex; gap: var(--space-md); padding: var(--space-md) 0; border-bottom: 1px solid var(--gray-light); }
         .instruction-step:last-child { border-bottom: none; }
         .step-number {
-            width: 28px;
-            height: 28px;
-            background: var(--cerulean);
+            width: 32px;
+            height: 32px;
+            background: var(--olive-green);
             color: white;
             border-radius: 50%;
             display: flex;
@@ -800,36 +945,90 @@
             font-weight: 600;
             font-size: 0.9rem;
             flex-shrink: 0;
+            font-family: var(--font-accent);
         }
         .recipe-notes {
-            background: var(--seafoam-light);
-            border-radius: var(--radius);
-            padding: 16px;
-            margin-top: 16px;
+            background: linear-gradient(135deg, var(--cream) 0%, var(--feta-white) 100%);
+            border-radius: var(--radius-md);
+            padding: var(--space-lg);
+            margin-top: var(--space-lg);
+            border: 1px solid var(--olive-light);
         }
-        .recipe-notes-title { font-weight: 600; margin-bottom: 8px; color: var(--cerulean); }
+        .recipe-notes-title { font-weight: 600; margin-bottom: var(--space-sm); color: var(--olive-green); }
 
         /* Recipe Card Actions Bar */
         .recipe-card-actions {
             display: flex;
-            gap: 8px;
-            padding: 16px 20px;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
             border-top: 1px solid var(--gray-light);
-            background: var(--gray-light);
+            background: var(--feta-white);
         }
         .recipe-card-actions .btn { flex: 1; }
 
         /* Nonna's Tip */
         .nonna-tip {
-            background: linear-gradient(135deg, var(--cream) 0%, var(--seafoam-light) 100%);
-            border-left: 4px solid var(--cerulean);
-            border-radius: 0 var(--radius) var(--radius) 0;
-            padding: 16px;
-            margin: 16px 0;
+            background: linear-gradient(135deg, var(--cream) 0%, #fff5e6 100%);
+            border-left: 4px solid var(--terracotta);
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            padding: var(--space-lg);
+            margin: var(--space-lg) 0;
         }
-        .nonna-tip-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; color: var(--cerulean); }
-        .nonna-tip-text { font-style: italic; color: var(--navy); }
-        .nonna-tip-signature { text-align: right; margin-top: 8px; color: var(--gray-text); font-size: 0.9rem; }
+        .nonna-tip-header { display: flex; align-items: center; gap: var(--space-sm); margin-bottom: var(--space-sm); font-weight: 600; color: var(--terracotta); }
+        .nonna-tip-text { font-style: italic; color: var(--navy); line-height: 1.6; }
+        .nonna-tip-signature { text-align: right; margin-top: var(--space-sm); color: var(--warm-gray); font-size: 0.9rem; font-style: italic; }
+
+        /* Wine Pairing Section */
+        .wine-pairing-section {
+            background: linear-gradient(135deg, #f8f4ff 0%, #fff5f5 100%);
+            border: 1px solid #d4b4d4;
+            border-radius: var(--radius-md);
+            margin-top: var(--space-lg);
+            overflow: hidden;
+        }
+        .wine-pairing-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-md) var(--space-lg);
+            cursor: pointer;
+            background: linear-gradient(135deg, #722f37 0%, #8e4a51 100%);
+            color: white;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+        .wine-pairing-header:hover { background: linear-gradient(135deg, #5a252c 0%, #722f37 100%); }
+        .wine-pairing-icon { font-size: 1.3rem; }
+        .wine-pairing-title { flex: 1; }
+        .wine-pairing-toggle { font-size: 0.8rem; }
+        .wine-pairing-content {
+            padding: var(--space-lg);
+        }
+        .wine-style {
+            font-size: 1.1rem;
+            color: #722f37;
+            margin-bottom: var(--space-sm);
+        }
+        .wine-reason {
+            color: var(--gray-text);
+            margin-bottom: var(--space-md);
+            line-height: 1.5;
+        }
+        .wine-bottles {
+            background: white;
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+        }
+        .wine-bottles-title {
+            font-weight: 600;
+            color: #722f37;
+            margin-bottom: var(--space-sm);
+            font-size: 0.9rem;
+        }
+        .wine-bottle {
+            padding: var(--space-xs) 0;
+            font-size: 0.95rem;
+        }
 
         /* Tabs */
         .tabs {
@@ -1127,10 +1326,54 @@
         }
         .meal-slot-actions { display: flex; gap: 2px; }
         .meal-slot-actions .icon-btn { padding: 4px; font-size: 0.9rem; }
+        .meal-slot-actions .confirm-btn { color: var(--success); }
+        .meal-slot-actions .confirm-btn:hover { background: var(--success); color: white; }
         .meal-slot-add {
             color: var(--gray-text);
             font-size: 0.85rem;
             flex: 1;
+        }
+        .week-meal-slot.confirmed {
+            background: linear-gradient(135deg, #e8f5e9 0%, #f1f8e9 100%);
+            border: 1px solid var(--success);
+        }
+        .meal-confirmed-badge {
+            background: var(--success);
+            color: white;
+            padding: 2px 8px;
+            border-radius: var(--radius-full);
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-left: var(--space-sm);
+        }
+        /* Confirm Meal Modal */
+        .confirm-meal-recipe {
+            background: var(--feta-white);
+            padding: var(--space-md);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-lg);
+        }
+        .confirm-meal-section {
+            margin-bottom: var(--space-lg);
+        }
+        .confirm-meal-section-title {
+            font-weight: 600;
+            color: var(--olive-green);
+            margin-bottom: var(--space-sm);
+        }
+        .deduction-item {
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            margin-bottom: var(--space-xs);
+            font-size: 0.9rem;
+        }
+        .deduction-item.have {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .deduction-item.missing {
+            background: #fff3e0;
+            color: #e65100;
         }
         .week-day-summary {
             margin-top: 12px;
@@ -2542,7 +2785,10 @@
             <div class="view" id="view-recipes">
                 <div class="flex flex-between flex-center mb-16">
                     <h2 class="section-title" style="margin-bottom: 0; border: none;">📚 Recipe Library</h2>
-                    <button class="btn btn-sm btn-ghost" id="recipes-edit-btn" onclick="toggleRecipeEditMode()">Edit</button>
+                    <div class="flex gap-8">
+                        <button class="btn btn-sm btn-primary" onclick="openSaveManualRecipeModal()">+ Create Recipe</button>
+                        <button class="btn btn-sm btn-ghost" id="recipes-edit-btn" onclick="toggleRecipeEditMode()">Edit</button>
+                    </div>
                 </div>
                 <!-- Bulk Actions Bar (hidden by default) -->
                 <div class="bulk-actions-bar hidden" id="recipes-bulk-bar">
@@ -3963,11 +4209,13 @@ function parseRecipeToCard(content) {
                         <p>${modifications.replace(/\n/g, '<br>').replace(/^-\s*/gm, '• ')}</p>
                     </div>
                 ` : ''}
+                ${renderWinePairingSection({ title: title, ingredients: ingredients, tags: tags })}
             </div>
             <div class="recipe-card-actions">
                 <button class="btn btn-primary btn-sm" onclick="saveRecipeFromChat('${recipeId}')" id="save-btn-${recipeId}">💾 Save Recipe</button>
                 <button class="btn btn-secondary btn-sm" onclick="favoriteRecipeFromChat('${recipeId}')">❤️ Favorite</button>
                 <button class="btn btn-secondary btn-sm" onclick="addToWeekFromChat('${recipeId}')">📅 Add to Week</button>
+                <button class="btn btn-ghost btn-sm" onclick="shareRecipe('${recipeId}')">📤 Share</button>
             </div>
         </div>
     `;
@@ -5241,16 +5489,19 @@ function renderWeekPlanner() {
                     displayCalories = recipe?.nutrition?.calories;
                 }
 
+                const isConfirmed = meal.status === 'confirmed';
                 mealSlotsHtml += `
-                    <div class="week-meal-slot">
+                    <div class="week-meal-slot ${isConfirmed ? 'confirmed' : ''}">
                         <span class="meal-slot-icon">${mt.icon}</span>
                         <span class="meal-slot-type">${mt.label}</span>
                         <div class="meal-slot-content">
                             <div class="meal-slot-title">${meal.title}</div>
                             ${displayCalories ? `<span class="meal-slot-calories">${displayCalories} cal</span>` : ''}
+                            ${isConfirmed ? '<span class="meal-confirmed-badge">✓ Cooked</span>' : ''}
                         </div>
                         <div class="meal-slot-actions">
                             ${meal.recipeId ? `<button class="icon-btn" onclick="viewRecipeDetail('${meal.recipeId}')" title="View">👁️</button>` : ''}
+                            ${!isConfirmed && meal.recipeId ? `<button class="icon-btn confirm-btn" onclick="confirmMealCooked('${dateStr}', '${mt.key}')" title="Mark as Cooked">✓</button>` : ''}
                             <button class="icon-btn" onclick="openAddMealSlot('${dateStr}', '${mt.key}', '${day}')" title="Change">✏️</button>
                             <button class="icon-btn" onclick="removeMealSlot('${dateStr}', '${mt.key}')" title="Remove">🗑️</button>
                         </div>
@@ -5466,6 +5717,201 @@ function removeMealSlot(dateStr, mealType) {
         renderWeekPlanner();
         showToast('Meal removed');
     }
+}
+
+// ========================================
+// PANTRY INTEGRATION - CONFIRM MEAL COOKED
+// ========================================
+function confirmMealCooked(dateStr, mealType) {
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    const meal = mealPlans[dateStr]?.[mealType];
+
+    if (!meal || !meal.recipeId) {
+        showToast('No recipe linked to this meal');
+        return;
+    }
+
+    // Get the recipe
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === meal.recipeId);
+
+    if (!recipe) {
+        showToast('Recipe not found');
+        return;
+    }
+
+    // Show confirmation modal with ingredient deduction preview
+    const ingredients = recipe.ingredients || [];
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+
+    let deductionHtml = '';
+    let missingItems = [];
+    let deductionPlan = [];
+
+    ingredients.forEach(ing => {
+        const { name, qty } = parseIngredient(ing);
+        const pantryItem = pantry.find(p =>
+            p.name.toLowerCase().includes(name.toLowerCase()) ||
+            name.toLowerCase().includes(p.name.toLowerCase())
+        );
+
+        if (pantryItem) {
+            deductionPlan.push({ pantryItem, qty, originalIng: ing });
+            deductionHtml += `<div class="deduction-item have">✅ ${ing}</div>`;
+        } else {
+            missingItems.push(ing);
+            deductionHtml += `<div class="deduction-item missing">❌ ${ing} (not in pantry)</div>`;
+        }
+    });
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">✓ Confirm Meal Cooked</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="confirm-meal-recipe">
+                <strong>${recipe.title}</strong>
+                <div class="text-muted">${dateStr} · ${mealType}</div>
+            </div>
+
+            <div class="confirm-meal-section">
+                <div class="confirm-meal-section-title">📦 Pantry Deductions</div>
+                <p class="text-muted mb-12">These ingredients will be marked as used:</p>
+                ${deductionHtml}
+            </div>
+
+            ${missingItems.length > 0 ? `
+                <div class="confirm-meal-section">
+                    <div class="confirm-meal-section-title">🛒 Add Missing to Shopping List?</div>
+                    <label class="checkbox-item">
+                        <input type="checkbox" id="add-missing-to-shopping" checked>
+                        <span>Add ${missingItems.length} missing item(s) to shopping list</span>
+                    </label>
+                </div>
+            ` : ''}
+
+            <div class="confirm-meal-section">
+                <label class="checkbox-item">
+                    <input type="checkbox" id="update-recipe-cooked" checked>
+                    <span>Update recipe's "times cooked" counter</span>
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="executeMealConfirmation('${dateStr}', '${mealType}', '${meal.recipeId}')">
+                ✓ Confirm & Update Pantry
+            </button>
+        </div>
+    `);
+}
+
+function parseIngredient(ingredientStr) {
+    // Parse quantity and ingredient name from strings like "2 cups flour" or "1 lb chicken"
+    const match = ingredientStr.match(/^([\d½¼¾⅓⅔\.\/\s-]+)?\s*(cups?|tbsp?|tsp?|oz|lbs?|pounds?|cloves?|heads?|bunch|can|jar|container|package)?\s*(.+)/i);
+
+    if (match) {
+        return {
+            qty: (match[1] || '').trim(),
+            unit: (match[2] || '').trim(),
+            name: (match[3] || '').trim().replace(/,.*$/, '') // Remove anything after comma
+        };
+    }
+
+    return { qty: '', unit: '', name: ingredientStr.trim() };
+}
+
+function executeMealConfirmation(dateStr, mealType, recipeId) {
+    const addMissingToShopping = document.getElementById('add-missing-to-shopping')?.checked;
+    const updateRecipeCooked = document.getElementById('update-recipe-cooked')?.checked;
+
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+
+    if (!recipe) {
+        closeModal();
+        showToast('Recipe not found');
+        return;
+    }
+
+    const ingredients = recipe.ingredients || [];
+    let deducted = 0;
+    let missingItems = [];
+
+    // Process each ingredient
+    ingredients.forEach(ing => {
+        const { name } = parseIngredient(ing);
+        const pantryIndex = pantry.findIndex(p =>
+            p.name.toLowerCase().includes(name.toLowerCase()) ||
+            name.toLowerCase().includes(p.name.toLowerCase())
+        );
+
+        if (pantryIndex >= 0) {
+            // Mark as used/low or remove from pantry
+            const item = pantry[pantryIndex];
+            if (item.qty) {
+                // If quantity tracked, reduce it
+                const currentQty = parseFloat(item.qty) || 1;
+                item.qty = Math.max(0, currentQty - 1).toString();
+                if (parseFloat(item.qty) <= 0) {
+                    pantry.splice(pantryIndex, 1);
+                } else {
+                    item.status = 'low';
+                }
+            } else {
+                // No quantity, just mark as used
+                item.status = 'used';
+            }
+            deducted++;
+        } else {
+            missingItems.push(ing);
+        }
+    });
+
+    // Save updated pantry
+    setStorage(STORAGE.PANTRY, pantry);
+
+    // Add missing items to shopping list if checked
+    if (addMissingToShopping && missingItems.length > 0) {
+        const shopping = getStorage(STORAGE.SHOPPING) || { weekly: [] };
+        missingItems.forEach(ing => {
+            const { name } = parseIngredient(ing);
+            if (!shopping.weekly.find(i => i.name.toLowerCase() === name.toLowerCase())) {
+                shopping.weekly.push({
+                    name: ing,
+                    category: categorizeIngredient(name),
+                    checked: false,
+                    source: 'meal-confirm'
+                });
+            }
+        });
+        setStorage(STORAGE.SHOPPING, shopping);
+    }
+
+    // Update recipe times cooked if checked
+    if (updateRecipeCooked) {
+        recipe.timesCooked = (recipe.timesCooked || 0) + 1;
+        recipe.lastCooked = dateStr;
+        setStorage(STORAGE.RECIPES, library);
+    }
+
+    // Mark meal as confirmed/cooked
+    if (mealPlans[dateStr] && mealPlans[dateStr][mealType]) {
+        mealPlans[dateStr][mealType].status = 'confirmed';
+        setStorage(STORAGE.MEAL_PLANS, mealPlans);
+    }
+
+    closeModal();
+    renderWeekPlanner();
+
+    // Show summary toast
+    let message = `✅ ${recipe.title} confirmed!`;
+    if (deducted > 0) message += ` ${deducted} pantry items updated.`;
+    if (missingItems.length > 0 && addMissingToShopping) message += ` ${missingItems.length} added to shopping.`;
+    showToast(message);
 }
 
 function openAddMealForDay(dateStr, dayName) {
@@ -7331,6 +7777,373 @@ const TYPICAL_STAPLES = [
     { name: 'Greek yogurt', category: 'Dairy', quantity: '1 container' },
     { name: 'Feta cheese', category: 'Dairy', quantity: '1 container' }
 ];
+
+// ========================================
+// WINE PAIRING GUIDE
+// ========================================
+const WINE_PAIRINGS = {
+    proteins: {
+        chicken: {
+            default: { style: 'Unoaked Chardonnay or Pinot Grigio', reason: 'Light, crisp wines complement grilled/roasted chicken', bottles: ['Barefoot Chardonnay ($8)', 'Santa Margherita Pinot Grigio ($14)'] },
+            lemon: { style: 'Sauvignon Blanc or Albariño', reason: 'Citrus notes in the wine echo the lemon flavors', bottles: ['Kim Crawford Sauvignon Blanc ($12)', 'Martin Codax Albariño ($11)'] },
+            tomato: { style: 'Chianti or Tempranillo', reason: 'Tomato-based dishes pair with medium Italian/Spanish reds', bottles: ['Ruffino Chianti ($10)', 'Campo Viejo Tempranillo ($9)'] },
+            creamy: { style: 'Oaked Chardonnay', reason: 'Rich, buttery wine matches creamy sauces', bottles: ['Kendall-Jackson Chardonnay ($13)', 'La Crema Chardonnay ($15)'] },
+            spicy: { style: 'Off-dry Riesling', reason: 'Slight sweetness tames the heat', bottles: ['Dr. Loosen Riesling ($11)', 'Chateau Ste. Michelle Riesling ($9)'] }
+        },
+        fish: {
+            default: { style: 'Pinot Grigio or Vinho Verde', reason: 'Light, crisp wines let delicate fish shine', bottles: ['Ecco Domani Pinot Grigio ($10)', 'Casal Garcia Vinho Verde ($8)'] },
+            salmon: { style: 'Light Pinot Noir or Rosé', reason: 'Salmon\'s richness can handle lighter reds or dry rosé', bottles: ['Meiomi Pinot Noir ($15)', 'Whispering Angel Rosé ($14)'] },
+            shellfish: { style: 'Albariño or Muscadet', reason: 'Mineral wines from coastal regions pair perfectly', bottles: ['Martin Codax Albariño ($11)', 'Domaine de la Pépière Muscadet ($12)'] },
+            grilled: { style: 'Vermentino or Assyrtiko', reason: 'Herbal notes complement grilled seafood', bottles: ['Argiolas Vermentino ($12)', 'Sigalas Assyrtiko ($15)'] }
+        },
+        lamb: {
+            default: { style: 'Syrah or Cabernet Sauvignon', reason: 'Bold reds stand up to lamb\'s richness', bottles: ['19 Crimes Shiraz ($10)', 'Josh Cellars Cabernet ($13)'] },
+            herb: { style: 'Bordeaux blend or Rioja', reason: 'Herbal notes in the wine complement rosemary and thyme', bottles: ['Mouton Cadet Bordeaux ($12)', 'Marqués de Cáceres Rioja ($11)'] },
+            braised: { style: 'Côtes du Rhône or Aglianico', reason: 'Rustic, earthy wines for slow-cooked dishes', bottles: ['E. Guigal Côtes du Rhône ($12)', 'Feudi di San Gregorio Aglianico ($14)'] }
+        },
+        pork: {
+            default: { style: 'Pinot Noir or Spanish Garnacha', reason: 'Medium-bodied reds complement pork\'s sweetness', bottles: ['Meiomi Pinot Noir ($15)', 'Garnacha de Fuego ($8)'] },
+            spicy: { style: 'Zinfandel or Malbec', reason: 'Fruit-forward wines balance spiced pork', bottles: ['Ravenswood Zinfandel ($11)', 'Alamos Malbec ($10)'] }
+        },
+        vegetarian: {
+            default: { style: 'Rosé or Light Red', reason: 'Versatile wines work with diverse vegetable dishes', bottles: ['Côtes de Provence Rosé ($12)', 'Beaujolais Villages ($11)'] },
+            grilled: { style: 'Vermentino or Grüner Veltliner', reason: 'Herbal, fresh wines enhance grilled vegetables', bottles: ['Argiolas Vermentino ($12)', 'Hugl Grüner Veltliner ($11)'] }
+        }
+    },
+    cuisines: {
+        spanish: { style: 'Spanish wines - Tempranillo, Garnacha, Albariño', bottles: ['Campo Viejo Tempranillo ($9)', 'Borsao Garnacha ($8)'] },
+        greek: { style: 'Greek wines - Assyrtiko, Moschofilero', bottles: ['Sigalas Assyrtiko ($15)', 'Boutari Moschofilero ($12)'] },
+        italian: { style: 'Italian wines - Chianti, Montepulciano, Vermentino', bottles: ['Ruffino Chianti ($10)', 'Masciarelli Montepulciano ($11)'] },
+        moroccan: { style: 'Côtes du Rhône or off-dry Riesling', reason: 'Complex spices need versatile wines', bottles: ['E. Guigal Côtes du Rhône ($12)', 'Dr. Loosen Riesling ($11)'] },
+        lebanese: { style: 'Lebanese reds or Rosé', bottles: ['Château Musar ($18)', 'Château Kefraya Rosé ($14)'] }
+    },
+    sauces: {
+        tomato: { style: 'Italian reds - Chianti, Sangiovese', bottles: ['Ruffino Chianti ($10)', 'Antinori Santa Cristina ($11)'] },
+        citrus: { style: 'Sauvignon Blanc or Verdicchio', bottles: ['Kim Crawford Sauvignon Blanc ($12)', 'Bucci Verdicchio ($13)'] },
+        creamy: { style: 'Oaked Chardonnay or White Rioja', bottles: ['Kendall-Jackson Chardonnay ($13)', 'CVNE Monopole ($12)'] },
+        spicy: { style: 'Off-dry Riesling or Gewürztraminer', bottles: ['Dr. Loosen Riesling ($11)', 'Trimbach Gewürztraminer ($15)'] }
+    },
+    universal: {
+        rosé: { style: 'Provence Rosé', reason: 'Works with almost anything Mediterranean', bottles: ['AIX Rosé ($15)', 'Whispering Angel ($14)'] },
+        white: { style: 'Albariño', reason: 'Versatile white that pairs with seafood and chicken', bottles: ['Martin Codax Albariño ($11)', 'Burgans Albariño ($12)'] },
+        red: { style: 'Côtes du Rhône', reason: 'Food-friendly blend for meats and hearty dishes', bottles: ['E. Guigal Côtes du Rhône ($12)', 'M. Chapoutier Belleruche ($11)'] }
+    }
+};
+
+function getWinePairing(recipe) {
+    const title = (recipe.title || '').toLowerCase();
+    const ingredients = (recipe.ingredients || []).join(' ').toLowerCase();
+    const tags = (recipe.tags || []).map(t => t.toLowerCase());
+    const combined = title + ' ' + ingredients + ' ' + tags.join(' ');
+
+    let protein = null;
+    let sauce = null;
+    let cuisine = null;
+
+    // Detect protein
+    if (/chicken|pollo/.test(combined)) protein = 'chicken';
+    else if (/salmon|cod|branzino|fish|seafood|shrimp|scallop|tuna/.test(combined)) protein = 'fish';
+    else if (/lamb/.test(combined)) protein = 'lamb';
+    else if (/pork/.test(combined)) protein = 'pork';
+    else if (/vegetarian|vegan|tofu|bean|lentil|chickpea/.test(combined)) protein = 'vegetarian';
+
+    // Detect sauce/flavor profile
+    if (/lemon|citrus|lime/.test(combined)) sauce = 'lemon';
+    else if (/tomato|marinara/.test(combined)) sauce = 'tomato';
+    else if (/cream|creamy|butter/.test(combined)) sauce = 'creamy';
+    else if (/harissa|spicy|chili/.test(combined)) sauce = 'spicy';
+    else if (/herb|rosemary|thyme/.test(combined)) sauce = 'herb';
+
+    // Detect cuisine
+    if (/spanish|paella|chorizo|tapas/.test(combined)) cuisine = 'spanish';
+    else if (/greek|feta|tzatziki|moussaka/.test(combined)) cuisine = 'greek';
+    else if (/italian|pasta|risotto|pesto/.test(combined)) cuisine = 'italian';
+    else if (/moroccan|tagine|harissa/.test(combined)) cuisine = 'moroccan';
+    else if (/lebanese|falafel|hummus|za'atar/.test(combined)) cuisine = 'lebanese';
+
+    // Get the best pairing
+    let pairing = null;
+
+    if (protein && WINE_PAIRINGS.proteins[protein]) {
+        const proteinPairings = WINE_PAIRINGS.proteins[protein];
+        if (sauce && proteinPairings[sauce]) {
+            pairing = proteinPairings[sauce];
+        } else {
+            pairing = proteinPairings.default;
+        }
+    } else if (cuisine && WINE_PAIRINGS.cuisines[cuisine]) {
+        pairing = WINE_PAIRINGS.cuisines[cuisine];
+    } else if (sauce && WINE_PAIRINGS.sauces[sauce]) {
+        pairing = WINE_PAIRINGS.sauces[sauce];
+    } else {
+        // Default to rosé as universal pairing
+        pairing = WINE_PAIRINGS.universal.rosé;
+    }
+
+    return {
+        style: pairing.style,
+        reason: pairing.reason || `A versatile choice that complements Mediterranean flavors.`,
+        bottles: pairing.bottles || WINE_PAIRINGS.universal.rosé.bottles,
+        cuisine: cuisine,
+        protein: protein
+    };
+}
+
+function renderWinePairingSection(recipe) {
+    const pairing = getWinePairing(recipe);
+    return `
+        <div class="wine-pairing-section">
+            <div class="wine-pairing-header" onclick="toggleWinePairing(this)">
+                <span class="wine-pairing-icon">🍷</span>
+                <span class="wine-pairing-title">Wine Pairing Suggestion</span>
+                <span class="wine-pairing-toggle">▼</span>
+            </div>
+            <div class="wine-pairing-content hidden">
+                <div class="wine-style">
+                    <strong>Recommended:</strong> ${pairing.style}
+                </div>
+                <div class="wine-reason">
+                    <em>${pairing.reason}</em>
+                </div>
+                <div class="wine-bottles">
+                    <div class="wine-bottles-title">Budget-Friendly Options ($10-15):</div>
+                    ${pairing.bottles.map(b => `<div class="wine-bottle">🍾 ${b}</div>`).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function toggleWinePairing(header) {
+    const content = header.nextElementSibling;
+    const toggle = header.querySelector('.wine-pairing-toggle');
+    content.classList.toggle('hidden');
+    toggle.textContent = content.classList.contains('hidden') ? '▼' : '▲';
+}
+
+// ========================================
+// SHARE RECIPE
+// ========================================
+function shareRecipe(recipeId) {
+    // Try to find recipe in pending or library
+    let recipe = pendingRecipes.get(recipeId);
+    if (!recipe) {
+        const library = getRecipeLibrary();
+        recipe = library.find(r => r.id === recipeId);
+    }
+
+    if (!recipe) {
+        showToast('Recipe not found');
+        return;
+    }
+
+    // Get health profile modifications
+    const profile = getStorage(STORAGE.PROFILE);
+    const modifications = profile?.healthConditions?.length > 0 ?
+        `HEALTH MODIFICATIONS:\n${generateHealthModifications(profile)}` : '';
+
+    // Format recipe for sharing
+    const shareText = formatRecipeForSharing(recipe, modifications);
+
+    // Try to copy to clipboard
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(shareText)
+            .then(() => showToast('📋 Recipe copied to clipboard!'))
+            .catch(() => showShareModal(shareText));
+    } else {
+        showShareModal(shareText);
+    }
+}
+
+function formatRecipeForSharing(recipe, modifications) {
+    const ingredients = recipe.ingredients || [];
+    const instructions = recipe.instructions || [];
+    const nutrition = recipe.nutrition || {};
+    const prepTime = recipe.metadata?.prepTime || 'N/A';
+    const cookTime = recipe.metadata?.cookTime || 'N/A';
+    const servings = recipe.servings || 'N/A';
+
+    let text = `📋 ${recipe.title}\n`;
+    text += `${'═'.repeat(40)}\n\n`;
+    text += `⏱️ Prep: ${prepTime} min | Cook: ${cookTime} min | Servings: ${servings}\n`;
+    if (nutrition.calories) {
+        text += `🔥 Calories: ${nutrition.calories} per serving\n`;
+    }
+    text += `\n`;
+
+    text += `🥘 INGREDIENTS:\n`;
+    text += `${'-'.repeat(20)}\n`;
+    ingredients.forEach(ing => {
+        text += `• ${ing}\n`;
+    });
+    text += `\n`;
+
+    text += `👩‍🍳 INSTRUCTIONS:\n`;
+    text += `${'-'.repeat(20)}\n`;
+    instructions.forEach((step, i) => {
+        text += `${i + 1}. ${step}\n\n`;
+    });
+
+    if (modifications) {
+        text += `\n${modifications}\n`;
+    }
+
+    // Wine pairing
+    const pairing = getWinePairing(recipe);
+    text += `\n🍷 WINE PAIRING:\n`;
+    text += `${'-'.repeat(20)}\n`;
+    text += `${pairing.style}\n`;
+    text += `Budget picks: ${pairing.bottles.join(', ')}\n`;
+
+    text += `\n${'═'.repeat(40)}\n`;
+    text += `Created with Tavola 🍝\n`;
+    text += `Mediterranean meal planning made easy.\n`;
+
+    return text;
+}
+
+function showShareModal(shareText) {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">📤 Share Recipe</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p class="mb-16">Copy the recipe below to share:</p>
+            <textarea class="form-input" style="height: 300px; font-family: monospace; font-size: 0.85rem;" readonly>${shareText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
+            <button class="btn btn-primary btn-block mt-16" onclick="copyShareText()">📋 Copy to Clipboard</button>
+        </div>
+    `);
+}
+
+function copyShareText() {
+    const textarea = document.querySelector('.modal-body textarea');
+    if (textarea) {
+        textarea.select();
+        document.execCommand('copy');
+        showToast('📋 Copied to clipboard!');
+        closeModal();
+    }
+}
+
+// ========================================
+// SAVE MANUAL RECIPE TO LIBRARY
+// ========================================
+function openSaveManualRecipeModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">📝 Create Recipe</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Recipe Name *</label>
+                <input type="text" class="form-input" id="manual-recipe-title" placeholder="e.g., Mom's Greek Chicken">
+            </div>
+            <div class="form-group">
+                <label>Servings</label>
+                <input type="number" class="form-input" id="manual-recipe-servings" placeholder="4" value="4">
+            </div>
+            <div class="grid grid-2">
+                <div class="form-group">
+                    <label>Prep Time (min)</label>
+                    <input type="number" class="form-input" id="manual-recipe-prep" placeholder="15">
+                </div>
+                <div class="form-group">
+                    <label>Cook Time (min)</label>
+                    <input type="number" class="form-input" id="manual-recipe-cook" placeholder="30">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Calories (per serving)</label>
+                <input type="number" class="form-input" id="manual-recipe-calories" placeholder="450">
+            </div>
+            <div class="form-group">
+                <label>Ingredients (one per line) *</label>
+                <textarea class="form-input" id="manual-recipe-ingredients" rows="6" placeholder="2 lbs chicken thighs
+1 lemon, juiced
+3 cloves garlic, minced
+2 tbsp olive oil"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Instructions (one step per line) *</label>
+                <textarea class="form-input" id="manual-recipe-instructions" rows="6" placeholder="Preheat oven to 400°F
+Mix lemon juice, garlic, and olive oil
+Season chicken and arrange in baking dish
+Bake for 35-40 minutes until golden"></textarea>
+            </div>
+            <div class="form-group">
+                <label>Tags (comma-separated)</label>
+                <input type="text" class="form-input" id="manual-recipe-tags" placeholder="chicken, greek, easy, weeknight">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveManualRecipeToLibrary()">💾 Save Recipe</button>
+        </div>
+    `);
+}
+
+function saveManualRecipeToLibrary() {
+    const title = document.getElementById('manual-recipe-title')?.value.trim();
+    const servings = document.getElementById('manual-recipe-servings')?.value || '4';
+    const prepTime = document.getElementById('manual-recipe-prep')?.value || '';
+    const cookTime = document.getElementById('manual-recipe-cook')?.value || '';
+    const calories = document.getElementById('manual-recipe-calories')?.value || '';
+    const ingredientsText = document.getElementById('manual-recipe-ingredients')?.value.trim();
+    const instructionsText = document.getElementById('manual-recipe-instructions')?.value.trim();
+    const tagsText = document.getElementById('manual-recipe-tags')?.value.trim();
+
+    // Validation
+    if (!title) {
+        showToast('Please enter a recipe name');
+        return;
+    }
+    if (!ingredientsText) {
+        showToast('Please enter ingredients');
+        return;
+    }
+    if (!instructionsText) {
+        showToast('Please enter instructions');
+        return;
+    }
+
+    // Parse inputs
+    const ingredients = ingredientsText.split('\n').map(i => i.trim()).filter(i => i);
+    const instructions = instructionsText.split('\n').map(i => i.trim()).filter(i => i);
+    const tags = tagsText ? tagsText.split(',').map(t => t.trim().toLowerCase()).filter(t => t) : [];
+
+    // Create recipe object
+    const recipe = {
+        id: 'recipe_' + Date.now(),
+        title: title,
+        servings: servings,
+        ingredients: ingredients,
+        instructions: instructions,
+        tags: tags,
+        metadata: {
+            prepTime: prepTime,
+            cookTime: cookTime,
+            totalTime: (parseInt(prepTime) || 0) + (parseInt(cookTime) || 0)
+        },
+        nutrition: {
+            calories: calories
+        },
+        dateGenerated: new Date().toISOString(),
+        source: 'manual',
+        favorited: false,
+        timesCooked: 0
+    };
+
+    // Save to library
+    const result = saveRecipeToLibrary(recipe);
+    if (result.saved) {
+        closeModal();
+        showToast(`✅ "${title}" saved to your recipe library!`);
+    } else {
+        showToast(result.message);
+    }
+}
 
 // Categorize an ingredient based on name
 function categorizeIngredient(ingredientName) {
