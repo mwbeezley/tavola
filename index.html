@@ -1424,20 +1424,60 @@
         }
         .week-day-empty:hover { border-color: var(--cerulean); color: var(--cerulean); }
 
-        /* Week Plan Summary Card */
+        /* Week Plan Summary Card - FIXED READABILITY */
         .week-plan-card {
-            background: linear-gradient(135deg, var(--cerulean) 0%, var(--seafoam-dark) 100%);
+            background: linear-gradient(135deg, #2D5F8D 0%, #1e4a6b 100%);
             color: white;
-            border-radius: var(--radius);
-            padding: 20px;
-            margin: 16px 0;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            margin: var(--space-lg) 0;
+            box-shadow: var(--shadow-lg);
         }
-        .week-plan-card h3 { margin-bottom: 12px; }
-        .week-plan-item { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.2); display: flex; justify-content: space-between; }
+        .week-plan-card h3 {
+            color: #FFFFFF;
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .week-plan-item {
+            padding: var(--space-sm) 0;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: var(--space-md);
+        }
         .week-plan-item:last-child { border-bottom: none; }
-        .week-plan-actions { display: flex; gap: 12px; margin-top: 16px; }
-        .week-plan-actions .btn { flex: 1; background: rgba(255,255,255,0.2); border: none; }
-        .week-plan-actions .btn:hover { background: rgba(255,255,255,0.3); }
+        .week-plan-item strong {
+            color: #FFFFFF;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .week-plan-item span {
+            color: #F0F4F8;
+            font-size: 0.95rem;
+        }
+        .week-plan-actions {
+            display: flex;
+            gap: var(--space-md);
+            margin-top: var(--space-lg);
+        }
+        .week-plan-actions .btn {
+            flex: 1;
+            background: white;
+            color: #2D5F8D;
+            border: none;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .week-plan-actions .btn:hover {
+            background: var(--feta-white);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            transform: translateY(-1px);
+        }
 
         /* Modal */
         .modal-overlay {
@@ -4121,6 +4161,8 @@ function parseRecipeToCard(content) {
         modifications: modifications,
         healthBenefits: healthBenefits,
         nutrition: nutrition,
+        servings: parseInt(serves) || 4,
+        tags: tags,
         metadata: {
             prepTime: parseInt(prepTime),
             cookTime: parseInt(cookTime),
@@ -7926,14 +7968,14 @@ function toggleWinePairing(header) {
 // ========================================
 function shareRecipe(recipeId) {
     // Try to find recipe in pending or library
-    let recipe = pendingRecipes.get(recipeId);
+    let recipe = window.pendingRecipes?.[recipeId];
     if (!recipe) {
         const library = getRecipeLibrary();
         recipe = library.find(r => r.id === recipeId);
     }
 
     if (!recipe) {
-        showToast('Recipe not found');
+        showToast('Recipe not found - save it first!');
         return;
     }
 
