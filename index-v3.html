@@ -133,7 +133,7 @@
             z-index: 100;
         }
         .header-content { display: flex; justify-content: space-between; align-items: center; }
-        .header-right { display: flex; align-items: center; gap: 8px; }
+        .header-right { display: flex; align-items: center; gap: 12px; }
         .header-search {
             display: flex;
             align-items: center;
@@ -151,6 +151,96 @@
             width: 100%;
             color: var(--navy);
         }
+
+        /* Auth Section */
+        .auth-section {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .auth-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--olive-green);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .auth-btn:hover {
+            background: var(--olive-dark);
+            transform: translateY(-1px);
+        }
+        .auth-btn .icon {
+            font-size: 1rem;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: var(--olive-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--navy);
+            max-width: 100px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .sync-status {
+            font-size: 0.75rem;
+            color: var(--warm-gray);
+            padding: 4px 8px;
+            background: var(--gray-light);
+            border-radius: 12px;
+        }
+
+        /* Responsive auth section */
+        @media (max-width: 600px) {
+            .auth-section {
+                gap: 6px;
+            }
+            .auth-btn {
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            .auth-btn span:not(.icon) {
+                display: none;
+            }
+            .user-name {
+                display: none;
+            }
+            .sync-status {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+        }
+
         .icon-btn {
             background: none;
             border: none;
@@ -2337,6 +2427,63 @@
             .recipe-card { box-shadow: none; border: 1px solid #ddd; }
         }
     </style>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js';
+        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc, writeBatch, serverTimestamp, onSnapshot } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js';
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from 'https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB-TyujX9jkwj_RaDdBhN17A9bZuBgGPLQ",
+            authDomain: "tavola-58e0e.firebaseapp.com",
+            projectId: "tavola-58e0e",
+            storageBucket: "tavola-58e0e.firebasestorage.app",
+            messagingSenderId: "486187712746",
+            appId: "1:486187712746:web:07d5365afa765e3bd15793",
+            measurementId: "G-2Y0WHB6CVD"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Make Firebase available globally for the app
+        window.firebaseApp = app;
+        window.firebaseAuth = auth;
+        window.firebaseDb = db;
+        window.firebaseStorage = storage;
+        window.firebaseGoogleProvider = googleProvider;
+
+        // Export Firebase functions globally
+        window.firebaseSignInWithPopup = signInWithPopup;
+        window.firebaseSignOut = signOut;
+        window.firebaseOnAuthStateChanged = onAuthStateChanged;
+        window.firestoreDoc = doc;
+        window.firestoreSetDoc = setDoc;
+        window.firestoreGetDoc = getDoc;
+        window.firestoreCollection = collection;
+        window.firestoreQuery = query;
+        window.firestoreWhere = where;
+        window.firestoreGetDocs = getDocs;
+        window.firestoreDeleteDoc = deleteDoc;
+        window.firestoreWriteBatch = writeBatch;
+        window.firestoreServerTimestamp = serverTimestamp;
+        window.firestoreOnSnapshot = onSnapshot;
+        window.storageRef = ref;
+        window.storageUploadBytes = uploadBytes;
+        window.storageGetDownloadURL = getDownloadURL;
+        window.storageDeleteObject = deleteObject;
+
+        // Signal that Firebase is ready
+        window.firebaseReady = true;
+        window.dispatchEvent(new CustomEvent('firebase-ready'));
+    </script>
 </head>
 <body>
     <!-- Header -->
@@ -2347,6 +2494,13 @@
                 <div class="header-search" id="global-search">
                     <span>🔍</span>
                     <input type="text" placeholder="Search..." id="global-search-input" onkeyup="handleGlobalSearch(event)">
+                </div>
+                <div class="auth-section">
+                    <div class="user-info" id="user-info" style="display: none;"></div>
+                    <span class="sync-status" id="sync-status"></span>
+                    <button class="auth-btn" id="auth-btn" onclick="signInWithGoogle()">
+                        <span class="icon">🔐</span> Sign In
+                    </button>
                 </div>
             </div>
         </div>
@@ -3457,7 +3611,13 @@ let state = {
     cookMode: { active: false, recipe: null, currentStep: 0 },
     recipeEditMode: false,
     selectedRecipes: new Set(),
-    selectedTagFilters: new Set()
+    selectedTagFilters: new Set(),
+    // Auth state
+    user: null,
+    isAuthReady: false,
+    syncEnabled: false,
+    isSyncing: false,
+    lastSyncTime: null
 };
 
 // Nonna's Tips
@@ -3475,6 +3635,460 @@ const NONNA_TIPS = [
 ];
 
 // ========================================
+// FIREBASE AUTH & SYNC
+// ========================================
+
+// Wait for Firebase to be ready
+function waitForFirebase() {
+    return new Promise((resolve) => {
+        if (window.firebaseReady) {
+            resolve();
+        } else {
+            window.addEventListener('firebase-ready', resolve, { once: true });
+        }
+    });
+}
+
+// Initialize Firebase Auth listener
+async function initFirebaseAuth() {
+    await waitForFirebase();
+
+    window.firebaseOnAuthStateChanged(window.firebaseAuth, (user) => {
+        state.user = user;
+        state.isAuthReady = true;
+        updateAuthUI();
+
+        if (user) {
+            console.log('User signed in:', user.email);
+            state.syncEnabled = true;
+            // Sync data from Firestore
+            syncFromFirestore();
+        } else {
+            console.log('User signed out');
+            state.syncEnabled = false;
+        }
+    });
+}
+
+// Sign in with Google
+async function signInWithGoogle() {
+    try {
+        await waitForFirebase();
+        const result = await window.firebaseSignInWithPopup(
+            window.firebaseAuth,
+            window.firebaseGoogleProvider
+        );
+        showToast(`Welcome, ${result.user.displayName || result.user.email}! 🎉`);
+        return result.user;
+    } catch (error) {
+        console.error('Sign in error:', error);
+        if (error.code === 'auth/popup-closed-by-user') {
+            showToast('Sign in cancelled');
+        } else if (error.code === 'auth/popup-blocked') {
+            showToast('Please allow popups for sign in');
+        } else {
+            showToast('Sign in failed. Please try again.');
+        }
+        return null;
+    }
+}
+
+// Sign out
+async function signOutUser() {
+    try {
+        await waitForFirebase();
+        await window.firebaseSignOut(window.firebaseAuth);
+        state.user = null;
+        state.syncEnabled = false;
+        showToast('Signed out successfully');
+        updateAuthUI();
+    } catch (error) {
+        console.error('Sign out error:', error);
+        showToast('Sign out failed');
+    }
+}
+
+// Update auth UI elements
+function updateAuthUI() {
+    const authBtn = document.getElementById('auth-btn');
+    const userInfo = document.getElementById('user-info');
+    const syncStatus = document.getElementById('sync-status');
+
+    if (!state.isAuthReady) return;
+
+    if (state.user) {
+        if (authBtn) {
+            authBtn.innerHTML = `<span class="icon">👤</span> Sign Out`;
+            authBtn.onclick = signOutUser;
+        }
+        if (userInfo) {
+            const displayName = state.user.displayName || state.user.email?.split('@')[0] || 'User';
+            userInfo.innerHTML = `
+                <div class="user-avatar">
+                    ${state.user.photoURL
+                        ? `<img src="${state.user.photoURL}" alt="${displayName}" />`
+                        : `<span>${displayName.charAt(0).toUpperCase()}</span>`
+                    }
+                </div>
+                <span class="user-name">${displayName}</span>
+            `;
+            userInfo.style.display = 'flex';
+        }
+        if (syncStatus) {
+            syncStatus.innerHTML = state.isSyncing
+                ? '☁️ Syncing...'
+                : '✅ Synced';
+            syncStatus.style.display = 'block';
+        }
+    } else {
+        if (authBtn) {
+            authBtn.innerHTML = `<span class="icon">🔐</span> Sign In`;
+            authBtn.onclick = signInWithGoogle;
+        }
+        if (userInfo) {
+            userInfo.style.display = 'none';
+        }
+        if (syncStatus) {
+            syncStatus.innerHTML = '☁️ Sign in to sync';
+            syncStatus.style.display = 'block';
+        }
+    }
+}
+
+// ========================================
+// FIRESTORE SYNC FUNCTIONS
+// ========================================
+
+// Collection paths
+function getUserCollection(collectionName) {
+    if (!state.user) return null;
+    return `users/${state.user.uid}/${collectionName}`;
+}
+
+// Sync all data to Firestore
+async function syncToFirestore() {
+    if (!state.user || !state.syncEnabled) return;
+
+    state.isSyncing = true;
+    updateAuthUI();
+
+    try {
+        await waitForFirebase();
+        const batch = window.firestoreWriteBatch(window.firebaseDb);
+
+        // Sync profile
+        const profile = getStorage(STORAGE.PROFILE);
+        if (profile) {
+            const profileRef = window.firestoreDoc(window.firebaseDb, 'users', state.user.uid);
+            batch.set(profileRef, {
+                ...profile,
+                email: state.user.email,
+                updatedAt: window.firestoreServerTimestamp()
+            }, { merge: true });
+        }
+
+        // Sync recipes
+        const recipes = getRecipeLibrary();
+        for (const recipe of recipes) {
+            const recipeRef = window.firestoreDoc(
+                window.firebaseDb,
+                `users/${state.user.uid}/recipes`,
+                recipe.id
+            );
+            batch.set(recipeRef, {
+                ...recipe,
+                updatedAt: window.firestoreServerTimestamp()
+            });
+        }
+
+        // Sync meal plans
+        const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+        const mealPlansRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'mealPlans'
+        );
+        batch.set(mealPlansRef, {
+            plans: mealPlans,
+            updatedAt: window.firestoreServerTimestamp()
+        });
+
+        // Sync pantry
+        const pantry = getStorage(STORAGE.PANTRY) || [];
+        const pantryRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'pantry'
+        );
+        batch.set(pantryRef, {
+            items: pantry,
+            updatedAt: window.firestoreServerTimestamp()
+        });
+
+        // Sync shopping lists
+        const shopping = getStorage(STORAGE.SHOPPING) || [];
+        const shoppingRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'shopping'
+        );
+        batch.set(shoppingRef, {
+            lists: shopping,
+            updatedAt: window.firestoreServerTimestamp()
+        });
+
+        // Sync workouts
+        const workouts = getStorage(STORAGE.WORKOUTS) || [];
+        const workoutsRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'workouts'
+        );
+        batch.set(workoutsRef, {
+            entries: workouts,
+            updatedAt: window.firestoreServerTimestamp()
+        });
+
+        // Sync preferences
+        const prefs = getStorage(STORAGE.PREFS) || {};
+        const prefsRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'preferences'
+        );
+        batch.set(prefsRef, {
+            ...prefs,
+            updatedAt: window.firestoreServerTimestamp()
+        });
+
+        await batch.commit();
+        state.lastSyncTime = new Date();
+        console.log('Data synced to Firestore');
+    } catch (error) {
+        console.error('Sync to Firestore failed:', error);
+        showToast('Sync failed. Changes saved locally.');
+    } finally {
+        state.isSyncing = false;
+        updateAuthUI();
+    }
+}
+
+// Sync data from Firestore (on login)
+async function syncFromFirestore() {
+    if (!state.user) return;
+
+    state.isSyncing = true;
+    updateAuthUI();
+
+    try {
+        await waitForFirebase();
+
+        // Get profile
+        const profileRef = window.firestoreDoc(window.firebaseDb, 'users', state.user.uid);
+        const profileSnap = await window.firestoreGetDoc(profileRef);
+        if (profileSnap.exists()) {
+            const cloudProfile = profileSnap.data();
+            const localProfile = getStorage(STORAGE.PROFILE);
+
+            // Merge: prefer cloud data but keep local if cloud is older
+            if (!localProfile || (cloudProfile.updatedAt?.toDate() > new Date(localProfile.updatedAt || 0))) {
+                setStorage(STORAGE.PROFILE, cloudProfile);
+            }
+        }
+
+        // Get recipes
+        const recipesRef = window.firestoreCollection(
+            window.firebaseDb,
+            `users/${state.user.uid}/recipes`
+        );
+        const recipesSnap = await window.firestoreGetDocs(recipesRef);
+        const cloudRecipes = [];
+        recipesSnap.forEach(doc => {
+            cloudRecipes.push({ ...doc.data(), id: doc.id });
+        });
+
+        if (cloudRecipes.length > 0) {
+            // Merge with local recipes
+            const localRecipes = getRecipeLibrary();
+            const mergedRecipes = mergeRecipeLibraries(localRecipes, cloudRecipes);
+            setStorage(STORAGE.RECIPES, mergedRecipes);
+        }
+
+        // Get meal plans
+        const mealPlansRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'mealPlans'
+        );
+        const mealPlansSnap = await window.firestoreGetDoc(mealPlansRef);
+        if (mealPlansSnap.exists()) {
+            const cloudPlans = mealPlansSnap.data().plans || {};
+            const localPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+            const mergedPlans = { ...localPlans, ...cloudPlans };
+            setStorage(STORAGE.MEAL_PLANS, mergedPlans);
+        }
+
+        // Get pantry
+        const pantryRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'pantry'
+        );
+        const pantrySnap = await window.firestoreGetDoc(pantryRef);
+        if (pantrySnap.exists()) {
+            const cloudPantry = pantrySnap.data().items || [];
+            setStorage(STORAGE.PANTRY, cloudPantry);
+        }
+
+        // Get shopping lists
+        const shoppingRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'shopping'
+        );
+        const shoppingSnap = await window.firestoreGetDoc(shoppingRef);
+        if (shoppingSnap.exists()) {
+            const cloudShopping = shoppingSnap.data().lists || [];
+            setStorage(STORAGE.SHOPPING, cloudShopping);
+        }
+
+        // Get workouts
+        const workoutsRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'workouts'
+        );
+        const workoutsSnap = await window.firestoreGetDoc(workoutsRef);
+        if (workoutsSnap.exists()) {
+            const cloudWorkouts = workoutsSnap.data().entries || [];
+            setStorage(STORAGE.WORKOUTS, cloudWorkouts);
+        }
+
+        // Get preferences
+        const prefsRef = window.firestoreDoc(
+            window.firebaseDb,
+            `users/${state.user.uid}/data`,
+            'preferences'
+        );
+        const prefsSnap = await window.firestoreGetDoc(prefsRef);
+        if (prefsSnap.exists()) {
+            setStorage(STORAGE.PREFS, prefsSnap.data());
+        }
+
+        state.lastSyncTime = new Date();
+        console.log('Data synced from Firestore');
+        showToast('Data synced from cloud ☁️');
+
+        // Refresh current view
+        if (state.currentView) {
+            navigateTo(state.currentView);
+        }
+    } catch (error) {
+        console.error('Sync from Firestore failed:', error);
+        showToast('Could not sync from cloud. Using local data.');
+    } finally {
+        state.isSyncing = false;
+        updateAuthUI();
+    }
+}
+
+// Merge recipe libraries (prefer newer versions)
+function mergeRecipeLibraries(local, cloud) {
+    const merged = new Map();
+
+    // Add all local recipes
+    local.forEach(recipe => {
+        merged.set(recipe.id, recipe);
+    });
+
+    // Merge cloud recipes (prefer newer)
+    cloud.forEach(cloudRecipe => {
+        const localRecipe = merged.get(cloudRecipe.id);
+        if (!localRecipe) {
+            merged.set(cloudRecipe.id, cloudRecipe);
+        } else {
+            // Compare timestamps
+            const cloudTime = cloudRecipe.updatedAt?.toDate?.() || new Date(cloudRecipe.updatedAt || 0);
+            const localTime = new Date(localRecipe.updatedAt || localRecipe.dateGenerated || 0);
+
+            if (cloudTime > localTime) {
+                // Keep cloud version but merge cooking history
+                merged.set(cloudRecipe.id, {
+                    ...cloudRecipe,
+                    cookingHistory: [
+                        ...(localRecipe.cookingHistory || []),
+                        ...(cloudRecipe.cookingHistory || [])
+                    ].filter((v, i, a) => a.findIndex(t => t.date === v.date) === i)
+                });
+            }
+        }
+    });
+
+    return Array.from(merged.values());
+}
+
+// Debounced sync function (call after data changes)
+let syncTimeout = null;
+function debouncedSync() {
+    if (!state.syncEnabled) return;
+
+    if (syncTimeout) {
+        clearTimeout(syncTimeout);
+    }
+
+    syncTimeout = setTimeout(() => {
+        syncToFirestore();
+    }, 2000); // Wait 2 seconds before syncing
+}
+
+// ========================================
+// PHOTO UPLOAD TO FIREBASE STORAGE
+// ========================================
+
+async function uploadRecipePhoto(recipeId, file) {
+    if (!state.user) {
+        showToast('Sign in to upload photos');
+        return null;
+    }
+
+    try {
+        await waitForFirebase();
+
+        // Create a reference to the file location
+        const photoRef = window.storageRef(
+            window.firebaseStorage,
+            `users/${state.user.uid}/recipes/${recipeId}/${file.name}`
+        );
+
+        // Upload the file
+        const snapshot = await window.storageUploadBytes(photoRef, file);
+
+        // Get the download URL
+        const downloadURL = await window.storageGetDownloadURL(snapshot.ref);
+
+        console.log('Photo uploaded:', downloadURL);
+        return downloadURL;
+    } catch (error) {
+        console.error('Photo upload failed:', error);
+        showToast('Photo upload failed');
+        return null;
+    }
+}
+
+async function deleteRecipePhoto(photoURL) {
+    if (!state.user || !photoURL) return;
+
+    try {
+        await waitForFirebase();
+        const photoRef = window.storageRef(window.firebaseStorage, photoURL);
+        await window.storageDeleteObject(photoRef);
+        console.log('Photo deleted');
+    } catch (error) {
+        console.error('Photo delete failed:', error);
+    }
+}
+
+// ========================================
 // INITIALIZATION
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
@@ -3486,6 +4100,9 @@ function initApp() {
     cleanupDuplicateRecipes();
     cleanupBadMealPlans();
     cleanupBadWorkouts();
+
+    // Initialize Firebase Auth (non-blocking)
+    initFirebaseAuth();
 
     const profile = getStorage(STORAGE.PROFILE);
     if (profile) {
@@ -3646,6 +4263,10 @@ function getStorage(key) {
 function setStorage(key, value) {
     try {
         localStorage.setItem(key, JSON.stringify(value));
+        // Trigger cloud sync for important data
+        if ([STORAGE.RECIPES, STORAGE.MEAL_PLANS, STORAGE.PANTRY, STORAGE.SHOPPING, STORAGE.WORKOUTS, STORAGE.PROFILE].includes(key)) {
+            debouncedSync();
+        }
         return true;
     } catch (e) {
         console.error('Storage write error:', e);
