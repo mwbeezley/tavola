@@ -78,6 +78,15 @@
             --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
             --font-accent: 'Montserrat', sans-serif;
             --font-script: 'Dancing Script', cursive;
+
+            /* Extended UI Colors */
+            --border-light: #e5e7eb;
+            --text-muted: #6b7280;
+            --skeleton-base: #e5e7eb;
+            --skeleton-shimmer: #f3f4f6;
+            --accent-gold: #DAA520;
+            --olive-hover: #556B2F;
+            --terracotta-hover: #D2691E;
         }
         .dark-mode {
             --cream: #1A1A1A;
@@ -2420,11 +2429,674 @@
         }
         .filter-dropdown.open .filter-dropdown-content { display: block; }
 
-        /* Print Styles */
+        /* ========================================
+           LOADING STATES
+           ======================================== */
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid var(--gray-light);
+            border-top-color: var(--olive-green);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        .loading-spinner.small { width: 20px; height: 20px; border-width: 2px; }
+        .loading-spinner.inline { display: inline-block; vertical-align: middle; margin-right: 8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(255,255,255,0.85);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            gap: 16px;
+        }
+        .loading-overlay .loading-text {
+            color: var(--gray-text);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+        }
+
+        .btn-loading {
+            opacity: 0.7;
+            pointer-events: none;
+            position: relative;
+        }
+        .btn-loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        /* ========================================
+           SKELETON LOADING
+           ======================================== */
+        .skeleton {
+            background: linear-gradient(90deg, var(--skeleton-base) 25%, var(--skeleton-shimmer) 50%, var(--skeleton-base) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: var(--radius-sm);
+        }
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        .skeleton-text { height: 1rem; margin-bottom: 0.5rem; width: 80%; }
+        .skeleton-title { height: 1.5rem; width: 60%; margin-bottom: 1rem; }
+        .skeleton-card {
+            height: 220px;
+            border-radius: var(--radius);
+            margin-bottom: 16px;
+        }
+        .skeleton-avatar { width: 40px; height: 40px; border-radius: 50%; }
+
+        /* ========================================
+           CONFIRMATION MODAL
+           ======================================== */
+        .confirmation-modal-content {
+            text-align: center;
+            padding: var(--space-xl);
+        }
+        .confirmation-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-lg);
+            display: block;
+        }
+        .confirmation-icon.warning { color: var(--warning); }
+        .confirmation-icon.danger { color: var(--danger); }
+        .confirmation-icon.success { color: var(--success); }
+        .confirmation-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            margin-bottom: var(--space-sm);
+            color: var(--charcoal);
+        }
+        .confirmation-message {
+            color: var(--gray-text);
+            margin-bottom: var(--space-xl);
+            line-height: 1.6;
+        }
+        .confirmation-actions {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+        }
+        .confirmation-actions .btn { min-width: 120px; }
+
+        /* ========================================
+           EMPTY STATES
+           ======================================== */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-3xl) var(--space-xl);
+        }
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-lg);
+            opacity: 0.4;
+            display: block;
+        }
+        .empty-state-title {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--charcoal);
+            margin-bottom: var(--space-sm);
+        }
+        .empty-state-text {
+            color: var(--gray-text);
+            margin-bottom: var(--space-xl);
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+        .empty-state .btn {
+            margin: 0 auto;
+        }
+
+        /* ========================================
+           ENHANCED TOAST STYLES
+           ======================================== */
+        .toast-container {
+            position: fixed;
+            bottom: 100px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column-reverse;
+            gap: 8px;
+            pointer-events: none;
+        }
+        .toast-item {
+            background: var(--white);
+            color: var(--charcoal);
+            padding: 14px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 280px;
+            max-width: 400px;
+            transform: translateX(120%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: auto;
+            border-left: 4px solid var(--olive-green);
+        }
+        .toast-item.show { transform: translateX(0); opacity: 1; }
+        .toast-item.toast-success { border-left-color: var(--success); }
+        .toast-item.toast-error { border-left-color: var(--danger); }
+        .toast-item.toast-warning { border-left-color: var(--warning); }
+        .toast-item.toast-info { border-left-color: var(--info); }
+        .toast-item .toast-icon { font-size: 1.2rem; flex-shrink: 0; }
+        .toast-item .toast-message { flex: 1; font-size: 0.9rem; line-height: 1.4; }
+        .toast-item .toast-close {
+            background: none; border: none; cursor: pointer;
+            color: var(--gray-text); padding: 4px; font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+        @media (max-width: 640px) {
+            .toast-container {
+                left: 16px;
+                right: 16px;
+                bottom: 90px;
+            }
+            .toast-item { min-width: auto; max-width: 100%; }
+        }
+
+        /* ========================================
+           BADGE & CHIP UTILITIES
+           ======================================== */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .badge-family { background: var(--seafoam-light); color: var(--mediterranean-blue); }
+        .badge-private { background: var(--gray-light); color: var(--gray-text); }
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border-radius: var(--radius-full);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1.5px solid var(--gray-medium);
+            background: var(--white);
+            color: var(--charcoal);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .chip:hover { border-color: var(--olive-green); }
+        .chip.active {
+            background: var(--olive-green);
+            border-color: var(--olive-green);
+            color: white;
+        }
+        .chip .chip-count { opacity: 0.7; font-size: 0.7rem; }
+        .chip .chip-remove {
+            background: none; border: none; cursor: pointer;
+            color: inherit; padding: 0; font-size: 1rem; line-height: 1;
+            opacity: 0.6;
+        }
+        .chip .chip-remove:hover { opacity: 1; }
+
+        /* ========================================
+           TAG SELECTION (for share/filter modals)
+           ======================================== */
+        .tag-selection-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+        @media (min-width: 640px) {
+            .tag-selection-grid { grid-template-columns: repeat(3, 1fr); }
+        }
+        .tag-selection-chip {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: 8px 12px;
+            border: 2px solid var(--gray-medium);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+        }
+        .tag-selection-chip input[type="checkbox"] { accent-color: var(--olive-green); }
+        .tag-selection-chip.selected {
+            border-color: var(--olive-green);
+            background: rgba(107, 142, 35, 0.08);
+        }
+
+        /* ========================================
+           RADIO GROUP (for privacy selection)
+           ======================================== */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+        .radio-item {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-md);
+            padding: var(--space-md);
+            border: 2px solid var(--gray-medium);
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .radio-item:has(input:checked) {
+            border-color: var(--olive-green);
+            background: rgba(107, 142, 35, 0.06);
+        }
+        .radio-item input[type="radio"] { accent-color: var(--olive-green); margin-top: 3px; }
+        .radio-label {
+            font-weight: 500;
+            margin-bottom: 2px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .radio-desc { font-size: 0.85rem; color: var(--gray-text); }
+
+        /* ========================================
+           ENHANCED RECIPE DETAIL MODAL
+           ======================================== */
+        .recipe-detail-body {
+            max-height: 70vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .recipe-modal-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-top: 6px;
+        }
+        .recipe-detail-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+            padding: var(--space-md);
+            background: var(--feta-white);
+            border-radius: var(--radius);
+            margin-bottom: var(--space-lg);
+        }
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+            color: var(--gray-text);
+        }
+        .meta-item i, .meta-item svg { width: 16px; height: 16px; }
+        .recipe-detail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-lg);
+        }
+        .recipe-detail-section {
+            margin-bottom: var(--space-xl);
+        }
+        .recipe-detail-section .section-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.15rem;
+            font-family: var(--font-heading);
+            color: var(--olive-green);
+            margin-bottom: var(--space-md);
+            padding-bottom: var(--space-sm);
+            border-bottom: 2px solid rgba(107, 142, 35, 0.2);
+        }
+        .recipe-detail-section .section-title i,
+        .recipe-detail-section .section-title svg { width: 20px; height: 20px; }
+        .nutrition-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-sm);
+        }
+        @media (min-width: 640px) {
+            .nutrition-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+        .nutrition-card {
+            text-align: center;
+            padding: var(--space-md) var(--space-sm);
+            background: var(--feta-white);
+            border-radius: var(--radius);
+        }
+        .nutrition-value {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--olive-green);
+        }
+        .nutrition-label {
+            font-size: 0.7rem;
+            color: var(--gray-text);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+        .ingredients-list, .instructions-list {
+            padding-left: var(--space-xl);
+            line-height: 1.8;
+        }
+        .ingredients-list li, .instructions-list li {
+            margin-bottom: var(--space-sm);
+        }
+        .health-benefits-section {
+            background: rgba(107, 142, 35, 0.05);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+        }
+        .recipe-detail-footer {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            padding: 16px 20px;
+            border-top: 1px solid var(--gray-medium);
+        }
+        .recipe-detail-footer .btn { font-size: 0.85rem; }
+
+        /* ========================================
+           FAMILY TAVOLA STYLES
+           ======================================== */
+        .recipes-tab-bar {
+            display: flex;
+            gap: 0;
+            margin-bottom: var(--space-lg);
+            border-bottom: 2px solid var(--gray-medium);
+        }
+        .recipes-tab {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            font-family: var(--font-accent);
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: var(--gray-text);
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s;
+        }
+        .recipes-tab.active {
+            color: var(--olive-green);
+        }
+        .recipes-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: var(--olive-green);
+        }
+        .recipes-tab:hover { color: var(--olive-green); }
+
+        .family-tavola-header {
+            background: linear-gradient(135deg, rgba(107,142,35,0.08) 0%, var(--cream) 100%);
+            padding: var(--space-md) var(--space-lg);
+            border-radius: var(--radius);
+            margin-bottom: var(--space-lg);
+        }
+        .family-filters {
+            display: flex;
+            gap: var(--space-md);
+            flex-wrap: wrap;
+            margin-bottom: var(--space-md);
+        }
+        .family-recipe-shared-by {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            color: var(--gray-text);
+            margin-top: 6px;
+        }
+        .family-recipe-shared-by i, .family-recipe-shared-by svg { width: 12px; height: 12px; }
+
+        .family-rating-form {
+            background: var(--feta-white);
+            padding: var(--space-lg);
+            border-radius: var(--radius);
+            margin-bottom: var(--space-xl);
+        }
+        .family-rating-form h4 {
+            margin: 0 0 var(--space-md) 0;
+            color: var(--olive-green);
+            font-family: var(--font-heading);
+        }
+        .star-rating .star {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--gray-medium);
+            transition: color 0.15s;
+        }
+        .star-rating .star.filled { color: #fbbf24; }
+        .star-rating .star:hover { color: #f59e0b; }
+        .family-ratings-list { margin-top: var(--space-xl); }
+        .family-rating-item {
+            background: var(--white);
+            padding: var(--space-md);
+            border-radius: var(--radius);
+            margin-bottom: var(--space-md);
+            border-left: 3px solid var(--olive-green);
+        }
+        .rating-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-sm);
+        }
+        .rating-user {
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        .rating-stars { color: #fbbf24; }
+        .rating-comment {
+            color: var(--gray-text);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin: 0 0 var(--space-sm) 0;
+        }
+        .rating-modification {
+            background: var(--cream);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+        }
+
+        /* ========================================
+           RECIPE CREATION FORM
+           ======================================== */
+        .create-recipe-form { max-height: 70vh; overflow-y: auto; }
+        .ingredient-input-row, .instruction-input-row {
+            display: flex;
+            align-items: flex-start;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+        }
+        .ingredient-input-row input,
+        .ingredient-input-row select { flex: 1; }
+        .step-num {
+            min-width: 28px;
+            font-weight: 600;
+            color: var(--olive-green);
+            padding-top: 10px;
+            text-align: center;
+        }
+        .instruction-input-row textarea { flex: 1; }
+        .btn-icon {
+            background: none;
+            border: none;
+            padding: 8px;
+            cursor: pointer;
+            color: var(--gray-text);
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-icon:hover { background: var(--gray-light); color: var(--danger); }
+        .nutrition-inputs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-sm);
+        }
+        @media (min-width: 640px) {
+            .nutrition-inputs { grid-template-columns: repeat(4, 1fr); }
+        }
+        .form-input-small {
+            padding: 8px 10px;
+            border: 1px solid var(--gray-medium);
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-family: var(--font-body);
+            width: 100%;
+        }
+        .form-input-small:focus {
+            outline: none;
+            border-color: var(--olive-green);
+            box-shadow: 0 0 0 3px rgba(107, 142, 35, 0.15);
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-md);
+        }
+        .prompt-actions {
+            display: flex;
+            gap: var(--space-md);
+        }
+        @media (max-width: 640px) {
+            .prompt-actions { flex-direction: column; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        /* ========================================
+           PANTRY ENHANCEMENTS
+           ======================================== */
+        .pantry-status-fresh { border-left: 3px solid var(--success); }
+        .pantry-status-low { border-left: 3px solid var(--warning); }
+        .pantry-status-out { border-left: 3px solid var(--danger); opacity: 0.7; }
+
+        .pantry-alerts {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+            margin-bottom: var(--space-xl);
+        }
+        @media (min-width: 768px) {
+            .pantry-alerts { grid-template-columns: repeat(2, 1fr); }
+        }
+        .pantry-alert-card {
+            background: #fff8e1;
+            border: 1px solid var(--warning);
+            border-radius: var(--radius);
+            padding: var(--space-lg);
+        }
+        .pantry-alert-card.urgent {
+            background: #fce4ec;
+            border-color: var(--danger);
+        }
+        .pantry-alert-header {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            margin-bottom: var(--space-md);
+        }
+        .pantry-alert-header h4 { margin: 0; font-size: 1rem; }
+        .pantry-alert-header i, .pantry-alert-header svg { width: 20px; height: 20px; }
+        .pantry-alert-list { list-style: none; padding: 0; margin: 0; }
+        .pantry-alert-list li {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+            font-size: 0.9rem;
+        }
+        .pantry-alert-list li:last-child { border-bottom: none; }
+
+        /* ========================================
+           LUCIDE ICON UTILITY STYLES
+           ======================================== */
+        [data-lucide] { width: 20px; height: 20px; stroke-width: 2; }
+        .btn [data-lucide], .btn i svg { width: 16px; height: 16px; vertical-align: middle; margin-right: 4px; }
+        .btn-sm [data-lucide] { width: 14px; height: 14px; }
+        .nav-item [data-lucide] { width: 24px; height: 24px; }
+
+        /* ========================================
+           PRINT STYLES (Enhanced)
+           ======================================== */
         @media print {
-            .header, .bottom-nav, .chat-input-area, .recipe-actions, .btn, .recipe-card-actions { display: none !important; }
-            body { padding: 0; background: white; }
-            .recipe-card { box-shadow: none; border: 1px solid #ddd; }
+            /* Hide all UI chrome */
+            .header, .bottom-nav, .chat-input-area, .recipe-actions,
+            .recipe-card-actions, .modal-overlay, .modal-close,
+            .modal-footer, .toast, .toast-container, .onboarding-overlay,
+            .quick-actions, .btn, button, nav, .filter-dropdown,
+            .recipes-tab-bar, .family-filters, .tag-filter-section { display: none !important; }
+
+            /* Reset page */
+            body {
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+                color: black !important;
+                font-family: Georgia, 'Times New Roman', serif !important;
+            }
+
+            /* Recipe print layout */
+            .recipe-card, .modal, .recipe-detail-body {
+                box-shadow: none !important;
+                border: none !important;
+                padding: 0 !important;
+                max-height: none !important;
+                overflow: visible !important;
+            }
+            .recipe-detail-section { page-break-inside: avoid; }
+            .ingredients-list, .instructions-list { font-size: 12pt; }
+
+            /* Print header */
+            .modal-title, .recipe-detail-section .section-title {
+                color: black !important;
+                font-size: 14pt;
+            }
+
+            /* Nutrition grid for print */
+            .nutrition-grid { grid-template-columns: repeat(6, 1fr) !important; }
+            .nutrition-card { border: 1px solid #ddd; }
+
+            /* Hide non-essential detail sections */
+            .health-benefits-section, .family-rating-form, .family-ratings-list { display: none !important; }
+
+            /* Page setup */
+            @page { margin: 0.5in; }
         }
     </style>
 
@@ -2484,6 +3156,9 @@
         window.firebaseReady = true;
         window.dispatchEvent(new CustomEvent('firebase-ready'));
     </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
 </head>
 <body>
     <!-- Header -->
@@ -2977,73 +3652,113 @@
 
             <!-- RECIPES LIBRARY View (NEW) -->
             <div class="view" id="view-recipes">
-                <div class="flex flex-between flex-center mb-16">
-                    <h2 class="section-title" style="margin-bottom: 0; border: none;">📚 Recipe Library</h2>
-                    <div class="flex gap-8">
-                        <button class="btn btn-sm btn-primary" onclick="openSaveManualRecipeModal()">+ Create Recipe</button>
-                        <button class="btn btn-sm btn-ghost" id="recipes-edit-btn" onclick="toggleRecipeEditMode()">Edit</button>
-                    </div>
+                <!-- Tab Bar: My Recipes / Family Tavola -->
+                <div class="recipes-tab-bar">
+                    <button class="recipes-tab active" id="tab-my-recipes" onclick="switchRecipesTab('my')">📚 My Recipes</button>
+                    <button class="recipes-tab" id="tab-family-recipes" onclick="switchRecipesTab('family')">👨‍👩‍👧 Family Tavola</button>
                 </div>
-                <!-- Bulk Actions Bar (hidden by default) -->
-                <div class="bulk-actions-bar hidden" id="recipes-bulk-bar">
-                    <span class="bulk-count"><span id="bulk-selected-count">0</span> selected</span>
-                    <div class="bulk-buttons">
-                        <button class="btn btn-sm btn-ghost" onclick="bulkSelectAll()">Select All</button>
-                        <button class="btn btn-sm btn-ghost" onclick="bulkDeselectAll()">Deselect</button>
-                        <button class="btn btn-sm btn-secondary" onclick="bulkAddToFavorites()">❤️ Favorite</button>
-                        <button class="btn btn-sm btn-secondary" onclick="bulkRemoveFromFavorites()">💔 Unfavorite</button>
-                        <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="bulkDeleteRecipes()">🗑️ Delete</button>
+
+                <!-- MY RECIPES TAB -->
+                <div id="recipes-tab-my">
+                    <div class="flex flex-between flex-center mb-16">
+                        <div class="flex gap-8">
+                            <button class="btn btn-sm btn-primary" onclick="openSaveManualRecipeModal()">+ Create Recipe</button>
+                            <button class="btn btn-sm btn-ghost" id="recipes-edit-btn" onclick="toggleRecipeEditMode()">Edit</button>
+                        </div>
                     </div>
-                </div>
-                <div class="flex flex-between flex-center mb-16 gap-8" style="flex-wrap: wrap;">
-                    <input type="text" class="form-input" id="recipes-search" placeholder="Search recipes..." style="max-width: 250px; flex: 1;" oninput="filterRecipeLibrary()">
-                    <div class="filter-dropdown" id="recipe-filters">
-                        <button class="btn btn-secondary btn-sm" onclick="toggleFilterDropdown()">Filters ▾</button>
-                        <div class="filter-dropdown-content">
-                            <div class="form-group">
-                                <label>Sort by</label>
-                                <select class="form-select" id="recipes-sort" onchange="filterRecipeLibrary()">
-                                    <option value="recent">Recent</option>
-                                    <option value="rating">Highest Rated</option>
-                                    <option value="cooked">Most Cooked</option>
-                                    <option value="time">Cook Time</option>
-                                    <option value="name">Name A-Z</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Protein</label>
-                                <select class="form-select" id="recipes-protein" onchange="filterRecipeLibrary()">
-                                    <option value="">All</option>
-                                    <option value="fish">Fish</option>
-                                    <option value="chicken">Chicken</option>
-                                    <option value="pork">Pork</option>
-                                    <option value="beef">Beef</option>
-                                    <option value="vegetarian">Vegetarian</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Time</label>
-                                <select class="form-select" id="recipes-time" onchange="filterRecipeLibrary()">
-                                    <option value="">All</option>
-                                    <option value="quick">Quick (&lt;30min)</option>
-                                    <option value="standard">Standard (30-60min)</option>
-                                    <option value="long">Long (60+min)</option>
-                                </select>
-                            </div>
-                            <div class="tag-filter-section">
-                                <span class="tag-filter-label">Filter by Tags</span>
-                                <div class="tag-filter-chips" id="tag-filter-chips"></div>
-                                <span class="tag-filter-clear" id="tag-filter-clear" onclick="clearTagFilters()">Clear tag filters</span>
+                    <!-- Bulk Actions Bar (hidden by default) -->
+                    <div class="bulk-actions-bar hidden" id="recipes-bulk-bar">
+                        <span class="bulk-count"><span id="bulk-selected-count">0</span> selected</span>
+                        <div class="bulk-buttons">
+                            <button class="btn btn-sm btn-ghost" onclick="bulkSelectAll()">Select All</button>
+                            <button class="btn btn-sm btn-ghost" onclick="bulkDeselectAll()">Deselect</button>
+                            <button class="btn btn-sm btn-secondary" onclick="bulkAddToFavorites()">❤️ Favorite</button>
+                            <button class="btn btn-sm btn-secondary" onclick="bulkRemoveFromFavorites()">💔 Unfavorite</button>
+                            <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="bulkDeleteRecipes()">🗑️ Delete</button>
+                        </div>
+                    </div>
+                    <div class="flex flex-between flex-center mb-16 gap-8" style="flex-wrap: wrap;">
+                        <input type="text" class="form-input" id="recipes-search" placeholder="Search recipes..." style="max-width: 250px; flex: 1;" oninput="filterRecipeLibrary()">
+                        <div class="filter-dropdown" id="recipe-filters">
+                            <button class="btn btn-secondary btn-sm" onclick="toggleFilterDropdown()">Filters ▾</button>
+                            <div class="filter-dropdown-content">
+                                <div class="form-group">
+                                    <label>Sort by</label>
+                                    <select class="form-select" id="recipes-sort" onchange="filterRecipeLibrary()">
+                                        <option value="recent">Recent</option>
+                                        <option value="rating">Highest Rated</option>
+                                        <option value="cooked">Most Cooked</option>
+                                        <option value="time">Cook Time</option>
+                                        <option value="name">Name A-Z</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Protein</label>
+                                    <select class="form-select" id="recipes-protein" onchange="filterRecipeLibrary()">
+                                        <option value="">All</option>
+                                        <option value="fish">Fish</option>
+                                        <option value="chicken">Chicken</option>
+                                        <option value="pork">Pork</option>
+                                        <option value="beef">Beef</option>
+                                        <option value="vegetarian">Vegetarian</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Time</label>
+                                    <select class="form-select" id="recipes-time" onchange="filterRecipeLibrary()">
+                                        <option value="">All</option>
+                                        <option value="quick">Quick (&lt;30min)</option>
+                                        <option value="standard">Standard (30-60min)</option>
+                                        <option value="long">Long (60+min)</option>
+                                    </select>
+                                </div>
+                                <div class="tag-filter-section">
+                                    <span class="tag-filter-label">Filter by Tags</span>
+                                    <div class="tag-filter-chips" id="tag-filter-chips"></div>
+                                    <span class="tag-filter-clear" id="tag-filter-clear" onclick="clearTagFilters()">Clear tag filters</span>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <div class="grid grid-2" id="recipes-grid"></div>
+                    <div class="empty-state" id="recipes-empty">
+                        <div class="empty-state-icon">📚</div>
+                        <div class="empty-state-title">Your recipe library is empty</div>
+                        <p class="empty-state-text">Chat with Nonna to get personalized Mediterranean recipes tailored to your health needs!</p>
+                        <button class="btn btn-primary" onclick="navigateTo('chat')">💬 Ask Nonna for Recipe Ideas</button>
+                    </div>
                 </div>
-                <div class="grid grid-2" id="recipes-grid"></div>
-                <div class="empty-state" id="recipes-empty">
-                    <div class="empty-state-icon">📚</div>
-                    <div class="empty-state-title">Your recipe library is empty</div>
-                    <p class="empty-state-text">Chat with Nonna to get personalized Mediterranean recipes tailored to your health needs!</p>
-                    <button class="btn btn-primary" onclick="navigateTo('chat')">💬 Ask Nonna for Recipe Ideas</button>
+
+                <!-- FAMILY TAVOLA TAB -->
+                <div id="recipes-tab-family" style="display:none">
+                    <div class="family-tavola-header">
+                        <p style="margin:0;color:var(--gray-text);font-size:0.95rem">Recipes shared by your family. Rate them, add your own twist, and discover new favorites!</p>
+                    </div>
+
+                    <div class="family-filters">
+                        <input type="text" class="form-input" id="family-search" placeholder="Search family recipes..." style="max-width: 250px; flex: 1;" oninput="filterFamilyRecipes()">
+                        <select class="form-select" id="family-sort" onchange="filterFamilyRecipes()" style="max-width: 180px;">
+                            <option value="recent">Recently Shared</option>
+                            <option value="rating">Highest Rated</option>
+                            <option value="popular">Most Cooked</option>
+                            <option value="name">Name A-Z</option>
+                        </select>
+                    </div>
+
+                    <!-- Tag filter chips -->
+                    <div style="margin-bottom:16px">
+                        <div class="tag-filter-chips" id="family-tag-filter-chips" style="display:flex;flex-wrap:wrap;gap:6px"></div>
+                        <span class="tag-filter-clear" id="family-tag-filter-clear" onclick="clearFamilyTagFilters()" style="display:none;cursor:pointer;color:var(--olive-green);font-size:0.85rem;margin-top:8px">Clear filters</span>
+                    </div>
+
+                    <div class="grid grid-2" id="family-recipes-grid"></div>
+
+                    <div class="empty-state" id="family-recipes-empty" style="display:none">
+                        <div class="empty-state-icon">👨‍👩‍👧</div>
+                        <div class="empty-state-title">No family recipes yet</div>
+                        <p class="empty-state-text">Share your favorite recipes with your family! Open a recipe and tap the Share button to add it to Family Tavola.</p>
+                        <button class="btn btn-primary" onclick="switchRecipesTab('my')">📚 Go to My Recipes</button>
+                    </div>
                 </div>
             </div>
 
@@ -3526,38 +4241,41 @@
     <!-- Bottom Navigation (5 tabs) -->
     <nav class="bottom-nav hidden" id="bottom-nav">
         <button class="nav-item active" onclick="navigateTo('home')" data-view="home">
-            <span class="icon">🏠</span>
+            <i data-lucide="home"></i>
             <span>Home</span>
         </button>
         <button class="nav-item" onclick="navigateTo('week')" data-view="week">
-            <span class="icon">📅</span>
+            <i data-lucide="calendar"></i>
             <span>Week</span>
         </button>
         <button class="nav-item" onclick="navigateTo('recipes')" data-view="recipes">
-            <span class="icon">📚</span>
+            <i data-lucide="book-open"></i>
             <span>Recipes</span>
         </button>
         <button class="nav-item" onclick="navigateTo('chat')" data-view="chat">
-            <span class="icon">💬</span>
+            <i data-lucide="message-circle"></i>
             <span>Chat</span>
         </button>
         <button class="nav-item" onclick="navigateTo('workouts')" data-view="workouts">
-            <span class="icon">💪</span>
+            <i data-lucide="dumbbell"></i>
             <span>Workouts</span>
         </button>
         <button class="nav-item" onclick="navigateTo('more')" data-view="more">
-            <span class="icon">⋮</span>
+            <i data-lucide="more-horizontal"></i>
             <span>More</span>
         </button>
     </nav>
 
     <!-- Modal Container -->
-    <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModalOnOverlay(event)" role="dialog" aria-modal="true" aria-labelledby="modal-title-label">
         <div class="modal" id="modal-content"></div>
     </div>
 
-    <!-- Toast -->
+    <!-- Toast (legacy) -->
     <div class="toast" id="toast"></div>
+
+    <!-- Enhanced Toast Container -->
+    <div class="toast-container" id="toast-container"></div>
 
     <!-- Onboarding Overlay -->
     <div class="onboarding-overlay" id="onboarding-overlay">
@@ -3663,6 +4381,8 @@ async function initFirebaseAuth() {
             state.syncEnabled = true;
             // Sync data from Firestore
             syncFromFirestore();
+            // Setup Family Tavola real-time listener
+            setupFamilyRecipesListener();
         } else {
             console.log('User signed out');
             state.syncEnabled = false;
@@ -4320,8 +5040,14 @@ function navigateTo(view) {
     if (view === 'home') updateDashboard();
     if (view === 'favorites') renderFavorites();
     if (view === 'week') renderWeekPlanner();
-    if (view === 'recipes') renderRecipeLibrary();
+    if (view === 'recipes') {
+        if (state.currentRecipesTab === 'family') renderFamilyRecipes();
+        else renderRecipeLibrary();
+    }
     if (view === 'workouts') renderWorkoutsView();
+
+    // Refresh Lucide icons after view change
+    refreshIcons();
 }
 
 function showMoreMenu() {
@@ -5065,6 +5791,9 @@ function renderQuickActions() {
     actions.className = 'quick-actions';
     actions.innerHTML = `
         <button class="quick-action" onclick="askNonna('Plan my meals for this week')">🗓️ Plan My Week</button>
+        <button class="quick-action" onclick="askNonnaWithPantry()">🥫 What Can I Make?</button>
+        <button class="quick-action" onclick="askNonna('What should I buy at the store this week? Check my pantry for what\\'s running low and suggest items for healthy Mediterranean meals.')">🛒 What Should I Buy?</button>
+        <button class="quick-action" onclick="askNonna('Plan this week\\'s meals using what I already have in my pantry. Minimize new purchases.')">📋 Plan Around Pantry</button>
         <button class="quick-action" onclick="askNonna('What can I make with what\\'s in my garden?')">🌱 Use My Garden</button>
         <button class="quick-action" onclick="askNonna('Give me a quick, easy dinner idea')">⚡ Quick Dinner</button>
         <button class="quick-action" onclick="askNonna('I need a gentle meal - not feeling great')">🩺 Gentle Meal</button>
@@ -5944,24 +6673,294 @@ function viewRecipeDetail(recipeId) {
     const recipe = library.find(r => r.id === recipeId);
     if (!recipe) return;
 
+    const meta = recipe.metadata || {};
+    const nutrition = recipe.nutrition || {};
+    const tags = meta.tags || recipe.tags || [];
+    const rating = recipe.averageRating || recipe.rating || 0;
+    const privacyBadge = recipe.privacy === 'family'
+        ? '<span class="badge badge-family">👨‍👩‍👧 Family</span>'
+        : '<span class="badge badge-private">🔒 Private</span>';
+
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">${recipe.title}</h2>
-            <button class="modal-close" onclick="closeModal()">×</button>
-        </div>
-        <div class="modal-body" style="padding: 0;">
-            ${recipe.rawContent ? parseRecipeToCard(recipe.rawContent) : `
-                <div class="recipe-card">
-                    <div class="recipe-header">
-                        <div class="recipe-title">${recipe.title}</div>
-                    </div>
-                    <div class="recipe-body">
-                        <p>Recipe details not available.</p>
-                    </div>
+            <div>
+                <h2 class="modal-title" id="modal-title-label">${recipe.title}</h2>
+                <div class="recipe-modal-meta">
+                    ${privacyBadge}
+                    ${rating > 0 ? `<span class="badge badge-success">${renderStarsDisplay(rating)}</span>` : ''}
+                    ${recipe.timesCooked > 0 ? `<span class="badge">👨‍🍳 Cooked ${recipe.timesCooked}x</span>` : ''}
                 </div>
-            `}
+            </div>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
         </div>
-    `);
+        <div class="recipe-detail-body" id="recipe-print-area">
+            ${renderRecipeDetailContent(recipe)}
+        </div>
+        <div class="recipe-detail-footer">
+            <button class="btn btn-ghost btn-sm" onclick="printRecipe('${recipeId}')">
+                <i data-lucide="printer"></i> Print
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleFavoriteFromCard('${recipeId}')" title="${recipe.favorited ? 'Remove from favorites' : 'Add to favorites'}">
+                ${recipe.favorited ? '❤️' : '🤍'} Favorite
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="openShareRecipeModal('${recipeId}')">
+                <i data-lucide="share-2"></i> Share
+            </button>
+            <button class="btn btn-secondary btn-sm" onclick="closeModal(); assignRecipeToSlotFromLibrary('${recipeId}')">
+                <i data-lucide="calendar"></i> Add to Week
+            </button>
+            ${recipe.instructions && recipe.instructions.length > 0 ? `
+                <button class="btn btn-primary btn-sm" onclick="startCookMode('${recipeId}')">
+                    <i data-lucide="chef-hat"></i> Cook Now
+                </button>
+            ` : ''}
+        </div>
+    `, { maxWidth: '700px' });
+}
+
+// Render the inner content of a recipe detail modal
+function renderRecipeDetailContent(recipe) {
+    const meta = recipe.metadata || {};
+    const nutrition = recipe.nutrition || {};
+    const ingredients = recipe.ingredients || [];
+    const instructions = recipe.instructions || [];
+    const tags = meta.tags || recipe.tags || [];
+
+    // If we only have rawContent and no parsed data, show parsed card
+    if ((!ingredients.length && !instructions.length) && recipe.rawContent) {
+        return parseRecipeToCard(recipe.rawContent);
+    }
+
+    // Meta info bar
+    const metaHTML = `
+        <div class="recipe-detail-meta">
+            <div class="meta-item"><i data-lucide="clock"></i> ${meta.totalTime || meta.cookTime || 30} min total</div>
+            <div class="meta-item"><i data-lucide="users"></i> Serves ${meta.serves || recipe.servings || 2}</div>
+            ${meta.prepTime ? `<div class="meta-item"><i data-lucide="timer"></i> ${meta.prepTime} min prep</div>` : ''}
+            ${meta.cookTime ? `<div class="meta-item"><i data-lucide="flame"></i> ${meta.cookTime} min cook</div>` : ''}
+            ${meta.proteinType ? `<div class="meta-item"><i data-lucide="beef"></i> ${meta.proteinType}</div>` : ''}
+        </div>
+    `;
+
+    // Tags
+    const tagsHTML = tags.length > 0 ? `
+        <div class="recipe-detail-tags">
+            ${tags.map(tag => `<span class="tag ${getTagClass(tag)}">${tag}</span>`).join('')}
+        </div>
+    ` : '';
+
+    // Nutrition grid
+    const nutritionHTML = (nutrition.calories || nutrition.protein) ? `
+        <div class="recipe-detail-section">
+            <h3 class="section-title"><i data-lucide="activity"></i> Nutrition <small style="font-weight:normal;color:var(--gray-text)">(per serving)</small></h3>
+            <div class="nutrition-grid">
+                ${nutrition.calories ? `<div class="nutrition-card"><div class="nutrition-value">${nutrition.calories}</div><div class="nutrition-label">Calories</div></div>` : ''}
+                ${nutrition.protein ? `<div class="nutrition-card"><div class="nutrition-value">${nutrition.protein}g</div><div class="nutrition-label">Protein</div></div>` : ''}
+                ${nutrition.carbs ? `<div class="nutrition-card"><div class="nutrition-value">${nutrition.carbs}g</div><div class="nutrition-label">Carbs</div></div>` : ''}
+                ${nutrition.fat ? `<div class="nutrition-card"><div class="nutrition-value">${nutrition.fat}g</div><div class="nutrition-label">Fat</div></div>` : ''}
+                ${nutrition.fiber ? `<div class="nutrition-card"><div class="nutrition-value">${nutrition.fiber}g</div><div class="nutrition-label">Fiber</div></div>` : ''}
+                ${nutrition.sodium ? `<div class="nutrition-card"><div class="nutrition-value">${nutrition.sodium}mg</div><div class="nutrition-label">Sodium</div></div>` : ''}
+            </div>
+        </div>
+    ` : '';
+
+    // Ingredients
+    const ingredientsHTML = ingredients.length > 0 ? `
+        <div class="recipe-detail-section">
+            <h3 class="section-title"><i data-lucide="shopping-basket"></i> Ingredients</h3>
+            <ul class="ingredients-list">
+                ${ingredients.map(ing => `<li>${typeof ing === 'object' ? `${ing.amount || ''} ${ing.unit || ''} ${ing.name || ing}`.trim() : ing}</li>`).join('')}
+            </ul>
+        </div>
+    ` : '';
+
+    // Instructions
+    const instructionsHTML = instructions.length > 0 ? `
+        <div class="recipe-detail-section">
+            <h3 class="section-title"><i data-lucide="list-ordered"></i> Instructions</h3>
+            <ol class="instructions-list">
+                ${instructions.map(step => `<li>${step}</li>`).join('')}
+            </ol>
+        </div>
+    ` : '';
+
+    // Health benefits
+    const healthHTML = recipe.healthBenefits ? `
+        <div class="recipe-detail-section health-benefits-section">
+            <h3 class="section-title"><i data-lucide="heart-pulse"></i> Health Benefits</h3>
+            <p style="margin:0;line-height:1.7">${recipe.healthBenefits}</p>
+        </div>
+    ` : '';
+
+    // Modifications
+    const modsHTML = recipe.modifications ? `
+        <div class="recipe-detail-section">
+            <h3 class="section-title"><i data-lucide="repeat"></i> Modifications</h3>
+            <p style="margin:0;line-height:1.7">${recipe.modifications.replace(/\n/g, '<br>')}</p>
+        </div>
+    ` : '';
+
+    // Notes
+    const notesHTML = recipe.notes ? `
+        <div class="recipe-detail-section">
+            <h3 class="section-title"><i data-lucide="file-text"></i> Personal Notes</h3>
+            <p style="margin:0;line-height:1.7;color:var(--gray-text)">${recipe.notes}</p>
+        </div>
+    ` : '';
+
+    return `
+        ${metaHTML}
+        ${tagsHTML}
+        ${nutritionHTML}
+        ${ingredientsHTML}
+        ${instructionsHTML}
+        ${healthHTML}
+        ${modsHTML}
+        ${notesHTML}
+    `;
+}
+
+// ========================================
+// SHARE RECIPE MODAL
+// ========================================
+const ALL_RECIPE_TAGS = {
+    health: ["Anti-Inflammatory", "Heart-Healthy", "Low-Sodium", "Crohn's-Friendly", "High-Protein", "Gut-Friendly", "Diabetic-Friendly"],
+    dietary: ["Vegetarian", "Vegan", "Gluten-Free", "Dairy-Free", "Low-Carb", "Mediterranean"],
+    cuisine: ["Spanish", "Italian", "Greek", "Levantine", "North African", "American"],
+    mealType: ["Breakfast", "Lunch", "Dinner", "Snack", "Dessert", "Batch Cooking", "Quick Meals"],
+    method: ["One-Pot", "Sheet Pan", "Slow Cooker", "Instant Pot", "Grill", "Air Fryer"]
+};
+
+function openShareRecipeModal(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    const recipeTags = recipe.metadata?.tags || recipe.tags || [];
+
+    function renderTagGroup(label, tags) {
+        return `
+            <div style="margin-bottom:12px">
+                <div style="font-weight:500;font-size:0.85rem;margin-bottom:6px;color:var(--olive-green)">${label}</div>
+                <div class="tag-selection-grid">
+                    ${tags.map(tag => {
+                        const checked = recipeTags.includes(tag);
+                        return `<label class="tag-selection-chip ${checked ? 'selected' : ''}">
+                            <input type="checkbox" value="${tag}" ${checked ? 'checked' : ''} onchange="this.parentElement.classList.toggle('selected',this.checked)">
+                            <span>${tag}</span>
+                        </label>`;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">Share "${recipe.title}"</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body" style="max-height:65vh;overflow-y:auto">
+            <div class="form-group" style="margin-bottom:20px">
+                <label style="font-weight:600;margin-bottom:8px;display:block">Privacy</label>
+                <div class="radio-group">
+                    <label class="radio-item">
+                        <input type="radio" name="share-privacy" value="private" ${recipe.privacy !== 'family' ? 'checked' : ''}>
+                        <div>
+                            <div class="radio-label">🔒 Private</div>
+                            <div class="radio-desc">Only you can see this recipe</div>
+                        </div>
+                    </label>
+                    <label class="radio-item">
+                        <input type="radio" name="share-privacy" value="family" ${recipe.privacy === 'family' ? 'checked' : ''}>
+                        <div>
+                            <div class="radio-label">👨‍👩‍👧 Family Tavola</div>
+                            <div class="radio-desc">Share with your family — everyone can see, rate, and cook it</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom:20px">
+                <label style="font-weight:600;margin-bottom:8px;display:block">Tags</label>
+                <div id="share-tag-selection">
+                    ${renderTagGroup('Health', ALL_RECIPE_TAGS.health)}
+                    ${renderTagGroup('Dietary', ALL_RECIPE_TAGS.dietary)}
+                    ${renderTagGroup('Cuisine', ALL_RECIPE_TAGS.cuisine)}
+                    ${renderTagGroup('Meal Type', ALL_RECIPE_TAGS.mealType)}
+                    ${renderTagGroup('Cooking Method', ALL_RECIPE_TAGS.method)}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label style="font-weight:600;margin-bottom:8px;display:block">Personal Note (optional)</label>
+                <textarea class="form-input" id="share-personal-note" rows="3" placeholder="Why you love this recipe, tips for your family..."
+                    style="width:100%;resize:vertical">${recipe.shareNotes || ''}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveShareSettings('${recipeId}')">
+                <i data-lucide="save"></i> Save
+            </button>
+        </div>
+    `, { maxWidth: '650px' });
+}
+
+function saveShareSettings(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    // Get privacy selection
+    const privacy = document.querySelector('input[name="share-privacy"]:checked')?.value || 'private';
+
+    // Get selected tags
+    const selectedTags = Array.from(document.querySelectorAll('#share-tag-selection input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
+
+    // Get personal note
+    const note = document.getElementById('share-personal-note')?.value?.trim() || '';
+
+    // Update recipe
+    recipe.privacy = privacy;
+    recipe.shareNotes = note;
+    if (!recipe.metadata) recipe.metadata = {};
+    recipe.metadata.tags = selectedTags;
+    recipe.tags = selectedTags;
+    recipe.updatedAt = new Date().toISOString();
+
+    // Add sharedBy info if sharing to family
+    if (privacy === 'family' && state.user) {
+        recipe.sharedBy = {
+            userId: state.user.uid,
+            displayName: state.user.displayName || state.user.email?.split('@')[0] || 'Family Member',
+            email: state.user.email
+        };
+        recipe.sharedAt = new Date().toISOString();
+    }
+
+    setStorage(STORAGE.RECIPES, library);
+
+    // Sync to family Firestore collection if sharing
+    if (privacy === 'family' && state.user) {
+        syncRecipeToFamily(recipe);
+        showToast('Shared to Family Tavola! 🎉', 'success');
+    } else {
+        showToast('Recipe settings saved', 'success');
+    }
+
+    closeModal();
+    renderRecipeLibrary();
+}
+
+// Enhanced print recipe
+function printRecipe(recipeId) {
+    // Focus on recipe-print-area if it exists, then print
+    const printArea = document.getElementById('recipe-print-area');
+    if (printArea) {
+        window.print();
+    }
 }
 
 // ========================================
@@ -6012,6 +7011,477 @@ function filterFavorites() {
 
 function sortFavorites() {
     renderFavorites();
+}
+
+// ========================================
+// FAMILY TAVOLA - SHARED RECIPE LIBRARY
+// ========================================
+
+let familyTagFilters = new Set();
+
+function switchRecipesTab(tab) {
+    state.currentRecipesTab = tab;
+
+    // Update tab buttons
+    document.getElementById('tab-my-recipes').classList.toggle('active', tab === 'my');
+    document.getElementById('tab-family-recipes').classList.toggle('active', tab === 'family');
+
+    // Show/hide tab content
+    document.getElementById('recipes-tab-my').style.display = tab === 'my' ? '' : 'none';
+    document.getElementById('recipes-tab-family').style.display = tab === 'family' ? '' : 'none';
+
+    if (tab === 'family') {
+        renderFamilyRecipes();
+    } else {
+        renderRecipeLibrary();
+    }
+}
+
+// Sync a recipe to the shared Firestore "recipes" collection
+async function syncRecipeToFamily(recipe) {
+    if (!state.user || recipe.privacy !== 'family') return;
+
+    try {
+        await waitForFirebase();
+        const familyRecipeRef = window.firestoreDoc(window.firebaseDb, 'recipes', recipe.id);
+        await window.firestoreSetDoc(familyRecipeRef, {
+            ...recipe,
+            sharedBy: recipe.sharedBy || {
+                userId: state.user.uid,
+                displayName: state.user.displayName || state.user.email?.split('@')[0] || 'Family Member',
+                email: state.user.email
+            },
+            sharedAt: recipe.sharedAt || new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        });
+        console.log('Recipe synced to Family Tavola:', recipe.title);
+    } catch (error) {
+        console.error('Failed to sync recipe to family:', error);
+        showToast('Could not share to Family Tavola', 'error');
+    }
+}
+
+// Load all family recipes from Firestore
+async function loadFamilyRecipes() {
+    if (!state.user) return [];
+
+    try {
+        await waitForFirebase();
+        const recipesRef = window.firestoreCollection(window.firebaseDb, 'recipes');
+        const q = window.firestoreQuery(recipesRef, window.firestoreWhere('privacy', '==', 'family'));
+        const snapshot = await window.firestoreGetDocs(q);
+
+        const familyRecipes = [];
+        snapshot.forEach(doc => {
+            const data = doc.data();
+            familyRecipes.push({
+                ...data,
+                id: doc.id,
+                isShared: true,
+                isOwner: data.sharedBy?.userId === state.user.uid
+            });
+        });
+        return familyRecipes;
+    } catch (error) {
+        console.error('Failed to load family recipes:', error);
+        return [];
+    }
+}
+
+// Set up real-time listener for family recipes
+function setupFamilyRecipesListener() {
+    if (!state.user || state._familyListenerActive) return;
+
+    try {
+        const recipesRef = window.firestoreCollection(window.firebaseDb, 'recipes');
+        const q = window.firestoreQuery(recipesRef, window.firestoreWhere('privacy', '==', 'family'));
+
+        window.firestoreOnSnapshot(q, (snapshot) => {
+            if (!state.familyRecipes) state.familyRecipes = [];
+
+            snapshot.docChanges().forEach(change => {
+                const data = change.doc.data();
+                const recipe = { ...data, id: change.doc.id, isShared: true, isOwner: data.sharedBy?.userId === state.user?.uid };
+
+                if (change.type === 'added' || change.type === 'modified') {
+                    const idx = state.familyRecipes.findIndex(r => r.id === recipe.id);
+                    if (idx >= 0) state.familyRecipes[idx] = recipe;
+                    else state.familyRecipes.push(recipe);
+                } else if (change.type === 'removed') {
+                    state.familyRecipes = state.familyRecipes.filter(r => r.id !== change.doc.id);
+                }
+            });
+
+            // Refresh view if on Family tab
+            if (state.currentRecipesTab === 'family') {
+                displayFamilyRecipes(state.familyRecipes);
+            }
+        });
+
+        state._familyListenerActive = true;
+        console.log('Family recipes listener active');
+    } catch (error) {
+        console.error('Failed to setup family listener:', error);
+    }
+}
+
+// Render family recipes (with loading state)
+async function renderFamilyRecipes() {
+    const grid = document.getElementById('family-recipes-grid');
+    const empty = document.getElementById('family-recipes-empty');
+    if (!grid) return;
+
+    // Show loading skeletons
+    grid.innerHTML = Array(4).fill('<div class="skeleton skeleton-card"></div>').join('');
+    empty.style.display = 'none';
+
+    // Use cached data if available, otherwise load
+    if (!state.familyRecipes) {
+        state.familyRecipes = await loadFamilyRecipes();
+    }
+
+    displayFamilyRecipes(state.familyRecipes);
+    populateFamilyTagFilters();
+}
+
+function displayFamilyRecipes(recipes) {
+    const grid = document.getElementById('family-recipes-grid');
+    const empty = document.getElementById('family-recipes-empty');
+    if (!grid) return;
+
+    // Apply filters
+    let filtered = applyFamilyFilters(recipes);
+
+    if (filtered.length === 0) {
+        grid.innerHTML = '';
+        empty.style.display = '';
+        return;
+    }
+
+    empty.style.display = 'none';
+    grid.innerHTML = filtered.map(recipe => renderFamilyRecipeCard(recipe)).join('');
+    refreshIcons();
+}
+
+function applyFamilyFilters(recipes) {
+    const search = document.getElementById('family-search')?.value?.toLowerCase() || '';
+    const sort = document.getElementById('family-sort')?.value || 'recent';
+
+    let filtered = [...recipes];
+
+    // Search
+    if (search) {
+        filtered = filtered.filter(r =>
+            r.title?.toLowerCase().includes(search) ||
+            r.ingredients?.some(i => (typeof i === 'string' ? i : i.name || '').toLowerCase().includes(search))
+        );
+    }
+
+    // Tag filters
+    if (familyTagFilters.size > 0) {
+        filtered = filtered.filter(r => {
+            const tags = (r.metadata?.tags || r.tags || []).map(t => t.toLowerCase());
+            return Array.from(familyTagFilters).every(f => tags.includes(f.toLowerCase()));
+        });
+    }
+
+    // Sort
+    switch(sort) {
+        case 'rating':
+            filtered.sort((a, b) => (b.averageRating || b.rating || 0) - (a.averageRating || a.rating || 0));
+            break;
+        case 'popular':
+            filtered.sort((a, b) => (b.timesCooked || 0) - (a.timesCooked || 0));
+            break;
+        case 'name':
+            filtered.sort((a, b) => (a.title || '').localeCompare(b.title || ''));
+            break;
+        default: // recent
+            filtered.sort((a, b) => new Date(b.sharedAt || b.dateGenerated || 0) - new Date(a.sharedAt || a.dateGenerated || 0));
+    }
+
+    return filtered;
+}
+
+function renderFamilyRecipeCard(recipe) {
+    const meta = recipe.metadata || {};
+    const nutrition = recipe.nutrition || {};
+    const tags = (meta.tags || recipe.tags || []).slice(0, 3);
+    const rating = recipe.averageRating || recipe.rating || 0;
+    const sharedByName = recipe.sharedBy?.displayName || recipe.sharedBy?.email?.split('@')[0] || 'Family Member';
+
+    return `
+        <div class="library-card" onclick="viewFamilyRecipeDetail('${recipe.id}')" style="cursor:pointer">
+            <div class="library-card-banner">
+                🍽️
+                <span class="card-calories">${nutrition.calories ? '🔥 ' + nutrition.calories + ' cal' : '👨‍👩‍👧 Family'}</span>
+            </div>
+            <div class="library-card-body">
+                <div class="library-card-title">${recipe.title}</div>
+                ${rating > 0 ? `<div style="color:#fbbf24;font-size:0.85rem">${'★'.repeat(Math.round(rating))}${'☆'.repeat(5-Math.round(rating))} (${rating.toFixed?.(1) || rating})</div>` : ''}
+                <div class="library-card-meta">
+                    <span>⏱️ ${meta.totalTime || meta.cookTime || 30}min</span>
+                    <span>🍽️ ${meta.serves || recipe.servings || 2}</span>
+                    ${recipe.timesCooked > 0 ? `<span>👨‍🍳 ${recipe.timesCooked}x</span>` : ''}
+                </div>
+                <div class="family-recipe-shared-by">
+                    <i data-lucide="user"></i> Shared by ${sharedByName}
+                </div>
+                <div class="library-card-tags" style="margin-top:6px">
+                    ${tags.map(tag => `<span class="tag ${getTagClass(tag)}">${tag}</span>`).join('')}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// View full family recipe with ratings
+async function viewFamilyRecipeDetail(recipeId) {
+    // Show loading modal
+    openModal(`
+        <div style="padding:40px;text-align:center">
+            <div class="loading-spinner" style="margin:0 auto 16px"></div>
+            <p style="color:var(--gray-text)">Loading recipe...</p>
+        </div>
+    `);
+
+    // Load recipe with ratings
+    const recipe = await loadFamilyRecipeWithRatings(recipeId);
+    if (!recipe) {
+        closeModal();
+        showToast('Recipe not found', 'error');
+        return;
+    }
+
+    const familyRatings = recipe.familyRatings || [];
+    const userRating = familyRatings.find(r => r.userId === state.user?.uid);
+    const sharedByName = recipe.sharedBy?.displayName || recipe.sharedBy?.email?.split('@')[0] || 'Family Member';
+
+    openModal(`
+        <div class="modal-header">
+            <div>
+                <h2 class="modal-title" id="modal-title-label">${recipe.title}</h2>
+                <div class="recipe-modal-meta">
+                    <span class="badge badge-family">👨‍👩‍👧 Family</span>
+                    ${recipe.averageRating > 0 ? `<span class="badge badge-success">${renderStarsDisplay(recipe.averageRating)}</span>` : ''}
+                    <span style="font-size:0.85rem;color:var(--gray-text)"><i data-lucide="user"></i> by ${sharedByName}</span>
+                </div>
+            </div>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+        </div>
+        <div class="recipe-detail-body" id="recipe-print-area">
+            ${renderRecipeDetailContent(recipe)}
+
+            ${recipe.shareNotes ? `
+                <div class="recipe-detail-section" style="background:var(--cream);padding:12px 16px;border-radius:var(--radius)">
+                    <p style="margin:0;font-style:italic;color:var(--gray-text)">"${recipe.shareNotes}" — ${sharedByName}</p>
+                </div>
+            ` : ''}
+
+            <!-- Family Ratings Section -->
+            <div class="recipe-detail-section">
+                <h3 class="section-title"><i data-lucide="message-square"></i> Family Reviews (${familyRatings.length})</h3>
+
+                <!-- User rating form -->
+                <div class="family-rating-form">
+                    <h4>${userRating ? 'Update Your Review' : 'Add Your Review'}</h4>
+                    <div class="form-group" style="margin-bottom:12px">
+                        <label style="font-size:0.85rem;margin-bottom:4px;display:block">Rating</label>
+                        <div class="star-rating" id="user-rating-stars">
+                            ${[1,2,3,4,5].map(n => `<span class="star ${(userRating?.rating || 0) >= n ? 'filled' : ''}" onclick="setFamilyRatingStars(${n})">★</span>`).join('')}
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px">
+                        <label style="font-size:0.85rem;margin-bottom:4px;display:block">Comment (optional)</label>
+                        <textarea class="form-input" id="family-rating-comment" rows="2" placeholder="What did you think?" style="width:100%;resize:vertical">${userRating?.comment || ''}</textarea>
+                    </div>
+                    <div class="form-group" style="margin-bottom:12px">
+                        <label style="font-size:0.85rem;margin-bottom:4px;display:block">Your Modifications (optional)</label>
+                        <textarea class="form-input" id="family-rating-mod" rows="2" placeholder="Any changes you made?" style="width:100%;resize:vertical">${userRating?.modification || ''}</textarea>
+                    </div>
+                    <button class="btn btn-primary btn-sm" onclick="submitFamilyRating('${recipeId}')">
+                        ${userRating ? 'Update Review' : 'Submit Review'}
+                    </button>
+                </div>
+
+                <!-- Other family ratings -->
+                ${familyRatings.filter(r => r.userId !== state.user?.uid).length > 0 ? `
+                    <div class="family-ratings-list">
+                        ${familyRatings.filter(r => r.userId !== state.user?.uid).map(r => `
+                            <div class="family-rating-item">
+                                <div class="rating-header">
+                                    <span class="rating-user"><i data-lucide="user"></i> ${r.userName || 'Family Member'}</span>
+                                    <span class="rating-stars">${'★'.repeat(r.rating)}${'☆'.repeat(5 - r.rating)}</span>
+                                </div>
+                                ${r.comment ? `<p class="rating-comment">${r.comment}</p>` : ''}
+                                ${r.modification ? `<div class="rating-modification"><strong>Their twist:</strong> ${r.modification}</div>` : ''}
+                            </div>
+                        `).join('')}
+                    </div>
+                ` : '<p style="color:var(--gray-text);font-size:0.9rem">Be the first to review this recipe!</p>'}
+            </div>
+        </div>
+        <div class="recipe-detail-footer">
+            <button class="btn btn-ghost btn-sm" onclick="printRecipe('${recipeId}')"><i data-lucide="printer"></i> Print</button>
+            ${!recipe.isOwner ? `<button class="btn btn-secondary btn-sm" onclick="saveFamilyToMyRecipes('${recipeId}')"><i data-lucide="download"></i> Save to My Recipes</button>` : ''}
+            <button class="btn btn-primary btn-sm" onclick="closeModal(); assignRecipeToSlotFromLibrary('${recipeId}')"><i data-lucide="calendar"></i> Add to Week</button>
+        </div>
+    `, { maxWidth: '700px' });
+}
+
+// Family rating helpers
+let _currentFamilyRating = 0;
+
+function setFamilyRatingStars(rating) {
+    _currentFamilyRating = rating;
+    document.querySelectorAll('#user-rating-stars .star').forEach((star, i) => {
+        star.classList.toggle('filled', i < rating);
+    });
+}
+
+async function submitFamilyRating(recipeId) {
+    if (_currentFamilyRating === 0) {
+        showToast('Please select a rating', 'warning');
+        return;
+    }
+
+    const comment = document.getElementById('family-rating-comment')?.value?.trim() || '';
+    const modification = document.getElementById('family-rating-mod')?.value?.trim() || '';
+
+    try {
+        await waitForFirebase();
+        const ratingRef = window.firestoreDoc(window.firebaseDb, `recipes/${recipeId}/ratings`, state.user.uid);
+        await window.firestoreSetDoc(ratingRef, {
+            userId: state.user.uid,
+            userName: state.user.displayName || state.user.email?.split('@')[0] || 'Family Member',
+            rating: _currentFamilyRating,
+            comment: comment,
+            modification: modification,
+            createdAt: window.firestoreServerTimestamp()
+        });
+
+        showToast('Review saved!', 'success');
+
+        // Reload to show updated ratings
+        _currentFamilyRating = 0;
+        viewFamilyRecipeDetail(recipeId);
+    } catch (error) {
+        console.error('Failed to save rating:', error);
+        showToast('Could not save review', 'error');
+    }
+}
+
+// Load a family recipe with its ratings sub-collection
+async function loadFamilyRecipeWithRatings(recipeId) {
+    if (!state.user) return null;
+
+    try {
+        await waitForFirebase();
+
+        // Get recipe
+        const recipeRef = window.firestoreDoc(window.firebaseDb, 'recipes', recipeId);
+        const recipeSnap = await window.firestoreGetDoc(recipeRef);
+        if (!recipeSnap.exists()) {
+            // Maybe it's a local recipe
+            const library = getRecipeLibrary();
+            return library.find(r => r.id === recipeId) || null;
+        }
+
+        const recipe = { ...recipeSnap.data(), id: recipeSnap.id, isOwner: recipeSnap.data().sharedBy?.userId === state.user.uid };
+
+        // Get ratings
+        const ratingsRef = window.firestoreCollection(window.firebaseDb, `recipes/${recipeId}/ratings`);
+        const ratingsSnap = await window.firestoreGetDocs(ratingsRef);
+        const ratings = [];
+        ratingsSnap.forEach(doc => ratings.push({ ...doc.data(), id: doc.id }));
+
+        recipe.familyRatings = ratings;
+        recipe.averageRating = ratings.length > 0
+            ? ratings.reduce((sum, r) => sum + r.rating, 0) / ratings.length
+            : 0;
+
+        return recipe;
+    } catch (error) {
+        console.error('Failed to load recipe with ratings:', error);
+        return null;
+    }
+}
+
+// Save a family recipe to your personal library
+function saveFamilyToMyRecipes(recipeId) {
+    const familyRecipe = state.familyRecipes?.find(r => r.id === recipeId);
+    if (!familyRecipe) return;
+
+    const library = getRecipeLibrary();
+
+    // Check for duplicates
+    if (library.find(r => r.title === familyRecipe.title)) {
+        showToast('You already have a recipe with this name', 'info');
+        return;
+    }
+
+    const newRecipe = {
+        ...familyRecipe,
+        id: 'recipe_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+        privacy: 'private',
+        originalFamilyRecipeId: recipeId,
+        dateGenerated: new Date().toISOString(),
+        timesCooked: 0,
+        rating: 0,
+        favorited: false,
+        isShared: false,
+        isOwner: true
+    };
+
+    library.push(newRecipe);
+    setStorage(STORAGE.RECIPES, library);
+    showToast('Saved to your recipe library!', 'success');
+    closeModal();
+}
+
+// Populate tag filter chips for family recipes
+function populateFamilyTagFilters() {
+    if (!state.familyRecipes) return;
+
+    const allTags = new Map();
+    state.familyRecipes.forEach(recipe => {
+        const tags = recipe.metadata?.tags || recipe.tags || [];
+        tags.forEach(tag => allTags.set(tag, (allTags.get(tag) || 0) + 1));
+    });
+
+    const sorted = Array.from(allTags.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 15);
+
+    const container = document.getElementById('family-tag-filter-chips');
+    const clearBtn = document.getElementById('family-tag-filter-clear');
+    if (!container) return;
+
+    container.innerHTML = sorted.map(([tag, count]) => {
+        const active = familyTagFilters.has(tag);
+        return `<span class="chip ${active ? 'active' : ''}" onclick="toggleFamilyTagFilter('${tag.replace(/'/g, "\\'")}')">${tag} <span class="chip-count">(${count})</span></span>`;
+    }).join('');
+
+    if (clearBtn) {
+        clearBtn.style.display = familyTagFilters.size > 0 ? 'inline' : 'none';
+    }
+}
+
+function toggleFamilyTagFilter(tag) {
+    if (familyTagFilters.has(tag)) familyTagFilters.delete(tag);
+    else familyTagFilters.add(tag);
+    displayFamilyRecipes(state.familyRecipes || []);
+    populateFamilyTagFilters();
+}
+
+function clearFamilyTagFilters() {
+    familyTagFilters.clear();
+    displayFamilyRecipes(state.familyRecipes || []);
+    populateFamilyTagFilters();
+}
+
+function filterFamilyRecipes() {
+    displayFamilyRecipes(state.familyRecipes || []);
 }
 
 // ========================================
@@ -6365,6 +7835,251 @@ function saveManualMealSlot(dateStr, mealType) {
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     showToast(`Added ${title}`);
+    renderWeekPlanner();
+
+    // Prompt to save as recipe (with short delay so toast shows first)
+    setTimeout(() => {
+        promptSaveAsRecipe(title, calories ? parseInt(calories) : null, dateStr, mealType);
+    }, 400);
+}
+
+// ========================================
+// AUTO-RECIPE FROM MANUAL MEAL ENTRY
+// ========================================
+function promptSaveAsRecipe(mealTitle, calories, dateStr, mealType) {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">💡 Save as Recipe?</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body" style="text-align:center;padding:24px">
+            <p style="font-size:1.05rem;margin-bottom:8px"><strong>"${mealTitle}"</strong></p>
+            <p style="color:var(--gray-text);margin-bottom:24px">Create a full recipe so you can cook it again, track ingredients, and share with family.</p>
+            <div class="prompt-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">Not Now</button>
+                <button class="btn btn-primary" onclick="openCreateRecipeFromMeal('${encodeURIComponent(mealTitle)}', ${calories || 'null'}, '${dateStr}', '${mealType}')">
+                    <i data-lucide="book-plus"></i> Create Recipe
+                </button>
+            </div>
+        </div>
+    `, { maxWidth: '440px' });
+}
+
+function openCreateRecipeFromMeal(encodedTitle, calories, dateStr, mealType) {
+    const mealTitle = decodeURIComponent(encodedTitle);
+    const mealLabels = { breakfast: 'Breakfast', lunch: 'Lunch', dinner: 'Dinner', snacks: 'Snack' };
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">Create Recipe</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body create-recipe-form">
+            <div class="form-group">
+                <label>Recipe Name *</label>
+                <input type="text" class="form-input" id="new-recipe-title" value="${mealTitle}">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Servings</label>
+                    <input type="number" class="form-input" id="new-recipe-servings" value="2" min="1">
+                </div>
+                <div class="form-group">
+                    <label>Meal Type</label>
+                    <select class="form-select" id="new-recipe-meal-type">
+                        ${Object.entries(mealLabels).map(([k, v]) => `<option value="${k}" ${k === mealType ? 'selected' : ''}>${v}</option>`).join('')}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Prep Time (min)</label>
+                    <input type="number" class="form-input" id="new-recipe-prep" value="10" min="0">
+                </div>
+                <div class="form-group">
+                    <label>Cook Time (min)</label>
+                    <input type="number" class="form-input" id="new-recipe-cook" value="20" min="0">
+                </div>
+            </div>
+
+            <!-- Ingredients -->
+            <div class="form-group">
+                <label>Ingredients *</label>
+                <div id="new-recipe-ingredients-list">
+                    <div class="ingredient-input-row">
+                        <input type="text" class="form-input" placeholder="e.g., 2 cups rice">
+                        <button class="btn-icon" onclick="this.parentElement.remove()" title="Remove"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="ingredient-input-row">
+                        <input type="text" class="form-input" placeholder="e.g., 1 tbsp olive oil">
+                        <button class="btn-icon" onclick="this.parentElement.remove()" title="Remove"><i data-lucide="x"></i></button>
+                    </div>
+                    <div class="ingredient-input-row">
+                        <input type="text" class="form-input" placeholder="e.g., 1 lb chicken breast">
+                        <button class="btn-icon" onclick="this.parentElement.remove()" title="Remove"><i data-lucide="x"></i></button>
+                    </div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="addNewRecipeIngredient()" style="margin-top:6px">
+                    <i data-lucide="plus"></i> Add Ingredient
+                </button>
+            </div>
+
+            <!-- Instructions -->
+            <div class="form-group">
+                <label>Instructions *</label>
+                <div id="new-recipe-instructions-list">
+                    <div class="instruction-input-row">
+                        <span class="step-num">1.</span>
+                        <textarea class="form-input" placeholder="Describe this step..." rows="2" style="resize:vertical"></textarea>
+                        <button class="btn-icon" onclick="removeNewRecipeStep(this)" title="Remove"><i data-lucide="x"></i></button>
+                    </div>
+                </div>
+                <button class="btn btn-ghost btn-sm" onclick="addNewRecipeStep()" style="margin-top:6px">
+                    <i data-lucide="plus"></i> Add Step
+                </button>
+            </div>
+
+            <!-- Nutrition -->
+            <div class="form-group">
+                <label>Nutrition per serving (optional)</label>
+                <div class="nutrition-inputs">
+                    <input type="number" class="form-input-small" id="new-recipe-cal" placeholder="Calories" value="${calories || ''}">
+                    <input type="number" class="form-input-small" id="new-recipe-protein" placeholder="Protein (g)">
+                    <input type="number" class="form-input-small" id="new-recipe-carbs" placeholder="Carbs (g)">
+                    <input type="number" class="form-input-small" id="new-recipe-fat" placeholder="Fat (g)">
+                </div>
+            </div>
+
+            <!-- Tags -->
+            <div class="form-group">
+                <label>Tags (optional)</label>
+                <div class="tag-selection-grid" id="new-recipe-tags">
+                    ${Object.values(ALL_RECIPE_TAGS).flat().slice(0, 18).map(tag =>
+                        `<label class="tag-selection-chip"><input type="checkbox" value="${tag}" onchange="this.parentElement.classList.toggle('selected',this.checked)"><span>${tag}</span></label>`
+                    ).join('')}
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveNewRecipeFromMeal('${dateStr}', '${mealType}')">
+                <i data-lucide="save"></i> Save Recipe
+            </button>
+        </div>
+    `, { maxWidth: '650px' });
+}
+
+function addNewRecipeIngredient() {
+    const container = document.getElementById('new-recipe-ingredients-list');
+    const div = document.createElement('div');
+    div.className = 'ingredient-input-row';
+    div.innerHTML = `
+        <input type="text" class="form-input" placeholder="e.g., 1 tsp cumin">
+        <button class="btn-icon" onclick="this.parentElement.remove()" title="Remove"><i data-lucide="x"></i></button>
+    `;
+    container.appendChild(div);
+    refreshIcons();
+    div.querySelector('input').focus();
+}
+
+function addNewRecipeStep() {
+    const container = document.getElementById('new-recipe-instructions-list');
+    const count = container.children.length + 1;
+    const div = document.createElement('div');
+    div.className = 'instruction-input-row';
+    div.innerHTML = `
+        <span class="step-num">${count}.</span>
+        <textarea class="form-input" placeholder="Describe this step..." rows="2" style="resize:vertical"></textarea>
+        <button class="btn-icon" onclick="removeNewRecipeStep(this)" title="Remove"><i data-lucide="x"></i></button>
+    `;
+    container.appendChild(div);
+    refreshIcons();
+    div.querySelector('textarea').focus();
+}
+
+function removeNewRecipeStep(btn) {
+    btn.parentElement.remove();
+    // Renumber
+    const container = document.getElementById('new-recipe-instructions-list');
+    Array.from(container.children).forEach((row, i) => {
+        const num = row.querySelector('.step-num');
+        if (num) num.textContent = `${i + 1}.`;
+    });
+}
+
+function saveNewRecipeFromMeal(dateStr, mealType) {
+    const title = document.getElementById('new-recipe-title')?.value?.trim();
+    if (!title) { showToast('Please enter a recipe name', 'warning'); return; }
+
+    // Gather ingredients
+    const ingredients = Array.from(document.querySelectorAll('#new-recipe-ingredients-list input'))
+        .map(i => i.value.trim()).filter(Boolean);
+    if (ingredients.length === 0) { showToast('Please add at least one ingredient', 'warning'); return; }
+
+    // Gather instructions
+    const instructions = Array.from(document.querySelectorAll('#new-recipe-instructions-list textarea'))
+        .map(t => t.value.trim()).filter(Boolean);
+    if (instructions.length === 0) { showToast('Please add at least one instruction step', 'warning'); return; }
+
+    const servings = parseInt(document.getElementById('new-recipe-servings')?.value) || 2;
+    const prepTime = parseInt(document.getElementById('new-recipe-prep')?.value) || 10;
+    const cookTime = parseInt(document.getElementById('new-recipe-cook')?.value) || 20;
+
+    // Nutrition
+    const nutrition = {
+        calories: document.getElementById('new-recipe-cal')?.value || '',
+        protein: document.getElementById('new-recipe-protein')?.value || '',
+        carbs: document.getElementById('new-recipe-carbs')?.value || '',
+        fat: document.getElementById('new-recipe-fat')?.value || '',
+        fiber: '',
+        sodium: ''
+    };
+
+    // Tags
+    const selectedTags = Array.from(document.querySelectorAll('#new-recipe-tags input[type="checkbox"]:checked'))
+        .map(cb => cb.value);
+
+    const recipeId = 'recipe_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    const recipe = {
+        id: recipeId,
+        title: title,
+        ingredients: ingredients,
+        instructions: instructions,
+        nutrition: nutrition,
+        servings: servings,
+        metadata: {
+            prepTime: prepTime,
+            cookTime: cookTime,
+            totalTime: prepTime + cookTime,
+            serves: servings,
+            tags: selectedTags,
+            proteinType: ''
+        },
+        tags: selectedTags,
+        dateGenerated: new Date().toISOString(),
+        timesCooked: 0,
+        rating: 0,
+        favorited: false,
+        privacy: 'private',
+        source: 'manual-entry'
+    };
+
+    // Save to library
+    const library = getRecipeLibrary();
+    library.push(recipe);
+    setStorage(STORAGE.RECIPES, library);
+
+    // Link to meal plan
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    if (mealPlans[dateStr] && mealPlans[dateStr][mealType]) {
+        mealPlans[dateStr][mealType].recipeId = recipeId;
+        setStorage(STORAGE.MEAL_PLANS, mealPlans);
+    }
+
+    closeModal();
+    showToast(`"${title}" saved to your recipe library!`, 'success');
     renderWeekPlanner();
 }
 
@@ -7030,38 +8745,97 @@ function renderPantry() {
     }
 
     empty.classList.add('hidden');
-    container.innerHTML = pantry.map((item, i) => `
-        <div class="pantry-item">
-            <span class="pantry-item-icon">${item.icon || '🥫'}</span>
+    container.innerHTML = pantry.map((item, i) => {
+        // Determine status class based on quantity and threshold
+        const qtyStr = (item.qty || '').toLowerCase();
+        const isLow = item.status === 'use-soon' || item.status === 'low' || qtyStr.includes('low') || qtyStr.includes('almost') || qtyStr.includes('last');
+        const isOut = item.status === 'out' || qtyStr === '0' || qtyStr === '' || qtyStr.includes('out');
+        const statusClass = isOut ? 'pantry-status-out' : isLow ? 'pantry-status-low' : 'pantry-status-fresh';
+        const statusIndicator = isOut ? '🔴' : isLow ? '🟡' : '🟢';
+        const locationIcon = item.location === 'fridge' ? '🧊' : item.location === 'freezer' ? '❄️' : '🏠';
+
+        return `
+        <div class="pantry-item ${statusClass}">
+            <span class="pantry-item-icon">${item.icon || getCategoryIcon(item.category)}</span>
             <div class="pantry-item-info">
                 <div class="pantry-item-name">${item.name}</div>
-                <div class="pantry-item-qty">${item.qty || ''}</div>
+                <div class="pantry-item-qty">${item.qty || 'No quantity set'} ${item.location ? `<small>${locationIcon}</small>` : ''}</div>
             </div>
-            <span class="pantry-status ${item.status || 'fresh'}"></span>
-            <button class="icon-btn" onclick="removePantryItem(${i})">🗑️</button>
+            <span title="${isOut ? 'Out of stock' : isLow ? 'Running low' : 'In stock'}">${statusIndicator}</span>
+            <button class="btn-icon" onclick="editPantryItemModal(${i})" title="Edit"><i data-lucide="edit"></i></button>
+            <button class="btn-icon" onclick="removePantryItem(${i})" title="Remove"><i data-lucide="trash-2"></i></button>
         </div>
-    `).join('');
+    `;
+    }).join('');
+    refreshIcons();
+}
+
+function getCategoryIcon(category) {
+    const icons = {
+        grains: '🌾', proteins: '🥩', produce: '🥬', dairy: '🧀',
+        spices: '🌿', oils: '🫒', canned: '🥫', frozen: '🧊',
+        condiments: '🍯', baking: '🧁', beverages: '🥤', snacks: '🍿'
+    };
+    return icons[category] || '🥫';
 }
 
 function openAddPantryModal() {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">Add Pantry Item</h2>
-            <button class="modal-close" onclick="closeModal()">×</button>
+            <h2 class="modal-title" id="modal-title-label">Add Pantry Item</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
         </div>
         <div class="modal-body">
             <div class="form-group">
-                <label>Item Name</label>
+                <label>Item Name *</label>
                 <input type="text" class="form-input" id="pantry-item-name" placeholder="e.g., Olive oil">
             </div>
-            <div class="form-group">
-                <label>Quantity (optional)</label>
-                <input type="text" class="form-input" id="pantry-item-qty" placeholder="e.g., 1 bottle">
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="text" class="form-input" id="pantry-item-qty" placeholder="e.g., 2 bottles">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-select" id="pantry-item-category">
+                        <option value="">Select...</option>
+                        <option value="produce">🥬 Produce</option>
+                        <option value="proteins">🥩 Proteins</option>
+                        <option value="dairy">🧀 Dairy</option>
+                        <option value="grains">🌾 Grains</option>
+                        <option value="spices">🌿 Spices</option>
+                        <option value="oils">🫒 Oils & Vinegars</option>
+                        <option value="canned">🥫 Canned Goods</option>
+                        <option value="frozen">🧊 Frozen</option>
+                        <option value="condiments">🍯 Condiments</option>
+                        <option value="baking">🧁 Baking</option>
+                        <option value="beverages">🥤 Beverages</option>
+                        <option value="snacks">🍿 Snacks</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Location</label>
+                    <select class="form-select" id="pantry-item-location">
+                        <option value="pantry">🏠 Pantry</option>
+                        <option value="fridge">🧊 Fridge</option>
+                        <option value="freezer">❄️ Freezer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-select" id="pantry-item-status">
+                        <option value="fresh">🟢 Well Stocked</option>
+                        <option value="low">🟡 Running Low</option>
+                        <option value="use-soon">🔴 Use Soon</option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="savePantryItem()">Add</button>
+            <button class="btn btn-primary" onclick="savePantryItem()"><i data-lucide="plus"></i> Add Item</button>
         </div>
     `);
 }
@@ -7069,14 +8843,99 @@ function openAddPantryModal() {
 function savePantryItem() {
     const name = document.getElementById('pantry-item-name').value.trim();
     const qty = document.getElementById('pantry-item-qty').value.trim();
-    if (!name) return;
+    const category = document.getElementById('pantry-item-category')?.value || '';
+    const location = document.getElementById('pantry-item-location')?.value || 'pantry';
+    const status = document.getElementById('pantry-item-status')?.value || 'fresh';
+    if (!name) { showToast('Please enter an item name', 'warning'); return; }
 
     const pantry = getStorage(STORAGE.PANTRY) || [];
-    pantry.push({ name, qty, icon: '🥫', status: 'fresh' });
+    pantry.push({
+        name, qty, category, location, status,
+        icon: getCategoryIcon(category),
+        addedAt: new Date().toISOString()
+    });
     setStorage(STORAGE.PANTRY, pantry);
     closeModal();
     renderPantry();
-    showToast('Item added!');
+    showToast(`${name} added to pantry!`, 'success');
+}
+
+function editPantryItemModal(index) {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const item = pantry[index];
+    if (!item) return;
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">Edit: ${item.name}</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Item Name</label>
+                <input type="text" class="form-input" id="edit-pantry-name" value="${item.name}">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Quantity</label>
+                    <input type="text" class="form-input" id="edit-pantry-qty" value="${item.qty || ''}">
+                </div>
+                <div class="form-group">
+                    <label>Category</label>
+                    <select class="form-select" id="edit-pantry-category">
+                        <option value="">Select...</option>
+                        ${['produce','proteins','dairy','grains','spices','oils','canned','frozen','condiments','baking','beverages','snacks'].map(c =>
+                            `<option value="${c}" ${item.category === c ? 'selected' : ''}>${getCategoryIcon(c)} ${c.charAt(0).toUpperCase() + c.slice(1)}</option>`
+                        ).join('')}
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Location</label>
+                    <select class="form-select" id="edit-pantry-location">
+                        <option value="pantry" ${item.location === 'pantry' || !item.location ? 'selected' : ''}>🏠 Pantry</option>
+                        <option value="fridge" ${item.location === 'fridge' ? 'selected' : ''}>🧊 Fridge</option>
+                        <option value="freezer" ${item.location === 'freezer' ? 'selected' : ''}>❄️ Freezer</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select class="form-select" id="edit-pantry-status">
+                        <option value="fresh" ${item.status === 'fresh' || !item.status ? 'selected' : ''}>🟢 Well Stocked</option>
+                        <option value="low" ${item.status === 'low' ? 'selected' : ''}>🟡 Running Low</option>
+                        <option value="use-soon" ${item.status === 'use-soon' ? 'selected' : ''}>🔴 Use Soon</option>
+                        <option value="out" ${item.status === 'out' ? 'selected' : ''}>⛔ Out of Stock</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="updatePantryItem(${index})"><i data-lucide="save"></i> Save</button>
+        </div>
+    `);
+}
+
+function updatePantryItem(index) {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    if (!pantry[index]) return;
+
+    pantry[index] = {
+        ...pantry[index],
+        name: document.getElementById('edit-pantry-name')?.value?.trim() || pantry[index].name,
+        qty: document.getElementById('edit-pantry-qty')?.value?.trim() || '',
+        category: document.getElementById('edit-pantry-category')?.value || '',
+        location: document.getElementById('edit-pantry-location')?.value || 'pantry',
+        status: document.getElementById('edit-pantry-status')?.value || 'fresh',
+        icon: getCategoryIcon(document.getElementById('edit-pantry-category')?.value || ''),
+        updatedAt: new Date().toISOString()
+    };
+
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+    showToast('Pantry item updated', 'success');
 }
 
 function removePantryItem(index) {
@@ -10190,27 +12049,150 @@ function addActivity(type, title) {
 // ========================================
 // MODALS
 // ========================================
-function openModal(content) {
-    document.getElementById('modal-content').innerHTML = content;
-    document.getElementById('modal-overlay').classList.add('active');
+// ========================================
+// MODAL SYSTEM (Enhanced with accessibility)
+// ========================================
+let _previousFocusElement = null;
+
+function openModal(content, options = {}) {
+    _previousFocusElement = document.activeElement;
+    const overlay = document.getElementById('modal-overlay');
+    const modal = document.getElementById('modal-content');
+    modal.innerHTML = content;
+
+    // Set max-width if provided
+    if (options.maxWidth) {
+        modal.style.maxWidth = options.maxWidth;
+    } else {
+        modal.style.maxWidth = '';
+    }
+
+    overlay.classList.add('active');
+
+    // Initialize Lucide icons in modal content
+    if (window.lucide) {
+        try { lucide.createIcons(); } catch(e) {}
+    }
+
+    // Trap focus
+    trapFocus(modal);
+
+    // ESC to close
+    document.addEventListener('keydown', _modalEscHandler);
 }
 
 function closeModal() {
-    document.getElementById('modal-overlay').classList.remove('active');
+    const overlay = document.getElementById('modal-overlay');
+    overlay.classList.remove('active');
+    document.removeEventListener('keydown', _modalEscHandler);
+
+    // Restore focus
+    if (_previousFocusElement && _previousFocusElement.focus) {
+        _previousFocusElement.focus();
+    }
+}
+
+function _modalEscHandler(e) {
+    if (e.key === 'Escape') closeModal();
 }
 
 function closeModalOnOverlay(event) {
     if (event.target.id === 'modal-overlay') closeModal();
 }
 
+// Focus trap utility
+function trapFocus(element) {
+    const focusableSelectors = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    const focusableElements = element.querySelectorAll(focusableSelectors);
+    if (focusableElements.length === 0) return;
+
+    const firstElement = focusableElements[0];
+    const lastElement = focusableElements[focusableElements.length - 1];
+
+    // Focus the first focusable element
+    setTimeout(() => firstElement.focus(), 50);
+
+    element._trapHandler = function(e) {
+        if (e.key !== 'Tab') return;
+        if (e.shiftKey) {
+            if (document.activeElement === firstElement) {
+                e.preventDefault();
+                lastElement.focus();
+            }
+        } else {
+            if (document.activeElement === lastElement) {
+                e.preventDefault();
+                firstElement.focus();
+            }
+        }
+    };
+    element.addEventListener('keydown', element._trapHandler);
+}
+
+// Confirmation modal helper
+function showConfirmation({ icon, iconType, title, message, confirmText, confirmClass, onConfirm }) {
+    openModal(`
+        <div class="confirmation-modal-content">
+            <span class="confirmation-icon ${iconType || 'warning'}">${icon || '⚠️'}</span>
+            <div class="confirmation-title">${title || 'Are you sure?'}</div>
+            <div class="confirmation-message">${message || 'This action cannot be undone.'}</div>
+            <div class="confirmation-actions">
+                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn ${confirmClass || 'btn-primary'}" id="confirm-action-btn">${confirmText || 'Confirm'}</button>
+            </div>
+        </div>
+    `, { maxWidth: '420px' });
+
+    document.getElementById('confirm-action-btn').addEventListener('click', () => {
+        closeModal();
+        if (onConfirm) onConfirm();
+    });
+}
+
 // ========================================
-// TOAST
+// TOAST SYSTEM (Enhanced with types & stacking)
 // ========================================
-function showToast(message) {
-    const toast = document.getElementById('toast');
-    toast.textContent = message;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 3000);
+const TOAST_ICONS = {
+    success: '✅',
+    error: '❌',
+    warning: '⚠️',
+    info: 'ℹ️'
+};
+
+function showToast(message, type = 'success', duration = 3000) {
+    // Also support legacy single-arg call
+    const container = document.getElementById('toast-container');
+    if (!container) {
+        // Fallback to legacy toast
+        const toast = document.getElementById('toast');
+        if (toast) {
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+        return;
+    }
+
+    const toastEl = document.createElement('div');
+    toastEl.className = `toast-item toast-${type}`;
+    toastEl.innerHTML = `
+        <span class="toast-icon">${TOAST_ICONS[type] || '✅'}</span>
+        <span class="toast-message">${message}</span>
+        <button class="toast-close" onclick="this.parentElement.remove()" aria-label="Dismiss">&times;</button>
+    `;
+
+    container.appendChild(toastEl);
+
+    // Trigger animation
+    requestAnimationFrame(() => {
+        toastEl.classList.add('show');
+    });
+
+    // Auto-dismiss
+    setTimeout(() => {
+        toastEl.classList.remove('show');
+        setTimeout(() => toastEl.remove(), 300);
+    }, duration);
 }
 
 // ========================================
@@ -10656,10 +12638,6 @@ function addIngredientsToShopping(recipeId) {
     });
     setStorage(STORAGE.SHOPPING, lists);
     showToast('🛒 Ingredients added to shopping list!');
-}
-
-function printRecipe(recipeId) {
-    window.print();
 }
 
 let lastDeletedRecipe = null;
@@ -11291,6 +13269,22 @@ function formatWorkoutDataForAPI() {
 - Current streak: ${streak} days
 ${streak >= 3 ? '(Great consistency! Consider celebrating this with a nutritious reward.)' : ''}
 ${totalCalories > 1500 ? '(High activity level - may need extra protein and calories for recovery.)' : ''}`;
+}
+
+// ========================================
+// INITIALIZE LUCIDE ICONS
+// ========================================
+document.addEventListener('DOMContentLoaded', function() {
+    if (window.lucide) {
+        try { lucide.createIcons(); } catch(e) { console.warn('Lucide init:', e); }
+    }
+});
+
+// Re-initialize Lucide after dynamic content updates
+function refreshIcons() {
+    if (window.lucide) {
+        try { lucide.createIcons(); } catch(e) {}
+    }
 }
 </script>
 </body>

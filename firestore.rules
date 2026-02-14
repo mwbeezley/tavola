@@ -1,0 +1,31 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // User-scoped collections: only the owner can read/write
+    match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Shared family recipes: any authenticated user can read
+    // Only the creator can update/delete their own recipes
+    match /recipes/{recipeId} {
+      // Any signed-in user can read family recipes
+      allow read: if request.auth != null;
+
+      // Any signed-in user can create a recipe
+      allow create: if request.auth != null
+        && request.resource.data.sharedBy.userId == request.auth.uid;
+
+      // Only the creator can update or delete
+      allow update, delete: if request.auth != null
+        && resource.data.sharedBy.userId == request.auth.uid;
+
+      // Ratings sub-collection: any authenticated user can read/write their own rating
+      match /ratings/{ratingId} {
+        allow read: if request.auth != null;
+        allow write: if request.auth != null && ratingId == request.auth.uid;
+      }
+    }
+  }
+}
