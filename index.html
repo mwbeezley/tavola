@@ -3400,14 +3400,14 @@
                     <i data-lucide="settings"></i>
                 </button>
                 <div class="header-search" id="global-search">
-                    <span>🔍</span>
+                    <span><i data-lucide="search" style="width:16px;height:16px"></i></span>
                     <input type="text" placeholder="Search..." id="global-search-input" onkeyup="handleGlobalSearch(event)">
                 </div>
                 <div class="auth-section">
                     <div class="user-info" id="user-info" style="display: none;"></div>
                     <span class="sync-status" id="sync-status"></span>
                     <button class="auth-btn" id="auth-btn" onclick="signInWithGoogle()">
-                        <span class="icon">🔐</span> Sign In
+                        <span class="icon"><i data-lucide="lock" style="width:16px;height:16px"></i></span> Sign In
                     </button>
                 </div>
             </div>
@@ -3464,14 +3464,14 @@
                     <i data-lucide="settings"></i>
                 </button>
                 <div class="header-search">
-                    <span>🔍</span>
+                    <span><i data-lucide="search" style="width:16px;height:16px"></i></span>
                     <input type="text" placeholder="Search..." onkeyup="handleGlobalSearch(event)">
                 </div>
                 <div class="auth-section">
                     <div class="user-info" id="user-info-desktop" style="display: none;"></div>
                     <span class="sync-status" id="sync-status-desktop"></span>
                     <button class="auth-btn" onclick="signInWithGoogle()">
-                        <span class="icon">🔐</span> Sign In
+                        <span class="icon"><i data-lucide="lock" style="width:16px;height:16px"></i></span> Sign In
                     </button>
                 </div>
             </div>
@@ -3496,7 +3496,7 @@
             <form id="profile-form" onsubmit="saveProfile(event)">
                 <!-- Health Conditions - Expanded -->
                 <div class="card">
-                    <h2 class="card-title">🩺 Health Conditions</h2>
+                    <h2 class="card-title"><i data-lucide="stethoscope" style="width:18px;height:18px;vertical-align:middle"></i> Health Conditions</h2>
                     <p class="text-muted mb-16">Check all that apply. This helps Nonna tailor recipes to your needs.</p>
 
                     <!-- Digestive Conditions -->
@@ -3685,7 +3685,7 @@
 
                 <!-- Cooking for Two -->
                 <div class="card">
-                    <h2 class="card-title">👥 Cooking for Two</h2>
+                    <h2 class="card-title"><i data-lucide="users" style="width:18px;height:18px;vertical-align:middle"></i> Cooking for Two</h2>
                     <label class="toggle mb-16">
                         <input type="checkbox" name="cookingForTwo" id="cookingForTwoToggle" onchange="toggleCookingForTwo()">
                         <span class="toggle-switch"></span>
@@ -3720,7 +3720,7 @@
 
                 <!-- Protein Preferences -->
                 <div class="card">
-                    <h2 class="card-title">🥩 Protein Preferences</h2>
+                    <h2 class="card-title"><i data-lucide="beef" style="width:18px;height:18px;vertical-align:middle"></i> Protein Preferences</h2>
                     <p class="text-muted mb-16">Check all proteins you eat</p>
                     <div class="grid grid-2">
                         <label class="checkbox-item"><input type="checkbox" name="proteins" value="white-fish"> White Fish</label>
@@ -3740,7 +3740,7 @@
 
                 <!-- Garden -->
                 <div class="card">
-                    <h2 class="card-title">🌱 Your Garden</h2>
+                    <h2 class="card-title"><i data-lucide="sprout" style="width:18px;height:18px;vertical-align:middle"></i> Your Garden</h2>
                     <div class="form-group">
                         <label>What's Currently Growing?</label>
                         <textarea class="form-textarea" name="currentlyGrowing" placeholder="e.g., tomatoes, zucchini, basil, peppers..."></textarea>
@@ -3764,7 +3764,7 @@
 
                 <!-- Cooking Capacity -->
                 <div class="card">
-                    <h2 class="card-title">⏰ Cooking Capacity</h2>
+                    <h2 class="card-title"><i data-lucide="clock" style="width:18px;height:18px;vertical-align:middle"></i> Cooking Capacity</h2>
                     <div class="form-group">
                         <label>Energy Level for Cooking</label>
                         <select class="form-select" name="energyLevel">
@@ -3786,7 +3786,7 @@
 
                 <!-- Budget -->
                 <div class="card">
-                    <h2 class="card-title">💰 Budget</h2>
+                    <h2 class="card-title"><i data-lucide="wallet" style="width:18px;height:18px;vertical-align:middle"></i> Budget</h2>
                     <div class="form-row">
                         <div class="form-group">
                             <label>Weekly Grocery Budget</label>
@@ -3811,7 +3811,7 @@
 
                 <!-- Dietary Notes -->
                 <div class="card">
-                    <h2 class="card-title">📝 Dietary Notes</h2>
+                    <h2 class="card-title"><i data-lucide="file-text" style="width:18px;height:18px;vertical-align:middle"></i> Dietary Notes</h2>
                     <div class="form-group">
                         <label>Foods to Avoid</label>
                         <textarea class="form-textarea" name="foodsToAvoid" placeholder="Specific triggers or dislikes..."></textarea>
@@ -3928,19 +3928,19 @@
             <div class="view" id="view-week">
                 <div class="week-header">
                     <div class="week-nav">
-                        <button class="week-nav-btn" onclick="changeWeek(-1)">◀</button>
+                        <button class="week-nav-btn" onclick="changeWeek(-1)"><i data-lucide="chevron-left" style="width:16px;height:16px"></i></button>
                         <span class="week-title" id="week-title">This Week</span>
-                        <button class="week-nav-btn" onclick="changeWeek(1)">▶</button>
+                        <button class="week-nav-btn" onclick="changeWeek(1)"><i data-lucide="chevron-right" style="width:16px;height:16px"></i></button>
                     </div>
                     <div class="week-actions">
-                        <button class="btn btn-primary btn-sm" onclick="askNonnaForWeekPlan()">🤖 Plan Week</button>
-                        <button class="btn btn-secondary btn-sm" onclick="generateWeekShoppingList()">🛒 Shopping</button>
-                        <button class="btn btn-secondary btn-sm" onclick="showPrepChecklist()">📋 Prep</button>
+                        <button class="btn btn-primary btn-sm" onclick="askNonnaForWeekPlan()"><i data-lucide="bot" style="width:14px;height:14px;vertical-align:middle"></i> Plan Week</button>
+                        <button class="btn btn-secondary btn-sm" onclick="generateWeekShoppingList()"><i data-lucide="shopping-cart" style="width:14px;height:14px;vertical-align:middle"></i> Shopping</button>
+                        <button class="btn btn-secondary btn-sm" onclick="showPrepChecklist()"><i data-lucide="clipboard-list" style="width:14px;height:14px;vertical-align:middle"></i> Prep</button>
                     </div>
                 </div>
                 <div id="week-planner"></div>
                 <div class="empty-state hidden" id="week-empty">
-                    <div class="empty-state-icon">📅</div>
+                    <div class="empty-state-icon"><i data-lucide="calendar-days" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                     <div class="empty-state-title">Your week is empty</div>
                     <p class="empty-state-text">Let's fill it with delicious, healthy meals! Nonna can create a complete weekly plan based on your preferences and pantry.</p>
                     <button class="btn btn-primary" onclick="openPlanningModeModal()">🤖 Plan This Week</button>
@@ -3951,8 +3951,8 @@
             <div class="view" id="view-recipes">
                 <!-- Tab Bar: My Recipes / Family Tavola -->
                 <div class="recipes-tab-bar">
-                    <button class="recipes-tab active" id="tab-my-recipes" onclick="switchRecipesTab('my')">📚 My Recipes</button>
-                    <button class="recipes-tab" id="tab-family-recipes" onclick="switchRecipesTab('family')">👨‍👩‍👧 Family Tavola</button>
+                    <button class="recipes-tab active" id="tab-my-recipes" onclick="switchRecipesTab('my')"><i data-lucide="book-open" style="width:16px;height:16px;vertical-align:middle"></i> My Recipes</button>
+                    <button class="recipes-tab" id="tab-family-recipes" onclick="switchRecipesTab('family')"><i data-lucide="users" style="width:16px;height:16px;vertical-align:middle"></i> Family Tavola</button>
                 </div>
 
                 <!-- MY RECIPES TAB -->
@@ -3969,9 +3969,9 @@
                         <div class="bulk-buttons">
                             <button class="btn btn-sm btn-ghost" onclick="bulkSelectAll()">Select All</button>
                             <button class="btn btn-sm btn-ghost" onclick="bulkDeselectAll()">Deselect</button>
-                            <button class="btn btn-sm btn-secondary" onclick="bulkAddToFavorites()">❤️ Favorite</button>
-                            <button class="btn btn-sm btn-secondary" onclick="bulkRemoveFromFavorites()">💔 Unfavorite</button>
-                            <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="bulkDeleteRecipes()">🗑️ Delete</button>
+                            <button class="btn btn-sm btn-secondary" onclick="bulkAddToFavorites()"><i data-lucide="heart" style="width:14px;height:14px;vertical-align:middle"></i> Favorite</button>
+                            <button class="btn btn-sm btn-secondary" onclick="bulkRemoveFromFavorites()"><i data-lucide="heart-crack" style="width:14px;height:14px;vertical-align:middle"></i> Unfavorite</button>
+                            <button class="btn btn-sm" style="background: var(--danger); color: white;" onclick="bulkDeleteRecipes()"><i data-lucide="trash-2" style="width:14px;height:14px;vertical-align:middle"></i> Delete</button>
                         </div>
                     </div>
                     <div class="flex flex-between flex-center mb-16 gap-8" style="flex-wrap: wrap;">
@@ -4019,10 +4019,10 @@
                     </div>
                     <div class="grid grid-2" id="recipes-grid"></div>
                     <div class="empty-state" id="recipes-empty">
-                        <div class="empty-state-icon">📚</div>
+                        <div class="empty-state-icon"><i data-lucide="book-open" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                         <div class="empty-state-title">Your recipe library is empty</div>
                         <p class="empty-state-text">Chat with Nonna to get personalized Mediterranean recipes tailored to your health needs!</p>
-                        <button class="btn btn-primary" onclick="navigateTo('chat')">💬 Ask Nonna for Recipe Ideas</button>
+                        <button class="btn btn-primary" onclick="navigateTo('chat')"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle"></i> Ask Nonna for Recipe Ideas</button>
                     </div>
                 </div>
 
@@ -4051,7 +4051,7 @@
                     <div class="grid grid-2" id="family-recipes-grid"></div>
 
                     <div class="empty-state" id="family-recipes-empty" style="display:none">
-                        <div class="empty-state-icon">👨‍👩‍👧</div>
+                        <div class="empty-state-icon"><i data-lucide="users" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                         <div class="empty-state-title">No family recipes yet</div>
                         <p class="empty-state-text">Share your favorite recipes with your family! Open a recipe and tap the Share button to add it to Family Tavola.</p>
                         <button class="btn btn-primary" onclick="switchRecipesTab('my')">📚 Go to My Recipes</button>
@@ -4065,9 +4065,9 @@
                     <div class="chat-messages" id="chat-messages"></div>
                     <div class="chat-input-area">
                         <div class="chat-input-wrapper">
-                            <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input">🎤</button>
+                            <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input"><i data-lucide="mic"></i></button>
                             <textarea class="chat-input" id="chat-input" placeholder="Ask Nonna anything..." rows="1"></textarea>
-                            <button class="send-btn" id="send-btn" onclick="sendMessage()">➤</button>
+                            <button class="send-btn" id="send-btn" onclick="sendMessage()"><i data-lucide="send"></i></button>
                         </div>
                     </div>
                 </div>
@@ -4075,7 +4075,7 @@
 
             <!-- WORKOUTS View -->
             <div class="view" id="view-workouts">
-                <h2 class="section-title">💪 Workouts</h2>
+                <h2 class="section-title"><i data-lucide="dumbbell" style="width:20px;height:20px;vertical-align:middle"></i> Workouts</h2>
 
                 <!-- Calorie Balance -->
                 <div class="calorie-balance" id="calorie-balance">
@@ -4125,14 +4125,14 @@
                         <span class="card-title">Quick Log</span>
                     </div>
                     <div class="quick-log-presets" id="quick-log-presets">
-                        <button class="quick-log-btn" onclick="quickLogWorkout('vrboxing', 45)">🥊 VR Boxing</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('kettlebells', 30)">🏋️ Kettlebells</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('resistancebands', 25)">🧘 Resistance Bands</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('walking', 30)">🚶 30min Walk</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('running', 20)">🏃 20min Run</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('cycling', 30)">🚴 30min Bike</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('yoga', 30)">🧘 30min Yoga</button>
-                        <button class="quick-log-btn" onclick="quickLogWorkout('swimming', 30)">🏊 30min Swim</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('vrboxing', 45)"><i data-lucide="swords" style="width:14px;height:14px;vertical-align:middle"></i> VR Boxing</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('kettlebells', 30)"><i data-lucide="dumbbell" style="width:14px;height:14px;vertical-align:middle"></i> Kettlebells</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('resistancebands', 25)"><i data-lucide="stretch-horizontal" style="width:14px;height:14px;vertical-align:middle"></i> Resistance Bands</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('walking', 30)"><i data-lucide="footprints" style="width:14px;height:14px;vertical-align:middle"></i> 30min Walk</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('running', 20)"><i data-lucide="footprints" style="width:14px;height:14px;vertical-align:middle"></i> 20min Run</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('cycling', 30)"><i data-lucide="bike" style="width:14px;height:14px;vertical-align:middle"></i> 30min Bike</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('yoga', 30)"><i data-lucide="stretch-horizontal" style="width:14px;height:14px;vertical-align:middle"></i> 30min Yoga</button>
+                        <button class="quick-log-btn" onclick="quickLogWorkout('swimming', 30)"><i data-lucide="waves" style="width:14px;height:14px;vertical-align:middle"></i> 30min Swim</button>
                     </div>
                     <button class="btn btn-primary btn-block" onclick="openWorkoutLogModal()">+ Log Custom Workout</button>
                 </div>
@@ -4152,7 +4152,7 @@
                     </div>
                     <div id="workout-list-today">
                         <div class="empty-state" style="padding: 20px;">
-                            <div class="empty-state-icon">🏃</div>
+                            <div class="empty-state-icon"><i data-lucide="footprints" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                             <div class="empty-state-title">No workouts logged today</div>
                             <p class="empty-state-text">Log a workout to track your calorie burn!</p>
                         </div>
@@ -4162,40 +4162,40 @@
 
             <!-- MORE View -->
             <div class="view" id="view-more">
-                <h2 class="section-title">⚙️ More</h2>
+                <h2 class="section-title"><i data-lucide="settings" style="width:20px;height:20px;vertical-align:middle"></i> More</h2>
 
                 <!-- More Menu Items -->
                 <div class="more-menu" id="more-menu-main">
                     <button class="more-menu-item" onclick="switchMoreTab('kitchen')">
-                        <span class="icon">🍳</span>
+                        <span class="icon"><i data-lucide="cooking-pot"></i></span>
                         <div class="more-menu-item-content">
                             <div class="more-menu-item-title">Kitchen Tools</div>
                             <div class="more-menu-item-desc">Pantry, shopping lists, batch cooking</div>
                         </div>
                     </button>
                     <button class="more-menu-item" onclick="switchMoreTab('garden')">
-                        <span class="icon">🌱</span>
+                        <span class="icon"><i data-lucide="sprout"></i></span>
                         <div class="more-menu-item-content">
                             <div class="more-menu-item-title">Garden</div>
                             <div class="more-menu-item-desc">Track what's growing</div>
                         </div>
                     </button>
                     <button class="more-menu-item" onclick="switchMoreTab('crohns')">
-                        <span class="icon">🩺</span>
+                        <span class="icon"><i data-lucide="stethoscope"></i></span>
                         <div class="more-menu-item-content">
                             <div class="more-menu-item-title">Crohn's Care</div>
                             <div class="more-menu-item-desc">Flare mode & gentle meal options</div>
                         </div>
                     </button>
                     <button class="more-menu-item" onclick="switchMoreTab('history')">
-                        <span class="icon">📖</span>
+                        <span class="icon"><i data-lucide="book-open"></i></span>
                         <div class="more-menu-item-content">
                             <div class="more-menu-item-title">Meal History</div>
                             <div class="more-menu-item-desc">Track what you've cooked</div>
                         </div>
                     </button>
                     <button class="more-menu-item" onclick="switchMoreTab('settings')">
-                        <span class="icon">⚙️</span>
+                        <span class="icon"><i data-lucide="settings"></i></span>
                         <div class="more-menu-item-content">
                             <div class="more-menu-item-title">Settings</div>
                             <div class="more-menu-item-desc">Profile, appearance, data</div>
@@ -4206,7 +4206,7 @@
                 <!-- Kitchen Sub-View -->
                 <div class="hidden" id="more-kitchen">
                     <button class="btn btn-ghost mb-16" onclick="showMoreMenu()">← Back</button>
-                    <h2 class="section-title">🍳 Kitchen</h2>
+                    <h2 class="section-title"><i data-lucide="cooking-pot" style="width:20px;height:20px;vertical-align:middle"></i> Kitchen</h2>
                     <div class="tabs">
                         <button class="tab active" onclick="switchKitchenTab('pantry')">Pantry</button>
                         <button class="tab" onclick="switchKitchenTab('shopping')">Shopping</button>
@@ -4217,14 +4217,14 @@
                         <div class="flex flex-between flex-center mb-16">
                             <span class="text-muted">Track your ingredients</span>
                             <div class="flex gap-8">
-                                <button class="btn btn-sm btn-secondary" onclick="openPantryScanModal()">📷 Scan</button>
+                                <button class="btn btn-sm btn-secondary" onclick="openPantryScanModal()"><i data-lucide="camera" style="width:14px;height:14px;vertical-align:middle"></i> Scan</button>
                                 <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add</button>
                             </div>
                         </div>
 
                         <!-- What Can I Make Button -->
                         <button class="btn btn-primary btn-block mb-16" onclick="openWhatCanIMakeModal()" style="padding: 14px; font-size: 1rem;">
-                            🍳 What Can I Make Right Now?
+                            <i data-lucide="cooking-pot" style="width:16px;height:16px;vertical-align:middle"></i> What Can I Make Right Now?
                         </button>
 
                         <!-- Pantry Alerts Section -->
@@ -4240,19 +4240,19 @@
                                 <p class="text-muted" style="font-size: 0.85rem; margin-bottom: 12px;">Just got groceries? Add them quickly:</p>
                                 <div class="quick-add-btns">
                                     <button class="quick-add-btn" onclick="openDeliveryQuickAdd('misfits')">
-                                        <div style="font-size: 1.2rem;">🥬</div>
+                                        <div><i data-lucide="leaf" style="width:20px;height:20px"></i></div>
                                         <div style="font-weight: 500;">Misfits Market</div>
                                     </button>
                                     <button class="quick-add-btn" onclick="openDeliveryQuickAdd('wholefoods')">
-                                        <div style="font-size: 1.2rem;">🛒</div>
+                                        <div><i data-lucide="shopping-cart" style="width:20px;height:20px"></i></div>
                                         <div style="font-weight: 500;">Whole Foods</div>
                                     </button>
                                     <button class="quick-add-btn" onclick="openDeliveryQuickAdd('csa')">
-                                        <div style="font-size: 1.2rem;">🌱</div>
+                                        <div><i data-lucide="sprout" style="width:20px;height:20px"></i></div>
                                         <div style="font-weight: 500;">CSA Pickup</div>
                                     </button>
                                     <button class="quick-add-btn" onclick="openDeliveryQuickAdd('custom')">
-                                        <div style="font-size: 1.2rem;">➕</div>
+                                        <div><i data-lucide="plus" style="width:20px;height:20px"></i></div>
                                         <div style="font-weight: 500;">Custom</div>
                                     </button>
                                 </div>
@@ -4263,7 +4263,7 @@
 
                         <div id="pantry-list"></div>
                         <div class="empty-state" id="pantry-empty">
-                            <div class="empty-state-icon">🥫</div>
+                            <div class="empty-state-icon"><i data-lucide="package" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                             <div class="empty-state-title">Pantry is empty</div>
                             <p>Add items manually or scan with your camera.</p>
                         </div>
@@ -4297,7 +4297,7 @@
                         </div>
                         <div id="shopping-list"></div>
                         <div class="empty-state" id="shopping-empty">
-                            <div class="empty-state-icon">🛒</div>
+                            <div class="empty-state-icon"><i data-lucide="shopping-cart" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                             <div class="empty-state-title">List is empty</div>
                             <p>Add items or generate from meal plan.</p>
                         </div>
@@ -4308,7 +4308,7 @@
                     </div>
                     <div class="tab-content" id="kitchen-batch">
                         <div class="card">
-                            <h3 class="card-title">🍱 Plan Batch Cooking Session</h3>
+                            <h3 class="card-title"><i data-lucide="layout-grid" style="width:16px;height:16px;vertical-align:middle"></i> Plan Batch Cooking Session</h3>
                             <div class="form-group">
                                 <label>What to prep?</label>
                                 <div class="grid grid-2">
@@ -4356,7 +4356,7 @@
                         <div id="subs-categories">
                             <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                                    <span>🧀 Dairy</span><span class="accordion-icon">▼</span>
+                                    <span><i data-lucide="milk" style="width:16px;height:16px;vertical-align:middle"></i> Dairy</span><span class="accordion-icon">▼</span>
                                 </div>
                                 <div class="accordion-body">
                                     <p><strong>Greek Yogurt →</strong> Labneh, sour cream</p>
@@ -4366,7 +4366,7 @@
                             </div>
                             <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                                    <span>🌿 Herbs</span><span class="accordion-icon">▼</span>
+                                    <span><i data-lucide="leaf" style="width:16px;height:16px;vertical-align:middle"></i> Herbs</span><span class="accordion-icon">▼</span>
                                 </div>
                                 <div class="accordion-body">
                                     <p><strong>Fresh herbs →</strong> Dried at 1/3 amount</p>
@@ -4376,7 +4376,7 @@
                             </div>
                             <div class="accordion-item">
                                 <div class="accordion-header" onclick="toggleAccordion(this)">
-                                    <span>🍋 Acids</span><span class="accordion-icon">▼</span>
+                                    <span><i data-lucide="citrus" style="width:16px;height:16px;vertical-align:middle"></i> Acids</span><span class="accordion-icon">▼</span>
                                 </div>
                                 <div class="accordion-body">
                                     <p><strong>Lemon juice →</strong> White wine vinegar + sugar</p>
@@ -4391,7 +4391,7 @@
                 <!-- Garden Sub-View -->
                 <div class="hidden" id="more-garden">
                     <button class="btn btn-ghost mb-16" onclick="showMoreMenu()">← Back</button>
-                    <h2 class="section-title">🌱 Garden</h2>
+                    <h2 class="section-title"><i data-lucide="sprout" style="width:20px;height:20px;vertical-align:middle"></i> Garden</h2>
                     <div class="tabs">
                         <button class="tab active" onclick="switchGardenTab('inventory')">My Garden</button>
                         <button class="tab" onclick="switchGardenTab('planting')">Planting</button>
@@ -4403,11 +4403,11 @@
                             <button class="btn btn-sm btn-primary" onclick="openAddPlantModal()">+ Add</button>
                         </div>
                         <div id="garden-plants"></div>
-                        <button class="btn btn-secondary mt-16 btn-block" onclick="askNonnaWithGarden()">🍅 Recipes with my harvest</button>
+                        <button class="btn btn-secondary mt-16 btn-block" onclick="askNonnaWithGarden()"><i data-lucide="cherry" style="width:14px;height:14px;vertical-align:middle"></i> Recipes with my harvest</button>
                     </div>
                     <div class="tab-content" id="garden-planting">
                         <div class="card">
-                            <h3 class="card-title">🌱 Plant Now</h3>
+                            <h3 class="card-title"><i data-lucide="sprout" style="width:16px;height:16px;vertical-align:middle"></i> Plant Now</h3>
                             <p class="text-muted mb-16">Recommendations for your zone</p>
                             <div id="planting-suggestions"></div>
                         </div>
@@ -4424,9 +4424,9 @@
                 <!-- Crohn's Care Sub-View -->
                 <div class="hidden" id="more-crohns">
                     <button class="btn btn-ghost mb-16" onclick="showMoreMenu()">← Back</button>
-                    <h2 class="section-title">🩺 Crohn's Care</h2>
+                    <h2 class="section-title"><i data-lucide="stethoscope" style="width:20px;height:20px;vertical-align:middle"></i> Crohn's Care</h2>
                     <button class="btn btn-primary btn-block" style="padding: 20px; font-size: 1.1rem; margin-bottom: 20px;" onclick="activateFlareMode()">
-                        😔 I'm Having a Flare - Help Me
+                        <i data-lucide="frown" style="width:18px;height:18px;vertical-align:middle"></i> I'm Having a Flare - Help Me
                     </button>
                     <div class="flare-banner hidden" id="flare-mode-banner">
                         <div class="flare-banner-title"><i data-lucide="thermometer" style="width:18px;height:18px;vertical-align:middle;margin-right:4px"></i> Flare Mode Active</div>
@@ -4434,7 +4434,7 @@
                         <button class="btn btn-sm btn-ghost mt-8" onclick="deactivateFlareMode()">Exit Flare Mode</button>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">💚 Gentle Meal Ideas</h3>
+                        <h3 class="card-title"><i data-lucide="heart-pulse" style="width:16px;height:16px;vertical-align:middle"></i> Gentle Meal Ideas</h3>
                         <div class="quick-actions">
                             <button class="quick-action" onclick="askNonna('Give me a gentle soup recipe for a flare day')">Soothing Soup</button>
                             <button class="quick-action" onclick="askNonna('Easy-to-digest dinner')">Easy Dinner</button>
@@ -4442,7 +4442,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">🚫 Avoid During Flare</h3>
+                        <h3 class="card-title"><i data-lucide="ban" style="width:16px;height:16px;vertical-align:middle"></i> Avoid During Flare</h3>
                         <ul style="padding-left: 20px; color: var(--gray-text); font-size: 0.9rem;">
                             <li>Raw vegetables</li>
                             <li>High-fiber foods</li>
@@ -4457,9 +4457,9 @@
                 <!-- History Sub-View -->
                 <div class="hidden" id="more-history">
                     <button class="btn btn-ghost mb-16" onclick="showMoreMenu()">← Back</button>
-                    <h2 class="section-title">📖 Meal History</h2>
+                    <h2 class="section-title"><i data-lucide="book-open" style="width:20px;height:20px;vertical-align:middle"></i> Meal History</h2>
                     <div class="card">
-                        <h3 class="card-title">📊 Stats</h3>
+                        <h3 class="card-title"><i data-lucide="bar-chart-3" style="width:16px;height:16px;vertical-align:middle"></i> Stats</h3>
                         <div class="grid grid-2">
                             <div><strong>This Week:</strong> <span id="stat-week">0</span> meals</div>
                             <div><strong>This Month:</strong> <span id="stat-month">0</span> meals</div>
@@ -4471,7 +4471,7 @@
                     </div>
                     <div id="history-list"></div>
                     <div class="empty-state" id="history-empty">
-                        <div class="empty-state-icon">📖</div>
+                        <div class="empty-state-icon"><i data-lucide="book-open" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                         <div class="empty-state-title">No meals logged</div>
                         <p>Mark recipes as cooked to track history.</p>
                     </div>
@@ -4480,25 +4480,25 @@
                 <!-- Settings Sub-View -->
                 <div class="hidden" id="more-settings">
                     <button class="btn btn-ghost mb-16" onclick="showMoreMenu()">← Back</button>
-                    <h2 class="section-title">⚙️ Settings</h2>
+                    <h2 class="section-title"><i data-lucide="settings" style="width:20px;height:20px;vertical-align:middle"></i> Settings</h2>
                     <div class="card">
-                        <h3 class="card-title">🎨 Appearance</h3>
+                        <h3 class="card-title"><i data-lucide="palette" style="width:16px;height:16px;vertical-align:middle"></i> Appearance</h3>
                         <label class="toggle">
                             <input type="checkbox" id="dark-mode-toggle" onchange="toggleDarkMode()">
                             <span class="toggle-switch"></span>
-                            <span>🌙 Dark Mode</span>
+                            <span><i data-lucide="moon" style="width:14px;height:14px;vertical-align:middle"></i> Dark Mode</span>
                         </label>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">👤 Profile</h3>
+                        <h3 class="card-title"><i data-lucide="user" style="width:16px;height:16px;vertical-align:middle"></i> Profile</h3>
                         <button class="btn btn-secondary btn-block" onclick="editProfile()">Edit Health Profile</button>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">🎓 Help</h3>
+                        <h3 class="card-title"><i data-lucide="graduation-cap" style="width:16px;height:16px;vertical-align:middle"></i> Help</h3>
                         <button class="btn btn-secondary btn-block mb-8" onclick="restartTutorial()">Restart Tutorial</button>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">💾 Data</h3>
+                        <h3 class="card-title"><i data-lucide="save" style="width:16px;height:16px;vertical-align:middle"></i> Data</h3>
                         <div class="flex gap-8" style="flex-wrap: wrap;">
                             <button class="btn btn-secondary btn-sm" onclick="exportAllData()">Export</button>
                             <button class="btn btn-secondary btn-sm" onclick="importData()">Import</button>
@@ -4506,7 +4506,7 @@
                         </div>
                     </div>
                     <div class="card">
-                        <h3 class="card-title">ℹ️ About</h3>
+                        <h3 class="card-title"><i data-lucide="info" style="width:16px;height:16px;vertical-align:middle"></i> About</h3>
                         <p class="text-muted">Tavola v3.0</p>
                         <p class="text-muted" style="font-size: 0.85rem;">Made with ❤️ for chronic illness warriors</p>
                     </div>
@@ -4515,7 +4515,7 @@
 
             <!-- FAVORITES View -->
             <div class="view" id="view-favorites">
-                <h2 class="section-title">❤️ Favorites</h2>
+                <h2 class="section-title"><i data-lucide="heart" style="width:20px;height:20px;vertical-align:middle"></i> Favorites</h2>
                 <div class="flex flex-between flex-center mb-16">
                     <input type="text" class="form-input" id="favorites-search" placeholder="Search..." style="max-width: 200px;" oninput="filterFavorites()">
                     <select class="form-select" id="favorites-sort" style="max-width: 140px;" onchange="sortFavorites()">
@@ -4526,10 +4526,10 @@
                 </div>
                 <div class="grid grid-2" id="favorites-grid"></div>
                 <div class="empty-state" id="favorites-empty">
-                    <div class="empty-state-icon">❤️</div>
+                    <div class="empty-state-icon"><i data-lucide="heart" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                     <div class="empty-state-title">No favorites yet</div>
                     <p class="empty-state-text">Browse your recipe library or ask Nonna for suggestions, then tap ❤️ to save favorites here!</p>
-                    <button class="btn btn-primary" onclick="navigateTo('recipes')">📚 Browse Recipe Library</button>
+                    <button class="btn btn-primary" onclick="navigateTo('recipes')"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:middle"></i> Browse Recipe Library</button>
                 </div>
             </div>
         </div>
@@ -4787,7 +4787,7 @@ function updateAuthUI() {
         }
     } else {
         if (authBtn) {
-            authBtn.innerHTML = `<span class="icon">🔐</span> Sign In`;
+            authBtn.innerHTML = `<span class="icon"><i data-lucide="lock" style="width:16px;height:16px"></i></span> Sign In`;
             authBtn.onclick = signInWithGoogle;
         }
         if (userInfo) {
@@ -8030,10 +8030,10 @@ function renderWeekPlanner() {
     document.getElementById('week-title').textContent = getWeekTitle(state.currentWeekOffset);
 
     const mealTypes = [
-        { key: 'breakfast', icon: '🌅', label: 'Breakfast' },
-        { key: 'lunch', icon: '🌞', label: 'Lunch' },
-        { key: 'dinner', icon: '🌙', label: 'Dinner' },
-        { key: 'snacks', icon: '🍎', label: 'Snacks' }
+        { key: 'breakfast', icon: icon('sunrise'), label: 'Breakfast' },
+        { key: 'lunch', icon: icon('sun'), label: 'Lunch' },
+        { key: 'dinner', icon: icon('moon'), label: 'Dinner' },
+        { key: 'snacks', icon: icon('apple'), label: 'Snacks' }
     ];
 
     let hasAnyMeals = false;
@@ -9258,13 +9258,16 @@ function renderPantry() {
     refreshIcons();
 }
 
+const CATEGORY_ICONS = {
+    produce: 'leaf', proteins: 'beef', dairy: 'milk',
+    grains: 'wheat', spices: 'flask-round', oils: 'droplets',
+    canned: 'package', frozen: 'snowflake', condiments: 'flask-round',
+    baking: 'cake-slice', beverages: 'cup-soda', snacks: 'cookie',
+    herbs: 'leaf', other: 'package'
+};
+
 function getCategoryIcon(category) {
-    const icons = {
-        grains: '🌾', proteins: '🥩', produce: '🥬', dairy: '🧀',
-        spices: '🌿', oils: '🫒', canned: '🥫', frozen: '🧊',
-        condiments: '🍯', baking: '🧁', beverages: '🥤', snacks: '🍿'
-    };
-    return icons[category] || '🥫';
+    return icon(CATEGORY_ICONS[category?.toLowerCase()] || 'package');
 }
 
 function openAddPantryModal() {
@@ -9287,18 +9290,18 @@ function openAddPantryModal() {
                     <label>Category</label>
                     <select class="form-select" id="pantry-item-category">
                         <option value="">Select...</option>
-                        <option value="produce">🥬 Produce</option>
-                        <option value="proteins">🥩 Proteins</option>
-                        <option value="dairy">🧀 Dairy</option>
-                        <option value="grains">🌾 Grains</option>
-                        <option value="spices">🌿 Spices</option>
-                        <option value="oils">🫒 Oils & Vinegars</option>
-                        <option value="canned">🥫 Canned Goods</option>
-                        <option value="frozen">🧊 Frozen</option>
-                        <option value="condiments">🍯 Condiments</option>
-                        <option value="baking">🧁 Baking</option>
-                        <option value="beverages">🥤 Beverages</option>
-                        <option value="snacks">🍿 Snacks</option>
+                        <option value="produce">Produce</option>
+                        <option value="proteins">Proteins</option>
+                        <option value="dairy">Dairy</option>
+                        <option value="grains">Grains</option>
+                        <option value="spices">Spices</option>
+                        <option value="oils">Oils & Vinegars</option>
+                        <option value="canned">Canned Goods</option>
+                        <option value="frozen">Frozen</option>
+                        <option value="condiments">Condiments</option>
+                        <option value="baking">Baking</option>
+                        <option value="beverages">Beverages</option>
+                        <option value="snacks">Snacks</option>
                     </select>
                 </div>
             </div>
@@ -9306,9 +9309,9 @@ function openAddPantryModal() {
                 <div class="form-group">
                     <label>Location</label>
                     <select class="form-select" id="pantry-item-location">
-                        <option value="pantry">🏠 Pantry</option>
-                        <option value="fridge">🧊 Fridge</option>
-                        <option value="freezer">❄️ Freezer</option>
+                        <option value="pantry">Pantry</option>
+                        <option value="fridge">Fridge</option>
+                        <option value="freezer">Freezer</option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -12641,10 +12644,10 @@ function showConfirmation({ icon, iconType, title, message, confirmText, confirm
 // TOAST SYSTEM (Enhanced with types & stacking)
 // ========================================
 const TOAST_ICONS = {
-    success: '✅',
-    error: '❌',
-    warning: '⚠️',
-    info: 'ℹ️'
+    success: icon('check-circle'),
+    error: icon('x-circle'),
+    warning: icon('alert-triangle'),
+    info: icon('info')
 };
 
 function showToast(message, type = 'success', duration = 3000) {
@@ -12664,7 +12667,7 @@ function showToast(message, type = 'success', duration = 3000) {
     const toastEl = document.createElement('div');
     toastEl.className = `toast-item toast-${type}`;
     toastEl.innerHTML = `
-        <span class="toast-icon">${TOAST_ICONS[type] || '✅'}</span>
+        <span class="toast-icon">${TOAST_ICONS[type] || icon('check-circle')}</span>
         <span class="toast-message">${message}</span>
         <button class="toast-close" onclick="this.parentElement.remove()" aria-label="Dismiss">&times;</button>
     `;
@@ -12800,11 +12803,11 @@ function clearAllData() {
 // ONBOARDING
 // ========================================
 const onboardingSteps = [
-    { icon: '👋', title: 'Welcome to Tavola!', text: 'Let me show you around - it\'ll just take a minute!' },
-    { icon: '🏠', title: 'Dashboard', text: 'This is your home base. Quick access to everything you need.' },
-    { icon: '📅', title: 'This Week', text: 'Plan your weekly meals here. Nonna can generate a complete plan based on your health profile.' },
-    { icon: '📚', title: 'Recipe Library', text: 'Every recipe Nonna creates is saved here. Favorite the ones you love!' },
-    { icon: '💬', title: 'Chat with Nonna', text: 'Ask me anything! "What should I make with my tomatoes?" or "I\'m having a flare, give me gentle meals."' }
+    { icon: icon('hand', 32), title: 'Welcome to Tavola!', text: 'Let me show you around - it\'ll just take a minute!' },
+    { icon: icon('home', 32), title: 'Dashboard', text: 'This is your home base. Quick access to everything you need.' },
+    { icon: icon('calendar-days', 32), title: 'This Week', text: 'Plan your weekly meals here. Nonna can generate a complete plan based on your health profile.' },
+    { icon: icon('book-open', 32), title: 'Recipe Library', text: 'Every recipe Nonna creates is saved here. Favorite the ones you love!' },
+    { icon: icon('message-circle', 32), title: 'Chat with Nonna', text: 'Ask me anything! "What should I make with my tomatoes?" or "I\'m having a flare, give me gentle meals."' }
 ];
 
 let onboardingStep = 0;
@@ -13043,7 +13046,7 @@ function viewCookingHistory(recipeId) {
     if (history.length === 0) {
         historyHtml = `
             <div class="empty-state">
-                <div class="empty-state-icon">📖</div>
+                <div class="empty-state-icon"><i data-lucide="book-open" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                 <div class="empty-state-title">No cooking history yet</div>
                 <p>Rate this recipe after cooking to track your history.</p>
             </div>
@@ -13225,21 +13228,21 @@ document.addEventListener('click', (e) => {
 
 // MET values for calorie calculations (Metabolic Equivalent of Task)
 const WORKOUT_TYPES = {
-    vrboxing: { name: 'VR Boxing', icon: '🥊', met: 8.5 },
-    kettlebells: { name: 'Kettlebells', icon: '🏋️', met: 7.0 },
-    resistancebands: { name: 'Resistance Bands', icon: '🧘', met: 4.0 },
-    walking: { name: 'Walking', icon: '🚶', met: 3.5 },
-    running: { name: 'Running', icon: '🏃', met: 9.8 },
-    cycling: { name: 'Cycling', icon: '🚴', met: 7.5 },
-    swimming: { name: 'Swimming', icon: '🏊', met: 8.0 },
-    strength: { name: 'Strength Training', icon: '🏋️', met: 6.0 },
-    yoga: { name: 'Yoga', icon: '🧘', met: 3.0 },
-    hiit: { name: 'HIIT', icon: '⚡', met: 12.0 },
-    dancing: { name: 'Dancing', icon: '💃', met: 6.5 },
-    hiking: { name: 'Hiking', icon: '🥾', met: 6.0 },
-    pilates: { name: 'Pilates', icon: '🤸', met: 3.5 },
-    rowing: { name: 'Rowing', icon: '🚣', met: 7.0 },
-    other: { name: 'Other', icon: '🏅', met: 5.0 }
+    vrboxing: { name: 'VR Boxing', icon: icon('swords'), met: 8.5 },
+    kettlebells: { name: 'Kettlebells', icon: icon('dumbbell'), met: 7.0 },
+    resistancebands: { name: 'Resistance Bands', icon: icon('stretch-horizontal'), met: 4.0 },
+    walking: { name: 'Walking', icon: icon('footprints'), met: 3.5 },
+    running: { name: 'Running', icon: icon('footprints'), met: 9.8 },
+    cycling: { name: 'Cycling', icon: icon('bike'), met: 7.5 },
+    swimming: { name: 'Swimming', icon: icon('waves'), met: 8.0 },
+    strength: { name: 'Strength Training', icon: icon('dumbbell'), met: 6.0 },
+    yoga: { name: 'Yoga', icon: icon('stretch-horizontal'), met: 3.0 },
+    hiit: { name: 'HIIT', icon: icon('zap'), met: 12.0 },
+    dancing: { name: 'Dancing', icon: icon('music'), met: 6.5 },
+    hiking: { name: 'Hiking', icon: icon('mountain'), met: 6.0 },
+    pilates: { name: 'Pilates', icon: icon('stretch-horizontal'), met: 3.5 },
+    rowing: { name: 'Rowing', icon: icon('ship'), met: 7.0 },
+    other: { name: 'Other', icon: icon('trophy'), met: 5.0 }
 };
 
 function getWorkouts() {
@@ -13465,7 +13468,7 @@ function renderTodaysWorkouts() {
     if (todaysWorkouts.length === 0) {
         container.innerHTML = `
             <div class="empty-state" style="padding: 20px;">
-                <div class="empty-state-icon">🏃</div>
+                <div class="empty-state-icon"><i data-lucide="footprints" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                 <div class="empty-state-title">No workouts logged today</div>
                 <p class="empty-state-text">Log a workout to track your calorie burn!</p>
             </div>
@@ -13798,6 +13801,11 @@ document.addEventListener('DOMContentLoaded', function() {
         try { lucide.createIcons(); } catch(e) { console.warn('Lucide init:', e); }
     }
 });
+
+// Lucide icon helper for use in template literals
+function icon(name, size = 16, extraStyle = '') {
+    return `<i data-lucide="${name}" style="width:${size}px;height:${size}px;vertical-align:middle;display:inline-block;${extraStyle}"></i>`;
+}
 
 // Re-initialize Lucide after dynamic content updates
 function refreshIcons() {
