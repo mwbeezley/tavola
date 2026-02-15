@@ -366,23 +366,47 @@
         .card-title { font-size: 1.1rem; color: var(--olive-green); font-family: var(--font-heading); }
 
         /* Quick Action Tiles */
-        .action-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 20px; }
+        .action-tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; margin-bottom: 20px; }
         .action-tile {
             background: var(--white);
             border-radius: var(--radius);
-            padding: 20px 16px;
+            padding: 24px;
             text-align: center;
             cursor: pointer;
             box-shadow: var(--shadow);
-            transition: all 0.2s;
-            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            border-top: 4px solid var(--cerulean);
+            position: relative;
         }
-        .action-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--cerulean); }
-        .action-tile-icon { font-size: 2rem; margin-bottom: 8px; }
-        .action-tile-icon i, .action-tile-icon svg { width: 28px; height: 28px; color: var(--charcoal); transition: color 0.2s ease; }
-        .action-tile:hover .action-tile-icon i, .action-tile:hover .action-tile-icon svg { color: var(--seafoam); }
-        .action-tile-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
-        .action-tile-desc { font-size: 0.8rem; color: var(--gray-text); }
+        .action-tile:hover { transform: scale(1.02); box-shadow: 0 4px 12px rgba(26, 58, 82, 0.12); }
+        .action-tile:active { transform: scale(0.98); transition: 0.1s ease; }
+        .action-tile:focus-visible { outline: 2px solid var(--cerulean); outline-offset: 2px; }
+        .action-tile-icon {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 12px; background: var(--cerulean);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: filter 0.2s ease;
+        }
+        .action-tile:hover .action-tile-icon { filter: brightness(0.9); }
+        .action-tile-icon i, .action-tile-icon svg { width: 24px !important; height: 24px !important; color: white !important; }
+        .action-tile-title { font-weight: 600; font-size: 1.05rem; color: var(--navy); margin-bottom: 4px; line-height: 1.5; }
+        .action-tile-desc { font-size: 0.85rem; color: var(--gray-text); line-height: 1.5; }
+        /* Category color variants */
+        .action-tile.tile-cerulean { border-top-color: var(--cerulean); }
+        .action-tile.tile-cerulean .action-tile-icon { background: var(--cerulean); }
+        .action-tile.tile-seafoam { border-top-color: var(--seafoam); }
+        .action-tile.tile-seafoam .action-tile-icon { background: var(--seafoam); }
+        .action-tile.tile-navy { border-top-color: var(--navy); }
+        .action-tile.tile-navy .action-tile-icon { background: var(--navy); }
+        .action-tile.tile-amber { border-top-color: var(--amber); }
+        .action-tile.tile-amber .action-tile-icon { background: var(--amber); }
+        @media (max-width: 639px) {
+            .action-tiles { grid-template-columns: 1fr; gap: 16px; }
+        }
+        @media (min-width: 640px) and (max-width: 1024px) {
+            .action-tiles { gap: 16px; }
+        }
 
         /* Stats Bar */
         .stats-bar {
@@ -3960,32 +3984,32 @@
 
                 <!-- Quick Action Tiles -->
                 <div class="action-tiles">
-                    <div class="action-tile" onclick="navigateTo('week'); askNonnaForWeekPlan();">
+                    <div class="action-tile tile-cerulean" onclick="navigateTo('week'); askNonnaForWeekPlan();">
                         <div class="action-tile-icon"><i data-lucide="calendar-days"></i></div>
                         <div class="action-tile-title">Plan This Week</div>
                         <div class="action-tile-desc">Get your weekly meal plan</div>
                     </div>
-                    <div class="action-tile" onclick="navigateTo('favorites')">
+                    <div class="action-tile tile-seafoam" onclick="navigateTo('favorites')">
                         <div class="action-tile-icon"><i data-lucide="heart"></i></div>
                         <div class="action-tile-title">View Favorites</div>
                         <div class="action-tile-desc">Browse saved recipes</div>
                     </div>
-                    <div class="action-tile" onclick="navigateTo('chat')">
+                    <div class="action-tile tile-navy" onclick="navigateTo('chat')">
                         <div class="action-tile-icon"><i data-lucide="message-circle"></i></div>
                         <div class="action-tile-title">Chat with Nonna</div>
                         <div class="action-tile-desc">Ask about meals & recipes</div>
                     </div>
-                    <div class="action-tile" onclick="navigateTo('more'); switchMoreTab('garden');">
+                    <div class="action-tile tile-amber" onclick="navigateTo('more'); switchMoreTab('garden');">
                         <div class="action-tile-icon"><i data-lucide="sprout"></i></div>
                         <div class="action-tile-title">Check Garden</div>
                         <div class="action-tile-desc">What's ready to harvest</div>
                     </div>
-                    <div class="action-tile" onclick="openLeftoverTransformer();">
+                    <div class="action-tile tile-navy" onclick="openLeftoverTransformer();">
                         <div class="action-tile-icon"><i data-lucide="wand-sparkles"></i></div>
                         <div class="action-tile-title">Leftover Magic</div>
                         <div class="action-tile-desc">Transform what's on hand</div>
                     </div>
-                    <div class="action-tile" onclick="openImportRecipeModal();">
+                    <div class="action-tile tile-amber" onclick="openImportRecipeModal();">
                         <div class="action-tile-icon"><i data-lucide="download"></i></div>
                         <div class="action-tile-title">Import Recipe</div>
                         <div class="action-tile-desc">Save from any URL</div>
