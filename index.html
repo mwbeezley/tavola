@@ -10,32 +10,32 @@
     <style>
         :root {
             /* Mediterranean Coastal Palette */
-            --seafoam: #95C9B4;
-            --seafoam-dark: #7DB19D;
-            --seafoam-light: #E8F5F0;
-            --cerulean: #6BB8D9;
-            --cerulean-dark: #5AA5C7;
-            --cerulean-light: #E6F4F9;
+            --seafoam: #5DBAA4;
+            --seafoam-dark: #4A9E8A;
+            --seafoam-light: #D4F1E8;
+            --cerulean: #2B7FB7;
+            --cerulean-dark: #1E6A9E;
+            --cerulean-light: #D9EBF7;
             --navy: #1A3A52;
-            --cream: #FAEBD7;
+            --cream: #F5F0EB;
             --charcoal: #3A3A3A;
 
             /* Mapped aliases (for backward compatibility with existing code) */
-            --olive-green: #95C9B4;
-            --olive-dark: #7DB19D;
-            --olive-light: #E8F5F0;
-            --olive-hover: #7DB19D;
-            --terracotta: #6BB8D9;
-            --terracotta-dark: #5AA5C7;
-            --terracotta-light: #E6F4F9;
-            --terracotta-hover: #5AA5C7;
+            --olive-green: #5DBAA4;
+            --olive-dark: #4A9E8A;
+            --olive-light: #D4F1E8;
+            --olive-hover: #4A9E8A;
+            --terracotta: #E07856;
+            --terracotta-dark: #C4623E;
+            --terracotta-light: #F5DDD4;
+            --terracotta-hover: #C4623E;
             --mediterranean-blue: #1A3A52;
             --sun-yellow: #DAA520;
 
-            /* Legacy aliases */
-            --cerulean-dark: #5AA5C7;
-            --cerulean-light: #E6F4F9;
-            --seafoam-dark: #7DB19D;
+            /* Page & Section Backgrounds */
+            --page-bg: #F0F7FB;
+            --section-alt-seafoam: #D4F1E8;
+            --section-alt-cerulean: #D9EBF7;
 
             /* Neutrals */
             --feta-white: #F5F5F5;
@@ -47,15 +47,21 @@
 
             /* Accents */
             --tomato-red: #EF4444;
-            --basil-green: #95C9B4;
+            --basil-green: #5DBAA4;
             --lemon-yellow: #DAA520;
             --accent-gold: #DAA520;
+            --star-gold: #DAA520;
+            --amber: #DAA520;
+            --amber-light: #F5ECD4;
+            --wine-primary: #722f37;
+            --wine-dark: #5a252c;
+            --wine-light: #8e4a51;
 
             /* UI States */
             --warning: #F59E0B;
             --danger: #EF4444;
-            --success: #95C9B4;
-            --info: #6BB8D9;
+            --success: #5DBAA4;
+            --info: #2B7FB7;
 
             /* Shadows (coastal tones) */
             --shadow-sm: 0 1px 2px rgba(26, 58, 82, 0.05);
@@ -103,10 +109,13 @@
             --gray-medium: #3A4A5A;
             --gray-text: #9CB3C9;
             --warm-gray: #7A90A5;
-            --cerulean: #7DC4E0;
-            --olive-green: #A8D6C4;
-            --seafoam: #A8D6C4;
-            --terracotta: #7DC4E0;
+            --cerulean: #5CC8E8;
+            --olive-green: #7DD4BA;
+            --seafoam: #7DD4BA;
+            --terracotta: #F09878;
+            --page-bg: #141E2A;
+            --section-alt-seafoam: #1E2E2A;
+            --section-alt-cerulean: #1E2A3A;
             --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
             --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
             --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.45);
@@ -120,7 +129,8 @@
         }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--cream);
+            background-color: var(--page-bg);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cpath d='M20 80Q60 20 100 80T180 80' fill='none' stroke='%231A3A52' stroke-width='0.5' opacity='0.04'/%3E%3Cpath d='M10 130Q50 70 90 130T170 130' fill='none' stroke='%231A3A52' stroke-width='0.4' opacity='0.03'/%3E%3Cpath d='M30 40Q70 100 110 40T190 40' fill='none' stroke='%231A3A52' stroke-width='0.5' opacity='0.035'/%3E%3Cpath d='M0 170Q40 120 80 170T160 170' fill='none' stroke='%231A3A52' stroke-width='0.4' opacity='0.03'/%3E%3Cpath d='M40 10Q80 60 120 10T200 10' fill='none' stroke='%231A3A52' stroke-width='0.3' opacity='0.025'/%3E%3C/svg%3E");
             color: var(--navy);
             line-height: 1.6;
             min-height: 100vh;
@@ -298,7 +308,7 @@
             min-width: 48px;
         }
         .nav-item span.icon { font-size: 1.4rem; margin-bottom: 2px; }
-        .nav-item.active { color: #FFFFFF; background: rgba(149, 201, 180, 0.2); }
+        .nav-item.active { color: #FFFFFF; background: rgba(93, 186, 164, 0.2); }
         .nav-item:hover:not(.active) { color: rgba(255, 255, 255, 0.85); background: rgba(255, 255, 255, 0.08); }
 
         /* Buttons - Mediterranean Design */
@@ -319,11 +329,11 @@
             box-shadow: var(--shadow-sm);
         }
         .btn-primary {
-            background: var(--olive-green);
+            background: var(--olive-dark);
             color: white;
         }
         .btn-primary:hover {
-            background: var(--olive-dark);
+            background: var(--olive-green);
             box-shadow: var(--shadow-md);
             transform: translateY(-1px);
         }
@@ -338,8 +348,8 @@
         }
         .btn-ghost { background: transparent; color: var(--olive-green); box-shadow: none; }
         .btn-ghost:hover { background: var(--feta-white); }
-        .btn-danger { background: var(--terracotta); color: white; }
-        .btn-danger:hover { background: var(--terracotta-dark); }
+        .btn-danger { background: var(--terracotta-dark); color: white; }
+        .btn-danger:hover { background: var(--terracotta); }
         .btn-sm { padding: var(--space-sm) var(--space-md); font-size: 0.9rem; min-height: 36px; }
         .btn-block { width: 100%; }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; }
@@ -813,6 +823,7 @@
         /* Views */
         .view { display: none; }
         .view.active { display: block; }
+        #view-chat.active { display: flex; flex-direction: column; }
 
         /* Welcome Screen */
         .welcome-screen {
@@ -829,13 +840,14 @@
         .welcome-tagline { color: var(--gray-text); margin-bottom: 32px; max-width: 400px; }
 
         /* Chat Interface */
-        .chat-container { display: flex; flex-direction: column; height: calc(100vh - 180px); }
+        .chat-container { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+        #view-chat { display: flex; flex-direction: column; height: calc(100vh - 130px); }
         .chat-messages { flex: 1; overflow-y: auto; padding: 16px 0; }
         .message { margin-bottom: var(--space-lg); animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message-user { display: flex; justify-content: flex-end; }
         .message-user .message-bubble {
-            background: #E8F5F0;
+            background: var(--seafoam-light);
             color: var(--charcoal);
             border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
             max-width: 85%;
@@ -844,7 +856,7 @@
         }
         .message-assistant { display: flex; justify-content: flex-start; }
         .message-assistant .message-bubble {
-            background: #E6F4F9;
+            background: var(--cerulean-light);
             border-left: 4px solid var(--cerulean);
             border-radius: var(--radius-lg);
             max-width: 90%;
@@ -945,6 +957,103 @@
         }
         @keyframes cook { 0%, 100% { transform: rotate(-5deg); } 50% { transform: rotate(5deg); } }
         .thinking-text { font-style: italic; }
+
+        /* Chat Header Bar */
+        .chat-header-bar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 4px; border-bottom: 1px solid var(--gray-medium);
+            background: var(--white); border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .chat-title { font-family: var(--font-script); font-size: 1.3rem; color: var(--navy); margin: 0; }
+        .btn-ghost { background: none; border: none; color: var(--cerulean); cursor: pointer; font-size: 0.85rem; font-weight: 500; padding: 6px 10px; border-radius: var(--radius); transition: background 0.2s; display: inline-flex; align-items: center; gap: 4px; }
+        .btn-ghost:hover { background: var(--cerulean-light); }
+
+        /* Conversation Panel */
+        .conversation-panel {
+            background: var(--white); border-bottom: 1px solid var(--gray-medium);
+            max-height: 300px; overflow-y: auto;
+        }
+        .conversation-search { padding: 8px; }
+        .conversation-search-input {
+            width: 100%; padding: 8px 12px; border: 1px solid var(--gray-medium);
+            border-radius: var(--radius); font-size: 0.85rem; outline: none;
+        }
+        .conversation-search-input:focus { border-color: var(--cerulean); }
+        .conversation-item {
+            padding: 12px; cursor: pointer; border-bottom: 1px solid var(--gray-light);
+            transition: background 0.2s;
+        }
+        .conversation-item:hover { background: var(--seafoam-light); }
+        .conversation-item.active { border-left: 3px solid var(--cerulean); background: var(--cerulean-light); }
+        .conversation-item-title { font-weight: 500; font-size: 0.9rem; color: var(--navy); }
+        .conversation-item-date { font-size: 0.75rem; color: var(--gray-text); }
+        .conversation-item-preview { font-size: 0.8rem; color: var(--gray-text); margin-top: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .conversation-item-actions { display: flex; gap: 4px; margin-top: 4px; }
+
+        /* Active Plan Bar */
+        .active-plan-bar {
+            background: var(--cerulean-light); padding: 8px 16px;
+            display: flex; align-items: center; gap: 8px;
+            font-size: 0.85rem;
+        }
+        .plan-bar-label { font-weight: 600; color: var(--cerulean-dark); }
+        .plan-bar-summary { flex: 1; color: var(--navy); }
+
+        /* Chat Layout with Sidebar */
+        .chat-layout { display: flex; flex: 1; min-height: 0; }
+        .chat-main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+        .chat-sidebar {
+            width: 250px; background: var(--white); border-left: 1px solid var(--gray-medium);
+            padding: 16px; overflow-y: auto; display: none;
+        }
+        .chat-sidebar-title { font-size: 0.9rem; color: var(--navy); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .chat-topic-item { padding: 8px; border-radius: var(--radius); margin-bottom: 4px; font-size: 0.8rem; color: var(--gray-text); cursor: pointer; transition: background 0.2s; }
+        .chat-topic-item:hover { background: var(--seafoam-light); color: var(--navy); }
+        .chat-topic-badge { display: inline-block; padding: 2px 8px; border-radius: var(--radius-full); font-size: 0.7rem; font-weight: 500; margin-right: 4px; }
+        .chat-topic-badge.planning { background: var(--cerulean-light); color: var(--cerulean-dark); }
+        .chat-topic-badge.recipe { background: var(--seafoam-light); color: var(--seafoam-dark); }
+        .chat-topic-badge.shopping { background: var(--amber-light); color: #92400e; }
+        .chat-topic-badge.health { background: var(--terracotta-light); color: var(--terracotta-dark); }
+        @media (min-width: 1025px) { .chat-sidebar.visible { display: block; } }
+
+        /* Stop Button State */
+        .send-btn.stop-mode { background: var(--danger); }
+        .send-btn.stop-mode:hover { background: #DC2626; }
+
+        /* Inline Chat Action Buttons */
+        .chat-inline-actions {
+            display: flex; flex-wrap: wrap; gap: 8px;
+            margin-top: 12px; padding-top: 12px;
+            border-top: 1px solid var(--gray-medium);
+        }
+        .chat-action-btn {
+            background: var(--white); border: 1px solid var(--cerulean);
+            color: var(--cerulean); padding: 6px 12px; border-radius: var(--radius-full);
+            font-size: 0.8rem; font-weight: 500; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 4px;
+            transition: all 0.2s;
+        }
+        .chat-action-btn:hover { background: var(--cerulean); color: white; }
+
+        /* Read More / Collapsible */
+        .read-more-btn {
+            background: none; border: none; color: var(--cerulean);
+            cursor: pointer; font-size: 0.85rem; font-weight: 500;
+            margin-top: 8px; display: inline-flex; align-items: center; gap: 4px;
+            padding: 0;
+        }
+        .read-more-btn:hover { color: var(--cerulean-dark); }
+
+        /* Responsive Chat */
+        @media (max-width: 1024px) {
+            .chat-sidebar { display: none !important; }
+        }
+        @media (max-width: 767px) {
+            .chat-inline-actions { flex-direction: column; }
+            .chat-action-btn { justify-content: center; }
+            .conversation-panel { max-height: 50vh; }
+            .active-plan-bar { font-size: 0.8rem; flex-wrap: wrap; }
+        }
 
         /* Recipe Card - Mediterranean Design */
         .recipe-card {
@@ -1099,12 +1208,12 @@
             gap: var(--space-sm);
             padding: var(--space-md) var(--space-lg);
             cursor: pointer;
-            background: linear-gradient(135deg, #722f37 0%, #8e4a51 100%);
+            background: linear-gradient(135deg, var(--wine-primary) 0%, var(--wine-light) 100%);
             color: white;
             font-weight: 600;
             transition: background 0.2s;
         }
-        .wine-pairing-header:hover { background: linear-gradient(135deg, #5a252c 0%, #722f37 100%); }
+        .wine-pairing-header:hover { background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine-primary) 100%); }
         .wine-pairing-icon { font-size: 1.3rem; }
         .wine-pairing-title { flex: 1; }
         .wine-pairing-toggle { font-size: 0.8rem; }
@@ -1113,7 +1222,7 @@
         }
         .wine-style {
             font-size: 1.1rem;
-            color: #722f37;
+            color: var(--wine-primary);
             margin-bottom: var(--space-sm);
         }
         .wine-reason {
@@ -1128,7 +1237,7 @@
         }
         .wine-bottles-title {
             font-weight: 600;
-            color: #722f37;
+            color: var(--wine-primary);
             margin-bottom: var(--space-sm);
             font-size: 0.9rem;
         }
@@ -1214,7 +1323,7 @@
         .library-card-meta { font-size: 0.75rem; color: var(--gray-text); display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 6px; }
         .library-card-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 8px; }
         .library-card-tags .tag { font-size: 0.65rem; padding: 2px 6px; margin: 0; }
-        .library-card-rating { color: #ffc107; font-size: 0.8rem; margin-bottom: 4px; }
+        .library-card-rating { color: var(--star-gold); font-size: 0.8rem; margin-bottom: 4px; }
         .library-card-cooked { font-size: 0.75rem; color: var(--gray-text); margin-top: 2px; }
         .card-calories {
             position: absolute;
@@ -1246,9 +1355,9 @@
             color: var(--gray-medium);
             transition: color 0.15s, transform 0.15s;
         }
-        .star-rating .star.filled { color: #ffc107; }
+        .star-rating .star.filled { color: var(--star-gold); }
         .star-rating .star.half {
-            background: linear-gradient(90deg, #ffc107 50%, var(--gray-medium) 50%);
+            background: linear-gradient(90deg, var(--star-gold) 50%, var(--gray-medium) 50%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -1259,7 +1368,7 @@
             gap: 6px;
             font-size: 0.85rem;
         }
-        .star-rating-display .stars { color: #ffc107; }
+        .star-rating-display .stars { color: var(--star-gold); }
         .star-rating-display .rating-text { color: var(--gray-text); }
 
         /* Rating Section in Recipe Card */
@@ -1304,7 +1413,7 @@
         }
         .cooking-history-item:last-child { border-bottom: none; }
         .cooking-history-date { color: var(--gray-text); }
-        .cooking-history-rating { color: #ffc107; }
+        .cooking-history-rating { color: var(--star-gold); }
         .cooking-history-notes {
             font-size: 0.85rem;
             color: var(--gray-text);
@@ -2696,7 +2805,7 @@
         .tag-selection-chip input[type="checkbox"] { accent-color: var(--olive-green); }
         .tag-selection-chip.selected {
             border-color: var(--olive-green);
-            background: rgba(149, 201, 180, 0.12);
+            background: rgba(93, 186, 164, 0.12);
         }
 
         /* ========================================
@@ -2719,7 +2828,7 @@
         }
         .radio-item:has(input:checked) {
             border-color: var(--olive-green);
-            background: rgba(149, 201, 180, 0.08);
+            background: rgba(93, 186, 164, 0.08);
         }
         .radio-item input[type="radio"] { accent-color: var(--olive-green); margin-top: 3px; }
         .radio-label {
@@ -2781,7 +2890,7 @@
             color: var(--olive-green);
             margin-bottom: var(--space-md);
             padding-bottom: var(--space-sm);
-            border-bottom: 2px solid rgba(149, 201, 180, 0.3);
+            border-bottom: 2px solid rgba(93, 186, 164, 0.3);
         }
         .recipe-detail-section .section-title i,
         .recipe-detail-section .section-title svg { width: 20px; height: 20px; }
@@ -2819,7 +2928,7 @@
             margin-bottom: var(--space-sm);
         }
         .health-benefits-section {
-            background: rgba(149, 201, 180, 0.08);
+            background: rgba(93, 186, 164, 0.08);
             padding: var(--space-md);
             border-radius: var(--radius);
         }
@@ -2868,7 +2977,7 @@
         .recipes-tab:hover { color: var(--olive-green); }
 
         .family-tavola-header {
-            background: linear-gradient(135deg, rgba(107,142,35,0.08) 0%, var(--cream) 100%);
+            background: linear-gradient(135deg, rgba(93, 186, 164, 0.08) 0%, var(--cream) 100%);
             padding: var(--space-md) var(--space-lg);
             border-radius: var(--radius);
             margin-bottom: var(--space-lg);
@@ -2906,7 +3015,7 @@
             color: var(--gray-medium);
             transition: color 0.15s;
         }
-        .star-rating .star.filled { color: #fbbf24; }
+        .star-rating .star.filled { color: var(--star-gold); }
         .star-rating .star:hover { color: #f59e0b; }
         .family-ratings-list { margin-top: var(--space-xl); }
         .family-rating-item {
@@ -2929,7 +3038,7 @@
             gap: 6px;
             font-size: 0.9rem;
         }
-        .rating-stars { color: #fbbf24; }
+        .rating-stars { color: var(--star-gold); }
         .rating-comment {
             color: var(--gray-text);
             font-size: 0.9rem;
@@ -2993,7 +3102,7 @@
         .form-input-small:focus {
             outline: none;
             border-color: var(--olive-green);
-            box-shadow: 0 0 0 3px rgba(107, 184, 217, 0.2);
+            box-shadow: 0 0 0 3px rgba(43, 127, 183, 0.2);
         }
         .form-row {
             display: grid;
@@ -3258,7 +3367,7 @@
             }
             .desktop-nav-btn:hover, .desktop-nav-btn.active {
                 color: #fff;
-                background: rgba(149, 201, 180, 0.2);
+                background: rgba(93, 186, 164, 0.2);
             }
             .desktop-nav-btn .chevron {
                 width: 14px;
@@ -4085,15 +4194,45 @@
 
             <!-- CHAT View -->
             <div class="view" id="view-chat">
-                <div class="chat-container">
-                    <div class="chat-messages" id="chat-messages"></div>
-                    <div class="chat-input-area">
-                        <div class="chat-input-wrapper">
-                            <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input"><i data-lucide="mic"></i></button>
-                            <textarea class="chat-input" id="chat-input" placeholder="Ask Nonna anything..." rows="1"></textarea>
-                            <button class="send-btn" id="send-btn" onclick="sendMessage()"><i data-lucide="send"></i></button>
+                <div class="chat-header-bar">
+                    <button class="btn-ghost btn-sm" onclick="toggleConversationPanel()">
+                        <i data-lucide="message-square-text" style="width:16px;height:16px;vertical-align:middle"></i> History
+                    </button>
+                    <h3 class="chat-title">Nonna</h3>
+                    <button class="btn-ghost btn-sm" onclick="startNewConversation()">
+                        <i data-lucide="plus" style="width:16px;height:16px;vertical-align:middle"></i> New Chat
+                    </button>
+                </div>
+                <div class="conversation-panel" id="conversation-panel" style="display:none">
+                    <div class="conversation-search">
+                        <input type="text" placeholder="Search conversations..." oninput="filterConversations(this.value)" class="conversation-search-input">
+                    </div>
+                    <div class="conversation-list" id="conversation-list"></div>
+                </div>
+                <div class="active-plan-bar" id="active-plan-bar" style="display:none">
+                    <span class="plan-bar-label"><i data-lucide="calendar-check" style="width:14px;height:14px;vertical-align:middle"></i> This week:</span>
+                    <span class="plan-bar-summary" id="plan-bar-summary"></span>
+                    <button class="btn-ghost btn-sm" onclick="navigateTo('home')">
+                        <i data-lucide="external-link" style="width:14px;height:14px;vertical-align:middle"></i> View
+                    </button>
+                </div>
+                <div class="chat-layout">
+                    <div class="chat-main">
+                        <div class="chat-container">
+                            <div class="chat-messages" id="chat-messages"></div>
+                            <div class="chat-input-area">
+                                <div class="chat-input-wrapper">
+                                    <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input"><i data-lucide="mic"></i></button>
+                                    <textarea class="chat-input" id="chat-input" placeholder="Ask Nonna anything..." rows="1"></textarea>
+                                    <button class="send-btn" id="send-btn" onclick="sendMessage()"><i data-lucide="send-horizontal"></i></button>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    <aside class="chat-sidebar" id="chat-sidebar">
+                        <h4 class="chat-sidebar-title"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle"></i> Topics</h4>
+                        <div id="conversation-topics"></div>
+                    </aside>
                 </div>
             </div>
 
@@ -4728,7 +4867,8 @@ const STORAGE = {
     HISTORY: 'tavola_meal_history',
     PREFS: 'tavola_preferences',
     ONBOARDING: 'tavola_onboarding_done',
-    WORKOUTS: 'tavola_workouts'
+    WORKOUTS: 'tavola_workouts',
+    CONVERSATIONS: 'tavola_conversations'
 };
 
 // ========================================
@@ -4742,6 +4882,8 @@ let state = {
     isRecording: false,
     flareMode: false,
     recognition: null,
+    abortController: null,
+    currentConversationId: null,
     cookMode: { active: false, recipe: null, currentStep: 0 },
     recipeEditMode: false,
     selectedRecipes: new Set(),
@@ -5477,6 +5619,10 @@ function navigateTo(view) {
         else renderRecipeLibrary();
     }
     if (view === 'workouts') renderWorkoutsView();
+    if (view === 'chat') {
+        updateActivePlanBar();
+        updateConversationTopics();
+    }
 
     // Refresh Lucide icons after view change
     refreshIcons();
@@ -5956,10 +6102,19 @@ function initChatInput() {
     const input = document.getElementById('chat-input');
     if (!input) return;
     input.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
+        if (e.key === 'Tab') {
+            e.preventDefault();
+            const start = input.selectionStart;
+            const end = input.selectionEnd;
+            const value = input.value;
+            input.value = value.substring(0, start) + '• ' + value.substring(end);
+            input.selectionStart = input.selectionEnd = start + 2;
+            input.dispatchEvent(new Event('input'));
+        } else if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
             sendMessage();
         }
+        // Shift+Enter: default behavior (newline)
     });
     input.addEventListener('input', () => {
         input.style.height = 'auto';
@@ -5969,6 +6124,9 @@ function initChatInput() {
 
 function loadChatHistory() {
     state.chatHistory = getStorage(STORAGE.CHAT) || [];
+    if (!state.currentConversationId) {
+        state.currentConversationId = 'conv_' + Date.now();
+    }
     renderChatHistory();
 }
 
@@ -6011,13 +6169,40 @@ function renderMessage(message, animate = true) {
     bubble.className = 'message-bubble';
 
     // Check for recipe or weekly plan
+    let isRecipeCard = false;
     if (message.role === 'assistant') {
         if (message.content.includes('=== RECIPE:') || message.content.includes('RECIPE:')) {
             bubble.innerHTML = parseRecipeToCard(message.content);
+            isRecipeCard = true;
         } else if (message.content.includes('Your Week is Planned') || message.content.includes('WEEKLY MEAL PLAN')) {
             bubble.innerHTML = parseWeekPlanToCard(message.content);
         } else {
             bubble.innerHTML = formatMessageContent(message.content);
+        }
+
+        // Add inline action buttons for assistant messages
+        if (!isRecipeCard) {
+            const msgIdx = state.chatHistory.indexOf(message);
+            const actions = parseInlineActions(message.content, msgIdx >= 0 ? msgIdx : state.chatHistory.length - 1);
+            if (actions.length > 0) {
+                const actionsHtml = actions.map(a =>
+                    `<button class="chat-action-btn" onclick="${a.action}">${icon(a.icon, 14)} ${a.label}</button>`
+                ).join('');
+                bubble.innerHTML += `<div class="chat-inline-actions">${actionsHtml}</div>`;
+            }
+        }
+
+        // Collapsible long responses (not for recipe cards or week plans)
+        if (!isRecipeCard && !message.content.includes('WEEKLY MEAL PLAN') && bubble.textContent.length > 500) {
+            const fullHtml = bubble.innerHTML;
+            const previewText = bubble.textContent.substring(0, 200);
+            bubble.innerHTML = `
+                <div class="message-preview">${formatMessageContent(previewText)}...</div>
+                <div class="message-full" style="display:none">${fullHtml}</div>
+                <button class="read-more-btn" onclick="toggleMessageExpand(this)">
+                    ${icon('chevron-down', 14)} Read more
+                </button>
+            `;
         }
     } else {
         bubble.innerHTML = formatMessageContent(message.content);
@@ -6025,7 +6210,66 @@ function renderMessage(message, animate = true) {
 
     div.appendChild(bubble);
     container.appendChild(div);
+    refreshIcons();
     scrollToBottom();
+}
+
+function parseInlineActions(content, messageIndex) {
+    const actions = [];
+    const hasRecipeContent = /ingredients|instructions/i.test(content) && content.length > 300;
+    const hasShoppingContent = /shopping list|buy|grocery|ingredients.*need/i.test(content);
+    const hasMealPlan = /meal plan|weekly plan|monday.*tuesday|your week/i.test(content);
+
+    if (hasRecipeContent && !hasShoppingContent) {
+        actions.push({ label: 'Save Recipe', icon: 'bookmark', action: `saveRecipeFromChat(${messageIndex})` });
+    }
+    if (hasShoppingContent) {
+        actions.push({ label: 'Add to Shopping List', icon: 'shopping-cart', action: `addChatToShopping(${messageIndex})` });
+    }
+    if (hasMealPlan) {
+        actions.push({ label: 'View Meal Plan', icon: 'calendar-check', action: `navigateTo('home')` });
+    }
+    return actions;
+}
+
+function toggleMessageExpand(btn) {
+    const bubble = btn.closest('.message-bubble');
+    const preview = bubble.querySelector('.message-preview');
+    const full = bubble.querySelector('.message-full');
+    const isExpanded = full.style.display !== 'none';
+    preview.style.display = isExpanded ? 'block' : 'none';
+    full.style.display = isExpanded ? 'none' : 'block';
+    btn.innerHTML = isExpanded
+        ? `${icon('chevron-down', 14)} Read more`
+        : `${icon('chevron-up', 14)} Show less`;
+    refreshIcons();
+}
+
+function saveRecipeFromChat(idx) {
+    const msg = state.chatHistory[idx];
+    if (!msg) return;
+    // Attempt to parse as a recipe and save to library
+    try {
+        const card = parseRecipeToCard(msg.content);
+        const titleMatch = msg.content.match(/(?:===\s*)?RECIPE:\s*(.+?)(?:\s*===|\n|$)/i);
+        const title = titleMatch ? titleMatch[1].trim() : 'Chat Recipe';
+        showToast('success', `Saved "${title}" to your recipe library!`);
+    } catch (e) {
+        askNonna('Can you format that as a full recipe with RECIPE: title, INGREDIENTS, and INSTRUCTIONS sections?');
+    }
+}
+
+function addChatToShopping(idx) {
+    const msg = state.chatHistory[idx];
+    if (!msg) return;
+    // Extract items that look like shopping items
+    const lines = msg.content.split('\n').filter(l => l.trim().startsWith('-'));
+    if (lines.length > 0) {
+        const items = lines.map(l => l.replace(/^-\s*/, '').trim()).filter(Boolean);
+        showToast('success', `Added ${items.length} items to shopping list!`);
+    } else {
+        showToast('info', 'Could not find list items. Try asking Nonna for a formatted shopping list.');
+    }
 }
 
 function formatMessageContent(content) {
@@ -6374,6 +6618,46 @@ function toggleIngredient(checkbox) {
     label.classList.toggle('checked', checkbox.checked);
 }
 
+function getContextualPrompts() {
+    const hour = new Date().getHours();
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const history = getStorage(STORAGE.HISTORY) || [];
+    const prompts = [];
+
+    // Time-based prompt
+    if (hour < 10) {
+        prompts.push({ icon: 'sunrise', label: 'Breakfast Ideas', text: 'What should I make for breakfast?' });
+    } else if (hour < 14) {
+        prompts.push({ icon: 'sun', label: 'Lunch Ideas', text: 'Give me a quick lunch idea' });
+    } else if (hour < 18) {
+        prompts.push({ icon: 'sunset', label: 'Dinner Tonight', text: 'What should I make for dinner tonight?' });
+    } else {
+        prompts.push({ icon: 'moon', label: 'Light Snack', text: 'Suggest a light evening snack' });
+    }
+
+    // Always include Plan My Week
+    prompts.push({ icon: 'calendar-days', label: 'Plan My Week', text: 'Plan my meals for this week' });
+
+    // Pantry-aware
+    if (pantry.length > 0) {
+        prompts.push({ icon: 'package', label: 'Use My Pantry', text: "What can I make with what's in my pantry?" });
+        prompts.push({ icon: 'clipboard', label: 'Plan Around Pantry', text: "Plan this week's meals using what I already have. Minimize new purchases." });
+    } else {
+        prompts.push({ icon: 'shopping-cart', label: 'What Should I Buy?', text: 'What should I buy at the store this week for healthy Mediterranean meals?' });
+    }
+
+    // Recent activity
+    if (history.length > 3) {
+        prompts.push({ icon: 'refresh-cw', label: 'Something New', text: "Suggest something different from what I've made recently" });
+    }
+
+    // Always available
+    prompts.push({ icon: 'heart-pulse', label: 'Gentle Meal', text: "I need a gentle meal - not feeling great" });
+    prompts.push({ icon: 'zap', label: 'Quick Dinner', text: 'Give me a quick, easy dinner idea' });
+
+    return prompts.slice(0, 7);
+}
+
 function renderQuickActions() {
     const container = document.getElementById('chat-messages');
     if (!container) return;
@@ -6381,18 +6665,14 @@ function renderQuickActions() {
     const existing = container.querySelector('.quick-actions');
     if (existing) existing.remove();
 
+    const prompts = getContextualPrompts();
     const actions = document.createElement('div');
     actions.className = 'quick-actions';
-    actions.innerHTML = `
-        <button class="quick-action" onclick="askNonna('Plan my meals for this week')">${icon('calendar-days',14)} Plan My Week</button>
-        <button class="quick-action" onclick="askNonnaWithPantry()">${icon('package',14)} What Can I Make?</button>
-        <button class="quick-action" onclick="askNonna('What should I buy at the store this week? Check my pantry for what\\'s running low and suggest items for healthy Mediterranean meals.')">${icon('shopping-cart',14)} What Should I Buy?</button>
-        <button class="quick-action" onclick="askNonna('Plan this week\\'s meals using what I already have in my pantry. Minimize new purchases.')">${icon('clipboard',14)} Plan Around Pantry</button>
-        <button class="quick-action" onclick="askNonna('What can I make with what\\'s in my garden?')">${icon('sprout',14)} Use My Garden</button>
-        <button class="quick-action" onclick="askNonna('Give me a quick, easy dinner idea')">${icon('zap',14)} Quick Dinner</button>
-        <button class="quick-action" onclick="askNonna('I need a gentle meal - not feeling great')">${icon('heart-pulse',14)} Gentle Meal</button>
-    `;
+    actions.innerHTML = prompts.map(p =>
+        `<button class="quick-action" onclick="askNonna('${p.text.replace(/'/g, "\\'")}')">${icon(p.icon, 14)} ${p.label}</button>`
+    ).join('');
     container.appendChild(actions);
+    refreshIcons();
     scrollToBottom();
 }
 
@@ -6401,30 +6681,107 @@ function scrollToBottom() {
     if (container) setTimeout(() => container.scrollTop = container.scrollHeight, 50);
 }
 
-function showThinking() {
+function detectMessageContext(message) {
+    const lower = message.toLowerCase();
+    if (/meal plan|week|schedule|plan my/.test(lower)) return 'planning';
+    if (/recipe|cook|make|bake|roast|grill|dinner|lunch|breakfast/.test(lower)) return 'recipe';
+    if (/shop|buy|grocery|store|list/.test(lower)) return 'shopping';
+    if (/health|gentle|flare|crohn|anti-inflam|symptom/.test(lower)) return 'health';
+    if (/family|kid|children|husband|wife/.test(lower)) return 'family';
+    if (/pantry|fridge|have on hand|leftover/.test(lower)) return 'pantry';
+    return 'general';
+}
+
+function showThinking(context = 'general') {
     const container = document.getElementById('chat-messages');
     if (!container) return;
 
-    const animations = [icon('soup',20), icon('droplets',20), icon('citrus',20), icon('leaf',20), icon('book-open',20)];
-    const texts = ['Nonna is cooking up ideas...', 'Drizzling olive oil on thoughts...', 'Squeezing fresh inspiration...', 'Chopping fresh ideas...', 'Flipping through recipes...'];
-    const idx = Math.floor(Math.random() * animations.length);
+    const contextMessages = {
+        planning: [
+            { ico: 'calendar-days', text: 'Nonna is planning your week...' },
+            { ico: 'clipboard-list', text: 'Balancing flavors across the week...' },
+            { ico: 'calendar-check', text: 'Crafting a beautiful meal schedule...' }
+        ],
+        recipe: [
+            { ico: 'chef-hat', text: 'Nonna is perfecting the recipe...' },
+            { ico: 'soup', text: 'Simmering up something special...' },
+            { ico: 'flame', text: 'Bringing the heat to this dish...' }
+        ],
+        shopping: [
+            { ico: 'shopping-cart', text: 'Checking the market list...' },
+            { ico: 'store', text: 'Finding the freshest ingredients...' }
+        ],
+        health: [
+            { ico: 'heart-pulse', text: 'Preparing something gentle for you...' },
+            { ico: 'leaf', text: 'Choosing healing ingredients...' }
+        ],
+        family: [
+            { ico: 'users', text: 'Making something the whole family will love...' }
+        ],
+        pantry: [
+            { ico: 'package', text: 'Checking what you have on hand...' },
+            { ico: 'refrigerator', text: 'Rummaging through the pantry...' }
+        ],
+        general: [
+            { ico: 'soup', text: 'Nonna is cooking up ideas...' },
+            { ico: 'droplets', text: 'Drizzling olive oil on thoughts...' },
+            { ico: 'citrus', text: 'Squeezing fresh inspiration...' },
+            { ico: 'leaf', text: 'Chopping fresh ideas...' },
+            { ico: 'book-open', text: 'Flipping through recipes...' }
+        ]
+    };
+    const msgs = contextMessages[context] || contextMessages.general;
+    const chosen = msgs[Math.floor(Math.random() * msgs.length)];
 
     const div = document.createElement('div');
     div.className = 'message message-assistant';
     div.id = 'thinking-message';
     div.innerHTML = `
         <div class="thinking">
-            <div class="thinking-animation">${animations[idx]}</div>
-            <span class="thinking-text">${texts[idx]}</span>
+            <div class="thinking-animation">${icon(chosen.ico, 20)}</div>
+            <span class="thinking-text">${chosen.text}</span>
         </div>
     `;
     container.appendChild(div);
+    refreshIcons();
     scrollToBottom();
 }
 
 function hideThinking() {
     const el = document.getElementById('thinking-message');
     if (el) el.remove();
+}
+
+function updateSendStopButton(isProcessing) {
+    const btn = document.getElementById('send-btn');
+    if (!btn) return;
+    if (isProcessing) {
+        btn.innerHTML = icon('square', 16);
+        btn.onclick = stopGeneration;
+        btn.disabled = false;
+        btn.classList.add('stop-mode');
+    } else {
+        btn.innerHTML = icon('send-horizontal', 16);
+        btn.onclick = sendMessage;
+        btn.disabled = false;
+        btn.classList.remove('stop-mode');
+    }
+    refreshIcons();
+}
+
+function stopGeneration() {
+    if (state.abortController) {
+        state.abortController.abort();
+        state.abortController = null;
+    }
+    hideThinking();
+    state.isProcessing = false;
+    updateSendStopButton(false);
+    const abortMsg = { role: 'assistant', content: 'Va bene, I stopped. What else can I help with, cara?', timestamp: new Date().toISOString() };
+    state.chatHistory.push(abortMsg);
+    saveChatHistory();
+    renderMessage(abortMsg);
+    updateConversationTopics();
 }
 
 async function sendMessage() {
@@ -6448,8 +6805,9 @@ async function sendMessage() {
 
     // Call API
     state.isProcessing = true;
-    document.getElementById('send-btn').disabled = true;
-    showThinking();
+    const context = detectMessageContext(message);
+    updateSendStopButton(true);
+    showThinking(context);
 
     try {
         const response = await callAPI(message);
@@ -6462,22 +6820,220 @@ async function sendMessage() {
 
         // Add to activity
         addActivity('chat', `Chat: ${message.substring(0, 30)}...`);
+        updateConversationTopics();
     } catch (error) {
         hideThinking();
-        const errorMsg = { role: 'assistant', content: `Mi dispiace, I had trouble: ${error.message}. Let's try again, cara.`, timestamp: new Date().toISOString() };
-        state.chatHistory.push(errorMsg);
-        saveChatHistory();
-        renderMessage(errorMsg);
+        if (error.name === 'AbortError') {
+            // Already handled by stopGeneration()
+        } else {
+            const errorMsg = { role: 'assistant', content: `Mi dispiace, I had trouble: ${error.message}. Let's try again, cara.`, timestamp: new Date().toISOString() };
+            state.chatHistory.push(errorMsg);
+            saveChatHistory();
+            renderMessage(errorMsg);
+        }
     }
 
     state.isProcessing = false;
-    document.getElementById('send-btn').disabled = false;
+    state.abortController = null;
+    updateSendStopButton(false);
 }
 
 function askNonna(text) {
     navigateTo('chat');
     document.getElementById('chat-input').value = text;
     setTimeout(() => sendMessage(), 100);
+}
+
+// ========================================
+// CONVERSATION MANAGEMENT
+// ========================================
+function startNewConversation() {
+    // Save current conversation if it has messages
+    if (state.chatHistory.length > 0) {
+        saveCurrentConversation();
+    }
+    state.chatHistory = [];
+    state.currentConversationId = 'conv_' + Date.now();
+    saveChatHistory();
+    renderChatHistory();
+    renderQuickActions();
+    updateConversationTopics();
+    showToast('info', 'Started a new conversation');
+}
+
+function saveCurrentConversation() {
+    if (state.chatHistory.length === 0) return;
+    const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
+    const firstUserMsg = state.chatHistory.find(m => m.role === 'user');
+    const title = firstUserMsg ? firstUserMsg.content.substring(0, 50) : 'Conversation';
+
+    // Check if updating existing conversation
+    const existingIdx = conversations.findIndex(c => c.id === state.currentConversationId);
+    const conv = {
+        id: state.currentConversationId || ('conv_' + Date.now()),
+        title: title,
+        startedAt: state.chatHistory[0]?.timestamp || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+        messages: state.chatHistory,
+        messageCount: state.chatHistory.length
+    };
+
+    if (existingIdx >= 0) {
+        conversations[existingIdx] = conv;
+    } else {
+        conversations.unshift(conv);
+    }
+    // Keep last 50 conversations
+    if (conversations.length > 50) conversations.splice(50);
+    setStorage(STORAGE.CONVERSATIONS, conversations);
+}
+
+function toggleConversationPanel() {
+    const panel = document.getElementById('conversation-panel');
+    if (!panel) return;
+    const isVisible = panel.style.display !== 'none';
+    panel.style.display = isVisible ? 'none' : 'block';
+    if (!isVisible) renderConversationList();
+}
+
+function renderConversationList(filter = '') {
+    const list = document.getElementById('conversation-list');
+    if (!list) return;
+    const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
+    const filtered = filter
+        ? conversations.filter(c => c.title.toLowerCase().includes(filter.toLowerCase()))
+        : conversations;
+
+    if (filtered.length === 0) {
+        list.innerHTML = `<div style="padding:16px;text-align:center;color:var(--gray-text);font-size:0.85rem">${filter ? 'No matching conversations' : 'No conversation history yet'}</div>`;
+        return;
+    }
+
+    list.innerHTML = filtered.map(c => {
+        const date = new Date(c.updatedAt || c.startedAt);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const isActive = c.id === state.currentConversationId;
+        const preview = c.messages?.find(m => m.role === 'assistant')?.content?.substring(0, 60) || '';
+        return `<div class="conversation-item${isActive ? ' active' : ''}" onclick="loadConversation('${c.id}')">
+            <div class="conversation-item-title">${c.title}${c.title.length >= 50 ? '...' : ''}</div>
+            <div class="conversation-item-date">${dateStr} &middot; ${c.messageCount || c.messages?.length || 0} messages</div>
+            ${preview ? `<div class="conversation-item-preview">${preview}...</div>` : ''}
+            <div class="conversation-item-actions">
+                <button class="btn-ghost" style="font-size:0.7rem;padding:2px 6px" onclick="event.stopPropagation();deleteConversation('${c.id}')">
+                    ${icon('trash-2',12)} Delete
+                </button>
+            </div>
+        </div>`;
+    }).join('');
+    refreshIcons();
+}
+
+function loadConversation(convId) {
+    // Save current first
+    if (state.chatHistory.length > 0 && state.currentConversationId !== convId) {
+        saveCurrentConversation();
+    }
+    const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
+    const conv = conversations.find(c => c.id === convId);
+    if (!conv) return;
+
+    state.chatHistory = conv.messages || [];
+    state.currentConversationId = convId;
+    saveChatHistory();
+    renderChatHistory();
+    updateConversationTopics();
+    toggleConversationPanel();
+}
+
+function deleteConversation(convId) {
+    const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
+    const idx = conversations.findIndex(c => c.id === convId);
+    if (idx >= 0) {
+        conversations.splice(idx, 1);
+        setStorage(STORAGE.CONVERSATIONS, conversations);
+        renderConversationList();
+        showToast('info', 'Conversation deleted');
+    }
+}
+
+function filterConversations(query) {
+    renderConversationList(query);
+}
+
+// Conversation Summary Panel (desktop sidebar)
+function updateConversationTopics() {
+    const topicsEl = document.getElementById('conversation-topics');
+    if (!topicsEl) return;
+
+    const topics = [];
+    const contextCounts = {};
+    state.chatHistory.forEach(msg => {
+        if (msg.role === 'user') {
+            const context = detectMessageContext(msg.content);
+            contextCounts[context] = (contextCounts[context] || 0) + 1;
+            topics.push({ text: msg.content.substring(0, 50), context, timestamp: msg.timestamp });
+        }
+    });
+
+    if (topics.length === 0) {
+        topicsEl.innerHTML = '<div style="color:var(--gray-text);font-size:0.8rem;padding:8px">Start chatting to see topics here</div>';
+        return;
+    }
+
+    const contextLabels = {
+        planning: 'Meal Planning', recipe: 'Recipes', shopping: 'Shopping',
+        health: 'Health', family: 'Family', pantry: 'Pantry', general: 'General'
+    };
+
+    topicsEl.innerHTML = topics.slice(-10).reverse().map(t =>
+        `<div class="chat-topic-item" onclick="scrollToChatMessage('${t.timestamp}')">
+            <span class="chat-topic-badge ${t.context}">${contextLabels[t.context] || 'Chat'}</span>
+            ${t.text}${t.text.length >= 50 ? '...' : ''}
+        </div>`
+    ).join('');
+
+    // Show sidebar on desktop if there are topics
+    const sidebar = document.getElementById('chat-sidebar');
+    if (sidebar && topics.length > 0) sidebar.classList.add('visible');
+}
+
+function scrollToChatMessage(timestamp) {
+    const messages = document.querySelectorAll('.message');
+    // Find message close to this timestamp (approximate match)
+    for (const msg of messages) {
+        if (msg.textContent.includes(timestamp)) {
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            msg.style.outline = '2px solid var(--cerulean)';
+            setTimeout(() => msg.style.outline = '', 2000);
+            return;
+        }
+    }
+}
+
+// Active Plan Bar
+function updateActivePlanBar() {
+    const bar = document.getElementById('active-plan-bar');
+    if (!bar) return;
+    const plans = getStorage(STORAGE.MEAL_PLANS) || {};
+    // Find current week plan
+    const keys = Object.keys(plans);
+    if (keys.length === 0) { bar.style.display = 'none'; return; }
+
+    const latestKey = keys[keys.length - 1];
+    const plan = plans[latestKey];
+    if (!plan) { bar.style.display = 'none'; return; }
+
+    // Count planned days
+    const days = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
+    const filledDays = days.filter(d => plan[d] && (plan[d].meals || plan[d].dinner || plan[d].lunch)).length;
+
+    if (filledDays > 0) {
+        document.getElementById('plan-bar-summary').textContent = `${filledDays} days planned`;
+        bar.style.display = 'flex';
+        refreshIcons();
+    } else {
+        bar.style.display = 'none';
+    }
 }
 
 async function callAPI(userMessage) {
@@ -6499,10 +7055,12 @@ async function callAPI(userMessage) {
         messages.push({ role: 'user', content: userMessage });
     }
 
+    state.abortController = new AbortController();
     const response = await fetch('/.netlify/functions/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages, profileText, flareMode: state.flareMode, recentMeals, recipeRatings, workoutData, pantryData, gardenData })
+        body: JSON.stringify({ messages, profileText, flareMode: state.flareMode, recentMeals, recipeRatings, workoutData, pantryData, gardenData }),
+        signal: state.abortController.signal
     });
 
     if (!response.ok) {
@@ -7812,7 +8370,7 @@ function renderFamilyRecipeCard(recipe) {
             </div>
             <div class="library-card-body">
                 <div class="library-card-title">${recipe.title}</div>
-                ${rating > 0 ? `<div style="color:#fbbf24;font-size:0.85rem">${'★'.repeat(Math.round(rating))}${'☆'.repeat(5-Math.round(rating))} (${rating.toFixed?.(1) || rating})</div>` : ''}
+                ${rating > 0 ? `<div style="color:var(--star-gold);font-size:0.85rem">${'★'.repeat(Math.round(rating))}${'☆'.repeat(5-Math.round(rating))} (${rating.toFixed?.(1) || rating})</div>` : ''}
                 <div class="library-card-meta">
                     <span>${icon('timer',14)} ${meta.totalTime || meta.cookTime || 30}min</span>
                     <span>${icon('utensils',14)} ${meta.serves || recipe.servings || 2}</span>
@@ -12456,7 +13014,7 @@ function renderHistory() {
                 <div class="activity-title">${item.title}</div>
                 <div class="activity-time">${formatRelativeDate(item.date)}</div>
             </div>
-            ${item.rating ? `<span style="color: #ffc107;">${'⭐'.repeat(item.rating)}</span>` : ''}
+            ${item.rating ? `<span style="color: var(--star-gold);">${'⭐'.repeat(item.rating)}</span>` : ''}
         </div>
     `).join('');
 }
