@@ -9,52 +9,60 @@
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:wght@400;500;600;700&family=Lora:wght@400;500;600&family=Inter:wght@300;400;500;600&family=Montserrat:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
-            /* Mediterranean Color Palette */
-            --olive-green: #6B8E23;
-            --olive-dark: #5a7a1e;
-            --olive-light: #8faf4f;
-            --terracotta: #C65D3B;
-            --terracotta-dark: #a94d31;
-            --terracotta-light: #d87a5c;
-            --mediterranean-blue: #2D5F8D;
-            --sun-yellow: #F4A460;
+            /* Mediterranean Coastal Palette */
+            --seafoam: #95C9B4;
+            --seafoam-dark: #7DB19D;
+            --seafoam-light: #E8F5F0;
+            --cerulean: #6BB8D9;
+            --cerulean-dark: #5AA5C7;
+            --cerulean-light: #E6F4F9;
+            --navy: #1A3A52;
+            --cream: #FAEBD7;
+            --charcoal: #3A3A3A;
 
-            /* Legacy colors (keeping for compatibility) */
-            --cerulean: #007BA7;
-            --cerulean-dark: #006691;
-            --cerulean-light: #3399bf;
-            --seafoam: #7FD8BE;
-            --seafoam-light: #b8e8d8;
-            --seafoam-dark: #5cb89a;
+            /* Mapped aliases (for backward compatibility with existing code) */
+            --olive-green: #95C9B4;
+            --olive-dark: #7DB19D;
+            --olive-light: #E8F5F0;
+            --olive-hover: #7DB19D;
+            --terracotta: #6BB8D9;
+            --terracotta-dark: #5AA5C7;
+            --terracotta-light: #E6F4F9;
+            --terracotta-hover: #5AA5C7;
+            --mediterranean-blue: #1A3A52;
+            --sun-yellow: #DAA520;
+
+            /* Legacy aliases */
+            --cerulean-dark: #5AA5C7;
+            --cerulean-light: #E6F4F9;
+            --seafoam-dark: #7DB19D;
 
             /* Neutrals */
-            --navy: #3E3B36;
-            --charcoal: #3E3B36;
-            --cream: #FAF8F3;
-            --feta-white: #F8F9FA;
+            --feta-white: #F5F5F5;
             --white: #FFFFFF;
-            --warm-gray: #8B8680;
-            --gray-light: #f5f5f5;
-            --gray-medium: #e0e0e0;
-            --gray-text: #666;
+            --warm-gray: #9CA3AF;
+            --gray-light: #F5F5F5;
+            --gray-medium: #E5E7EB;
+            --gray-text: #6B7280;
 
             /* Accents */
-            --tomato-red: #D84315;
-            --basil-green: #4CAF50;
-            --lemon-yellow: #FDD835;
+            --tomato-red: #EF4444;
+            --basil-green: #95C9B4;
+            --lemon-yellow: #DAA520;
+            --accent-gold: #DAA520;
 
             /* UI States */
-            --warning: #FF9800;
-            --danger: #F44336;
-            --success: #4CAF50;
-            --info: #2196F3;
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --success: #95C9B4;
+            --info: #6BB8D9;
 
-            /* Shadows (warm tones) */
-            --shadow-sm: 0 1px 2px rgba(62, 59, 54, 0.05);
-            --shadow: 0 2px 8px rgba(62, 59, 54, 0.08);
-            --shadow-md: 0 4px 6px rgba(62, 59, 54, 0.1);
-            --shadow-lg: 0 10px 15px rgba(62, 59, 54, 0.15);
-            --shadow-xl: 0 20px 25px rgba(62, 59, 54, 0.2);
+            /* Shadows (coastal tones) */
+            --shadow-sm: 0 1px 2px rgba(26, 58, 82, 0.05);
+            --shadow: 0 2px 8px rgba(26, 58, 82, 0.08);
+            --shadow-md: 0 4px 6px rgba(26, 58, 82, 0.1);
+            --shadow-lg: 0 10px 15px rgba(26, 58, 82, 0.12);
+            --shadow-xl: 0 20px 25px rgba(26, 58, 82, 0.15);
 
             /* Border Radius */
             --radius-sm: 4px;
@@ -80,32 +88,30 @@
             --font-script: 'Dancing Script', cursive;
 
             /* Extended UI Colors */
-            --border-light: #e5e7eb;
-            --text-muted: #6b7280;
-            --skeleton-base: #e5e7eb;
-            --skeleton-shimmer: #f3f4f6;
-            --accent-gold: #DAA520;
-            --olive-hover: #556B2F;
-            --terracotta-hover: #D2691E;
+            --border-light: #E5E7EB;
+            --text-muted: #9CA3AF;
+            --skeleton-base: #E5E7EB;
+            --skeleton-shimmer: #F3F4F6;
         }
         .dark-mode {
-            --cream: #1A1A1A;
-            --feta-white: #252525;
-            --white: #2A2A2A;
-            --navy: #E8E8E8;
-            --charcoal: #E8E8E8;
-            --gray-light: #333;
-            --gray-medium: #444;
-            --gray-text: #aaa;
-            --warm-gray: #888;
-            --cerulean: #3399bf;
-            --olive-green: #8faf4f;
-            --terracotta: #d87a5c;
-            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-            --shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.35);
-            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.4);
-            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+            --cream: #1A1A2E;
+            --feta-white: #1E2A3A;
+            --white: #243447;
+            --navy: #E8F0F8;
+            --charcoal: #E8F0F8;
+            --gray-light: #2A3A4A;
+            --gray-medium: #3A4A5A;
+            --gray-text: #9CB3C9;
+            --warm-gray: #7A90A5;
+            --cerulean: #7DC4E0;
+            --olive-green: #A8D6C4;
+            --seafoam: #A8D6C4;
+            --terracotta: #7DC4E0;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+            --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+            --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         html, body {
@@ -269,8 +275,8 @@
             left: 0;
             right: 0;
             width: 100%;
-            background: var(--white);
-            border-top: 1px solid var(--gray-medium);
+            background: var(--navy);
+            border-top: none;
             display: flex;
             justify-content: space-around;
             padding: 6px 0 max(6px, env(safe-area-inset-bottom));
@@ -283,7 +289,7 @@
             padding: 6px 4px;
             border: none;
             background: none;
-            color: var(--gray-text);
+            color: rgba(255, 255, 255, 0.6);
             font-size: 0.6rem;
             font-family: inherit;
             cursor: pointer;
@@ -292,8 +298,8 @@
             min-width: 48px;
         }
         .nav-item span.icon { font-size: 1.4rem; margin-bottom: 2px; }
-        .nav-item.active { color: var(--cerulean); background: var(--seafoam-light); }
-        .nav-item:hover:not(.active) { background: var(--gray-light); }
+        .nav-item.active { color: #FFFFFF; background: rgba(149, 201, 180, 0.2); }
+        .nav-item:hover:not(.active) { color: rgba(255, 255, 255, 0.85); background: rgba(255, 255, 255, 0.08); }
 
         /* Buttons - Mediterranean Design */
         .btn {
@@ -363,6 +369,8 @@
         }
         .action-tile:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); border-color: var(--cerulean); }
         .action-tile-icon { font-size: 2rem; margin-bottom: 8px; }
+        .action-tile-icon i, .action-tile-icon svg { width: 28px; height: 28px; color: var(--charcoal); transition: color 0.2s ease; }
+        .action-tile:hover .action-tile-icon i, .action-tile:hover .action-tile-icon svg { color: var(--seafoam); }
         .action-tile-title { font-weight: 600; color: var(--navy); margin-bottom: 4px; }
         .action-tile-desc { font-size: 0.8rem; color: var(--gray-text); }
 
@@ -827,8 +835,8 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .message-user { display: flex; justify-content: flex-end; }
         .message-user .message-bubble {
-            background: linear-gradient(135deg, var(--seafoam) 0%, var(--seafoam-light) 100%);
-            color: var(--navy);
+            background: #E8F5F0;
+            color: var(--charcoal);
             border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
             max-width: 85%;
             padding: var(--space-md) var(--space-lg);
@@ -836,8 +844,8 @@
         }
         .message-assistant { display: flex; justify-content: flex-start; }
         .message-assistant .message-bubble {
-            background: var(--feta-white);
-            border-left: 4px solid var(--olive-green);
+            background: #E6F4F9;
+            border-left: 4px solid var(--cerulean);
             border-radius: var(--radius-lg);
             max-width: 90%;
             padding: var(--space-lg);
@@ -1525,7 +1533,7 @@
 
         /* Week Plan Summary Card - FIXED READABILITY */
         .week-plan-card {
-            background: linear-gradient(135deg, #2D5F8D 0%, #1e4a6b 100%);
+            background: linear-gradient(135deg, #1A3A52 0%, #132D40 100%);
             color: white;
             border-radius: var(--radius-lg);
             padding: var(--space-xl);
@@ -1567,7 +1575,7 @@
         .week-plan-actions .btn {
             flex: 1;
             background: white;
-            color: #2D5F8D;
+            color: #1A3A52;
             border: none;
             font-weight: 600;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -2688,7 +2696,7 @@
         .tag-selection-chip input[type="checkbox"] { accent-color: var(--olive-green); }
         .tag-selection-chip.selected {
             border-color: var(--olive-green);
-            background: rgba(107, 142, 35, 0.08);
+            background: rgba(149, 201, 180, 0.12);
         }
 
         /* ========================================
@@ -2711,7 +2719,7 @@
         }
         .radio-item:has(input:checked) {
             border-color: var(--olive-green);
-            background: rgba(107, 142, 35, 0.06);
+            background: rgba(149, 201, 180, 0.08);
         }
         .radio-item input[type="radio"] { accent-color: var(--olive-green); margin-top: 3px; }
         .radio-label {
@@ -2773,7 +2781,7 @@
             color: var(--olive-green);
             margin-bottom: var(--space-md);
             padding-bottom: var(--space-sm);
-            border-bottom: 2px solid rgba(107, 142, 35, 0.2);
+            border-bottom: 2px solid rgba(149, 201, 180, 0.3);
         }
         .recipe-detail-section .section-title i,
         .recipe-detail-section .section-title svg { width: 20px; height: 20px; }
@@ -2811,7 +2819,7 @@
             margin-bottom: var(--space-sm);
         }
         .health-benefits-section {
-            background: rgba(107, 142, 35, 0.05);
+            background: rgba(149, 201, 180, 0.08);
             padding: var(--space-md);
             border-radius: var(--radius);
         }
@@ -2985,7 +2993,7 @@
         .form-input-small:focus {
             outline: none;
             border-color: var(--olive-green);
-            box-shadow: 0 0 0 3px rgba(107, 142, 35, 0.15);
+            box-shadow: 0 0 0 3px rgba(107, 184, 217, 0.2);
         }
         .form-row {
             display: grid;
@@ -3098,6 +3106,226 @@
             /* Page setup */
             @page { margin: 0.5in; }
         }
+
+        /* ========================================
+           HYBRID NAVIGATION SYSTEM
+           ======================================== */
+
+        /* --- Nav Dropdown (shared mobile + desktop) --- */
+        .nav-dropdown-menu {
+            display: none;
+            position: absolute;
+            background: var(--white);
+            border-radius: var(--radius);
+            box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+            min-width: 200px;
+            z-index: 200;
+            overflow: hidden;
+        }
+        .nav-dropdown-menu.open { display: block; }
+        .nav-dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 16px;
+            color: var(--navy);
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            font-family: inherit;
+        }
+        .nav-dropdown-item:hover {
+            background: var(--seafoam-light);
+            color: var(--seafoam-dark);
+        }
+        .nav-dropdown-item [data-lucide], .nav-dropdown-item svg {
+            width: 18px;
+            height: 18px;
+            flex-shrink: 0;
+            color: var(--navy);
+        }
+        .nav-dropdown-item:hover [data-lucide], .nav-dropdown-item:hover svg {
+            color: var(--seafoam-dark);
+        }
+
+        /* --- Settings gear icon (shared) --- */
+        .nav-settings-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: none;
+            border: none;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 50%;
+            transition: color 0.2s, background 0.2s;
+        }
+        .nav-settings-btn:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.12);
+        }
+        .nav-settings-btn [data-lucide], .nav-settings-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* --- MOBILE: Bottom Nav with Dropdowns (< 768px) --- */
+        @media (max-width: 767px) {
+            .desktop-nav { display: none !important; }
+            .header-desktop-center { display: none !important; }
+            .header-desktop-right { display: none !important; }
+
+            .bottom-nav {
+                flex-direction: row;
+            }
+            .bottom-nav .nav-group {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                min-width: 48px;
+            }
+            .bottom-nav .nav-dropdown-menu {
+                bottom: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-bottom: 8px;
+                animation: slideUpDropdown 0.2s ease;
+            }
+            @keyframes slideUpDropdown {
+                from { opacity: 0; transform: translateX(-50%) translateY(10px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+        }
+
+        /* --- DESKTOP: Top Nav Bar (>= 768px) --- */
+        @media (min-width: 768px) {
+            .bottom-nav { display: none !important; }
+
+            .header {
+                background: var(--navy) !important;
+                border-bottom: none !important;
+                padding: 0 !important;
+            }
+            .header .container.header-content {
+                display: flex;
+                align-items: center;
+                min-height: 56px;
+                padding: 0 20px;
+            }
+            .header .logo {
+                color: #fff !important;
+                font-size: 1.6rem;
+                margin-right: 32px;
+                flex-shrink: 0;
+            }
+
+            /* Desktop center nav */
+            .header-desktop-center {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                flex: 1;
+                justify-content: center;
+            }
+            .desktop-nav-group {
+                position: relative;
+            }
+            .desktop-nav-btn {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                padding: 8px 14px;
+                border: none;
+                background: none;
+                color: rgba(255,255,255,0.75);
+                font-size: 0.9rem;
+                font-family: inherit;
+                font-weight: 500;
+                cursor: pointer;
+                border-radius: var(--radius-sm);
+                transition: all 0.2s;
+                white-space: nowrap;
+            }
+            .desktop-nav-btn [data-lucide], .desktop-nav-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+            .desktop-nav-btn:hover, .desktop-nav-btn.active {
+                color: #fff;
+                background: rgba(149, 201, 180, 0.2);
+            }
+            .desktop-nav-btn .chevron {
+                width: 14px;
+                height: 14px;
+                transition: transform 0.2s;
+            }
+            .desktop-nav-btn.open .chevron {
+                transform: rotate(180deg);
+            }
+
+            /* Desktop dropdowns drop DOWN */
+            .desktop-nav-group .nav-dropdown-menu {
+                top: 100%;
+                left: 50%;
+                transform: translateX(-50%);
+                margin-top: 4px;
+                animation: slideDownDropdown 0.18s ease;
+            }
+            @keyframes slideDownDropdown {
+                from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
+                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+            }
+
+            /* Desktop header right section */
+            .header-desktop-right {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                flex-shrink: 0;
+                margin-left: 16px;
+            }
+            .header-desktop-right .header-search {
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.2);
+            }
+            .header-desktop-right .header-search span {
+                color: rgba(255,255,255,0.6);
+            }
+            .header-desktop-right .header-search input {
+                color: #fff;
+            }
+            .header-desktop-right .header-search input::placeholder {
+                color: rgba(255,255,255,0.5);
+            }
+            .header-desktop-right .auth-section {
+                color: rgba(255,255,255,0.85);
+            }
+            .header-desktop-right .auth-btn {
+                color: #fff;
+                background: rgba(255,255,255,0.12);
+                border: 1px solid rgba(255,255,255,0.25);
+            }
+            .header-desktop-right .auth-btn:hover {
+                background: rgba(255,255,255,0.2);
+            }
+            .header-desktop-right .user-info {
+                color: rgba(255,255,255,0.85);
+            }
+            .header-desktop-right .sync-status {
+                color: rgba(255,255,255,0.6);
+            }
+
+            /* Hide the old mobile header-right on desktop */
+            .header > .container > .header-right {
+                display: none !important;
+            }
+        }
     </style>
 
     <!-- Firebase SDK -->
@@ -3165,7 +3393,12 @@
     <header class="header hidden" id="app-header">
         <div class="container header-content">
             <a href="#" class="logo" onclick="navigateTo('home'); return false;">Tavola</a>
+
+            <!-- Mobile: keep original header-right for small screens -->
             <div class="header-right">
+                <button class="nav-settings-btn" onclick="navigateTo('more'); switchMoreTab('settings');" title="Settings">
+                    <i data-lucide="settings"></i>
+                </button>
                 <div class="header-search" id="global-search">
                     <span>🔍</span>
                     <input type="text" placeholder="Search..." id="global-search-input" onkeyup="handleGlobalSearch(event)">
@@ -3174,6 +3407,70 @@
                     <div class="user-info" id="user-info" style="display: none;"></div>
                     <span class="sync-status" id="sync-status"></span>
                     <button class="auth-btn" id="auth-btn" onclick="signInWithGoogle()">
+                        <span class="icon">🔐</span> Sign In
+                    </button>
+                </div>
+            </div>
+
+            <!-- Desktop: center nav items -->
+            <nav class="header-desktop-center" id="desktop-nav">
+                <div class="desktop-nav-group">
+                    <button class="desktop-nav-btn" data-nav="home" onclick="navigateTo('home'); closeAllDropdowns();">
+                        <i data-lucide="home"></i> Home
+                    </button>
+                </div>
+                <div class="desktop-nav-group" id="desktop-cooking-group">
+                    <button class="desktop-nav-btn" data-nav="cooking" onclick="toggleDesktopDropdown('desktop-cooking-dropdown')">
+                        <i data-lucide="chef-hat"></i> Cooking <i data-lucide="chevron-down" class="chevron"></i>
+                    </button>
+                    <div class="nav-dropdown-menu" id="desktop-cooking-dropdown">
+                        <button class="nav-dropdown-item" onclick="navAction('chat')"><i data-lucide="message-circle"></i> Chat with Nonna</button>
+                        <button class="nav-dropdown-item" onclick="navAction('recipes')"><i data-lucide="book-open"></i> Recipes</button>
+                        <button class="nav-dropdown-item" onclick="navAction('favorites')"><i data-lucide="heart"></i> Favorites</button>
+                        <button class="nav-dropdown-item" onclick="navAction('family')"><i data-lucide="users"></i> Family Tavola</button>
+                    </div>
+                </div>
+                <div class="desktop-nav-group" id="desktop-plan-group">
+                    <button class="desktop-nav-btn" data-nav="plan" onclick="toggleDesktopDropdown('desktop-plan-dropdown')">
+                        <i data-lucide="calendar"></i> Plan <i data-lucide="chevron-down" class="chevron"></i>
+                    </button>
+                    <div class="nav-dropdown-menu" id="desktop-plan-dropdown">
+                        <button class="nav-dropdown-item" onclick="navAction('week')"><i data-lucide="calendar-days"></i> This Week</button>
+                        <button class="nav-dropdown-item" onclick="navAction('history')"><i data-lucide="clock"></i> Meal History</button>
+                        <button class="nav-dropdown-item" onclick="navAction('batch')"><i data-lucide="cooking-pot"></i> Batch Prep</button>
+                    </div>
+                </div>
+                <div class="desktop-nav-group" id="desktop-pantry-group">
+                    <button class="desktop-nav-btn" data-nav="pantry" onclick="toggleDesktopDropdown('desktop-pantry-dropdown')">
+                        <i data-lucide="warehouse"></i> Pantry <i data-lucide="chevron-down" class="chevron"></i>
+                    </button>
+                    <div class="nav-dropdown-menu" id="desktop-pantry-dropdown">
+                        <button class="nav-dropdown-item" onclick="navAction('pantry')"><i data-lucide="package"></i> My Pantry</button>
+                        <button class="nav-dropdown-item" onclick="navAction('shopping')"><i data-lucide="shopping-cart"></i> Shopping List</button>
+                        <button class="nav-dropdown-item" onclick="navAction('garden')"><i data-lucide="flower-2"></i> Garden</button>
+                        <button class="nav-dropdown-item" onclick="navAction('crohns')"><i data-lucide="shield-plus"></i> Crohn's Care</button>
+                    </div>
+                </div>
+                <div class="desktop-nav-group">
+                    <button class="desktop-nav-btn" data-nav="workouts" onclick="navigateTo('workouts'); closeAllDropdowns();">
+                        <i data-lucide="dumbbell"></i> Workouts
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Desktop: right section -->
+            <div class="header-desktop-right">
+                <button class="nav-settings-btn" onclick="navigateTo('more'); switchMoreTab('settings');" title="Settings">
+                    <i data-lucide="settings"></i>
+                </button>
+                <div class="header-search">
+                    <span>🔍</span>
+                    <input type="text" placeholder="Search..." onkeyup="handleGlobalSearch(event)">
+                </div>
+                <div class="auth-section">
+                    <div class="user-info" id="user-info-desktop" style="display: none;"></div>
+                    <span class="sync-status" id="sync-status-desktop"></span>
+                    <button class="auth-btn" onclick="signInWithGoogle()">
                         <span class="icon">🔐</span> Sign In
                     </button>
                 </div>
@@ -3537,37 +3834,37 @@
             <div class="view active" id="view-home">
                 <!-- Flare Mode Banner (shown when active) -->
                 <div class="flare-banner hidden" id="home-flare-banner">
-                    <div class="flare-banner-title">🌡️ Flare Mode Active</div>
+                    <div class="flare-banner-title"><i data-lucide="thermometer" style="width:18px;height:18px;vertical-align:middle;margin-right:4px"></i> Flare Mode Active</div>
                     <div class="flare-banner-text">Nonna will suggest gentle, easy-to-digest meals.</div>
                 </div>
 
                 <!-- Stats Bar -->
                 <div class="stats-bar" id="dashboard-stats">
-                    <div class="stat-item"><span class="icon">🍽️</span> <span>Meals: <strong id="stat-meals-planned">0/7</strong></span></div>
-                    <div class="stat-item"><span class="icon">❤️</span> <span>Favorites: <strong id="stat-favorites">0</strong></span></div>
-                    <div class="stat-item"><span class="icon">🌱</span> <span>Garden: <strong id="stat-garden">-</strong></span></div>
-                    <div class="stat-item"><span class="icon">📚</span> <span>Recipes: <strong id="stat-recipes">0</strong></span></div>
+                    <div class="stat-item"><i data-lucide="utensils" style="width:16px;height:16px"></i> <span>Meals: <strong id="stat-meals-planned">0/7</strong></span></div>
+                    <div class="stat-item"><i data-lucide="heart" style="width:16px;height:16px"></i> <span>Favorites: <strong id="stat-favorites">0</strong></span></div>
+                    <div class="stat-item"><i data-lucide="sprout" style="width:16px;height:16px"></i> <span>Garden: <strong id="stat-garden">-</strong></span></div>
+                    <div class="stat-item"><i data-lucide="book-open" style="width:16px;height:16px"></i> <span>Recipes: <strong id="stat-recipes">0</strong></span></div>
                 </div>
 
                 <!-- Quick Action Tiles -->
                 <div class="action-tiles">
                     <div class="action-tile" onclick="navigateTo('week'); askNonnaForWeekPlan();">
-                        <div class="action-tile-icon">📅</div>
+                        <div class="action-tile-icon"><i data-lucide="calendar-days"></i></div>
                         <div class="action-tile-title">Plan This Week</div>
                         <div class="action-tile-desc">Get your weekly meal plan</div>
                     </div>
                     <div class="action-tile" onclick="navigateTo('favorites')">
-                        <div class="action-tile-icon">❤️</div>
+                        <div class="action-tile-icon"><i data-lucide="heart"></i></div>
                         <div class="action-tile-title">View Favorites</div>
                         <div class="action-tile-desc">Browse saved recipes</div>
                     </div>
                     <div class="action-tile" onclick="navigateTo('chat')">
-                        <div class="action-tile-icon">💬</div>
+                        <div class="action-tile-icon"><i data-lucide="message-circle"></i></div>
                         <div class="action-tile-title">Chat with Nonna</div>
                         <div class="action-tile-desc">Ask about meals & recipes</div>
                     </div>
                     <div class="action-tile" onclick="navigateTo('more'); switchMoreTab('garden');">
-                        <div class="action-tile-icon">🌱</div>
+                        <div class="action-tile-icon"><i data-lucide="sprout"></i></div>
                         <div class="action-tile-title">Check Garden</div>
                         <div class="action-tile-desc">What's ready to harvest</div>
                     </div>
@@ -3576,7 +3873,7 @@
                 <!-- Today's Activity Summary -->
                 <div class="card" id="dashboard-workout-card">
                     <div class="card-header">
-                        <h3 class="card-title">💪 Today's Activity</h3>
+                        <h3 class="card-title"><i data-lucide="activity" style="width:20px;height:20px;vertical-align:middle;margin-right:6px"></i> Today's Activity</h3>
                         <button class="btn btn-ghost btn-sm" onclick="navigateTo('workouts')">View All</button>
                     </div>
                     <div class="workout-stats" style="margin-bottom: 0;">
@@ -3601,7 +3898,7 @@
 
                 <!-- Recent Activity -->
                 <div class="card">
-                    <h3 class="card-title">📋 Recent Activity</h3>
+                    <h3 class="card-title"><i data-lucide="clock" style="width:20px;height:20px;vertical-align:middle;margin-right:6px"></i> Recent Activity</h3>
                     <div class="activity-list" id="recent-activity">
                         <div class="empty-state" style="padding: 24px;">
                             <p class="text-muted">No recent activity yet. Start by chatting with Nonna!</p>
@@ -3611,7 +3908,7 @@
 
                 <!-- Nonna's Tip of the Day -->
                 <div class="nonna-tip" id="nonna-tip-daily">
-                    <div class="nonna-tip-header">💡 Nonna's Tip</div>
+                    <div class="nonna-tip-header"><i data-lucide="lightbulb" style="width:18px;height:18px;vertical-align:middle;margin-right:6px"></i> Nonna's Tip</div>
                     <div class="nonna-tip-text" id="nonna-tip-text">"Always finish with good olive oil - it makes everything taste better, cara."</div>
                     <div class="nonna-tip-signature">— Nonna</div>
                 </div>
@@ -3619,10 +3916,10 @@
                 <!-- Empty State for New Users -->
                 <div class="card hidden" id="new-user-welcome">
                     <div class="text-center" style="padding: 24px;">
-                        <div style="font-size: 3rem; margin-bottom: 16px;">👋</div>
+                        <div style="margin-bottom: 16px;"><i data-lucide="hand-metal" style="width:48px;height:48px;color:var(--cerulean)"></i></div>
                         <h3 style="color: var(--cerulean); margin-bottom: 8px;">Welcome to Tavola!</h3>
                         <p class="text-muted mb-16">Nonna helps you plan Mediterranean meals tailored to your health needs.</p>
-                        <button class="btn btn-primary" onclick="navigateTo('chat')">💬 Start Chatting with Nonna</button>
+                        <button class="btn btn-primary" onclick="navigateTo('chat')"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"></i> Start Chatting with Nonna</button>
                     </div>
                 </div>
             </div>
@@ -4132,7 +4429,7 @@
                         😔 I'm Having a Flare - Help Me
                     </button>
                     <div class="flare-banner hidden" id="flare-mode-banner">
-                        <div class="flare-banner-title">🌡️ Flare Mode Active</div>
+                        <div class="flare-banner-title"><i data-lucide="thermometer" style="width:18px;height:18px;vertical-align:middle;margin-right:4px"></i> Flare Mode Active</div>
                         <div class="flare-banner-text">Nonna will only suggest gentle meals.</div>
                         <button class="btn btn-sm btn-ghost mt-8" onclick="deactivateFlareMode()">Exit Flare Mode</button>
                     </div>
@@ -4198,7 +4495,7 @@
                     </div>
                     <div class="card">
                         <h3 class="card-title">🎓 Help</h3>
-                        <button class="btn btn-secondary btn-block mb-8" onclick="startOnboarding()">Take App Tour</button>
+                        <button class="btn btn-secondary btn-block mb-8" onclick="restartTutorial()">Restart Tutorial</button>
                     </div>
                     <div class="card">
                         <h3 class="card-title">💾 Data</h3>
@@ -4238,32 +4535,60 @@
         </div>
     </main>
 
-    <!-- Bottom Navigation (5 tabs) -->
+    <!-- Bottom Navigation (5 tabs with dropdowns) -->
     <nav class="bottom-nav hidden" id="bottom-nav">
-        <button class="nav-item active" onclick="navigateTo('home')" data-view="home">
-            <i data-lucide="home"></i>
-            <span>Home</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('week')" data-view="week">
-            <i data-lucide="calendar"></i>
-            <span>Week</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('recipes')" data-view="recipes">
-            <i data-lucide="book-open"></i>
-            <span>Recipes</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('chat')" data-view="chat">
-            <i data-lucide="message-circle"></i>
-            <span>Chat</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('workouts')" data-view="workouts">
-            <i data-lucide="dumbbell"></i>
-            <span>Workouts</span>
-        </button>
-        <button class="nav-item" onclick="navigateTo('more')" data-view="more">
-            <i data-lucide="more-horizontal"></i>
-            <span>More</span>
-        </button>
+        <!-- Home (direct) -->
+        <div class="nav-group">
+            <button class="nav-item active" onclick="navigateTo('home'); closeAllDropdowns();" data-view="home" data-nav="home">
+                <i data-lucide="home"></i>
+                <span>Home</span>
+            </button>
+        </div>
+        <!-- Cooking (dropdown) -->
+        <div class="nav-group" id="mobile-cooking-group">
+            <button class="nav-item" data-nav="cooking" onclick="toggleMobileDropdown('mobile-cooking-dropdown', this)">
+                <i data-lucide="chef-hat"></i>
+                <span>Cooking</span>
+            </button>
+            <div class="nav-dropdown-menu" id="mobile-cooking-dropdown">
+                <button class="nav-dropdown-item" onclick="navAction('chat')"><i data-lucide="message-circle"></i> Chat with Nonna</button>
+                <button class="nav-dropdown-item" onclick="navAction('recipes')"><i data-lucide="book-open"></i> Recipes</button>
+                <button class="nav-dropdown-item" onclick="navAction('favorites')"><i data-lucide="heart"></i> Favorites</button>
+                <button class="nav-dropdown-item" onclick="navAction('family')"><i data-lucide="users"></i> Family Tavola</button>
+            </div>
+        </div>
+        <!-- Plan (dropdown) -->
+        <div class="nav-group" id="mobile-plan-group">
+            <button class="nav-item" data-nav="plan" onclick="toggleMobileDropdown('mobile-plan-dropdown', this)">
+                <i data-lucide="calendar"></i>
+                <span>Plan</span>
+            </button>
+            <div class="nav-dropdown-menu" id="mobile-plan-dropdown">
+                <button class="nav-dropdown-item" onclick="navAction('week')"><i data-lucide="calendar-days"></i> This Week</button>
+                <button class="nav-dropdown-item" onclick="navAction('history')"><i data-lucide="clock"></i> Meal History</button>
+                <button class="nav-dropdown-item" onclick="navAction('batch')"><i data-lucide="cooking-pot"></i> Batch Prep</button>
+            </div>
+        </div>
+        <!-- Pantry (dropdown) -->
+        <div class="nav-group" id="mobile-pantry-group">
+            <button class="nav-item" data-nav="pantry" onclick="toggleMobileDropdown('mobile-pantry-dropdown', this)">
+                <i data-lucide="warehouse"></i>
+                <span>Pantry</span>
+            </button>
+            <div class="nav-dropdown-menu" id="mobile-pantry-dropdown">
+                <button class="nav-dropdown-item" onclick="navAction('pantry')"><i data-lucide="package"></i> My Pantry</button>
+                <button class="nav-dropdown-item" onclick="navAction('shopping')"><i data-lucide="shopping-cart"></i> Shopping List</button>
+                <button class="nav-dropdown-item" onclick="navAction('garden')"><i data-lucide="flower-2"></i> Garden</button>
+                <button class="nav-dropdown-item" onclick="navAction('crohns')"><i data-lucide="shield-plus"></i> Crohn's Care</button>
+            </div>
+        </div>
+        <!-- Workouts (direct) -->
+        <div class="nav-group">
+            <button class="nav-item" onclick="navigateTo('workouts'); closeAllDropdowns();" data-view="workouts" data-nav="workouts">
+                <i data-lucide="dumbbell"></i>
+                <span>Workouts</span>
+            </button>
+        </div>
     </nav>
 
     <!-- Modal Container -->
@@ -4960,7 +5285,20 @@ function cleanupBadWorkouts() {
     }
 }
 
-function checkOnboarding() {
+async function checkOnboarding() {
+    // First check Firestore if user is authenticated
+    const user = firebase.auth().currentUser;
+    if (user) {
+        try {
+            const doc = await firebase.firestore().collection('users').doc(user.uid).get();
+            if (doc.exists && doc.data().hasCompletedOnboarding) {
+                return; // Already completed, don't show
+            }
+        } catch (e) {
+            console.log('Firestore onboarding check failed, falling back to localStorage');
+        }
+    }
+    // Fallback to localStorage
     const done = getStorage(STORAGE.ONBOARDING);
     if (!done) {
         setTimeout(() => startOnboarding(), 500);
@@ -5028,10 +5366,13 @@ function navigateTo(view) {
     const targetView = document.getElementById(`view-${view}`);
     if (targetView) targetView.classList.add('active');
 
-    // Update bottom nav
+    // Update bottom nav (legacy data-view)
     document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
     const navItem = document.querySelector(`.nav-item[data-view="${view}"]`);
     if (navItem) navItem.classList.add('active');
+
+    // Update hybrid nav active states (data-nav groups)
+    updateHybridNavActive(view);
 
     // Show More menu if going to more
     if (view === 'more') showMoreMenu();
@@ -5049,6 +5390,153 @@ function navigateTo(view) {
     // Refresh Lucide icons after view change
     refreshIcons();
 }
+
+// ========================================
+// HYBRID NAVIGATION HELPERS
+// ========================================
+
+// Map views to their parent nav group
+const viewToNavGroup = {
+    home: 'home',
+    chat: 'cooking',
+    recipes: 'cooking',
+    favorites: 'cooking',
+    cooking: 'cooking',
+    week: 'plan',
+    plan: 'plan',
+    more: 'plan', // history, batch go through more
+    pantry: 'pantry',
+    workouts: 'workouts'
+};
+
+function updateHybridNavActive(view) {
+    const group = viewToNavGroup[view] || null;
+
+    // Mobile bottom nav: highlight the nav-item whose data-nav matches the group
+    document.querySelectorAll('.bottom-nav .nav-item').forEach(n => n.classList.remove('active'));
+    if (group) {
+        const mobileBtn = document.querySelector(`.bottom-nav .nav-item[data-nav="${group}"]`);
+        if (mobileBtn) mobileBtn.classList.add('active');
+    }
+
+    // Desktop top nav: highlight the desktop-nav-btn whose data-nav matches the group
+    document.querySelectorAll('.desktop-nav-btn').forEach(n => n.classList.remove('active'));
+    if (group) {
+        const desktopBtn = document.querySelector(`.desktop-nav-btn[data-nav="${group}"]`);
+        if (desktopBtn) desktopBtn.classList.add('active');
+    }
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.nav-dropdown-menu').forEach(m => m.classList.remove('open'));
+    document.querySelectorAll('.desktop-nav-btn').forEach(b => b.classList.remove('open'));
+}
+
+function toggleMobileDropdown(menuId, triggerBtn) {
+    const menu = document.getElementById(menuId);
+    const isOpen = menu.classList.contains('open');
+    closeAllDropdowns();
+    if (!isOpen) {
+        menu.classList.add('open');
+        refreshIcons();
+    }
+}
+
+function toggleDesktopDropdown(menuId) {
+    const menu = document.getElementById(menuId);
+    const isOpen = menu.classList.contains('open');
+    closeAllDropdowns();
+    if (!isOpen) {
+        menu.classList.add('open');
+        // Mark the button as open for chevron rotation
+        const btn = menu.parentElement.querySelector('.desktop-nav-btn');
+        if (btn) btn.classList.add('open');
+        refreshIcons();
+    }
+}
+
+// Unified navigation action for dropdown items
+function navAction(action) {
+    closeAllDropdowns();
+    switch (action) {
+        case 'chat':
+            navigateTo('chat');
+            break;
+        case 'recipes':
+            navigateTo('recipes');
+            break;
+        case 'favorites':
+            navigateTo('favorites');
+            break;
+        case 'family':
+            navigateTo('recipes');
+            switchRecipesTab('family');
+            break;
+        case 'week':
+            navigateTo('week');
+            break;
+        case 'history':
+            navigateTo('more');
+            switchMoreTab('history');
+            break;
+        case 'batch':
+            navigateTo('more');
+            switchMoreTab('kitchen');
+            setTimeout(() => switchKitchenTab('batch'), 100);
+            break;
+        case 'pantry':
+            navigateTo('more');
+            switchMoreTab('kitchen');
+            break;
+        case 'shopping':
+            navigateTo('more');
+            switchMoreTab('kitchen');
+            setTimeout(() => switchKitchenTab('shopping'), 100);
+            break;
+        case 'garden':
+            navigateTo('more');
+            switchMoreTab('garden');
+            break;
+        case 'crohns':
+            navigateTo('more');
+            switchMoreTab('crohns');
+            break;
+        case 'workouts':
+            navigateTo('workouts');
+            break;
+    }
+}
+
+// Close dropdowns on outside click
+document.addEventListener('click', function(e) {
+    if (!e.target.closest('.nav-group') && !e.target.closest('.desktop-nav-group')) {
+        closeAllDropdowns();
+    }
+});
+
+// Desktop: hover to open dropdowns
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.desktop-nav-group').forEach(group => {
+        const btn = group.querySelector('.desktop-nav-btn');
+        const menu = group.querySelector('.nav-dropdown-menu');
+        if (!menu) return; // no dropdown for direct nav items
+
+        group.addEventListener('mouseenter', function() {
+            if (window.innerWidth >= 768) {
+                closeAllDropdowns();
+                menu.classList.add('open');
+                if (btn) btn.classList.add('open');
+                refreshIcons();
+            }
+        });
+        group.addEventListener('mouseleave', function() {
+            if (window.innerWidth >= 768) {
+                menu.classList.remove('open');
+                if (btn) btn.classList.remove('open');
+            }
+        });
+    });
+});
 
 function showMoreMenu() {
     document.getElementById('more-menu-main').classList.remove('hidden');
@@ -12327,6 +12815,21 @@ function startOnboarding() {
     renderOnboardingStep();
 }
 
+function restartTutorial() {
+    // Clear the onboarding flag so it can be shown again
+    setStorage(STORAGE.ONBOARDING, false);
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.firestore().collection('users').doc(user.uid).set(
+            { hasCompletedOnboarding: false },
+            { merge: true }
+        ).catch(e => console.log('Failed to reset onboarding flag:', e));
+    }
+    // Navigate to home and start the tour
+    navigateTo('home');
+    setTimeout(() => startOnboarding(), 300);
+}
+
 function renderOnboardingStep() {
     const step = onboardingSteps[onboardingStep];
     const card = document.getElementById('onboarding-card');
@@ -12366,11 +12869,27 @@ function prevOnboarding() {
 function finishOnboarding() {
     setStorage(STORAGE.ONBOARDING, true);
     document.getElementById('onboarding-overlay').classList.remove('active');
+    // Persist to Firestore so it doesn't show on other devices
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.firestore().collection('users').doc(user.uid).set(
+            { hasCompletedOnboarding: true },
+            { merge: true }
+        ).catch(e => console.log('Failed to save onboarding flag:', e));
+    }
 }
 
 function skipOnboarding() {
     setStorage(STORAGE.ONBOARDING, true);
     document.getElementById('onboarding-overlay').classList.remove('active');
+    // Persist to Firestore
+    const user = firebase.auth().currentUser;
+    if (user) {
+        firebase.firestore().collection('users').doc(user.uid).set(
+            { hasCompletedOnboarding: true },
+            { merge: true }
+        ).catch(e => console.log('Failed to save onboarding flag:', e));
+    }
 }
 
 // ========================================
