@@ -11429,20 +11429,7 @@ const PRICE_DATABASE = {
 };
 
 // Category icons for shopping list display
-const CATEGORY_ICONS = {
-    'Produce': icon('leaf',14),
-    'Proteins': icon('beef',14),
-    'Dairy': icon('milk',14),
-    'Pantry': icon('package',14),
-    'Grains': icon('wheat',14),
-    'Canned Goods': icon('package',14),
-    'Frozen': icon('refrigerator',14),
-    'Spices': icon('flask-round',14),
-    'Condiments': icon('flask-round',14),
-    'Beverages': icon('cup-soda',14),
-    'Snacks': icon('cookie',14),
-    'Other': icon('package',14)
-};
+// CATEGORY_ICONS defined at line ~9925, getCategoryIcon() at ~9933
 
 // Typical Mediterranean staples to suggest
 const TYPICAL_STAPLES = [
@@ -12248,7 +12235,7 @@ function loadEnhancedShoppingList(listId) {
     const categoryOrder = ['Produce', 'Proteins', 'Dairy', 'Grains', 'Canned Goods', 'Pantry', 'Spices', 'Other'];
     categoryOrder.forEach(category => {
         if (grouped[category] && grouped[category].length > 0) {
-            const catIcon = CATEGORY_ICONS[category] || icon('package',14);
+            const catIcon = getCategoryIcon(category);
             html += `
                 <div class="shopping-category-header">
                     <span>${catIcon}</span>
@@ -12280,7 +12267,7 @@ function loadEnhancedShoppingList(listId) {
     // Handle categories not in the order list
     Object.keys(grouped).forEach(category => {
         if (!categoryOrder.includes(category) && grouped[category].length > 0) {
-            const catIcon = CATEGORY_ICONS[category] || icon('package',14);
+            const catIcon = getCategoryIcon(category);
             html += `
                 <div class="shopping-category-header">
                     <span>${catIcon}</span>
