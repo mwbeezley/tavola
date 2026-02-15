@@ -1,0 +1,8 @@
+{
+  "name": "tavola-functions",
+  "version": "1.0.0",
+  "description": "Serverless functions for Tavola app",
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}

@@ -3428,6 +3428,9 @@
                         <button class="nav-dropdown-item" onclick="navAction('recipes')"><i data-lucide="book-open"></i> Recipes</button>
                         <button class="nav-dropdown-item" onclick="navAction('favorites')"><i data-lucide="heart"></i> Favorites</button>
                         <button class="nav-dropdown-item" onclick="navAction('family')"><i data-lucide="users"></i> Family Tavola</button>
+                        <button class="nav-dropdown-item" onclick="navAction('import-recipe')"><i data-lucide="download"></i> Import Recipe</button>
+                        <button class="nav-dropdown-item" onclick="navAction('leftovers')"><i data-lucide="wand-sparkles"></i> Transform Leftovers</button>
+                        <button class="nav-dropdown-item" onclick="navAction('collections')"><i data-lucide="library"></i> Collections</button>
                     </div>
                 </div>
                 <div class="desktop-nav-group" id="desktop-plan-group">
@@ -3868,6 +3871,26 @@
                         <div class="action-tile-title">Check Garden</div>
                         <div class="action-tile-desc">What's ready to harvest</div>
                     </div>
+                    <div class="action-tile" onclick="openLeftoverTransformer();">
+                        <div class="action-tile-icon"><i data-lucide="wand-sparkles"></i></div>
+                        <div class="action-tile-title">Leftover Magic</div>
+                        <div class="action-tile-desc">Transform what's on hand</div>
+                    </div>
+                    <div class="action-tile" onclick="openImportRecipeModal();">
+                        <div class="action-tile-icon"><i data-lucide="download"></i></div>
+                        <div class="action-tile-title">Import Recipe</div>
+                        <div class="action-tile-desc">Save from any URL</div>
+                    </div>
+                </div>
+
+                <!-- Seasonal Produce Card -->
+                <div class="card" id="seasonal-card" style="display:none">
+                    <div class="card-header">
+                        <h3 class="card-title"><i data-lucide="sun" style="width:18px;height:18px;vertical-align:middle;color:var(--accent-warm)"></i> In Season Now</h3>
+                        <span class="text-muted" id="seasonal-month"></span>
+                    </div>
+                    <div id="seasonal-items" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px"></div>
+                    <button class="btn btn-sm btn-secondary" onclick="askNonnaWithSeasonal()"><i data-lucide="chef-hat" style="width:14px;height:14px;vertical-align:middle"></i> Cook with seasonal picks</button>
                 </div>
 
                 <!-- Today's Activity Summary -->
@@ -3943,7 +3966,7 @@
                     <div class="empty-state-icon"><i data-lucide="calendar-days" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                     <div class="empty-state-title">Your week is empty</div>
                     <p class="empty-state-text">Let's fill it with delicious, healthy meals! Nonna can create a complete weekly plan based on your preferences and pantry.</p>
-                    <button class="btn btn-primary" onclick="openPlanningModeModal()">🤖 Plan This Week</button>
+                    <button class="btn btn-primary" onclick="openPlanningModeModal()"><i data-lucide="bot" style="width:14px;height:14px;vertical-align:middle"></i> Plan This Week</button>
                 </div>
             </div>
 
@@ -3960,6 +3983,7 @@
                     <div class="flex flex-between flex-center mb-16">
                         <div class="flex gap-8">
                             <button class="btn btn-sm btn-primary" onclick="openSaveManualRecipeModal()">+ Create Recipe</button>
+                            <button class="btn btn-sm btn-secondary" onclick="openImportRecipeModal()"><i data-lucide="download" style="width:14px;height:14px;vertical-align:middle"></i> Import</button>
                             <button class="btn btn-sm btn-ghost" id="recipes-edit-btn" onclick="toggleRecipeEditMode()">Edit</button>
                         </div>
                     </div>
@@ -4054,7 +4078,7 @@
                         <div class="empty-state-icon"><i data-lucide="users" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                         <div class="empty-state-title">No family recipes yet</div>
                         <p class="empty-state-text">Share your favorite recipes with your family! Open a recipe and tap the Share button to add it to Family Tavola.</p>
-                        <button class="btn btn-primary" onclick="switchRecipesTab('my')">📚 Go to My Recipes</button>
+                        <button class="btn btn-primary" onclick="switchRecipesTab('my')"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:middle"></i> Go to My Recipes</button>
                     </div>
                 </div>
             </div>
@@ -4201,6 +4225,13 @@
                             <div class="more-menu-item-desc">Profile, appearance, data</div>
                         </div>
                     </button>
+                    <button class="more-menu-item" onclick="switchMoreTab('about')">
+                        <span class="icon"><i data-lucide="info"></i></span>
+                        <div class="more-menu-item-content">
+                            <div class="more-menu-item-title">About Tavola</div>
+                            <div class="more-menu-item-desc">Our mission and how it works</div>
+                        </div>
+                    </button>
                 </div>
 
                 <!-- Kitchen Sub-View -->
@@ -4212,12 +4243,14 @@
                         <button class="tab" onclick="switchKitchenTab('shopping')">Shopping</button>
                         <button class="tab" onclick="switchKitchenTab('batch')">Batch Prep</button>
                         <button class="tab" onclick="switchKitchenTab('subs')">Substitutions</button>
+                        <button class="tab" onclick="switchKitchenTab('collections')">Collections</button>
                     </div>
                     <div class="tab-content active" id="kitchen-pantry">
                         <div class="flex flex-between flex-center mb-16">
                             <span class="text-muted">Track your ingredients</span>
                             <div class="flex gap-8">
                                 <button class="btn btn-sm btn-secondary" onclick="openPantryScanModal()"><i data-lucide="camera" style="width:14px;height:14px;vertical-align:middle"></i> Scan</button>
+                                <button class="btn btn-sm btn-secondary" id="pantry-voice-btn" onclick="startPantryVoice()"><i data-lucide="mic" style="width:14px;height:14px;vertical-align:middle"></i> Voice</button>
                                 <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add</button>
                             </div>
                         </div>
@@ -4233,7 +4266,7 @@
                         <!-- Quick Add from Delivery -->
                         <div class="quick-add-section" id="quick-add-section">
                             <div class="quick-add-header" onclick="toggleQuickAddSection()">
-                                <span>🚚 Quick Add from Delivery</span>
+                                <span><i data-lucide="truck" style="width:14px;height:14px;vertical-align:middle"></i> Quick Add from Delivery</span>
                                 <span class="accordion-icon">▼</span>
                             </div>
                             <div class="quick-add-content" id="quick-add-content">
@@ -4272,18 +4305,18 @@
                         <!-- Smart Shopping Generator -->
                         <div class="card smart-shopping-card mb-16" id="smart-shopping-generator">
                             <div class="smart-shopping-header">
-                                <span class="smart-shopping-icon">🤖</span>
+                                <span class="smart-shopping-icon"><i data-lucide="bot" style="width:16px;height:16px"></i></span>
                                 <h3 class="smart-shopping-title">Generate Smart Shopping List</h3>
                             </div>
                             <p class="text-muted mb-12" style="font-size: 0.85rem;">Automatically creates a list based on:</p>
                             <ul class="smart-shopping-features">
-                                <li>📅 Your weekly meal plan (all meals)</li>
-                                <li>📦 Current pantry inventory</li>
-                                <li>⚠️ Items running low</li>
-                                <li>🌟 Your typical staples</li>
+                                <li><i data-lucide="calendar" style="width:14px;height:14px;vertical-align:middle"></i> Your weekly meal plan (all meals)</li>
+                                <li><i data-lucide="package" style="width:14px;height:14px;vertical-align:middle"></i> Current pantry inventory</li>
+                                <li><i data-lucide="alert-triangle" style="width:14px;height:14px;vertical-align:middle"></i> Items running low</li>
+                                <li><i data-lucide="star" style="width:14px;height:14px;vertical-align:middle"></i> Your typical staples</li>
                             </ul>
                             <button class="btn btn-primary btn-block mt-12" onclick="generateSmartShoppingList()">
-                                🎯 Generate from This Week
+                                <i data-lucide="target" style="width:14px;height:14px;vertical-align:middle"></i> Generate from This Week
                             </button>
                         </div>
 
@@ -4302,7 +4335,7 @@
                             <p>Add items or generate from meal plan.</p>
                         </div>
                         <div class="flex gap-8 mt-16">
-                            <button class="btn btn-secondary" onclick="printShoppingList()" style="flex: 1;">🖨️ Print</button>
+                            <button class="btn btn-secondary" onclick="printShoppingList()" style="flex: 1;"><i data-lucide="printer" style="width:14px;height:14px;vertical-align:middle"></i> Print</button>
                             <button class="btn btn-secondary" onclick="clearCheckedItems()" style="flex: 1;">Clear Done</button>
                         </div>
                     </div>
@@ -4332,14 +4365,14 @@
                             <!-- Pantry Ingredient Check -->
                             <div class="batch-ingredient-check" id="batch-ingredient-check" style="display: none;">
                                 <div class="batch-ingredient-header">
-                                    <span>📦</span> Ingredient Check
+                                    <span><i data-lucide="package" style="width:14px;height:14px;vertical-align:middle"></i></span> Ingredient Check
                                 </div>
                                 <div id="batch-ingredient-list"></div>
                                 <div class="batch-missing-items" id="batch-missing-items" style="display: none;">
                                     <div style="font-weight: 600; margin-bottom: 8px;">Missing Items:</div>
                                     <div id="batch-missing-list"></div>
                                     <button class="btn btn-secondary btn-sm mt-8" onclick="addBatchMissingToShopping()">
-                                        🛒 Add Missing to Shopping List
+                                        <i data-lucide="shopping-cart" style="width:14px;height:14px;vertical-align:middle"></i> Add Missing to Shopping List
                                     </button>
                                 </div>
                             </div>
@@ -4385,6 +4418,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="tab-content" id="kitchen-collections">
+                        <div class="flex flex-between flex-center mb-16">
+                            <span class="text-muted">Organize your recipes into cookbooks</span>
+                            <button class="btn btn-sm btn-primary" onclick="openCreateCollectionModal()">+ New Collection</button>
+                        </div>
+                        <div id="collections-list"></div>
                     </div>
                 </div>
 
@@ -4508,8 +4548,56 @@
                     <div class="card">
                         <h3 class="card-title"><i data-lucide="info" style="width:16px;height:16px;vertical-align:middle"></i> About</h3>
                         <p class="text-muted">Tavola v3.0</p>
-                        <p class="text-muted" style="font-size: 0.85rem;">Made with ❤️ for chronic illness warriors</p>
+                        <p class="text-muted" style="font-size: 0.85rem;">Made with love for chronic illness warriors</p>
                     </div>
+                </div>
+
+                <!-- About Sub-View -->
+                <div class="hidden" id="more-about">
+                    <button class="btn btn-ghost mb-16" onclick="showMoreMenu()"><i data-lucide="arrow-left" style="width:14px;height:14px;vertical-align:middle"></i> Back</button>
+                    <div class="card" style="text-align:center; padding: 32px 24px;">
+                        <div style="font-family: var(--font-script); font-size: 2.8rem; color: var(--navy); margin-bottom: 8px;">Tavola</div>
+                        <p style="font-family: var(--font-heading); color: var(--gray-text); font-size: 1.1rem;">Where Food Brings Us Together</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title"><i data-lucide="target" style="width:18px;height:18px;vertical-align:middle"></i> Our Mission</h3>
+                        <p style="line-height: 1.7; color: var(--charcoal);">Tavola is for people who love cooking, cherish building connections through food, and those managing chronic health conditions who need creative ways to nourish their bodies while enjoying diverse, delicious meals. Named after the Italian word for "table," Tavola brings families together through the simple act of sharing a meal.</p>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title"><i data-lucide="heart-pulse" style="width:18px;height:18px;vertical-align:middle"></i> Built For</h3>
+                        <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 20px; margin-top: 12px;">
+                            <div style="text-align:center;">
+                                <div style="margin-bottom:8px;"><i data-lucide="utensils" style="width:28px;height:28px;color:var(--seafoam)"></i></div>
+                                <strong style="display:block; margin-bottom:4px;">Food Lovers</strong>
+                                <p class="text-muted" style="font-size:0.85rem;">Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize, and cook with confidence. Your personal AI sous chef, Nonna, is always ready to help.</p>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="margin-bottom:8px;"><i data-lucide="users" style="width:28px;height:28px;color:var(--cerulean)"></i></div>
+                                <strong style="display:block; margin-bottom:4px;">Families & Community</strong>
+                                <p class="text-muted" style="font-size:0.85rem;">Share recipes with loved ones through Family Tavola. Learn from your mom's favorites, swap cooking tips with your sister, and build a shared family cookbook that spans generations.</p>
+                            </div>
+                            <div style="text-align:center;">
+                                <div style="margin-bottom:8px;"><i data-lucide="shield-plus" style="width:28px;height:28px;color:var(--seafoam-dark)"></i></div>
+                                <strong style="display:block; margin-bottom:4px;">Health & Wellness</strong>
+                                <p class="text-muted" style="font-size:0.85rem;">Managing Crohn's disease, heart health, or other conditions doesn't mean sacrificing flavor. Tavola helps you plan anti-inflammatory, gut-friendly meals that are both delicious and healing.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title"><i data-lucide="lightbulb" style="width:18px;height:18px;vertical-align:middle"></i> How It Works</h3>
+                        <ol style="padding-left: 20px; line-height: 2; color: var(--charcoal);">
+                            <li>Chat with Nonna for personalized meal planning</li>
+                            <li>Smart pantry management tracks what you have</li>
+                            <li>Family Tavola shares recipes across your circle</li>
+                            <li>Budget-aware suggestions based on local prices</li>
+                        </ol>
+                    </div>
+                    <div class="card" style="background: var(--seafoam-light); border-left: 4px solid var(--seafoam);">
+                        <h3 class="card-title"><i data-lucide="bot" style="width:18px;height:18px;vertical-align:middle"></i> Meet Nonna</h3>
+                        <p style="font-style: italic; font-family: var(--font-heading); color: var(--navy); line-height: 1.6;">"Ciao, cara! I'm your AI cooking companion, powered by Claude. I know Mediterranean cuisine inside and out, I understand your health needs, and I'm here to help you cook with what you already have. Let's make something beautiful together!"</p>
+                        <p style="text-align: right; color: var(--gray-text); margin-top: 8px;">— Nonna</p>
+                    </div>
+                    <p class="text-muted" style="text-align:center; margin-top: 16px;">Tavola v3.0</p>
                 </div>
             </div>
 
@@ -4528,7 +4616,7 @@
                 <div class="empty-state" id="favorites-empty">
                     <div class="empty-state-icon"><i data-lucide="heart" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                     <div class="empty-state-title">No favorites yet</div>
-                    <p class="empty-state-text">Browse your recipe library or ask Nonna for suggestions, then tap ❤️ to save favorites here!</p>
+                    <p class="empty-state-text">Browse your recipe library or ask Nonna for suggestions, then tap the heart to save favorites here!</p>
                     <button class="btn btn-primary" onclick="navigateTo('recipes')"><i data-lucide="book-open" style="width:14px;height:14px;vertical-align:middle"></i> Browse Recipe Library</button>
                 </div>
             </div>
@@ -4555,6 +4643,9 @@
                 <button class="nav-dropdown-item" onclick="navAction('recipes')"><i data-lucide="book-open"></i> Recipes</button>
                 <button class="nav-dropdown-item" onclick="navAction('favorites')"><i data-lucide="heart"></i> Favorites</button>
                 <button class="nav-dropdown-item" onclick="navAction('family')"><i data-lucide="users"></i> Family Tavola</button>
+                <button class="nav-dropdown-item" onclick="navAction('import-recipe')"><i data-lucide="download"></i> Import Recipe</button>
+                <button class="nav-dropdown-item" onclick="navAction('leftovers')"><i data-lucide="wand-sparkles"></i> Transform Leftovers</button>
+                <button class="nav-dropdown-item" onclick="navAction('collections')"><i data-lucide="library"></i> Collections</button>
             </div>
         </div>
         <!-- Plan (dropdown) -->
@@ -4723,7 +4814,7 @@ async function signInWithGoogle() {
             window.firebaseAuth,
             window.firebaseGoogleProvider
         );
-        showToast(`Welcome, ${result.user.displayName || result.user.email}! 🎉`);
+        showToast(`Welcome, ${result.user.displayName || result.user.email}! ${icon('sparkles',14)}`);
         return result.user;
     } catch (error) {
         console.error('Sign in error:', error);
@@ -4763,7 +4854,7 @@ function updateAuthUI() {
 
     if (state.user) {
         if (authBtn) {
-            authBtn.innerHTML = `<span class="icon">👤</span> Sign Out`;
+            authBtn.innerHTML = `<span class="icon"><i data-lucide="user" style="width:14px;height:14px"></i></span> Sign Out`;
             authBtn.onclick = signOutUser;
         }
         if (userInfo) {
@@ -4781,8 +4872,8 @@ function updateAuthUI() {
         }
         if (syncStatus) {
             syncStatus.innerHTML = state.isSyncing
-                ? '☁️ Syncing...'
-                : '✅ Synced';
+                ? `${icon('cloud',14)} Syncing...`
+                : `${icon('check-circle',14)} Synced`;
             syncStatus.style.display = 'block';
         }
     } else {
@@ -4794,7 +4885,7 @@ function updateAuthUI() {
             userInfo.style.display = 'none';
         }
         if (syncStatus) {
-            syncStatus.innerHTML = '☁️ Sign in to sync';
+            syncStatus.innerHTML = `${icon('cloud',14)} Sign in to sync`;
             syncStatus.style.display = 'block';
         }
     }
@@ -5022,7 +5113,7 @@ async function syncFromFirestore() {
 
         state.lastSyncTime = new Date();
         console.log('Data synced from Firestore');
-        showToast('Data synced from cloud ☁️');
+        showToast(`Data synced from cloud ${icon('cloud',14)}`);
 
         // Refresh current view
         if (state.currentView) {
@@ -5504,6 +5595,17 @@ function navAction(action) {
         case 'workouts':
             navigateTo('workouts');
             break;
+        case 'import-recipe':
+            openImportRecipeModal();
+            break;
+        case 'leftovers':
+            openLeftoverTransformer();
+            break;
+        case 'collections':
+            navigateTo('more');
+            switchMoreTab('kitchen');
+            setTimeout(() => switchKitchenTab('collections'), 100);
+            break;
     }
 }
 
@@ -5545,6 +5647,7 @@ function showMoreMenu() {
     document.getElementById('more-crohns').classList.add('hidden');
     document.getElementById('more-history').classList.add('hidden');
     document.getElementById('more-settings').classList.add('hidden');
+    document.getElementById('more-about').classList.add('hidden');
 }
 
 function switchMoreTab(tab) {
@@ -5591,6 +5694,9 @@ function updateDashboard() {
     // Update workout dashboard card
     updateDashboardWorkoutCard();
 
+    // Update seasonal produce card
+    if (typeof updateSeasonalCard === 'function') updateSeasonalCard();
+
     // Flare mode indicator
     const flareBanner = document.getElementById('home-flare-banner');
     if (state.flareMode) {
@@ -5634,7 +5740,7 @@ function updateRecentActivity() {
     const recent = history.slice(0, 3);
     container.innerHTML = recent.map(item => `
         <div class="activity-item">
-            <span class="activity-icon">${item.type === 'cooked' ? '🍽️' : '💬'}</span>
+            <span class="activity-icon">${item.type === 'cooked' ? icon('utensils',14) : icon('message-circle',14)}</span>
             <div class="activity-content">
                 <div class="activity-title">${item.title}</div>
                 <div class="activity-time">${formatRelativeDate(item.date)}</div>
@@ -6037,7 +6143,7 @@ function parseRecipeToCard(content) {
     // Build health benefits HTML
     const healthHtml = healthBenefits ? `
         <div class="health-benefits">
-            <div class="health-benefits-title">💚 Why This Helps Your Health</div>
+            <div class="health-benefits-title">${icon('heart',14,'color:green')} Why This Helps Your Health</div>
             <div class="health-benefits-text">${healthBenefits.replace(/\n/g, '<br>')}</div>
         </div>
     ` : '';
@@ -6047,13 +6153,13 @@ function parseRecipeToCard(content) {
             <div class="recipe-header">
                 <div class="recipe-title">${title}</div>
                 <div class="recipe-actions">
-                    <button class="recipe-action-btn ${recipeData.favorited ? 'favorited' : ''}" onclick="toggleFavoriteFromCard('${recipeId}', this)" title="Favorite">❤️</button>
-                    <button class="recipe-action-btn" onclick="printRecipe('${recipeId}')" title="Print">🖨️</button>
+                    <button class="recipe-action-btn ${recipeData.favorited ? 'favorited' : ''}" onclick="toggleFavoriteFromCard('${recipeId}', this)" title="Favorite">${icon('heart',14,'color:var(--accent-warm)')}</button>
+                    <button class="recipe-action-btn" onclick="printRecipe('${recipeId}')" title="Print">${icon('printer',14)}</button>
                 </div>
                 <div class="recipe-meta">
-                    <div class="recipe-meta-item">⏱️ ${totalTime} min</div>
-                    <div class="recipe-meta-item">🍽️ Serves ${serves}</div>
-                    ${nutrition.calories ? `<div class="recipe-meta-item">🔥 ${nutrition.calories} cal</div>` : ''}
+                    <div class="recipe-meta-item">${icon('timer',14)} ${totalTime} min</div>
+                    <div class="recipe-meta-item">${icon('utensils',14)} Serves ${serves}</div>
+                    ${nutrition.calories ? `<div class="recipe-meta-item">${icon('flame',14)} ${nutrition.calories} cal</div>` : ''}
                 </div>
             </div>
             <div class="recipe-tags">
@@ -6063,7 +6169,7 @@ function parseRecipeToCard(content) {
             ${healthHtml}
             <div class="recipe-body">
                 <div class="recipe-section">
-                    <div class="recipe-section-title">📝 Ingredients</div>
+                    <div class="recipe-section-title">${icon('file-text',14)} Ingredients</div>
                     ${ingredients.map((ing, i) => `
                         <div class="ingredient-item">
                             <input type="checkbox" class="ingredient-checkbox" id="ing_${recipeId}_${i}" onchange="toggleIngredient(this)">
@@ -6072,7 +6178,7 @@ function parseRecipeToCard(content) {
                     `).join('')}
                 </div>
                 <div class="recipe-section">
-                    <div class="recipe-section-title">👩‍🍳 Instructions</div>
+                    <div class="recipe-section-title">${icon('chef-hat',14)} Instructions</div>
                     ${instructions.map((step, i) => `
                         <div class="instruction-step">
                             <div class="step-number">${i + 1}</div>
@@ -6082,17 +6188,17 @@ function parseRecipeToCard(content) {
                 </div>
                 ${modifications ? `
                     <div class="recipe-notes">
-                        <div class="recipe-notes-title">🔄 Modifications</div>
+                        <div class="recipe-notes-title">${icon('refresh-cw',14)} Modifications</div>
                         <p>${modifications.replace(/\n/g, '<br>').replace(/^-\s*/gm, '• ')}</p>
                     </div>
                 ` : ''}
                 ${renderWinePairingSection({ title: title, ingredients: ingredients, tags: tags })}
             </div>
             <div class="recipe-card-actions">
-                <button class="btn btn-primary btn-sm" onclick="saveRecipeFromChat('${recipeId}')" id="save-btn-${recipeId}">💾 Save Recipe</button>
-                <button class="btn btn-secondary btn-sm" onclick="favoriteRecipeFromChat('${recipeId}')">❤️ Favorite</button>
-                <button class="btn btn-secondary btn-sm" onclick="addToWeekFromChat('${recipeId}')">📅 Add to Week</button>
-                <button class="btn btn-ghost btn-sm" onclick="shareRecipe('${recipeId}')">📤 Share</button>
+                <button class="btn btn-primary btn-sm" onclick="saveRecipeFromChat('${recipeId}')" id="save-btn-${recipeId}">${icon('save',14)} Save Recipe</button>
+                <button class="btn btn-secondary btn-sm" onclick="favoriteRecipeFromChat('${recipeId}')">${icon('heart',14)} Favorite</button>
+                <button class="btn btn-secondary btn-sm" onclick="addToWeekFromChat('${recipeId}')">${icon('calendar',14)} Add to Week</button>
+                <button class="btn btn-ghost btn-sm" onclick="shareRecipe('${recipeId}')">${icon('share-2',14)} Share</button>
             </div>
         </div>
     `;
@@ -6244,20 +6350,20 @@ function parseWeekPlanToCard(content) {
     const planItems = days.map(day => {
         const d = mealPlan[day.toLowerCase()];
         const meals = [];
-        if (d.breakfast) meals.push(`🌅 ${d.breakfast.title}`);
-        if (d.lunch) meals.push(`🌞 ${d.lunch.title}`);
-        if (d.dinner) meals.push(`🌙 ${d.dinner.title}`);
-        if (d.snacks) meals.push(`🍎 ${d.snacks.title}`);
+        if (d.breakfast) meals.push(`${icon('sunrise',14)} ${d.breakfast.title}`);
+        if (d.lunch) meals.push(`${icon('sun',14)} ${d.lunch.title}`);
+        if (d.dinner) meals.push(`${icon('moon',14)} ${d.dinner.title}`);
+        if (d.snacks) meals.push(`${icon('apple',14)} ${d.snacks.title}`);
         return meals.length > 0 ? `<div class="week-plan-item"><span><strong>${day}</strong></span><span>${meals.join(' · ')}</span></div>` : '';
     }).filter(x => x).join('');
 
     return `
         <div class="week-plan-card">
-            <h3>✅ Your Week is Planned!</h3>
+            <h3>${icon('check-circle',14)} Your Week is Planned!</h3>
             ${planItems || '<p>No meals extracted - check the format above.</p>'}
             <div class="week-plan-actions">
-                <button class="btn" onclick="navigateTo('week')">📅 View This Week</button>
-                <button class="btn" onclick="generateWeekShoppingList()">🛒 Shopping List</button>
+                <button class="btn" onclick="navigateTo('week')">${icon('calendar',14)} View This Week</button>
+                <button class="btn" onclick="generateWeekShoppingList()">${icon('shopping-cart',14)} Shopping List</button>
             </div>
         </div>
     `;
@@ -6278,13 +6384,13 @@ function renderQuickActions() {
     const actions = document.createElement('div');
     actions.className = 'quick-actions';
     actions.innerHTML = `
-        <button class="quick-action" onclick="askNonna('Plan my meals for this week')">🗓️ Plan My Week</button>
-        <button class="quick-action" onclick="askNonnaWithPantry()">🥫 What Can I Make?</button>
-        <button class="quick-action" onclick="askNonna('What should I buy at the store this week? Check my pantry for what\\'s running low and suggest items for healthy Mediterranean meals.')">🛒 What Should I Buy?</button>
-        <button class="quick-action" onclick="askNonna('Plan this week\\'s meals using what I already have in my pantry. Minimize new purchases.')">📋 Plan Around Pantry</button>
-        <button class="quick-action" onclick="askNonna('What can I make with what\\'s in my garden?')">🌱 Use My Garden</button>
-        <button class="quick-action" onclick="askNonna('Give me a quick, easy dinner idea')">⚡ Quick Dinner</button>
-        <button class="quick-action" onclick="askNonna('I need a gentle meal - not feeling great')">🩺 Gentle Meal</button>
+        <button class="quick-action" onclick="askNonna('Plan my meals for this week')">${icon('calendar-days',14)} Plan My Week</button>
+        <button class="quick-action" onclick="askNonnaWithPantry()">${icon('package',14)} What Can I Make?</button>
+        <button class="quick-action" onclick="askNonna('What should I buy at the store this week? Check my pantry for what\\'s running low and suggest items for healthy Mediterranean meals.')">${icon('shopping-cart',14)} What Should I Buy?</button>
+        <button class="quick-action" onclick="askNonna('Plan this week\\'s meals using what I already have in my pantry. Minimize new purchases.')">${icon('clipboard',14)} Plan Around Pantry</button>
+        <button class="quick-action" onclick="askNonna('What can I make with what\\'s in my garden?')">${icon('sprout',14)} Use My Garden</button>
+        <button class="quick-action" onclick="askNonna('Give me a quick, easy dinner idea')">${icon('zap',14)} Quick Dinner</button>
+        <button class="quick-action" onclick="askNonna('I need a gentle meal - not feeling great')">${icon('heart-pulse',14)} Gentle Meal</button>
     `;
     container.appendChild(actions);
     scrollToBottom();
@@ -6299,7 +6405,7 @@ function showThinking() {
     const container = document.getElementById('chat-messages');
     if (!container) return;
 
-    const animations = ['🥘', '🫒', '🍋', '🌿', '📖'];
+    const animations = [icon('soup',20), icon('droplets',20), icon('citrus',20), icon('leaf',20), icon('book-open',20)];
     const texts = ['Nonna is cooking up ideas...', 'Drizzling olive oil on thoughts...', 'Squeezing fresh inspiration...', 'Chopping fresh ideas...', 'Flipping through recipes...'];
     const idx = Math.floor(Math.random() * animations.length);
 
@@ -6577,7 +6683,7 @@ function formatPantryForAPI() {
             text += categories[cat].map(item => {
                 let itemText = item.name;
                 if (item.quantity) itemText += ` (${item.quantity})`;
-                if (item.expirationConcern) itemText += ' ⚠️USE SOON';
+                if (item.expirationConcern) itemText += ' ' + icon('alert-triangle',14) + 'USE SOON';
                 return itemText;
             }).join(', ');
             text += '\n';
@@ -6587,7 +6693,7 @@ function formatPantryForAPI() {
     // Check for items expiring soon
     const expiringItems = pantry.filter(i => i.expirationConcern);
     if (expiringItems.length > 0) {
-        text += `\n⚠️ USE SOON: ${expiringItems.map(i => i.name).join(', ')}`;
+        text += `\n${icon('alert-triangle',14)} USE SOON: ${expiringItems.map(i => i.name).join(', ')}`;
     }
 
     return text;
@@ -6610,7 +6716,7 @@ function formatGardenForAPI() {
     // Check garden data for ready to harvest
     const readyToHarvest = garden.filter(g => g.status === 'ready' || g.readyToHarvest);
     if (readyToHarvest.length > 0) {
-        text += `🌱 READY TO HARVEST: ${readyToHarvest.map(g => g.name).join(', ')}\n`;
+        text += `READY TO HARVEST: ${readyToHarvest.map(g => g.name).join(', ')}\n`;
         text += '(Prioritize these fresh ingredients in recipes!)';
     }
 
@@ -6728,7 +6834,7 @@ function saveRecipeFromChat(recipeId) {
     // Update button to show saved state
     const saveBtn = document.getElementById(`save-btn-${recipeId}`);
     if (saveBtn) {
-        saveBtn.textContent = '✅ Saved!';
+        saveBtn.innerHTML = icon('check-circle',14) + ' Saved!';
         saveBtn.disabled = true;
         saveBtn.classList.remove('btn-primary');
         saveBtn.classList.add('btn-ghost');
@@ -6756,13 +6862,13 @@ function favoriteRecipeFromChat(recipeId) {
     // Update save button
     const saveBtn = document.getElementById(`save-btn-${recipeId}`);
     if (saveBtn) {
-        saveBtn.textContent = '✅ Saved!';
+        saveBtn.innerHTML = icon('check-circle',14) + ' Saved!';
         saveBtn.disabled = true;
         saveBtn.classList.remove('btn-primary');
         saveBtn.classList.add('btn-ghost');
     }
 
-    showToast('❤️ Recipe favorited and saved!');
+    showToast(`${icon('heart',14)} Recipe favorited and saved!`);
 }
 
 // Add to week from chat (saves and opens week modal)
@@ -6774,7 +6880,7 @@ function addToWeekFromChat(recipeId) {
         // Update save button
         const saveBtn = document.getElementById(`save-btn-${recipeId}`);
         if (saveBtn) {
-            saveBtn.textContent = '✅ Saved!';
+            saveBtn.innerHTML = icon('check-circle',14) + ' Saved!';
             saveBtn.disabled = true;
             saveBtn.classList.remove('btn-primary');
             saveBtn.classList.add('btn-ghost');
@@ -6824,7 +6930,7 @@ function renderLibraryCard(recipe) {
     }).join('');
 
     // Nutrition display
-    const caloriesHtml = nutrition.calories ? `<span class="card-calories">🔥 ${nutrition.calories} cal</span>` : '';
+    const caloriesHtml = nutrition.calories ? `<span class="card-calories">${icon('flame',14)} ${nutrition.calories} cal</span>` : '';
     const macrosHtml = (nutrition.protein || nutrition.carbs || nutrition.fat) ?
         `<div class="card-macros">${nutrition.protein ? nutrition.protein + 'g protein' : ''}${nutrition.carbs ? ' · ' + nutrition.carbs + 'g carbs' : ''}${nutrition.fat ? ' · ' + nutrition.fat + 'g fat' : ''}</div>` : '';
 
@@ -6837,17 +6943,17 @@ function renderLibraryCard(recipe) {
     return `
         <div class="library-card ${editModeClass} ${selectedClass}" onclick="${clickHandler}" data-recipe-id="${recipe.id}">
             <div class="library-card-banner">
-                🍽️
-                ${recipe.favorited ? '<span class="library-card-favorite">❤️</span>' : ''}
+                ${icon('utensils',14)}
+                ${recipe.favorited ? `<span class="library-card-favorite">${icon('heart',14,'color:var(--accent-warm);fill:var(--accent-warm)')}</span>` : ''}
                 ${caloriesHtml}
             </div>
             <div class="library-card-body">
                 <div class="library-card-title">${recipe.title}</div>
                 ${starDisplay ? `<div class="library-card-rating">${starDisplay}</div>` : ''}
                 <div class="library-card-meta">
-                    <span>⏱️ ${meta.totalTime || 30}min</span>
-                    <span>🍽️ ${meta.serves || 2}</span>
-                    ${cookedText ? `<span>👨‍🍳 ${cookedText}</span>` : ''}
+                    <span>${icon('timer',14)} ${meta.totalTime || 30}min</span>
+                    <span>${icon('utensils',14)} ${meta.serves || 2}</span>
+                    ${cookedText ? `<span>${icon('chef-hat',14)} ${cookedText}</span>` : ''}
                 </div>
                 ${macrosHtml}
                 <div class="library-card-tags">
@@ -7065,7 +7171,7 @@ function bulkAddToFavorites() {
     setStorage(STORAGE.RECIPES, library);
     filterRecipeLibrary();
     renderFavorites();
-    showToast(`❤️ ${count} recipe${count !== 1 ? 's' : ''} added to favorites`);
+    showToast(`${icon('heart',14)} ${count} recipe${count !== 1 ? 's' : ''} added to favorites`);
 }
 
 function bulkRemoveFromFavorites() {
@@ -7153,7 +7259,7 @@ function confirmBulkDelete() {
     renderFavorites();
     updateBulkCount();
 
-    showToast(`🗑️ ${deletedCount} recipe${deletedCount !== 1 ? 's' : ''} deleted`);
+    showToast(`${icon('trash-2',14)} ${deletedCount} recipe${deletedCount !== 1 ? 's' : ''} deleted`);
 }
 
 function viewRecipeDetail(recipeId) {
@@ -7166,8 +7272,8 @@ function viewRecipeDetail(recipeId) {
     const tags = meta.tags || recipe.tags || [];
     const rating = recipe.averageRating || recipe.rating || 0;
     const privacyBadge = recipe.privacy === 'family'
-        ? '<span class="badge badge-family">👨‍👩‍👧 Family</span>'
-        : '<span class="badge badge-private">🔒 Private</span>';
+        ? `<span class="badge badge-family">${icon('users',14)} Family</span>`
+        : `<span class="badge badge-private">${icon('lock',14)} Private</span>`;
 
     openModal(`
         <div class="modal-header">
@@ -7176,7 +7282,7 @@ function viewRecipeDetail(recipeId) {
                 <div class="recipe-modal-meta">
                     ${privacyBadge}
                     ${rating > 0 ? `<span class="badge badge-success">${renderStarsDisplay(rating)}</span>` : ''}
-                    ${recipe.timesCooked > 0 ? `<span class="badge">👨‍🍳 Cooked ${recipe.timesCooked}x</span>` : ''}
+                    ${recipe.timesCooked > 0 ? `<span class="badge">${icon('chef-hat',14)} Cooked ${recipe.timesCooked}x</span>` : ''}
                 </div>
             </div>
             <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
@@ -7189,7 +7295,7 @@ function viewRecipeDetail(recipeId) {
                 <i data-lucide="printer"></i> Print
             </button>
             <button class="btn btn-ghost btn-sm" onclick="toggleFavoriteFromCard('${recipeId}')" title="${recipe.favorited ? 'Remove from favorites' : 'Add to favorites'}">
-                ${recipe.favorited ? '❤️' : '🤍'} Favorite
+                ${recipe.favorited ? icon('heart',14,'color:var(--accent-warm);fill:var(--accent-warm)') : icon('heart',14)} Favorite
             </button>
             <button class="btn btn-ghost btn-sm" onclick="openShareRecipeModal('${recipeId}')">
                 <i data-lucide="share-2"></i> Share
@@ -7355,14 +7461,14 @@ function openShareRecipeModal(recipeId) {
                     <label class="radio-item">
                         <input type="radio" name="share-privacy" value="private" ${recipe.privacy !== 'family' ? 'checked' : ''}>
                         <div>
-                            <div class="radio-label">🔒 Private</div>
+                            <div class="radio-label">${icon('lock',14)} Private</div>
                             <div class="radio-desc">Only you can see this recipe</div>
                         </div>
                     </label>
                     <label class="radio-item">
                         <input type="radio" name="share-privacy" value="family" ${recipe.privacy === 'family' ? 'checked' : ''}>
                         <div>
-                            <div class="radio-label">👨‍👩‍👧 Family Tavola</div>
+                            <div class="radio-label">${icon('users',14)} Family Tavola</div>
                             <div class="radio-desc">Share with your family — everyone can see, rate, and cook it</div>
                         </div>
                     </label>
@@ -7433,7 +7539,7 @@ function saveShareSettings(recipeId) {
     // Sync to family Firestore collection if sharing
     if (privacy === 'family' && state.user) {
         syncRecipeToFamily(recipe);
-        showToast('Shared to Family Tavola! 🎉', 'success');
+        showToast(`Shared to Family Tavola! ${icon('sparkles',14)}`, 'success');
     } else {
         showToast('Recipe settings saved', 'success');
     }
@@ -7469,7 +7575,7 @@ function toggleFavoriteFromCard(recipeId, btn) {
 
     if (btn) btn.classList.toggle('favorited', recipe.favorited);
 
-    showToast(recipe.favorited ? '❤️ Added to favorites!' : 'Removed from favorites');
+    showToast(recipe.favorited ? `${icon('heart',14)} Added to favorites!` : 'Removed from favorites');
 }
 
 function renderFavorites() {
@@ -7701,16 +7807,16 @@ function renderFamilyRecipeCard(recipe) {
     return `
         <div class="library-card" onclick="viewFamilyRecipeDetail('${recipe.id}')" style="cursor:pointer">
             <div class="library-card-banner">
-                🍽️
-                <span class="card-calories">${nutrition.calories ? '🔥 ' + nutrition.calories + ' cal' : '👨‍👩‍👧 Family'}</span>
+                ${icon('utensils',14)}
+                <span class="card-calories">${nutrition.calories ? icon('flame',14) + ' ' + nutrition.calories + ' cal' : icon('users',14) + ' Family'}</span>
             </div>
             <div class="library-card-body">
                 <div class="library-card-title">${recipe.title}</div>
                 ${rating > 0 ? `<div style="color:#fbbf24;font-size:0.85rem">${'★'.repeat(Math.round(rating))}${'☆'.repeat(5-Math.round(rating))} (${rating.toFixed?.(1) || rating})</div>` : ''}
                 <div class="library-card-meta">
-                    <span>⏱️ ${meta.totalTime || meta.cookTime || 30}min</span>
-                    <span>🍽️ ${meta.serves || recipe.servings || 2}</span>
-                    ${recipe.timesCooked > 0 ? `<span>👨‍🍳 ${recipe.timesCooked}x</span>` : ''}
+                    <span>${icon('timer',14)} ${meta.totalTime || meta.cookTime || 30}min</span>
+                    <span>${icon('utensils',14)} ${meta.serves || recipe.servings || 2}</span>
+                    ${recipe.timesCooked > 0 ? `<span>${icon('chef-hat',14)} ${recipe.timesCooked}x</span>` : ''}
                 </div>
                 <div class="family-recipe-shared-by">
                     <i data-lucide="user"></i> Shared by ${sharedByName}
@@ -7750,7 +7856,7 @@ async function viewFamilyRecipeDetail(recipeId) {
             <div>
                 <h2 class="modal-title" id="modal-title-label">${recipe.title}</h2>
                 <div class="recipe-modal-meta">
-                    <span class="badge badge-family">👨‍👩‍👧 Family</span>
+                    <span class="badge badge-family">${icon('users',14)} Family</span>
                     ${recipe.averageRating > 0 ? `<span class="badge badge-success">${renderStarsDisplay(recipe.averageRating)}</span>` : ''}
                     <span style="font-size:0.85rem;color:var(--gray-text)"><i data-lucide="user"></i> by ${sharedByName}</span>
                 </div>
@@ -8121,10 +8227,10 @@ function renderWeekPlanner() {
                             ${isConfirmed ? '<span class="meal-confirmed-badge">✓ Cooked</span>' : ''}
                         </div>
                         <div class="meal-slot-actions">
-                            ${meal.recipeId ? `<button class="icon-btn" onclick="viewRecipeDetail('${meal.recipeId}')" title="View">👁️</button>` : ''}
+                            ${meal.recipeId ? `<button class="icon-btn" onclick="viewRecipeDetail('${meal.recipeId}')" title="View">${icon('eye',14)}</button>` : ''}
                             ${!isConfirmed && meal.recipeId ? `<button class="icon-btn confirm-btn" onclick="confirmMealCooked('${dateStr}', '${mt.key}')" title="Mark as Cooked">✓</button>` : ''}
-                            <button class="icon-btn" onclick="openAddMealSlot('${dateStr}', '${mt.key}', '${day}')" title="Change">✏️</button>
-                            <button class="icon-btn" onclick="removeMealSlot('${dateStr}', '${mt.key}')" title="Remove">🗑️</button>
+                            <button class="icon-btn" onclick="openAddMealSlot('${dateStr}', '${mt.key}', '${day}')" title="Change">${icon('pencil',14)}</button>
+                            <button class="icon-btn" onclick="removeMealSlot('${dateStr}', '${mt.key}')" title="Remove">${icon('trash-2',14)}</button>
                         </div>
                     </div>
                 `;
@@ -8148,9 +8254,9 @@ function renderWeekPlanner() {
 
         const summaryHtml = (dayCalories > 0 || workoutCalories > 0) ? `
             <div class="week-day-summary">
-                <span class="day-total-calories">🔥 Daily Burn: ${totalDailyBurn.toLocaleString()} cal (${baseTDEE} base${workoutCalories > 0 ? ' + ' + workoutCalories + ' workout' : ''})</span>
-                <span class="day-consumed">🍽️ Consumed: ${dayCalories} cal</span>
-                <span class="day-net-calories ${isDeficit ? 'deficit' : 'surplus'}">✅ Net ${isDeficit ? 'Deficit' : 'Surplus'}: ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? '🔥' : '⚠️'}</span>
+                <span class="day-total-calories">${icon('flame',14)} Daily Burn: ${totalDailyBurn.toLocaleString()} cal (${baseTDEE} base${workoutCalories > 0 ? ' + ' + workoutCalories + ' workout' : ''})</span>
+                <span class="day-consumed">${icon('utensils',14)} Consumed: ${dayCalories} cal</span>
+                <span class="day-net-calories ${isDeficit ? 'deficit' : 'surplus'}">${icon('check-circle',14)} Net ${isDeficit ? 'Deficit' : 'Surplus'}: ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? icon('flame',14) : icon('alert-triangle',14)}</span>
             </div>
         ` : '';
 
@@ -8184,21 +8290,21 @@ function openAddMealSlot(dateStr, mealType, dayName) {
         <div class="modal-body">
             <div class="more-menu">
                 <button class="more-menu-item" onclick="closeModal(); askNonnaForMealSlot('${dateStr}', '${mealType}', '${dayName}');">
-                    <span class="icon">🤖</span>
+                    <span class="icon"><i data-lucide="bot" style="width:14px;height:14px"></i></span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Ask Nonna</div>
                         <div class="more-menu-item-desc">Get a ${label.toLowerCase()} suggestion</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); openChooseFromLibraryForSlot('${dateStr}', '${mealType}');">
-                    <span class="icon">📚</span>
+                    <span class="icon">${icon('book-open',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">From Library</div>
                         <div class="more-menu-item-desc">Choose a saved recipe</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); openManualMealSlotEntry('${dateStr}', '${mealType}');">
-                    <span class="icon">✏️</span>
+                    <span class="icon">${icon('pencil',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Quick Entry</div>
                         <div class="more-menu-item-desc">Type meal name & calories</div>
@@ -8228,7 +8334,7 @@ function openChooseFromLibraryForSlot(dateStr, mealType) {
 
     const recipeList = library.slice(0, 20).map(r => `
         <button class="more-menu-item" onclick="assignRecipeToSlot('${r.id}', '${dateStr}', '${mealType}')">
-            <span class="icon">🍽️</span>
+            <span class="icon">${icon('utensils',14)}</span>
             <div class="more-menu-item-content">
                 <div class="more-menu-item-title">${r.title}</div>
                 <div class="more-menu-item-desc">${r.nutrition?.calories ? r.nutrition.calories + ' cal' : ''} ${r.metadata?.totalTime ? '· ' + r.metadata.totalTime + 'min' : ''}</div>
@@ -8287,7 +8393,7 @@ function openManualMealSlotEntry(dateStr, mealType) {
                 <div class="calorie-input-row">
                     <input type="number" class="form-input" id="manual-meal-calories" placeholder="e.g., 350">
                     <button type="button" class="estimate-btn" id="estimate-calories-btn" onclick="estimateCalories('manual-meal-name', 'manual-meal-calories')">
-                        🤖 Estimate
+                        ${icon('bot',14)} Estimate
                     </button>
                 </div>
                 <div id="calorie-estimate-result"></div>
@@ -8337,7 +8443,7 @@ function saveManualMealSlot(dateStr, mealType) {
 function promptSaveAsRecipe(mealTitle, calories, dateStr, mealType) {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title" id="modal-title-label">💡 Save as Recipe?</h2>
+            <h2 class="modal-title" id="modal-title-label">${icon('lightbulb',14)} Save as Recipe?</h2>
             <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
         </div>
         <div class="modal-body" style="text-align:center;padding:24px">
@@ -8623,10 +8729,10 @@ function confirmMealCooked(dateStr, mealType) {
 
         if (pantryItem) {
             deductionPlan.push({ pantryItem, qty, originalIng: ing });
-            deductionHtml += `<div class="deduction-item have">✅ ${ing}</div>`;
+            deductionHtml += `<div class="deduction-item have">${icon('check-circle',14)} ${ing}</div>`;
         } else {
             missingItems.push(ing);
-            deductionHtml += `<div class="deduction-item missing">❌ ${ing} (not in pantry)</div>`;
+            deductionHtml += `<div class="deduction-item missing">${icon('x-circle',14)} ${ing} (not in pantry)</div>`;
         }
     });
 
@@ -8642,14 +8748,14 @@ function confirmMealCooked(dateStr, mealType) {
             </div>
 
             <div class="confirm-meal-section">
-                <div class="confirm-meal-section-title">📦 Pantry Deductions</div>
+                <div class="confirm-meal-section-title">${icon('package',14)} Pantry Deductions</div>
                 <p class="text-muted mb-12">These ingredients will be marked as used:</p>
                 ${deductionHtml}
             </div>
 
             ${missingItems.length > 0 ? `
                 <div class="confirm-meal-section">
-                    <div class="confirm-meal-section-title">🛒 Add Missing to Shopping List?</div>
+                    <div class="confirm-meal-section-title">${icon('shopping-cart',14)} Add Missing to Shopping List?</div>
                     <label class="checkbox-item">
                         <input type="checkbox" id="add-missing-to-shopping" checked>
                         <span>Add ${missingItems.length} missing item(s) to shopping list</span>
@@ -8774,7 +8880,7 @@ function executeMealConfirmation(dateStr, mealType, recipeId) {
     renderWeekPlanner();
 
     // Show summary toast
-    let message = `✅ ${recipe.title} confirmed!`;
+    let message = `${icon('check-circle',14)} ${recipe.title} confirmed!`;
     if (deducted > 0) message += ` ${deducted} pantry items updated.`;
     if (missingItems.length > 0 && addMissingToShopping) message += ` ${missingItems.length} added to shopping.`;
     showToast(message);
@@ -8789,28 +8895,28 @@ function openAddMealForDay(dateStr, dayName) {
         <div class="modal-body">
             <div class="more-menu">
                 <button class="more-menu-item" onclick="closeModal(); askNonna('Suggest a meal for ${dayName}');">
-                    <span class="icon">🤖</span>
+                    <span class="icon"><i data-lucide="bot" style="width:14px;height:14px"></i></span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Ask Nonna</div>
                         <div class="more-menu-item-desc">Get a suggestion</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); openChooseFromFavorites('${dateStr}');">
-                    <span class="icon">❤️</span>
+                    <span class="icon"><i data-lucide="heart" style="width:14px;height:14px"></i></span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">From Favorites</div>
                         <div class="more-menu-item-desc">Choose a saved recipe</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); openChooseFromLibrary('${dateStr}');">
-                    <span class="icon">📚</span>
+                    <span class="icon">${icon('book-open',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">From Library</div>
                         <div class="more-menu-item-desc">Browse all recipes</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); openManualMealEntry('${dateStr}');">
-                    <span class="icon">✏️</span>
+                    <span class="icon">${icon('pencil',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Manual Entry</div>
                         <div class="more-menu-item-desc">Type a meal name</div>
@@ -8837,7 +8943,7 @@ function openManualMealEntry(dateStr) {
                 <div class="calorie-input-row">
                     <input type="number" class="form-input" id="manual-meal-input-calories" placeholder="e.g., 350">
                     <button type="button" class="estimate-btn" onclick="estimateCalories('manual-meal-input', 'manual-meal-input-calories')">
-                        🤖 Estimate
+                        ${icon('bot',14)} Estimate
                     </button>
                 </div>
                 <div id="calorie-estimate-result-manual"></div>
@@ -8870,7 +8976,7 @@ function saveManualMeal(dateStr) {
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     renderWeekPlanner();
-    showToast('✅ Meal added!');
+    showToast(`${icon('check-circle',14)} Meal added!`);
 }
 
 function openChooseFromLibrary(dateStr) {
@@ -8888,7 +8994,7 @@ function openChooseFromLibrary(dateStr) {
         <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
             ${library.map(r => `
                 <div class="more-menu-item" style="margin-bottom: 8px;" onclick="addRecipeToDay('${dateStr}', '${r.id}')">
-                    <span class="icon">🍽️</span>
+                    <span class="icon">${icon('utensils',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">${r.title}</div>
                         <div class="more-menu-item-desc">${r.metadata?.totalTime || 30} min</div>
@@ -8913,7 +9019,7 @@ function openChooseFromFavorites(dateStr) {
         <div class="modal-body" style="max-height: 60vh; overflow-y: auto;">
             ${favorites.map(r => `
                 <div class="more-menu-item" style="margin-bottom: 8px;" onclick="addRecipeToDay('${dateStr}', '${r.id}')">
-                    <span class="icon">❤️</span>
+                    <span class="icon"><i data-lucide="heart" style="width:14px;height:14px"></i></span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">${r.title}</div>
                     </div>
@@ -8940,7 +9046,7 @@ function addRecipeToDay(dateStr, recipeId) {
     setStorage(STORAGE.MEAL_PLANS, mealPlans);
     closeModal();
     renderWeekPlanner();
-    showToast('✅ Added to plan!');
+    showToast(`${icon('check-circle',14)} Added to plan!`);
 }
 
 function openAddToWeekModal(recipeId) {
@@ -9032,12 +9138,12 @@ function openPlanningModeModal() {
     let gardenSummary = '';
     if (garden && garden.length > 0) {
         const gardenItems = garden.map(g => typeof g === 'string' ? g : g.name).slice(0, 5);
-        gardenSummary = `<br><strong>🌱 Garden Ready:</strong> ${gardenItems.join(', ')}${garden.length > 5 ? '...' : ''}`;
+        gardenSummary = `<br><strong>${icon('sprout',14)} Garden Ready:</strong> ${gardenItems.join(', ')}${garden.length > 5 ? '...' : ''}`;
     }
 
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">📅 Plan This Week</h2>
+            <h2 class="modal-title">${icon('calendar',14)} Plan This Week</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
@@ -9047,7 +9153,7 @@ function openPlanningModeModal() {
                 <label class="planning-mode-option" onclick="selectPlanningMode('use-pantry')">
                     <input type="radio" name="planning-mode" value="use-pantry">
                     <div class="planning-mode-content">
-                        <div class="planning-mode-title">🏠 Use What I Have</div>
+                        <div class="planning-mode-title">${icon('home',14)} Use What I Have</div>
                         <div class="planning-mode-desc">Minimize shopping - prioritize pantry ingredients. Best when you want to use up what you have.</div>
                     </div>
                 </label>
@@ -9055,7 +9161,7 @@ function openPlanningModeModal() {
                 <label class="planning-mode-option selected" onclick="selectPlanningMode('balanced')">
                     <input type="radio" name="planning-mode" value="balanced" checked>
                     <div class="planning-mode-content">
-                        <div class="planning-mode-title">⚖️ Balanced (Recommended)</div>
+                        <div class="planning-mode-title">${icon('scale',14)} Balanced (Recommended)</div>
                         <div class="planning-mode-desc">Mix pantry items + fresh ingredients. Good variety with moderate shopping.</div>
                     </div>
                 </label>
@@ -9063,14 +9169,14 @@ function openPlanningModeModal() {
                 <label class="planning-mode-option" onclick="selectPlanningMode('shop-freely')">
                     <input type="radio" name="planning-mode" value="shop-freely">
                     <div class="planning-mode-content">
-                        <div class="planning-mode-title">🛒 Shop Freely</div>
+                        <div class="planning-mode-title">${icon('shopping-cart',14)} Shop Freely</div>
                         <div class="planning-mode-desc">Ignore pantry - suggest optimal recipes based only on health goals and preferences.</div>
                     </div>
                 </label>
             </div>
 
             <div class="planning-pantry-summary">
-                <h4>📦 Currently in your pantry:</h4>
+                <h4>${icon('package',14)} Currently in your pantry:</h4>
                 <div style="font-size: 0.85rem; color: var(--gray-dark);">
                     ${pantrySummary}
                     ${gardenSummary}
@@ -9206,7 +9312,7 @@ function generateWeekShoppingList() {
         document.getElementById('shopping-list-select').value = 'week-plan';
         loadShoppingList();
     }, 100);
-    showToast('🛒 Shopping list created from meal plan!');
+    showToast(`${icon('shopping-cart',14)} Shopping list created from meal plan!`);
 }
 
 function showPrepChecklist() {
@@ -9239,8 +9345,8 @@ function renderPantry() {
         const isLow = item.status === 'use-soon' || item.status === 'low' || qtyStr.includes('low') || qtyStr.includes('almost') || qtyStr.includes('last');
         const isOut = item.status === 'out' || qtyStr === '0' || qtyStr === '' || qtyStr.includes('out');
         const statusClass = isOut ? 'pantry-status-out' : isLow ? 'pantry-status-low' : 'pantry-status-fresh';
-        const statusIndicator = isOut ? '🔴' : isLow ? '🟡' : '🟢';
-        const locationIcon = item.location === 'fridge' ? '🧊' : item.location === 'freezer' ? '❄️' : '🏠';
+        const statusIndicator = isOut ? icon('circle-x',12,'color:var(--danger)') : isLow ? icon('circle-alert',12,'color:orange') : icon('circle-check',12,'color:var(--success)');
+        const locationIcon = item.location === 'fridge' ? icon('refrigerator',14) : item.location === 'freezer' ? icon('snowflake',14) : icon('home',14);
 
         return `
         <div class="pantry-item ${statusClass}">
@@ -9317,9 +9423,9 @@ function openAddPantryModal() {
                 <div class="form-group">
                     <label>Status</label>
                     <select class="form-select" id="pantry-item-status">
-                        <option value="fresh">🟢 Well Stocked</option>
-                        <option value="low">🟡 Running Low</option>
-                        <option value="use-soon">🔴 Use Soon</option>
+                        <option value="fresh">Well Stocked</option>
+                        <option value="low">Running Low</option>
+                        <option value="use-soon">Use Soon</option>
                     </select>
                 </div>
             </div>
@@ -9385,18 +9491,18 @@ function editPantryItemModal(index) {
                 <div class="form-group">
                     <label>Location</label>
                     <select class="form-select" id="edit-pantry-location">
-                        <option value="pantry" ${item.location === 'pantry' || !item.location ? 'selected' : ''}>🏠 Pantry</option>
-                        <option value="fridge" ${item.location === 'fridge' ? 'selected' : ''}>🧊 Fridge</option>
-                        <option value="freezer" ${item.location === 'freezer' ? 'selected' : ''}>❄️ Freezer</option>
+                        <option value="pantry" ${item.location === 'pantry' || !item.location ? 'selected' : ''}>${icon('home',14)} Pantry</option>
+                        <option value="fridge" ${item.location === 'fridge' ? 'selected' : ''}>${icon('refrigerator',14)} Fridge</option>
+                        <option value="freezer" ${item.location === 'freezer' ? 'selected' : ''}>${icon('snowflake',14)} Freezer</option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label>Status</label>
                     <select class="form-select" id="edit-pantry-status">
-                        <option value="fresh" ${item.status === 'fresh' || !item.status ? 'selected' : ''}>🟢 Well Stocked</option>
-                        <option value="low" ${item.status === 'low' ? 'selected' : ''}>🟡 Running Low</option>
-                        <option value="use-soon" ${item.status === 'use-soon' ? 'selected' : ''}>🔴 Use Soon</option>
-                        <option value="out" ${item.status === 'out' ? 'selected' : ''}>⛔ Out of Stock</option>
+                        <option value="fresh" ${item.status === 'fresh' || !item.status ? 'selected' : ''}>Well Stocked</option>
+                        <option value="low" ${item.status === 'low' ? 'selected' : ''}>Running Low</option>
+                        <option value="use-soon" ${item.status === 'use-soon' ? 'selected' : ''}>Use Soon</option>
+                        <option value="out" ${item.status === 'out' ? 'selected' : ''}>Out of Stock</option>
                     </select>
                 </div>
             </div>
@@ -9513,7 +9619,7 @@ function renderPantryAlerts() {
         html += `
             <div class="pantry-alert-card urgent">
                 <div class="pantry-alert-header">
-                    <span>🔴</span> Use Soon / Expiring (${status.expiringSoon.length})
+                    <span>${icon('circle-x',14,'color:var(--danger)')}</span> Use Soon / Expiring (${status.expiringSoon.length})
                 </div>
                 <ul class="pantry-alert-list">
                     ${status.expiringSoon.map(item => `
@@ -9532,7 +9638,7 @@ function renderPantryAlerts() {
         html += `
             <div class="pantry-alert-card">
                 <div class="pantry-alert-header">
-                    <span>🟡</span> Running Low (${status.runningLow.length})
+                    <span>${icon('circle-alert',14,'color:orange')}</span> Running Low (${status.runningLow.length})
                 </div>
                 <ul class="pantry-alert-list">
                     ${status.runningLow.map(item => `
@@ -9550,7 +9656,7 @@ function renderPantryAlerts() {
     if (allAlertItems.length > 0) {
         html += `
             <button class="btn btn-secondary btn-block mt-8" onclick="addPantryAlertsToShopping()">
-                🛒 Add All to Shopping List
+                ${icon('shopping-cart',14)} Add All to Shopping List
             </button>
         `;
     }
@@ -9633,14 +9739,14 @@ function openWhatCanIMakeModal() {
 
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">🍳 What Can I Make?</h2>
+            <h2 class="modal-title">${icon('chef-hat',14)} What Can I Make?</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
             <p class="text-muted mb-16">Nonna will suggest recipes using only what you have on hand.</p>
 
             <div class="card" style="padding: 12px; margin-bottom: 16px; background: var(--seafoam-light);">
-                <div style="font-weight: 600; margin-bottom: 8px;">📦 Your Current Inventory</div>
+                <div style="font-weight: 600; margin-bottom: 8px;">${icon('package',14)} Your Current Inventory</div>
                 <div style="font-size: 0.85rem; color: var(--gray-dark);">
                     ${inventorySummary}
                 </div>
@@ -9741,7 +9847,7 @@ function toggleQuickAddSection() {
 const DELIVERY_TEMPLATES = {
     misfits: {
         name: 'Misfits Market Box',
-        icon: '🥬',
+        icon: icon('leaf',14),
         items: [
             { name: 'Cherry tomatoes', qty: '1 container', category: 'Produce' },
             { name: 'Mixed greens', qty: '1 bag', category: 'Produce' },
@@ -9757,7 +9863,7 @@ const DELIVERY_TEMPLATES = {
     },
     wholefoods: {
         name: 'Whole Foods Order',
-        icon: '🛒',
+        icon: icon('shopping-cart',14),
         items: [
             { name: 'Salmon fillet', qty: '1 lb', category: 'Proteins' },
             { name: 'Chicken breast', qty: '1.5 lbs', category: 'Proteins' },
@@ -9773,7 +9879,7 @@ const DELIVERY_TEMPLATES = {
     },
     csa: {
         name: 'CSA Pickup',
-        icon: '🌱',
+        icon: icon('sprout',14),
         items: [
             { name: 'Tomatoes', qty: '1 lb', category: 'Produce' },
             { name: 'Lettuce', qty: '1 head', category: 'Produce' },
@@ -9787,7 +9893,7 @@ const DELIVERY_TEMPLATES = {
     },
     custom: {
         name: 'Custom Delivery',
-        icon: '➕',
+        icon: icon('plus',14),
         items: []
     }
 };
@@ -9835,7 +9941,7 @@ function openDeliveryQuickAdd(deliveryType) {
         </div>
         <div class="modal-footer" style="border-top: none; padding-top: 0;">
             <button class="btn btn-secondary btn-block" onclick="whatCanIMakeWithDelivery('${deliveryType}')">
-                🍳 What Can I Make With These?
+                ${icon('chef-hat',14)} What Can I Make With These?
             </button>
         </div>
     `);
@@ -9855,11 +9961,11 @@ function saveDeliveryItems(deliveryType) {
     let addedCount = 0;
 
     const categoryIcons = {
-        'Produce': '🥬',
-        'Proteins': '🥩',
-        'Dairy': '🧀',
-        'Pantry': '🥫',
-        'Grains': '🌾'
+        'Produce': icon('leaf',14),
+        'Proteins': icon('beef',14),
+        'Dairy': icon('milk',14),
+        'Pantry': icon('package',14),
+        'Grains': icon('wheat',14)
     };
 
     template.items.forEach((item, i) => {
@@ -9874,7 +9980,7 @@ function saveDeliveryItems(deliveryType) {
                 pantry.push({
                     name: item.name,
                     qty: item.qty,
-                    icon: categoryIcons[item.category] || '🥫',
+                    icon: categoryIcons[item.category] || icon('package',14),
                     status: 'fresh',
                     category: item.category
                 });
@@ -9932,7 +10038,7 @@ Suggest 3-5 quick Mediterranean recipes I can make this week using these fresh i
 function openCustomDeliveryModal() {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">➕ Add Multiple Items</h2>
+            <h2 class="modal-title">${icon('plus',14)} Add Multiple Items</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
@@ -9977,12 +10083,12 @@ function saveCustomDeliveryItems() {
     let addedCount = 0;
 
     const categoryIcons = {
-        'Produce': '🥬',
-        'Proteins': '🥩',
-        'Dairy': '🧀',
-        'Pantry': '🥫',
-        'Grains': '🌾',
-        'Other': '📦'
+        'Produce': icon('leaf',14),
+        'Proteins': icon('beef',14),
+        'Dairy': icon('milk',14),
+        'Pantry': icon('package',14),
+        'Grains': icon('wheat',14),
+        'Other': icon('package',14)
     };
 
     lines.forEach(line => {
@@ -10004,7 +10110,7 @@ function saveCustomDeliveryItems() {
                 pantry.push({
                     name: name,
                     qty: qty,
-                    icon: categoryIcons[category] || '📦',
+                    icon: categoryIcons[category] || icon('package',14),
                     status: 'fresh',
                     category: category
                 });
@@ -10044,14 +10150,14 @@ function openPantryScanModal() {
 
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">📷 Scan Your Pantry</h2>
+            <h2 class="modal-title">${icon('camera',14)} Scan Your Pantry</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body" id="scan-modal-body">
             <p class="text-muted mb-16">Take a photo or upload an image of your fridge, pantry, or spice rack. Nonna will identify the items for you!</p>
 
             <div class="scan-upload-area" id="scan-upload-area" onclick="document.getElementById('pantry-image-input').click()">
-                <div class="scan-upload-icon">📸</div>
+                <div class="scan-upload-icon">${icon('camera',14)}</div>
                 <div class="scan-upload-text">Tap to take photo or upload</div>
                 <div class="scan-upload-hint">Supports: JPG, PNG, WebP</div>
             </div>
@@ -10061,7 +10167,7 @@ function openPantryScanModal() {
             <img id="scan-preview" class="scan-preview hidden" alt="Preview">
 
             <div class="nonna-tip mt-16">
-                <div class="nonna-tip-header">💡 Tips for best results</div>
+                <div class="nonna-tip-header">${icon('lightbulb',14)} Tips for best results</div>
                 <div class="nonna-tip-text">
                     • Use good lighting<br>
                     • Capture labels when possible<br>
@@ -10069,7 +10175,7 @@ function openPantryScanModal() {
                 </div>
             </div>
 
-            <p class="text-muted mt-16" style="font-size: 0.8rem;">🔒 Photos are analyzed securely and not stored.</p>
+            <p class="text-muted mt-16" style="font-size: 0.8rem;">${icon('lock',14)} Photos are analyzed securely and not stored.</p>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
@@ -10146,7 +10252,7 @@ function processImageFile(file) {
         const uploadArea = document.getElementById('scan-upload-area');
         if (uploadArea) {
             uploadArea.innerHTML = `
-                <div class="scan-upload-icon">✅</div>
+                <div class="scan-upload-icon">${icon('check-circle',14)}</div>
                 <div class="scan-upload-text">Photo ready!</div>
                 <div class="scan-upload-hint">Tap to change photo</div>
             `;
@@ -10171,7 +10277,7 @@ async function analyzePantryImage() {
     const modalBody = document.getElementById('scan-modal-body');
     modalBody.innerHTML = `
         <div class="scan-loading">
-            <div class="scan-loading-icon">🔍</div>
+            <div class="scan-loading-icon">${icon('search',14)}</div>
             <div class="scan-loading-text">
                 <strong>Nonna is scanning your kitchen...</strong><br>
                 <span class="text-muted">Identifying items and quantities</span>
@@ -10218,7 +10324,7 @@ function showScanError(message) {
     const modalBody = document.getElementById('scan-modal-body');
     modalBody.innerHTML = `
         <div class="empty-state">
-            <div class="empty-state-icon">😕</div>
+            <div class="empty-state-icon">${icon('frown',14)}</div>
             <div class="empty-state-title">Couldn't detect items</div>
             <p>${message}</p>
             <button class="btn btn-primary mt-16" onclick="openPantryScanModal()">Try Again</button>
@@ -10248,25 +10354,25 @@ function showScanResults() {
 
     // Category icons
     const categoryIcons = {
-        'Produce': '🥬',
-        'Proteins': '🥩',
-        'Dairy': '🧀',
-        'Grains': '🌾',
-        'Canned Goods': '🥫',
-        'Spices': '🧂',
-        'Condiments': '🫙',
-        'Frozen': '❄️',
-        'Beverages': '🥤',
-        'Snacks': '🍿',
-        'Other': '📦'
+        'Produce': icon('leaf',14),
+        'Proteins': icon('beef',14),
+        'Dairy': icon('milk',14),
+        'Grains': icon('wheat',14),
+        'Canned Goods': icon('package',14),
+        'Spices': icon('flask-round',14),
+        'Condiments': icon('flask-round',14),
+        'Frozen': icon('snowflake',14),
+        'Beverages': icon('cup-soda',14),
+        'Snacks': icon('cookie',14),
+        'Other': icon('package',14)
     };
 
     // Status badge helper
     const getStatusBadge = (status) => {
         const statusMap = {
-            'Fresh': { class: 'fresh', text: '🟢 Fresh' },
-            'Use Soon': { class: 'use-soon', text: '🟡 Use Soon' },
-            'Check Date': { class: 'check', text: '🔴 Check Date' }
+            'Fresh': { class: 'fresh', text: icon('circle-check',12,'color:var(--success)') + ' Fresh' },
+            'Use Soon': { class: 'use-soon', text: icon('circle-alert',12,'color:orange') + ' Use Soon' },
+            'Check Date': { class: 'check', text: icon('circle-x',12,'color:var(--danger)') + ' Check Date' }
         };
         const s = statusMap[status] || statusMap['Fresh'];
         return `<span class="scan-item-badge ${s.class}">${s.text}</span>`;
@@ -10287,7 +10393,7 @@ function showScanResults() {
     // Render by category
     Object.keys(categories).sort().forEach(cat => {
         const catItems = categories[cat];
-        html += `<div class="scan-category-header">${categoryIcons[cat] || '📦'} ${cat} (${catItems.length})</div>`;
+        html += `<div class="scan-category-header">${categoryIcons[cat] || icon('package',14)} ${cat} (${catItems.length})</div>`;
 
         catItems.forEach(item => {
             const checked = pantryScanState.selectedItems.has(item.index) ? 'checked' : '';
@@ -10299,12 +10405,12 @@ function showScanResults() {
                         <div class="scan-item-details">
                             ${item.quantity} · ${item.location || 'Pantry'}
                             ${getStatusBadge(item.expirationConcern)}
-                            ${item.confidence === 'low' ? '<span class="scan-item-badge">❓ Verify</span>' : ''}
+                            ${item.confidence === 'low' ? `<span class="scan-item-badge">${icon('help-circle',12)} Verify</span>` : ''}
                         </div>
                     </div>
                     <div class="scan-item-actions">
-                        <button class="icon-btn" onclick="editScanItem(${item.index})" title="Edit">✏️</button>
-                        <button class="icon-btn" onclick="removeScanItem(${item.index})" title="Remove">🗑️</button>
+                        <button class="icon-btn" onclick="editScanItem(${item.index})" title="Edit">${icon('pencil',14)}</button>
+                        <button class="icon-btn" onclick="removeScanItem(${item.index})" title="Remove">${icon('trash-2',14)}</button>
                     </div>
                 </div>
             `;
@@ -10525,7 +10631,7 @@ function saveManualScanItem() {
 function showScanResultsModal() {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">📷 Scan Results</h2>
+            <h2 class="modal-title">${icon('camera',14)} Scan Results</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body" id="scan-modal-body"></div>
@@ -10548,17 +10654,17 @@ function addScannedItemsToPantry() {
 
     // Category to icon mapping
     const categoryIcons = {
-        'Produce': '🥬',
-        'Proteins': '🥩',
-        'Dairy': '🧀',
-        'Grains': '🌾',
-        'Canned Goods': '🥫',
-        'Spices': '🧂',
-        'Condiments': '🫙',
-        'Frozen': '❄️',
-        'Beverages': '🥤',
-        'Snacks': '🍿',
-        'Other': '📦'
+        'Produce': icon('leaf',14),
+        'Proteins': icon('beef',14),
+        'Dairy': icon('milk',14),
+        'Grains': icon('wheat',14),
+        'Canned Goods': icon('package',14),
+        'Spices': icon('flask-round',14),
+        'Condiments': icon('flask-round',14),
+        'Frozen': icon('snowflake',14),
+        'Beverages': icon('cup-soda',14),
+        'Snacks': icon('cookie',14),
+        'Other': icon('package',14)
     };
 
     // Status mapping
@@ -10589,7 +10695,7 @@ function addScannedItemsToPantry() {
             pantry.push({
                 name: item.name,
                 qty: item.quantity,
-                icon: categoryIcons[item.category] || '🥫',
+                icon: categoryIcons[item.category] || icon('package',14),
                 status: statusMap[item.expirationConcern] || 'fresh',
                 category: item.category,
                 location: item.location
@@ -10603,7 +10709,7 @@ function addScannedItemsToPantry() {
     renderPantry();
 
     // Show confirmation
-    let message = `✅ ${addedCount} items added to pantry!`;
+    let message = `${icon('check-circle',14)} ${addedCount} items added to pantry!`;
     if (duplicateCount > 0) {
         message += ` (${duplicateCount} updated)`;
     }
@@ -10766,18 +10872,18 @@ const PRICE_DATABASE = {
 
 // Category icons for shopping list display
 const CATEGORY_ICONS = {
-    'Produce': '🥬',
-    'Proteins': '🥩',
-    'Dairy': '🧀',
-    'Pantry': '🥫',
-    'Grains': '🌾',
-    'Canned Goods': '🥫',
-    'Frozen': '🧊',
-    'Spices': '🧂',
-    'Condiments': '🍯',
-    'Beverages': '🥤',
-    'Snacks': '🍪',
-    'Other': '📦'
+    'Produce': icon('leaf',14),
+    'Proteins': icon('beef',14),
+    'Dairy': icon('milk',14),
+    'Pantry': icon('package',14),
+    'Grains': icon('wheat',14),
+    'Canned Goods': icon('package',14),
+    'Frozen': icon('refrigerator',14),
+    'Spices': icon('flask-round',14),
+    'Condiments': icon('flask-round',14),
+    'Beverages': icon('cup-soda',14),
+    'Snacks': icon('cookie',14),
+    'Other': icon('package',14)
 };
 
 // Typical Mediterranean staples to suggest
@@ -10907,7 +11013,7 @@ function renderWinePairingSection(recipe) {
     return `
         <div class="wine-pairing-section">
             <div class="wine-pairing-header" onclick="toggleWinePairing(this)">
-                <span class="wine-pairing-icon">🍷</span>
+                <span class="wine-pairing-icon">${icon('wine',14)}</span>
                 <span class="wine-pairing-title">Wine Pairing Suggestion</span>
                 <span class="wine-pairing-toggle">▼</span>
             </div>
@@ -10920,7 +11026,7 @@ function renderWinePairingSection(recipe) {
                 </div>
                 <div class="wine-bottles">
                     <div class="wine-bottles-title">Budget-Friendly Options ($10-15):</div>
-                    ${pairing.bottles.map(b => `<div class="wine-bottle">🍾 ${b}</div>`).join('')}
+                    ${pairing.bottles.map(b => `<div class="wine-bottle">${icon('wine',14)} ${b}</div>`).join('')}
                 </div>
             </div>
         </div>
@@ -10961,7 +11067,7 @@ function shareRecipe(recipeId) {
     // Try to copy to clipboard
     if (navigator.clipboard) {
         navigator.clipboard.writeText(shareText)
-            .then(() => showToast('📋 Recipe copied to clipboard!'))
+            .then(() => showToast(`${icon('clipboard',14)} Recipe copied to clipboard!`))
             .catch(() => showShareModal(shareText));
     } else {
         showShareModal(shareText);
@@ -10976,22 +11082,22 @@ function formatRecipeForSharing(recipe, modifications) {
     const cookTime = recipe.metadata?.cookTime || 'N/A';
     const servings = recipe.servings || 'N/A';
 
-    let text = `📋 ${recipe.title}\n`;
+    let text = `${icon('clipboard',14)} ${recipe.title}\n`;
     text += `${'═'.repeat(40)}\n\n`;
-    text += `⏱️ Prep: ${prepTime} min | Cook: ${cookTime} min | Servings: ${servings}\n`;
+    text += `Prep: ${prepTime} min | Cook: ${cookTime} min | Servings: ${servings}\n`;
     if (nutrition.calories) {
-        text += `🔥 Calories: ${nutrition.calories} per serving\n`;
+        text += `Calories: ${nutrition.calories} per serving\n`;
     }
     text += `\n`;
 
-    text += `🥘 INGREDIENTS:\n`;
+    text += `INGREDIENTS:\n`;
     text += `${'-'.repeat(20)}\n`;
     ingredients.forEach(ing => {
         text += `• ${ing}\n`;
     });
     text += `\n`;
 
-    text += `👩‍🍳 INSTRUCTIONS:\n`;
+    text += `INSTRUCTIONS:\n`;
     text += `${'-'.repeat(20)}\n`;
     instructions.forEach((step, i) => {
         text += `${i + 1}. ${step}\n\n`;
@@ -11003,13 +11109,13 @@ function formatRecipeForSharing(recipe, modifications) {
 
     // Wine pairing
     const pairing = getWinePairing(recipe);
-    text += `\n🍷 WINE PAIRING:\n`;
+    text += `\nWINE PAIRING:\n`;
     text += `${'-'.repeat(20)}\n`;
     text += `${pairing.style}\n`;
     text += `Budget picks: ${pairing.bottles.join(', ')}\n`;
 
     text += `\n${'═'.repeat(40)}\n`;
-    text += `Created with Tavola 🍝\n`;
+    text += `Created with Tavola\n`;
     text += `Mediterranean meal planning made easy.\n`;
 
     return text;
@@ -11018,13 +11124,13 @@ function formatRecipeForSharing(recipe, modifications) {
 function showShareModal(shareText) {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">📤 Share Recipe</h2>
+            <h2 class="modal-title">${icon('share-2',14)} Share Recipe</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
             <p class="mb-16">Copy the recipe below to share:</p>
             <textarea class="form-input" style="height: 300px; font-family: monospace; font-size: 0.85rem;" readonly>${shareText.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</textarea>
-            <button class="btn btn-primary btn-block mt-16" onclick="copyShareText()">📋 Copy to Clipboard</button>
+            <button class="btn btn-primary btn-block mt-16" onclick="copyShareText()">${icon('clipboard',14)} Copy to Clipboard</button>
         </div>
     `);
 }
@@ -11034,7 +11140,7 @@ function copyShareText() {
     if (textarea) {
         textarea.select();
         document.execCommand('copy');
-        showToast('📋 Copied to clipboard!');
+        showToast(`${icon('clipboard',14)} Copied to clipboard!`);
         closeModal();
     }
 }
@@ -11045,7 +11151,7 @@ function copyShareText() {
 function openSaveManualRecipeModal() {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">📝 Create Recipe</h2>
+            <h2 class="modal-title">${icon('file-text',14)} Create Recipe</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
@@ -11092,7 +11198,7 @@ Bake for 35-40 minutes until golden"></textarea>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="saveManualRecipeToLibrary()">💾 Save Recipe</button>
+            <button class="btn btn-primary" onclick="saveManualRecipeToLibrary()">${icon('save',14)} Save Recipe</button>
         </div>
     `);
 }
@@ -11152,7 +11258,7 @@ function saveManualRecipeToLibrary() {
     const result = saveRecipeToLibrary(recipe);
     if (result.saved) {
         closeModal();
-        showToast(`✅ "${title}" saved to your recipe library!`);
+        showToast(`${icon('check-circle',14)} "${title}" saved to your recipe library!`);
     } else {
         showToast(result.message);
     }
@@ -11557,7 +11663,7 @@ function loadEnhancedShoppingList(listId) {
         html += `
             <div class="shopping-suggestions">
                 <div class="shopping-suggestions-header">
-                    <span>💡</span> Smart Suggestions (optional)
+                    <span>${icon('lightbulb',14)}</span> Smart Suggestions (optional)
                 </div>
                 ${listData.suggestions.map((sug, i) => `
                     <div class="shopping-suggestion-item">
@@ -11584,10 +11690,10 @@ function loadEnhancedShoppingList(listId) {
     const categoryOrder = ['Produce', 'Proteins', 'Dairy', 'Grains', 'Canned Goods', 'Pantry', 'Spices', 'Other'];
     categoryOrder.forEach(category => {
         if (grouped[category] && grouped[category].length > 0) {
-            const icon = CATEGORY_ICONS[category] || '📦';
+            const catIcon = CATEGORY_ICONS[category] || icon('package',14);
             html += `
                 <div class="shopping-category-header">
-                    <span>${icon}</span>
+                    <span>${catIcon}</span>
                     <span>${category.toUpperCase()}</span>
                     <span style="font-weight: normal; color: var(--gray-text);">(${grouped[category].length})</span>
                 </div>
@@ -11605,7 +11711,7 @@ function loadEnhancedShoppingList(listId) {
                                 <span class="shopping-item-name">${item.name}</span>
                                 ${item.estimatedCost ? `<span class="shopping-item-qty">~$${item.estimatedCost.toFixed(2)}</span>` : ''}
                             </div>
-                            ${item.pantryStatus ? `<div class="shopping-item-pantry-status ${statusClass}">${item.pantryStatusType === 'missing' ? '⚠️' : '📍'} ${item.pantryStatus}</div>` : ''}
+                            ${item.pantryStatus ? `<div class="shopping-item-pantry-status ${statusClass}">${item.pantryStatusType === 'missing' ? icon('alert-triangle',14) : icon('map-pin',14)} ${item.pantryStatus}</div>` : ''}
                         </div>
                     </div>
                 `;
@@ -11616,10 +11722,10 @@ function loadEnhancedShoppingList(listId) {
     // Handle categories not in the order list
     Object.keys(grouped).forEach(category => {
         if (!categoryOrder.includes(category) && grouped[category].length > 0) {
-            const icon = CATEGORY_ICONS[category] || '📦';
+            const catIcon = CATEGORY_ICONS[category] || icon('package',14);
             html += `
                 <div class="shopping-category-header">
-                    <span>${icon}</span>
+                    <span>${catIcon}</span>
                     <span>${category.toUpperCase()}</span>
                     <span style="font-weight: normal; color: var(--gray-text);">(${grouped[category].length})</span>
                 </div>
@@ -11828,7 +11934,7 @@ function checkBatchIngredients() {
     // Render ingredient list
     listContainer.innerHTML = results.map(item => `
         <div class="batch-ingredient-item">
-            <span class="batch-ingredient-status">${item.status === 'have' ? '✅' : '❌'}</span>
+            <span class="batch-ingredient-status">${item.status === 'have' ? icon('check-circle',14) : icon('x-circle',14)}</span>
             <span style="flex: 1;">${item.name} (${item.qty})</span>
             <span style="font-size: 0.8rem; color: var(--gray-text);">${item.pantryInfo}</span>
         </div>
@@ -12012,7 +12118,7 @@ Guidelines:
         if (estimateBtn) {
             estimateBtn.disabled = false;
             estimateBtn.classList.remove('loading');
-            estimateBtn.innerHTML = 'ℹ️ Details';
+            estimateBtn.innerHTML = icon('info',14) + ' Details';
             estimateBtn.onclick = () => showCalorieEstimateDetails(estimate);
         }
 
@@ -12023,7 +12129,7 @@ Guidelines:
                 <div class="estimate-result">
                     <div class="estimate-result-header">
                         <span class="estimate-result-text">
-                            💡 Estimated: ~${estimate.calories} cal
+                            ${icon('lightbulb',14)} Estimated: ~${estimate.calories} cal
                             <span class="confidence">(${estimate.confidence} confidence)</span>
                         </span>
                         <span class="confidence-badge ${confidenceClass}">${estimate.confidence}</span>
@@ -12042,7 +12148,7 @@ Guidelines:
         if (estimateBtn) {
             estimateBtn.disabled = false;
             estimateBtn.classList.remove('loading');
-            estimateBtn.innerHTML = '🤖 Estimate';
+            estimateBtn.innerHTML = icon('bot',14) + ' Estimate';
         }
 
         // Show error in result container
@@ -12175,6 +12281,7 @@ function switchKitchenTab(tab) {
 
     if (tab === 'pantry') renderPantry();
     if (tab === 'shopping') loadShoppingList();
+    if (tab === 'collections') renderCollections();
 }
 
 // ========================================
@@ -12192,7 +12299,7 @@ function renderGarden() {
     const plants = profile.currentlyGrowing.split(',').map(p => p.trim()).filter(p => p);
     container.innerHTML = plants.map(plant => `
         <div class="pantry-item">
-            <span class="pantry-item-icon">🌱</span>
+            <span class="pantry-item-icon">${icon('sprout',14)}</span>
             <div class="pantry-item-info">
                 <div class="pantry-item-name">${plant}</div>
             </div>
@@ -12295,7 +12402,7 @@ function activateFlareMode() {
     prefs.flareMode = true;
     setStorage(STORAGE.PREFS, prefs);
     updateFlareUI();
-    showToast('🌡️ Flare mode activated. Nonna will suggest gentle meals.');
+    showToast(`${icon('thermometer',14)} Flare mode activated. Nonna will suggest gentle meals.`);
     navigateTo('chat');
     askNonna("I'm having a Crohn's flare. Give me some gentle meal options for today.");
 }
@@ -12344,7 +12451,7 @@ function renderHistory() {
     empty.classList.add('hidden');
     container.innerHTML = history.slice(0, 20).map(item => `
         <div class="activity-item">
-            <span class="activity-icon">🍽️</span>
+            <span class="activity-icon">${icon('utensils',14)}</span>
             <div class="activity-content">
                 <div class="activity-title">${item.title}</div>
                 <div class="activity-time">${formatRelativeDate(item.date)}</div>
@@ -12469,13 +12576,13 @@ function submitRating(recipeId, title, skipped) {
     currentRatingValue = 0;
 
     if (skipped) {
-        showToast('✅ Marked as cooked!');
+        showToast(`${icon('check-circle',14)} Marked as cooked!`);
     } else if (rating >= 4) {
-        showToast('✅ Wonderful! Glad you enjoyed it, cara! 🍝');
+        showToast(`${icon('check-circle',14)} Wonderful! Glad you enjoyed it, cara!`);
     } else if (rating >= 2) {
-        showToast('✅ Thanks for the feedback! Nonna will remember.');
+        showToast(`${icon('check-circle',14)} Thanks for the feedback! Nonna will remember.`);
     } else {
-        showToast('✅ Noted. Nonna will suggest something better next time!');
+        showToast(`${icon('check-circle',14)} Noted. Nonna will suggest something better next time!`);
     }
 
     // Refresh views if they're visible
@@ -12500,7 +12607,7 @@ function openAddMealModal() {
                 <div class="calorie-input-row">
                     <input type="number" class="form-input" id="log-meal-calories" placeholder="e.g., 350">
                     <button type="button" class="estimate-btn" id="estimate-calories-btn-log" onclick="estimateCalories('log-meal-input', 'log-meal-calories')">
-                        🤖 Estimate
+                        ${icon('bot',14)} Estimate
                     </button>
                 </div>
                 <div id="calorie-estimate-result-log"></div>
@@ -12621,10 +12728,11 @@ function trapFocus(element) {
 }
 
 // Confirmation modal helper
-function showConfirmation({ icon, iconType, title, message, confirmText, confirmClass, onConfirm }) {
+function showConfirmation({ icon: iconParam, iconType, title, message, confirmText, confirmClass, onConfirm }) {
+    const defaultIcon = icon('alert-triangle',14);
     openModal(`
         <div class="confirmation-modal-content">
-            <span class="confirmation-icon ${iconType || 'warning'}">${icon || '⚠️'}</span>
+            <span class="confirmation-icon ${iconType || 'warning'}">${iconParam || defaultIcon}</span>
             <div class="confirmation-title">${title || 'Are you sure?'}</div>
             <div class="confirmation-message">${message || 'This action cannot be undone.'}</div>
             <div class="confirmation-actions">
@@ -12780,7 +12888,7 @@ function importData() {
 function confirmClearAllData() {
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">⚠️ Clear All Data?</h2>
+            <h2 class="modal-title">${icon('alert-triangle',14)} Clear All Data?</h2>
             <button class="modal-close" onclick="closeModal()">×</button>
         </div>
         <div class="modal-body">
@@ -12920,7 +13028,7 @@ function renderCookModeStep() {
 
     body.innerHTML = `
         <details class="cook-mode-ingredients">
-            <summary>📝 Ingredients (tap to expand)</summary>
+            <summary>${icon('file-text',14)} Ingredients (tap to expand)</summary>
             <ul style="margin-top: 12px; padding-left: 20px;">
                 ${recipe.ingredients.map(i => `<li>${i}</li>`).join('')}
             </ul>
@@ -12931,7 +13039,7 @@ function renderCookModeStep() {
                 <label for="step-check-${currentStep}">${recipe.instructions[currentStep]}</label>
             </div>
             ${recipe.instructions[currentStep].match(/\d+\s*(min|minute)/i) ?
-                `<div class="cook-mode-timer" onclick="startTimer()">⏱️ Start Timer</div>` : ''}
+                `<div class="cook-mode-timer" onclick="startTimer()">${icon('timer',14)} Start Timer</div>` : ''}
         </div>
     `;
 
@@ -12964,7 +13072,7 @@ function exitCookMode() {
 }
 
 function startTimer() {
-    showToast('⏱️ Timer feature coming soon!');
+    showToast(`${icon('timer',14)} Timer feature coming soon!`);
 }
 
 // ========================================
@@ -12990,33 +13098,33 @@ function openRecipeMoreMenu(recipeId) {
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); viewCookingHistory('${recipeId}');">
-                    <span class="icon">📋</span>
+                    <span class="icon">${icon('clipboard',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Cooking History</div>
                         <div class="more-menu-item-desc">View past ratings and notes</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); addIngredientsToShopping('${recipeId}');">
-                    <span class="icon">🛒</span>
+                    <span class="icon">${icon('shopping-cart',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Add to Shopping List</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); startCookMode('${recipeId}');">
-                    <span class="icon">👨‍🍳</span>
+                    <span class="icon">${icon('chef-hat',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Start Cook Mode</div>
                     </div>
                 </button>
                 <button class="more-menu-item" onclick="closeModal(); printRecipe('${recipeId}');">
-                    <span class="icon">🖨️</span>
+                    <span class="icon">${icon('printer',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Print Recipe</div>
                     </div>
                 </button>
                 ${isFavorited ? `
                 <button class="more-menu-item" onclick="closeModal(); removeFromFavorites('${recipeId}');">
-                    <span class="icon">💔</span>
+                    <span class="icon"><i data-lucide="heart-off" style="width:14px;height:14px"></i></span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Remove from Favorites</div>
                         <div class="more-menu-item-desc">Keep in library</div>
@@ -13024,7 +13132,7 @@ function openRecipeMoreMenu(recipeId) {
                 </button>
                 ` : ''}
                 <button class="more-menu-item" onclick="closeModal(); confirmDeleteRecipe('${recipeId}');">
-                    <span class="icon">🗑️</span>
+                    <span class="icon">${icon('trash-2',14)}</span>
                     <div class="more-menu-item-content">
                         <div class="more-menu-item-title">Delete from Library</div>
                         <div class="more-menu-item-desc">Permanently remove</div>
@@ -13159,7 +13267,7 @@ function addIngredientsToShopping(recipeId) {
         lists.weekly.push({ name: ing, checked: false });
     });
     setStorage(STORAGE.SHOPPING, lists);
-    showToast('🛒 Ingredients added to shopping list!');
+    showToast(`${icon('shopping-cart',14)} Ingredients added to shopping list!`);
 }
 
 let lastDeletedRecipe = null;
@@ -13389,12 +13497,12 @@ function renderCalorieBalance() {
     // Update the labels via inner elements
     const inLabel = document.querySelector('#calories-in-bar')?.closest('.calorie-balance-item')?.querySelector('.calorie-balance-label');
     const outLabel = document.querySelector('#calories-out-bar')?.closest('.calorie-balance-item')?.querySelector('.calorie-balance-label');
-    if (inLabel) inLabel.textContent = '🍽️ Consumed';
-    if (outLabel) outLabel.textContent = `🔥 Daily Burn (${baseTDEE}${workoutCalories > 0 ? '+' + workoutCalories : ''})`;
+    if (inLabel) inLabel.innerHTML = `${icon('utensils',14)} Consumed`;
+    if (outLabel) outLabel.innerHTML = `${icon('flame',14)} Daily Burn (${baseTDEE}${workoutCalories > 0 ? '+' + workoutCalories : ''})`;
 
     // Update net display - show as POSITIVE deficit
     const netEl = document.getElementById('calorie-net');
-    netEl.textContent = `${isDeficit ? '✅' : '⚠️'} ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? 'deficit' : 'surplus'}`;
+    netEl.innerHTML = `${isDeficit ? icon('check-circle',14) : icon('alert-triangle',14)} ${Math.abs(deficit).toLocaleString()} cal ${isDeficit ? 'deficit' : 'surplus'}`;
     netEl.className = 'calorie-balance-net';
     if (isDeficit) netEl.classList.add('deficit');
     else netEl.classList.add('surplus');
@@ -13453,7 +13561,7 @@ function renderWorkoutCalendar() {
         html += `
             <div class="workout-day ${isToday ? 'today' : ''} ${hasWorkout ? 'has-workout' : ''}" onclick="showDayWorkouts('${dateStr}')">
                 <span class="workout-day-date">${date.getDate()}</span>
-                <span class="workout-day-indicator">${dayWorkouts.length > 0 ? dayWorkouts.length + ' 🏋️' : ''}</span>
+                <span class="workout-day-indicator">${dayWorkouts.length > 0 ? dayWorkouts.length + ' ' + icon('dumbbell',12) : ''}</span>
             </div>
         `;
     }
@@ -13487,7 +13595,7 @@ function renderTodaysWorkouts() {
                 </div>
                 <div class="workout-item-calories">-${workout.caloriesBurned} cal</div>
                 <div class="workout-item-actions">
-                    <button class="icon-btn" onclick="deleteWorkout('${workout.id}')" title="Delete">🗑️</button>
+                    <button class="icon-btn" onclick="deleteWorkout('${workout.id}')" title="Delete">${icon('trash-2',14)}</button>
                 </div>
             </div>
         `;
@@ -13506,7 +13614,7 @@ function quickLogWorkout(type, duration) {
     };
 
     saveWorkout(workout);
-    showToast(`${WORKOUT_TYPES[type]?.icon || '🏅'} Logged ${duration}min ${WORKOUT_TYPES[type]?.name || type}! (-${workout.caloriesBurned} cal)`);
+    showToast(`${WORKOUT_TYPES[type]?.icon || icon('medal',14)} Logged ${duration}min ${WORKOUT_TYPES[type]?.name || type}! (-${workout.caloriesBurned} cal)`);
     renderWorkoutsView();
 }
 
@@ -13605,7 +13713,7 @@ function submitWorkoutLog() {
     saveWorkout(workout);
     selectedWorkoutType = null;
     closeModal();
-    showToast(`${WORKOUT_TYPES[workout.type]?.icon || '🏅'} Workout logged! (-${workout.caloriesBurned} cal)`);
+    showToast(`${WORKOUT_TYPES[workout.type]?.icon || icon('medal',14)} Workout logged! (-${workout.caloriesBurned} cal)`);
     renderWorkoutsView();
 }
 
@@ -13638,7 +13746,7 @@ function showDayWorkouts(dateStr) {
                     <div class="workout-item-meta">${w.duration} min${w.time ? ' at ' + w.time : ''}${w.notes ? ' · ' + w.notes : ''}</div>
                 </div>
                 <div class="workout-item-calories">-${w.caloriesBurned} cal</div>
-                <button class="icon-btn" onclick="deleteDayWorkout('${w.id}', '${dateStr}')" title="Delete">🗑️</button>
+                <button class="icon-btn" onclick="deleteDayWorkout('${w.id}', '${dateStr}')" title="Delete">${icon('trash-2',14)}</button>
             </div>
         `;
     }).join('') : '<p class="text-center text-muted" style="padding: 16px 0;">No workouts logged yet.</p>';
@@ -13755,7 +13863,7 @@ function submitWorkoutLogForDate(dateStr) {
 
     saveWorkout(workout);
     selectedWorkoutType = null;
-    showToast(`${WORKOUT_TYPES[workout.type]?.icon || '🏅'} Workout logged! (-${workout.caloriesBurned} cal)`);
+    showToast(`${WORKOUT_TYPES[workout.type]?.icon || icon('medal',14)} Workout logged! (-${workout.caloriesBurned} cal)`);
     showDayWorkouts(dateStr); // Go back to the day view
     renderWorkoutsView();
 }
@@ -13812,6 +13920,673 @@ function refreshIcons() {
     if (window.lucide) {
         try { lucide.createIcons(); } catch(e) {}
     }
+}
+
+// ========================================
+// PHASE 3: SMART SUBSTITUTIONS DATABASE
+// ========================================
+const SUBSTITUTIONS = {
+    'butter': [
+        { sub: 'Olive oil', ratio: '3/4 the amount', notes: 'Best for sauteing, not baking', tags: ['dairy-free','vegan'] },
+        { sub: 'Coconut oil', ratio: '1:1', notes: 'Slight coconut flavor', tags: ['dairy-free','vegan'] },
+        { sub: 'Ghee', ratio: '1:1', notes: 'Lactose-free, rich nutty flavor', tags: ['lactose-free'] }
+    ],
+    'greek yogurt': [
+        { sub: 'Labneh', ratio: '1:1', notes: 'Thicker, tangier', tags: [] },
+        { sub: 'Coconut yogurt', ratio: '1:1', notes: 'Dairy-free option', tags: ['dairy-free','vegan'] },
+        { sub: 'Sour cream', ratio: '1:1', notes: 'Richer flavor', tags: [] }
+    ],
+    'feta': [
+        { sub: 'Goat cheese', ratio: '1:1', notes: 'Milder, creamier', tags: [] },
+        { sub: 'Cottage cheese', ratio: '1:1 crumbled', notes: 'Lower fat option', tags: ['low-fat'] },
+        { sub: 'Ricotta salata', ratio: '1:1', notes: 'Firmer, milder', tags: [] }
+    ],
+    'parmesan': [
+        { sub: 'Pecorino Romano', ratio: '1:1', notes: 'Sharper, saltier', tags: [] },
+        { sub: 'Nutritional yeast', ratio: '2 tbsp per 1/4 cup', notes: 'Vegan, cheesy flavor', tags: ['dairy-free','vegan'] }
+    ],
+    'heavy cream': [
+        { sub: 'Coconut cream', ratio: '1:1', notes: 'Rich, slight coconut flavor', tags: ['dairy-free','vegan'] },
+        { sub: 'Cashew cream', ratio: '1:1', notes: 'Neutral flavor, blend soaked cashews', tags: ['dairy-free','vegan'] },
+        { sub: 'Evaporated milk', ratio: '1:1', notes: 'Lower fat option', tags: ['low-fat'] }
+    ],
+    'chicken breast': [
+        { sub: 'Chicken thighs', ratio: '1:1', notes: 'More flavor, slightly more fat, cheaper', tags: ['budget'] },
+        { sub: 'Turkey breast', ratio: '1:1', notes: 'Leaner option', tags: ['low-fat'] },
+        { sub: 'Firm tofu', ratio: '1:1 pressed', notes: 'Press 30 min, marinate well', tags: ['vegan','budget'] }
+    ],
+    'salmon': [
+        { sub: 'Trout', ratio: '1:1', notes: 'Similar flavor and texture', tags: [] },
+        { sub: 'Arctic char', ratio: '1:1', notes: 'Milder, sustainable', tags: [] },
+        { sub: 'Sardines', ratio: 'Adjust portions', notes: 'Higher omega-3, budget-friendly', tags: ['budget'] }
+    ],
+    'chickpeas': [
+        { sub: 'White beans (cannellini)', ratio: '1:1', notes: 'Creamier texture', tags: [] },
+        { sub: 'Lentils', ratio: '1:1', notes: 'Cook faster, more protein', tags: ['budget'] },
+        { sub: 'Edamame', ratio: '1:1', notes: 'Higher protein', tags: [] }
+    ],
+    'pasta': [
+        { sub: 'Zucchini noodles', ratio: '2 zucchini per serving', notes: 'Low-carb, salt and drain first', tags: ['low-carb','gluten-free'] },
+        { sub: 'Rice noodles', ratio: '1:1', notes: 'Gluten-free option', tags: ['gluten-free'] },
+        { sub: 'Whole wheat pasta', ratio: '1:1', notes: 'More fiber, nuttier flavor', tags: ['high-fiber'] }
+    ],
+    'rice': [
+        { sub: 'Cauliflower rice', ratio: '1:1', notes: 'Low-carb, sauté 5 min', tags: ['low-carb','keto'] },
+        { sub: 'Quinoa', ratio: '1:1', notes: 'Complete protein, nuttier', tags: ['high-protein'] },
+        { sub: 'Couscous', ratio: '1:1', notes: 'Cooks faster', tags: [] }
+    ],
+    'saffron': [
+        { sub: 'Turmeric', ratio: '1/4 tsp per pinch saffron', notes: 'For color, milder flavor', tags: ['budget'] },
+        { sub: 'Paprika + turmeric', ratio: 'Pinch of each', notes: 'Better color match', tags: ['budget'] }
+    ],
+    'white wine': [
+        { sub: 'Chicken broth + vinegar', ratio: '1 cup broth + 1 tsp vinegar', notes: 'Non-alcoholic', tags: ['alcohol-free'] },
+        { sub: 'White grape juice + vinegar', ratio: '3/4 cup juice + 1/4 cup vinegar', notes: 'Sweeter', tags: ['alcohol-free'] }
+    ],
+    'lemon juice': [
+        { sub: 'White wine vinegar', ratio: '1:1 + pinch sugar', notes: 'Similar acidity', tags: [] },
+        { sub: 'Lime juice', ratio: '1:1', notes: 'Slightly different flavor', tags: [] }
+    ],
+    'fresh herbs': [
+        { sub: 'Dried herbs', ratio: '1/3 the amount', notes: 'Add earlier in cooking', tags: [] }
+    ],
+    'basil': [
+        { sub: 'Oregano', ratio: '1:1', notes: 'Earthier flavor', tags: [] },
+        { sub: 'Parsley + mint', ratio: '3/4 parsley + 1/4 mint', notes: 'Closer to fresh basil flavor', tags: [] }
+    ],
+    'olive oil': [
+        { sub: 'Avocado oil', ratio: '1:1', notes: 'Higher smoke point, neutral flavor', tags: [] },
+        { sub: 'Grapeseed oil', ratio: '1:1', notes: 'Lighter, neutral', tags: ['budget'] }
+    ],
+    'eggs': [
+        { sub: 'Flax egg', ratio: '1 tbsp ground flax + 3 tbsp water per egg', notes: 'Let sit 5 min, best for baking', tags: ['vegan'] },
+        { sub: 'Chia egg', ratio: '1 tbsp chia + 3 tbsp water per egg', notes: 'Similar to flax, slightly thicker', tags: ['vegan'] }
+    ],
+    'bread crumbs': [
+        { sub: 'Almond flour', ratio: '1:1', notes: 'Gluten-free, nuttier', tags: ['gluten-free','low-carb'] },
+        { sub: 'Crushed crackers', ratio: '1:1', notes: 'Check for gluten-free options', tags: [] },
+        { sub: 'Oat flour', ratio: '1:1', notes: 'Blend oats, softer coating', tags: [] }
+    ],
+    'flour': [
+        { sub: 'Almond flour', ratio: '1:1 for coating, 3/4 for baking', notes: 'Gluten-free, denser', tags: ['gluten-free','low-carb'] },
+        { sub: 'Oat flour', ratio: '1:1', notes: 'Blend oats finely', tags: ['gluten-free'] },
+        { sub: 'Coconut flour', ratio: '1/4 the amount + more liquid', notes: 'Very absorbent', tags: ['gluten-free','low-carb'] }
+    ],
+    'sugar': [
+        { sub: 'Honey', ratio: '3/4 cup per 1 cup sugar', notes: 'Reduce liquid by 1/4 cup', tags: [] },
+        { sub: 'Maple syrup', ratio: '3/4 cup per 1 cup sugar', notes: 'Distinct flavor, reduce liquid', tags: ['vegan'] },
+        { sub: 'Stevia', ratio: '1 tsp per 1 cup sugar', notes: 'Zero calorie, very sweet', tags: ['diabetic-friendly','low-carb'] }
+    ],
+    'tomatoes': [
+        { sub: 'Canned tomatoes', ratio: '1 can per 3-4 fresh', notes: 'Often more flavorful for cooking', tags: ['budget'] },
+        { sub: 'Roasted red peppers', ratio: '1:1 for sauces', notes: 'Sweeter, nightshade-free if needed', tags: [] }
+    ],
+    'spinach': [
+        { sub: 'Kale', ratio: '1:1 chopped', notes: 'Remove stems, massage if raw', tags: [] },
+        { sub: 'Swiss chard', ratio: '1:1', notes: 'Slightly earthier', tags: [] },
+        { sub: 'Arugula', ratio: '1:1', notes: 'Peppery flavor', tags: [] }
+    ]
+};
+
+function findSubstitution(ingredientText) {
+    const lower = ingredientText.toLowerCase();
+    return Object.keys(SUBSTITUTIONS).find(key => lower.includes(key));
+}
+
+function showIngredientSubs(ingredient) {
+    const subs = SUBSTITUTIONS[ingredient];
+    if (!subs) return;
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('arrow-right-left')} Substitutions for ${ingredient}</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            ${subs.map(s => `
+                <div class="card" style="padding:12px; margin-bottom:8px;">
+                    <div style="display:flex; justify-content:space-between; align-items:start;">
+                        <div>
+                            <strong>${s.sub}</strong> <span class="text-muted">(${s.ratio})</span>
+                            ${s.notes ? `<p class="text-muted" style="font-size:0.85rem; margin-top:4px;">${s.notes}</p>` : ''}
+                        </div>
+                    </div>
+                    ${s.tags.length ? `<div style="margin-top:6px;">${s.tags.map(t => `<span class="tag" style="font-size:0.75rem;">${t}</span>`).join(' ')}</div>` : ''}
+                </div>
+            `).join('')}
+            <div class="text-muted" style="text-align:center; margin-top:12px; font-size:0.85rem;">
+                Need something else? <a href="#" onclick="askNonna('What can I substitute for ${ingredient}?'); closeModal(); return false;">Ask Nonna!</a>
+            </div>
+        </div>
+    `);
+    refreshIcons();
+}
+
+// ========================================
+// PHASE 4: SEASONAL PRODUCE ALERTS
+// ========================================
+const SEASONAL_PRODUCE = {
+    1:  ['citrus', 'kale', 'turnips', 'sweet potatoes', 'winter squash', 'cabbage', 'collards'],
+    2:  ['citrus', 'kale', 'turnips', 'sweet potatoes', 'spinach', 'arugula'],
+    3:  ['asparagus', 'lettuce', 'radishes', 'strawberries', 'peas', 'spinach', 'ramps'],
+    4:  ['asparagus', 'strawberries', 'lettuce', 'radishes', 'peas', 'spring onions', 'rhubarb'],
+    5:  ['strawberries', 'blueberries', 'snap peas', 'zucchini', 'cucumbers', 'fresh herbs'],
+    6:  ['blueberries', 'blackberries', 'peaches', 'tomatoes', 'corn', 'peppers', 'green beans'],
+    7:  ['tomatoes', 'peaches', 'corn', 'okra', 'peppers', 'eggplant', 'melons', 'figs'],
+    8:  ['tomatoes', 'peppers', 'corn', 'figs', 'muscadine grapes', 'okra', 'apples'],
+    9:  ['apples', 'pears', 'sweet potatoes', 'winter squash', 'turnips', 'muscadine grapes'],
+    10: ['apples', 'pears', 'sweet potatoes', 'winter squash', 'kale', 'turnips', 'pumpkin'],
+    11: ['sweet potatoes', 'winter squash', 'kale', 'collards', 'turnips', 'persimmons'],
+    12: ['citrus', 'kale', 'collards', 'sweet potatoes', 'winter squash', 'turnips']
+};
+
+function updateSeasonalCard() {
+    const month = new Date().getMonth() + 1;
+    const items = SEASONAL_PRODUCE[month] || [];
+    const card = document.getElementById('seasonal-card');
+    if (!card || items.length === 0) return;
+
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const pantryNames = pantry.map(p => p.name.toLowerCase());
+
+    card.style.display = '';
+    document.getElementById('seasonal-items').innerHTML = `
+        <div class="flex gap-8" style="flex-wrap:wrap; margin-bottom:12px;">
+            ${items.map(item => {
+                const inPantry = pantryNames.some(p => p.includes(item));
+                return `<span class="tag" style="background:${inPantry ? 'var(--seafoam-light)' : 'var(--gray-light)'}; color:var(--charcoal); border:1px solid ${inPantry ? 'var(--seafoam)' : 'var(--border-light)'}; padding:4px 10px; border-radius:20px; font-size:0.85rem;">
+                    ${inPantry ? icon('check', 12) + ' ' : ''}${item}
+                </span>`;
+            }).join('')}
+        </div>
+        <p class="text-muted" style="font-size:0.8rem; margin-bottom:8px;">
+            ${icon('map-pin', 12)} Western North Carolina &middot; ${new Date().toLocaleString('default', { month: 'long' })}
+        </p>
+    `;
+    refreshIcons();
+}
+
+function askNonnaWithSeasonal() {
+    const month = new Date().getMonth() + 1;
+    const items = SEASONAL_PRODUCE[month] || [];
+    askNonna(`It's ${new Date().toLocaleString('default', { month: 'long' })} in Western North Carolina. These items are in season at local farmers markets: ${items.join(', ')}. Suggest Mediterranean recipes featuring seasonal produce. Prioritize items I have in my pantry.`);
+}
+
+// ========================================
+// PHASE 5: VOICE INPUT FOR PANTRY
+// ========================================
+function startPantryVoice() {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        showToast('Voice input not supported in this browser', 'warning');
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    const btn = document.getElementById('pantry-voice-btn');
+    if (btn) btn.classList.add('recording');
+    showToast('Listening... speak now', 'info');
+
+    recognition.onresult = function(event) {
+        const text = event.results[0][0].transcript;
+        if (btn) btn.classList.remove('recording');
+        parsePantryVoiceInput(text);
+    };
+    recognition.onerror = function() {
+        if (btn) btn.classList.remove('recording');
+        showToast('Could not understand. Try again.', 'warning');
+    };
+    recognition.onend = function() {
+        if (btn) btn.classList.remove('recording');
+    };
+    recognition.start();
+}
+
+function parsePantryVoiceInput(text) {
+    let qty = '', unit = '', name = '';
+    const patterns = [
+        /^(?:add\s+)?(\d+\.?\d*)\s+(cups?|tbsp|tsp|oz|lbs?|pounds?|gallons?|liters?|cans?|bottles?|bags?|bunche?s?|heads?|cloves?|pieces?)\s+(?:of\s+)?(.+)/i,
+        /^(?:add\s+)?(\d+\.?\d*)\s+(.+)/i,
+        /^(?:add\s+)?(.+)/i
+    ];
+
+    for (const pattern of patterns) {
+        const match = text.match(pattern);
+        if (match) {
+            if (match.length === 4) { qty = match[1]; unit = match[2]; name = match[3]; }
+            else if (match.length === 3 && !isNaN(match[1])) { qty = match[1]; name = match[2]; }
+            else { name = match[1]; }
+            break;
+        }
+    }
+
+    name = name.trim().replace(/\.$/, '');
+    const category = guessCategory(name);
+    const qtyStr = unit ? `${qty} ${unit}` : qty;
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('mic')} Add to Pantry</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted" style="margin-bottom:12px;">I heard: "<strong>${text}</strong>"</p>
+            <div class="form-group">
+                <label>Item</label>
+                <input type="text" class="form-input" id="voice-pantry-name" value="${name}">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" class="form-input" id="voice-pantry-qty" value="${qtyStr}">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-select" id="voice-pantry-cat">
+                    ${Object.keys(CATEGORY_ICONS).filter(c => c !== 'other' && c !== 'herbs').map(c =>
+                        `<option value="${c}" ${c === category ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`
+                    ).join('')}
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="confirmVoicePantryAdd()">${icon('plus')} Add to Pantry</button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+function guessCategory(name) {
+    const lower = name.toLowerCase();
+    const rules = {
+        produce: /lettuce|tomato|onion|garlic|pepper|cucumber|carrot|celery|spinach|kale|zucchini|squash|potato|broccoli|cauliflower|mushroom|avocado|corn/,
+        proteins: /chicken|beef|pork|fish|salmon|shrimp|tofu|egg|lamb|turkey|tuna|sausage|bacon/,
+        dairy: /milk|cheese|yogurt|butter|cream|feta|mozzarella|parmesan|ricotta/,
+        grains: /rice|pasta|bread|flour|oat|quinoa|couscous|noodle|tortilla|cereal/,
+        oils: /olive oil|oil|vinegar|sesame/,
+        spices: /salt|pepper|cumin|paprika|oregano|cinnamon|turmeric|chili|garlic powder|thyme|rosemary|basil/,
+        canned: /can of|canned|tomato sauce|broth|stock|beans|chickpea|lentil/,
+        frozen: /frozen/,
+        beverages: /water|juice|coffee|tea|wine|beer|soda/
+    };
+    for (const [cat, regex] of Object.entries(rules)) {
+        if (regex.test(lower)) return cat;
+    }
+    return 'produce';
+}
+
+function confirmVoicePantryAdd() {
+    const name = document.getElementById('voice-pantry-name').value.trim();
+    if (!name) { showToast('Please enter an item name', 'warning'); return; }
+
+    const item = {
+        name: name,
+        qty: document.getElementById('voice-pantry-qty').value.trim() || '1',
+        category: document.getElementById('voice-pantry-cat').value,
+        location: 'pantry',
+        status: 'fresh',
+        addedAt: new Date().toISOString()
+    };
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    pantry.push(item);
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+    showToast(`${name} added to pantry!`, 'success');
+}
+
+// ========================================
+// PHASE 6: LEFTOVER TRANSFORMER
+// ========================================
+function openLeftoverTransformer() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const pantryItems = pantry.map(p => p.name).slice(0, 20);
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('refresh-cw')} Leftover Transformer</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted" style="margin-bottom:12px;">Tell Nonna what leftovers you have, and she'll suggest creative new meals.</p>
+            <div class="form-group">
+                <label>What leftovers do you have?</label>
+                <textarea class="form-textarea" id="leftover-input" rows="3" placeholder="e.g., leftover roasted chicken, half a lemon, some cooked rice, wilting spinach"></textarea>
+            </div>
+            ${pantryItems.length > 0 ? `
+                <div class="form-group">
+                    <label>Quick add from pantry:</label>
+                    <div class="flex gap-8" style="flex-wrap:wrap;">
+                        ${pantryItems.map(item => `
+                            <span class="tag" style="cursor:pointer; padding:4px 10px;" onclick="addLeftoverItem('${item.replace(/'/g, "\\'")}')">${item}</span>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="transformLeftovers()">${icon('bot')} Ask Nonna</button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+function addLeftoverItem(item) {
+    const input = document.getElementById('leftover-input');
+    if (!input) return;
+    const current = input.value.trim();
+    input.value = current ? `${current}, ${item}` : item;
+}
+
+function transformLeftovers() {
+    const leftovers = document.getElementById('leftover-input').value.trim();
+    if (!leftovers) { showToast('Please enter some leftover ingredients', 'warning'); return; }
+    closeModal();
+    askNonna(`I have these leftovers I need to use up: ${leftovers}. Please suggest 3-5 creative Mediterranean-inspired recipes to transform these leftovers into new meals. For each suggestion, give the recipe name, a brief description, which leftovers it uses, estimated time, and difficulty level. Prioritize recipes that use multiple leftovers at once and minimize waste.`);
+}
+
+// ========================================
+// PHASE 7: RECIPE COLLECTIONS
+// ========================================
+function getCollections() {
+    return getStorage('tavola_collections') || [];
+}
+
+function saveCollections(collections) {
+    setStorage('tavola_collections', collections);
+}
+
+function renderCollections() {
+    const collections = getCollections();
+    const grid = document.getElementById('collections-grid');
+    const empty = document.getElementById('collections-empty');
+    if (!grid) return;
+
+    if (collections.length === 0) {
+        grid.innerHTML = '';
+        if (empty) empty.style.display = '';
+        return;
+    }
+    if (empty) empty.style.display = 'none';
+
+    const library = getStorage(STORAGE.RECIPES) || [];
+    grid.innerHTML = collections.map(col => {
+        const recipeCount = col.recipeIds?.length || 0;
+        return `
+            <div class="card library-card" onclick="viewCollection('${col.id}')" style="cursor:pointer;">
+                <div class="card-title">${icon('library')} ${col.name}</div>
+                ${col.description ? `<p class="text-muted" style="font-size:0.85rem;">${col.description}</p>` : ''}
+                <div class="text-muted" style="font-size:0.8rem; margin-top:4px;">${recipeCount} recipe${recipeCount !== 1 ? 's' : ''}</div>
+            </div>
+        `;
+    }).join('');
+    refreshIcons();
+}
+
+function openCreateCollectionModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('library')} New Collection</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-input" id="col-name" placeholder="e.g., Weeknight Dinners">
+            </div>
+            <div class="form-group">
+                <label>Description (optional)</label>
+                <textarea class="form-textarea" id="col-desc" rows="2" placeholder="What's this collection about?"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveNewCollection()">${icon('save')} Create</button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+function saveNewCollection() {
+    const name = document.getElementById('col-name').value.trim();
+    if (!name) { showToast('Please enter a name', 'warning'); return; }
+    const collections = getCollections();
+    collections.push({
+        id: 'col_' + Date.now(),
+        name,
+        description: document.getElementById('col-desc').value.trim(),
+        recipeIds: [],
+        createdAt: new Date().toISOString()
+    });
+    saveCollections(collections);
+    closeModal();
+    renderCollections();
+    showToast('Collection created!', 'success');
+}
+
+function viewCollection(colId) {
+    const collections = getCollections();
+    const col = collections.find(c => c.id === colId);
+    if (!col) return;
+
+    const library = getStorage(STORAGE.RECIPES) || [];
+    const recipes = library.filter(r => (col.recipeIds || []).includes(r.id));
+
+    openModal(`
+        <div class="modal-header">
+            <div>
+                <h2 class="modal-title" id="modal-title-label">${col.name}</h2>
+                <p class="text-muted">${col.description || ''} &middot; ${recipes.length} recipes</p>
+            </div>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div style="margin-bottom:12px;">
+                <button class="btn btn-sm btn-primary" onclick="openAddRecipeToCollection('${colId}')">${icon('plus')} Add Recipes</button>
+                <button class="btn btn-sm" style="background:var(--danger);color:white;" onclick="deleteCollection('${colId}')">${icon('trash-2')} Delete</button>
+            </div>
+            ${recipes.length > 0 ? recipes.map(r => `
+                <div class="card" style="padding:10px; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <strong>${r.title}</strong>
+                        <div class="text-muted" style="font-size:0.8rem;">${r.metadata?.totalTime || 30} min</div>
+                    </div>
+                    <div>
+                        <button class="btn btn-ghost btn-sm" onclick="viewRecipeDetail('${r.id}')">${icon('eye')}</button>
+                        <button class="btn btn-ghost btn-sm" onclick="removeFromCollection('${colId}', '${r.id}')">${icon('x')}</button>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-muted" style="text-align:center; padding:16px;">No recipes yet. Add some!</p>'}
+        </div>
+    `);
+    refreshIcons();
+}
+
+function openAddRecipeToCollection(colId) {
+    const library = getStorage(STORAGE.RECIPES) || [];
+    const collections = getCollections();
+    const col = collections.find(c => c.id === colId);
+    if (!col) return;
+    const existingIds = new Set(col.recipeIds || []);
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('plus')} Add to ${col.name}</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            ${library.length > 0 ? library.map(r => `
+                <label class="toggle" style="padding:8px 0; border-bottom:1px solid var(--border-light); display:flex; align-items:center; gap:8px;">
+                    <input type="checkbox" value="${r.id}" ${existingIds.has(r.id) ? 'checked' : ''} onchange="toggleRecipeInCollection('${colId}', '${r.id}', this.checked)">
+                    <span>${r.title}</span>
+                </label>
+            `).join('') : '<p class="text-muted">No recipes in your library yet.</p>'}
+        </div>
+    `);
+}
+
+function toggleRecipeInCollection(colId, recipeId, add) {
+    const collections = getCollections();
+    const col = collections.find(c => c.id === colId);
+    if (!col) return;
+    if (!col.recipeIds) col.recipeIds = [];
+    if (add && !col.recipeIds.includes(recipeId)) {
+        col.recipeIds.push(recipeId);
+    } else if (!add) {
+        col.recipeIds = col.recipeIds.filter(id => id !== recipeId);
+    }
+    saveCollections(collections);
+}
+
+function removeFromCollection(colId, recipeId) {
+    toggleRecipeInCollection(colId, recipeId, false);
+    viewCollection(colId);
+    showToast('Removed from collection', 'success');
+}
+
+function deleteCollection(colId) {
+    const collections = getCollections().filter(c => c.id !== colId);
+    saveCollections(collections);
+    closeModal();
+    renderCollections();
+    showToast('Collection deleted', 'success');
+}
+
+// ========================================
+// PHASE 8: RECIPE IMPORT FROM URL
+// ========================================
+function openImportRecipeModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('link')} Import Recipe from URL</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted" style="margin-bottom:12px;">Paste a URL from any recipe website (AllRecipes, Food Network, NYT Cooking, etc.)</p>
+            <div class="form-group">
+                <input type="url" class="form-input" id="import-url" placeholder="https://www.example.com/recipe/...">
+            </div>
+            <div id="import-status"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" id="import-btn" onclick="importRecipeFromUrl()">${icon('download')} Import</button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+async function importRecipeFromUrl() {
+    const url = document.getElementById('import-url').value.trim();
+    if (!url) { showToast('Please enter a URL', 'warning'); return; }
+
+    const btn = document.getElementById('import-btn');
+    const status = document.getElementById('import-status');
+    btn.disabled = true;
+    btn.textContent = 'Importing...';
+    status.innerHTML = `<div class="text-muted" style="text-align:center; padding:16px;">${icon('loader', 20)} Fetching and parsing recipe...</div>`;
+    refreshIcons();
+
+    try {
+        const response = await fetch('/.netlify/functions/import-recipe', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+        const data = await response.json();
+
+        if (data.error) {
+            status.innerHTML = `<p style="color:var(--danger);">${icon('alert-triangle')} ${data.error}. Try adding the recipe manually instead.</p>`;
+            btn.disabled = false;
+            btn.innerHTML = `${icon('download')} Import`;
+            refreshIcons();
+            return;
+        }
+        showImportPreview(data.recipe, url);
+    } catch (error) {
+        status.innerHTML = `<p style="color:var(--danger);">${icon('alert-triangle')} Import failed: ${error.message}. The recipe import service may not be set up yet.</p>`;
+        btn.disabled = false;
+        btn.innerHTML = `${icon('download')} Import`;
+        refreshIcons();
+    }
+}
+
+function showImportPreview(recipe, sourceUrl) {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('check-circle')} Recipe Imported</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" class="form-input" id="import-title" value="${(recipe.title || '').replace(/"/g, '&quot;')}">
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Servings</label>
+                    <input type="number" class="form-input" id="import-servings" value="${recipe.servings || 4}">
+                </div>
+                <div class="form-group">
+                    <label>Prep (min)</label>
+                    <input type="number" class="form-input" id="import-prep" value="${recipe.metadata?.prepTime || 0}">
+                </div>
+                <div class="form-group">
+                    <label>Cook (min)</label>
+                    <input type="number" class="form-input" id="import-cook" value="${recipe.metadata?.cookTime || 0}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label>Ingredients (one per line)</label>
+                <textarea class="form-textarea" id="import-ingredients" rows="8">${(recipe.ingredients || []).join('\n')}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Instructions (one per line)</label>
+                <textarea class="form-textarea" id="import-instructions" rows="8">${(recipe.instructions || []).join('\n')}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveImportedRecipe('${sourceUrl.replace(/'/g, "\\'")}')">${icon('save')} Save to Library</button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+function saveImportedRecipe(sourceUrl) {
+    const title = document.getElementById('import-title').value.trim();
+    if (!title) { showToast('Please enter a title', 'warning'); return; }
+
+    const prepTime = parseInt(document.getElementById('import-prep').value) || 0;
+    const cookTime = parseInt(document.getElementById('import-cook').value) || 0;
+    const recipe = {
+        id: 'recipe_' + Date.now(),
+        title,
+        ingredients: document.getElementById('import-ingredients').value.split('\n').filter(l => l.trim()),
+        instructions: document.getElementById('import-instructions').value.split('\n').filter(l => l.trim()),
+        servings: parseInt(document.getElementById('import-servings').value) || 4,
+        metadata: {
+            prepTime, cookTime,
+            totalTime: prepTime + cookTime,
+            serves: parseInt(document.getElementById('import-servings').value) || 4,
+            sourceUrl
+        },
+        nutrition: {},
+        tags: ['imported'],
+        dateGenerated: new Date().toISOString(),
+        timesCooked: 0, rating: 0, favorited: false
+    };
+
+    const library = getStorage(STORAGE.RECIPES) || [];
+    library.push(recipe);
+    setStorage(STORAGE.RECIPES, library);
+    closeModal();
+    renderRecipeLibrary();
+    showToast(`"${title}" imported successfully!`, 'success');
 }
 </script>
 </body>
