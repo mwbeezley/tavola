@@ -3873,6 +3873,11 @@
         .border-top-seafoam { border-top-color: var(--seafoam); }
         .border-top-terracotta { border-top-color: var(--terracotta); }
         .border-top-amber { border-top-color: var(--amber); }
+        .border-top-cerulean { border-top-color: var(--cerulean); }
+
+        .pillars-four {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
 
         .pillar-icon {
             width: 64px;
@@ -3886,6 +3891,7 @@
         .pillar-icon.seafoam { background: var(--seafoam-light); color: var(--seafoam); }
         .pillar-icon.terracotta { background: var(--terracotta-light); color: var(--terracotta); }
         .pillar-icon.amber { background: var(--amber-light); color: var(--amber); }
+        .pillar-icon.cerulean { background: var(--cerulean-light); color: var(--cerulean); }
         .pillar-icon i { width: 32px; height: 32px; }
 
         .pillar-card h3 {
@@ -4120,32 +4126,227 @@
             padding: 16px 20px;
         }
         .about-content {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 48px 20px;
+            background: #FAEBD7;
+        }
+        .about-hero {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+        .about-hero h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--navy);
+            margin-bottom: 12px;
+            line-height: 1.2;
+        }
+        .about-subtitle {
+            font-family: var(--font-script);
+            font-size: 1.3rem;
+            color: var(--cerulean);
+        }
+        .about-story {
+            margin-bottom: 48px;
+        }
+        .about-story h2 {
+            font-family: var(--font-heading);
+            font-size: 2rem;
+            color: var(--navy);
+            margin-bottom: 32px;
+        }
+        .about-story h3 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin: 48px 0 24px;
+        }
+        .about-story p {
+            font-size: 18px;
+            line-height: 1.8;
+            color: var(--charcoal);
+            margin-bottom: 24px;
+        }
+        .pullquote {
+            font-size: 20px;
+            line-height: 1.7;
+            color: var(--seafoam);
+            font-weight: 500;
+            padding: 24px;
+            background: white;
+            border-left: 4px solid var(--seafoam);
+            margin: 32px 0;
+            font-style: italic;
+        }
+        .founder-signature {
+            font-family: var(--font-script);
+            font-size: 1.5rem;
+            color: var(--navy);
+            margin-top: 48px;
+            text-align: right;
+        }
+        .about-four-pillars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+        .about-four-pillars .pillar-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-lg);
+            border-top: 4px solid var(--seafoam);
+            box-shadow: var(--shadow-md);
+        }
+        .about-four-pillars .pillar-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--seafoam-light);
+            color: var(--seafoam);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 16px;
+        }
+        .about-four-pillars .pillar-icon i {
+            width: 24px;
+            height: 24px;
+        }
+        .about-four-pillars h4 {
+            font-size: 1.2rem;
+            color: var(--navy);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .about-four-pillars h4 i {
+            width: 20px;
+            height: 20px;
+            color: var(--seafoam);
+        }
+        .about-four-pillars p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--charcoal);
+        }
+
+        @media (max-width: 768px) {
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+            .about-story p {
+                font-size: 16px;
+            }
+            .pullquote {
+                font-size: 18px;
+            }
+        }
+
+        /* FAQ Page */
+        .faq-page {
+            display: none;
+            background: var(--page-bg);
+        }
+        .faq-page.active {
+            display: block;
+        }
+        .faq-header {
+            background: var(--navy);
+            padding: 16px 20px;
+        }
+        .faq-content {
             max-width: 800px;
             margin: 0 auto;
             padding: 48px 20px;
         }
-        .about-section {
+        .faq-hero {
+            text-align: center;
             margin-bottom: 48px;
         }
-        .about-section h2 {
-            color: var(--navy);
-            margin-bottom: 16px;
-        }
-        .about-pillars {
-            display: grid;
-            gap: 32px;
-        }
-        .about-pillars > div h3 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .faq-hero h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
             color: var(--navy);
             margin-bottom: 12px;
         }
-        .about-pillars > div i {
-            width: 24px;
-            height: 24px;
-            color: var(--seafoam);
+        .faq-subtitle {
+            font-size: 1.2rem;
+            color: var(--charcoal);
+        }
+        .faq-accordion {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .faq-item {
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: box-shadow 0.2s;
+        }
+        .faq-item.active {
+            box-shadow: var(--shadow-md);
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            cursor: pointer;
+            background: white;
+            transition: background 0.2s;
+        }
+        .faq-question:hover {
+            background: var(--gray-light);
+        }
+        .faq-item.active .faq-question {
+            background: var(--seafoam-light);
+        }
+        .faq-question span {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+        }
+        .faq-arrow {
+            width: 20px;
+            height: 20px;
+            color: var(--cerulean);
+            transition: transform 0.3s;
+            flex-shrink: 0;
+        }
+        .faq-item.active .faq-arrow {
+            transform: rotate(180deg);
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 24px 24px;
+        }
+        .faq-answer p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--charcoal);
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .faq-hero h1 {
+                font-size: 2rem;
+            }
+            .faq-question span {
+                font-size: 16px;
+            }
+            .faq-answer p {
+                font-size: 14px;
+            }
         }
 
         /* Responsive */
@@ -4761,8 +4962,8 @@
         <!-- Hero Section -->
         <section class="marketing-hero">
             <div class="container">
-                <h1>Your Mediterranean Kitchen Companion</h1>
-                <p class="hero-subtitle">Gentle, delicious meals designed for your health</p>
+                <h1>Your AI sous chef for Mediterranean meal planning</h1>
+                <p class="hero-subtitle">Discover diverse, delicious cooking without the hassle. Let Nonna handle the planning, shopping and stress—so you can focus on the joy of cooking and eating well.</p>
                 <div class="hero-cta">
                     <button class="btn btn-primary btn-lg" onclick="showIntakeForm()">Get Started Free</button>
                     <button class="btn btn-secondary btn-lg" onclick="showMarketingAbout()">Learn More</button>
@@ -4770,25 +4971,30 @@
             </div>
         </section>
 
-        <!-- Three Pillars -->
+        <!-- Four Pillars -->
         <section class="marketing-section bg-cerulean">
             <div class="container">
-                <h2 class="section-title">Built for You</h2>
-                <div class="pillars-grid">
+                <h2 class="section-title">Tavola is for people who love food—and need it to actually work for their lives</h2>
+                <div class="pillars-grid pillars-four">
                     <div class="pillar-card border-top-seafoam">
                         <div class="pillar-icon seafoam"><i data-lucide="heart"></i></div>
-                        <h3>For Food Lovers</h3>
-                        <p>Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize and cook with confidence.</p>
+                        <h3>Food Lovers</h3>
+                        <p>Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize and cook with confidence. Your personal AI sous chef, Nonna, is always ready to help.</p>
                     </div>
                     <div class="pillar-card border-top-terracotta">
                         <div class="pillar-icon terracotta"><i data-lucide="users"></i></div>
-                        <h3>For Families</h3>
-                        <p>Share recipes with loved ones through Family Tavola. Learn from family favorites and build a shared cookbook across generations.</p>
+                        <h3>Families & Community</h3>
+                        <p>Share recipes with loved ones through Family Tavola. Learn from your mom's favorites, swap cooking tips with your sister and build a shared family cookbook that spans generations.</p>
                     </div>
                     <div class="pillar-card border-top-amber">
                         <div class="pillar-icon amber"><i data-lucide="shield-plus"></i></div>
-                        <h3>For Health & Wellness</h3>
-                        <p>Managing digestive health doesn't mean sacrificing flavor. Tavola helps you plan anti-inflammatory, gut-friendly meals that are delicious and healing.</p>
+                        <h3>Chronic Illness Warriors</h3>
+                        <p>Managing Crohn's, UC, IBS or other digestive conditions? Tavola filters recipes by health tags, tracks trigger foods and provides gentle meal options during flares. Nutrition as medicine.</p>
+                    </div>
+                    <div class="pillar-card border-top-cerulean">
+                        <div class="pillar-icon cerulean"><i data-lucide="target"></i></div>
+                        <h3>Health-Conscious Eaters</h3>
+                        <p>Weight loss, heart health, diabetes management—whatever your goals, Tavola helps you eat well without sacrificing flavor. Mediterranean patterns that naturally support wellness.</p>
                     </div>
                 </div>
             </div>
@@ -4939,6 +5145,7 @@
                     <div>
                         <h5>Product</h5>
                         <a href="#" onclick="showMarketingAbout(); return false;">About</a>
+                        <a href="#" onclick="showFAQPage(); return false;">FAQ</a>
                         <a href="#" onclick="showIntakeForm(); return false;">Get Started</a>
                     </div>
                     <div>
@@ -4962,32 +5169,197 @@
             </div>
         </header>
         <div class="about-content">
-            <h1>About Tavola</h1>
-            <section class="about-section">
-                <h2>Our Story</h2>
-                <p>Tavola was born from a simple need: delicious, healthy Mediterranean meals that work for sensitive digestive systems. Living with digestive challenges shouldn't mean sacrificing culinary joy.</p>
-            </section>
-            <section class="about-section">
-                <h2>Three Pillars</h2>
-                <div class="about-pillars">
-                    <div>
-                        <h3><i data-lucide="heart"></i> For Food Lovers</h3>
-                        <p>Mediterranean cuisine is about more than nutrition—it's culture, family and joy. We preserve that while making it accessible for everyone.</p>
+            <div class="about-hero">
+                <h1>Tavola: Where food brings us together</h1>
+                <p class="about-subtitle">Named after the Italian word for "table"</p>
+            </div>
+
+            <section class="about-story">
+                <h2>The story behind Tavola</h2>
+
+                <p>I created Tavola because I was exhausted.</p>
+
+                <p>Living with Crohn's disease meant every meal was a calculation. Would this trigger a flare? Could I eat this safely? What would give me energy without making me feel worse?</p>
+
+                <p>Then I decided to lose weight—another layer of complexity. Suddenly I was tracking macros, planning workouts and trying to cook anti-inflammatory Mediterranean meals that wouldn't bore me to tears.</p>
+
+                <p>And I <em>love</em> cooking. I genuinely enjoy it. But even I was drowning in the mental load.</p>
+
+                <p>Meal planning consumed hours every week. Shopping took forever because I'd forget what I already had. I'd cook something delicious on Sunday and completely forget about the leftovers by Tuesday. I'd find myself eating the same rotation of "safe" meals because thinking through new options was overwhelming.</p>
+
+                <p>Then my mom started asking me for help. She has her own health needs and saw what Mediterranean eating was doing for me. Suddenly I was meal planning for two households, each with different needs, different schedules and different budgets.</p>
+
+                <p class="pullquote">That's when I realized: if I'm struggling with this—someone who actually enjoys cooking and has the time to research recipes—what about everyone else?</p>
+
+                <p>What about the working parents who barely have time to think about dinner, let alone plan a week ahead? What about people managing chronic conditions who need nutrition to be part of their treatment plan? What about families who want to cook together and share recipes but don't have a good system for it?</p>
+
+                <p>So I built Tavola.</p>
+
+                <p>Named after the Italian word for "table," Tavola is where food brings us together.</p>
+
+                <p>It started as a tool to manage my own Crohn's and weight loss. Then it became something my mom and sister used. Then I kept adding features—pantry tracking so I'd stop buying duplicate ingredients, Family Tavola so we could share recipes, smart shopping lists that account for what I already have.</p>
+
+                <p>And then I added Nonna.</p>
+
+                <p>I've always loved AI and what it makes possible. The idea that I could have a patient, knowledgeable cooking companion who understood Mediterranean cuisine, knew about anti-inflammatory eating and could help me plan meals around my actual pantry ingredients? That changed everything.</p>
+
+                <p>Nonna knows I have Crohn's. She knows I'm working on losing weight. She knows I love trying new cuisines but need things to be practical for weeknight cooking. She knows what's in my fridge right now and what's on sale at Aldi this week.</p>
+
+                <p class="pullquote">She's like having a real Italian grandmother in your pocket—patient, full of wisdom and always ready to help you cook something delicious without the stress.</p>
+
+                <h3>Tavola is for four kinds of people:</h3>
+
+                <div class="about-four-pillars">
+                    <div class="pillar-card">
+                        <div class="pillar-icon"><i data-lucide="heart"></i></div>
+                        <h4>Food Lovers</h4>
+                        <p>Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize and cook with confidence. Your personal AI sous chef, Nonna, is always ready to help.</p>
                     </div>
-                    <div>
-                        <h3><i data-lucide="users"></i> For Families</h3>
-                        <p>Share recipes across generations. Preserve family techniques. Build a living cookbook together through Family Tavola.</p>
+                    <div class="pillar-card">
+                        <h4><i data-lucide="users"></i> Families & Community</h4>
+                        <p>Share recipes with loved ones through Family Tavola. Learn from your mom's favorites, swap cooking tips with your sister and build a shared family cookbook that spans generations.</p>
                     </div>
-                    <div>
-                        <h3><i data-lucide="shield-plus"></i> For Health</h3>
-                        <p>Designed for IBD, IBS and digestive sensitivities. Flare mode provides gentle options when you need them most.</p>
+                    <div class="pillar-card">
+                        <h4><i data-lucide="shield-plus"></i> Chronic Illness Warriors</h4>
+                        <p>Managing Crohn's, UC, IBS or other digestive conditions? Tavola filters recipes by health tags, tracks trigger foods and provides gentle meal options during flares. Nutrition as medicine.</p>
+                    </div>
+                    <div class="pillar-card">
+                        <h4><i data-lucide="target"></i> Health-Conscious Eaters</h4>
+                        <p>Weight loss, heart health, diabetes management—whatever your goals, Tavola helps you eat well without sacrificing flavor. Mediterranean patterns that naturally support wellness.</p>
                     </div>
                 </div>
+
+                <p>If you're trying to eat better, cook more or just reduce the mental load of figuring out "what's for dinner," Tavola is built for you.</p>
+
+                <p>We're not a meal kit service. We're not selling you food. We're not trying to make cooking complicated.</p>
+
+                <p>We're just trying to make meal planning feel less like a chore and more like the creative, connecting, nourishing act it's supposed to be.</p>
+
+                <p class="pullquote">Because at the end of the day, food isn't just fuel. It's how we take care of ourselves. It's how we show love to our families. It's how we explore cultures and traditions.</p>
+
+                <p>And it should never feel impossible to do well.</p>
+
+                <p>Welcome to Tavola. Let's cook something great together.</p>
+
+                <p class="founder-signature">—Matt Beezley, Founder</p>
             </section>
-            <section class="about-section">
-                <h2>Meet Nonna</h2>
-                <p>Nonna is your AI cooking companion—patient, knowledgeable and always available. She understands Mediterranean cooking traditions, digestive wellness and how to adapt recipes for your needs.</p>
-            </section>
+        </div>
+    </div>
+
+    <!-- FAQ Page -->
+    <div class="faq-page" id="view-faq" style="display:none;">
+        <header class="faq-header">
+            <div class="container">
+                <button class="btn btn-secondary" onclick="navigateBackFromAbout()"><i data-lucide="arrow-left"></i> Back</button>
+            </div>
+        </header>
+        <div class="faq-content">
+            <div class="faq-hero">
+                <h1>Frequently asked questions</h1>
+                <p class="faq-subtitle">Everything you need to know about Tavola</p>
+            </div>
+
+            <div class="faq-accordion">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What is Tavola?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tavola is an AI-powered meal planning platform built for Mediterranean cooking, chronic health management and family recipe sharing. Think of it as having a knowledgeable Italian grandmother (Nonna) who helps you plan meals, manage your pantry and cook with confidence—without the overwhelm.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Who is Nonna?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nonna is your AI cooking companion, powered by Claude. She understands Mediterranean cuisine, helps you plan meals based on your pantry, answers cooking questions and creates personalized meal plans around your health goals, budget and preferences. She's patient, knowledgeable and always available—just like a real grandmother.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do I need to know how to cook?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Not at all! Nonna walks you through recipes step-by-step and can adapt them to your skill level. Whether you're a confident home cook or just starting out, Tavola meets you where you are.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What makes Tavola different from other meal planning apps?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Three things: (1) Nonna is context-aware—she knows what's in your pantry, your health needs and your cooking style. (2) Family Tavola lets you share recipes with loved ones and build a shared family cookbook. (3) We're built specifically for Mediterranean eating patterns, which are naturally anti-inflammatory and gut-friendly.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can Tavola help with dietary restrictions or health conditions?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Tavola was originally created to help manage Crohn's disease through Mediterranean eating. Nonna can filter recipes by health tags (anti-inflammatory, heart-healthy, low-sodium, etc.) and adapt any recipe to be Crohn's-friendly, gluten-free, dairy-free or match other dietary needs.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How does the smart pantry work?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Add ingredients to your digital pantry once and Tavola tracks what you have. When you mark a meal as cooked, Tavola automatically deducts ingredients from your pantry. You'll get low-stock alerts and shopping lists that only include what you actually need to buy. No more duplicate purchases or forgotten ingredients.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What is Family Tavola?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Family Tavola is a shared recipe library where you and your loved ones can share favorite recipes, rate dishes, leave cooking notes and build collections together. It's like a digital family cookbook that grows with you.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How much does Tavola cost?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>We offer a free tier that includes limited Nonna chats and basic meal planning. Premium plans start at $12/month (or $100/year) for unlimited access to Nonna, Family Tavola, smart pantry and all features. Family plans for up to 5 users are $20/month.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I import recipes from other websites?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! Paste a URL from recipe sites like NYT Cooking, Bon Appétit or AllRecipes and Tavola extracts the ingredients, instructions and nutrition info. You can edit before saving to your collection.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Will Tavola work for me if I'm not doing Mediterranean cooking?</span>
+                        <i data-lucide="chevron-down" class="faq-arrow"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Absolutely! While Tavola specializes in Mediterranean cuisine (Greek, Italian, Spanish, Levantine, North African), Nonna can help with any cooking style. The smart pantry, family sharing and meal planning features work for all types of cooking.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -6935,9 +7307,15 @@ function showMarketingAbout() {
 
 function navigateBackFromAbout() {
     const aboutView = document.getElementById('view-about');
+    const faqView = document.getElementById('view-faq');
+
     if (aboutView) {
         aboutView.classList.remove('active');
         aboutView.style.display = 'none';
+    }
+    if (faqView) {
+        faqView.classList.remove('active');
+        faqView.style.display = 'none';
     }
 
     if (state.user || getStorage(STORAGE.PROFILE)) {
@@ -6946,6 +7324,40 @@ function navigateBackFromAbout() {
     } else {
         showMarketingPage();
     }
+}
+
+function showFAQPage() {
+    state.previousView = state.currentView || 'marketing';
+    const marketingView = document.getElementById('view-marketing');
+    const faqView = document.getElementById('view-faq');
+
+    if (marketingView) {
+        marketingView.classList.remove('active');
+        marketingView.style.display = 'none';
+    }
+
+    if (faqView) {
+        faqView.style.display = 'block';
+        faqView.classList.add('active');
+        refreshIcons();
+    }
+}
+
+function toggleFAQ(element) {
+    const faqItem = element.parentElement;
+    const wasActive = faqItem.classList.contains('active');
+
+    // Close all FAQ items
+    document.querySelectorAll('.faq-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    // Open clicked item if it wasn't active
+    if (!wasActive) {
+        faqItem.classList.add('active');
+    }
+
+    refreshIcons();
 }
 
 function cleanupDuplicateRecipes() {
