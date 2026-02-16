@@ -10131,6 +10131,21 @@ async function sendNonnaMessage() {
     }
 }
 
+// CRITICAL: Initialize Enter key listener for Nonna chat input
+document.addEventListener('DOMContentLoaded', function() {
+    const nonnaInput = document.getElementById('chat-input-nonna');
+    if (nonnaInput) {
+        nonnaInput.addEventListener('keydown', function(e) {
+            // Enter sends message (unless Shift is held for new line)
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendNonnaMessage();
+            }
+            // Shift+Enter allows new line (default textarea behavior)
+        });
+    }
+});
+
 function toggleNonnaVoice() {
     const btn = document.getElementById('nonna-voice-btn');
     if (!btn) return;
