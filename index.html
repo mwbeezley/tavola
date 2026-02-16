@@ -1967,32 +1967,217 @@
         .accordion-item.open .accordion-body { display: block; }
 
         /* Pantry Items */
-        .pantry-item {
+        /* Pantry Category Groups */
+        .pantry-category {
+            margin-bottom: 24px;
+        }
+
+        .pantry-category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: #D9EBF7;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .pantry-category-header:hover {
+            background: #C5E2F5;
+        }
+
+        .pantry-category-header.expanded {
+            background: #B8DCF3;
+        }
+
+        .pantry-category-header.has-alerts {
+            background: #FFF3CD;
+            border-left: 4px solid #DAA520;
+        }
+
+        .pantry-category-header-left {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px;
-            background: var(--gray-light);
+        }
+
+        .pantry-category-name {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: var(--navy);
+        }
+
+        .pantry-category-count {
+            font-size: 0.85rem;
+            color: var(--gray-text);
+            font-weight: 400;
+        }
+
+        .pantry-category-arrow {
+            transition: transform 0.3s;
+            color: var(--navy);
+        }
+
+        .pantry-category-header.expanded .pantry-category-arrow {
+            transform: rotate(180deg);
+        }
+
+        .pantry-category-items {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+        }
+
+        .pantry-category-items.expanded {
+            max-height: 5000px;
+            opacity: 1;
+            margin-bottom: 12px;
+        }
+
+        /* Pantry Item Cards */
+        .pantry-card {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            transition: all 0.2s;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+        }
+
+        .pantry-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 4px 12px rgba(26, 58, 82, 0.12);
+            border-color: var(--seafoam);
+        }
+
+        .pantry-card.status-critical {
+            border-left: 4px solid #EF4444;
+        }
+
+        .pantry-card.status-low {
+            border-left: 4px solid #DAA520;
+        }
+
+        .pantry-card.status-stocked {
+            border-left: 4px solid #5DBAA4;
+        }
+
+        .pantry-card-icon {
+            font-size: 2rem;
+            margin-bottom: 4px;
+        }
+
+        .pantry-card-name {
+            font-weight: 600;
+            font-size: 1rem;
+            color: var(--navy);
+            line-height: 1.3;
+            min-height: 2.6em;
+        }
+
+        .pantry-card-qty {
+            font-size: 0.9rem;
+            color: var(--gray-text);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pantry-card-qty i {
+            width: 14px;
+            height: 14px;
+        }
+
+        .pantry-card-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 4px;
+        }
+
+        .pantry-card-status i {
+            width: 12px;
+            height: 12px;
+        }
+
+        .pantry-card-status.status-stocked {
+            background: #E8F5F1;
+            color: #5DBAA4;
+        }
+
+        .pantry-card-status.status-low {
+            background: #FFF3CD;
+            color: #DAA520;
+        }
+
+        .pantry-card-status.status-critical {
+            background: #FEE2E2;
+            color: #EF4444;
+        }
+
+        .pantry-card-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .btn-icon-sm {
+            background: none;
+            border: 1px solid var(--border-light);
+            padding: 6px 10px;
             border-radius: var(--radius-sm);
-            margin-bottom: 8px;
-            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out, border-color 0.2s ease;
-            border: 1px solid transparent;
             cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.85rem;
+            color: var(--gray-text);
         }
-        .pantry-item:hover { transform: scale(1.02); box-shadow: 0 4px 16px rgba(26, 58, 82, 0.1); border-color: var(--seafoam-light); }
-        .pantry-item-icon { font-size: 1.3rem; }
-        .pantry-item-info { flex: 1; }
-        .pantry-item-name { font-weight: 500; }
-        .pantry-item-qty { font-size: 0.85rem; color: var(--gray-text); }
-        .pantry-status {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--success);
+
+        .btn-icon-sm i {
+            width: 14px;
+            height: 14px;
         }
-        .pantry-status.fresh { background: var(--success); }
-        .pantry-status.use-soon { background: var(--warning); }
-        .pantry-status.check { background: var(--danger); }
+
+        .btn-icon-sm:hover {
+            background: var(--gray-light);
+            border-color: var(--cerulean);
+            color: var(--navy);
+        }
+
+        /* Responsive: Mobile/Tablet */
+        @media (max-width: 768px) {
+            .pantry-category-items {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+                gap: 12px;
+            }
+
+            .pantry-card {
+                padding: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .pantry-category-items {
+                grid-template-columns: 1fr;
+            }
+        }
 
         /* Smart Shopping Generator */
         .smart-shopping-card {
@@ -11492,28 +11677,129 @@ function renderPantry() {
     }
 
     empty.classList.add('hidden');
-    container.innerHTML = pantry.map((item, i) => {
-        // Determine status class based on quantity and threshold
-        const qtyStr = (item.qty || '').toLowerCase();
-        const isLow = item.status === 'use-soon' || item.status === 'low' || qtyStr.includes('low') || qtyStr.includes('almost') || qtyStr.includes('last');
-        const isOut = item.status === 'out' || qtyStr === '0' || qtyStr === '' || qtyStr.includes('out');
-        const statusClass = isOut ? 'pantry-status-out' : isLow ? 'pantry-status-low' : 'pantry-status-fresh';
-        const statusIndicator = isOut ? icon('circle-x',12,'color:var(--danger)') : isLow ? icon('circle-alert',12,'color:orange') : icon('circle-check',12,'color:var(--success)');
-        const locationIcon = item.location === 'fridge' ? icon('refrigerator',14) : item.location === 'freezer' ? icon('snowflake',14) : icon('home',14);
 
-        return `
-        <div class="pantry-item ${statusClass}">
-            <span class="pantry-item-icon">${item.icon || getCategoryIcon(item.category)}</span>
-            <div class="pantry-item-info">
-                <div class="pantry-item-name">${item.name}</div>
-                <div class="pantry-item-qty">${item.qty || 'No quantity set'} ${item.location ? `<small>${locationIcon}</small>` : ''}</div>
+    // Group items by category
+    const grouped = {};
+    pantry.forEach((item, index) => {
+        const cat = item.category || 'other';
+        if (!grouped[cat]) grouped[cat] = [];
+        grouped[cat].push({ ...item, index });
+    });
+
+    // Category metadata
+    const categoryMeta = {
+        produce: { name: 'Produce', icon: 'leaf', order: 1 },
+        proteins: { name: 'Proteins', icon: 'drumstick', order: 2 },
+        dairy: { name: 'Dairy', icon: 'milk', order: 3 },
+        grains: { name: 'Grains', icon: 'wheat', order: 4 },
+        canned: { name: 'Canned Goods', icon: 'package', order: 5 },
+        condiments: { name: 'Condiments', icon: 'droplet', order: 6 },
+        spices: { name: 'Spices', icon: 'sparkles', order: 7 },
+        oils: { name: 'Oils & Vinegars', icon: 'droplets', order: 8 },
+        snacks: { name: 'Snacks', icon: 'cookie', order: 9 },
+        beverages: { name: 'Beverages', icon: 'wine', order: 10 },
+        baking: { name: 'Baking', icon: 'cake-slice', order: 11 },
+        frozen: { name: 'Frozen', icon: 'snowflake', order: 12 },
+        other: { name: 'Other', icon: 'package', order: 99 }
+    };
+
+    // Sort categories: low-stock categories first, then by order
+    const sortedCategories = Object.keys(grouped).sort((a, b) => {
+        const hasLowA = grouped[a].some(item => isItemLowOrOut(item));
+        const hasLowB = grouped[b].some(item => isItemLowOrOut(item));
+        if (hasLowA && !hasLowB) return -1;
+        if (!hasLowA && hasLowB) return 1;
+        return (categoryMeta[a]?.order || 99) - (categoryMeta[b]?.order || 99);
+    });
+
+    // Render grouped categories
+    container.innerHTML = sortedCategories.map(cat => {
+        const meta = categoryMeta[cat] || { name: cat, icon: 'package', order: 99 };
+        const items = grouped[cat];
+        const hasLowStock = items.some(item => isItemLowOrOut(item));
+
+        const categoryHTML = `
+            <div class="pantry-category" data-category="${cat}">
+                <div class="pantry-category-header ${hasLowStock ? 'has-alerts' : ''}" onclick="togglePantryCategory('${cat}')">
+                    <div class="pantry-category-header-left">
+                        <i data-lucide="${meta.icon}" style="width:20px;height:20px"></i>
+                        <span class="pantry-category-name">${meta.name}</span>
+                        <span class="pantry-category-count">${items.length} item${items.length !== 1 ? 's' : ''}</span>
+                    </div>
+                    <i data-lucide="chevron-down" class="pantry-category-arrow" style="width:18px;height:18px"></i>
+                </div>
+                <div class="pantry-category-items" id="pantry-cat-${cat}">
+                    ${items.map(item => renderPantryCard(item)).join('')}
+                </div>
             </div>
-            <span title="${isOut ? 'Out of stock' : isLow ? 'Running low' : 'In stock'}">${statusIndicator}</span>
-            <button class="btn-icon" onclick="editPantryItemModal(${i})" title="Edit"><i data-lucide="edit"></i></button>
-            <button class="btn-icon" onclick="removePantryItem(${i})" title="Remove"><i data-lucide="trash-2"></i></button>
+        `;
+        return categoryHTML;
+    }).join('');
+
+    refreshIcons();
+}
+
+function isItemLowOrOut(item) {
+    const qtyStr = (item.qty || '').toLowerCase();
+    const isLow = item.status === 'use-soon' || item.status === 'low' || qtyStr.includes('low') || qtyStr.includes('almost') || qtyStr.includes('last');
+    const isOut = item.status === 'out' || qtyStr === '0' || qtyStr === '' || qtyStr.includes('out');
+    return isLow || isOut;
+}
+
+function renderPantryCard(item) {
+    const qtyStr = (item.qty || '').toLowerCase();
+    const isLow = item.status === 'use-soon' || item.status === 'low' || qtyStr.includes('low') || qtyStr.includes('almost') || qtyStr.includes('last');
+    const isOut = item.status === 'out' || qtyStr === '0' || qtyStr === '' || qtyStr.includes('out');
+
+    let statusBadge = '';
+    let statusClass = '';
+    if (isOut) {
+        statusBadge = '<span class="pantry-card-status status-critical"><i data-lucide="circle-x"></i> Critical</span>';
+        statusClass = 'status-critical';
+    } else if (isLow) {
+        statusBadge = '<span class="pantry-card-status status-low"><i data-lucide="circle-alert"></i> Running low</span>';
+        statusClass = 'status-low';
+    } else {
+        statusBadge = '<span class="pantry-card-status status-stocked"><i data-lucide="circle-check"></i> Well stocked</span>';
+        statusClass = 'status-stocked';
+    }
+
+    const locationIcon = item.location === 'fridge' ? '<i data-lucide="refrigerator"></i>' :
+                         item.location === 'freezer' ? '<i data-lucide="snowflake"></i>' : '';
+
+    return `
+        <div class="pantry-card ${statusClass}">
+            <div class="pantry-card-icon">${item.icon || getCategoryIcon(item.category)}</div>
+            <div class="pantry-card-name">${item.name}</div>
+            <div class="pantry-card-qty">${item.qty || 'No quantity'} ${locationIcon}</div>
+            ${statusBadge}
+            <div class="pantry-card-actions">
+                <button class="btn-icon-sm" onclick="editPantryItemModal(${item.index})" title="Edit">
+                    <i data-lucide="pencil"></i>
+                </button>
+                <button class="btn-icon-sm" onclick="removePantryItem(${item.index})" title="Remove">
+                    <i data-lucide="trash-2"></i>
+                </button>
+            </div>
         </div>
     `;
-    }).join('');
+}
+
+function togglePantryCategory(cat) {
+    const items = document.getElementById(`pantry-cat-${cat}`);
+    const header = items?.previousElementSibling;
+    const arrow = header?.querySelector('.pantry-category-arrow');
+
+    if (items && header) {
+        const isExpanded = items.classList.contains('expanded');
+        if (isExpanded) {
+            items.classList.remove('expanded');
+            header.classList.remove('expanded');
+        } else {
+            items.classList.add('expanded');
+            header.classList.add('expanded');
+        }
+    }
     refreshIcons();
 }
 
