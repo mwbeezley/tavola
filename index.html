@@ -9571,6 +9571,34 @@ function renderQuickChatMessages() {
     container.scrollTop = container.scrollHeight;
 }
 
+function getContextualLoadingMessage(message) {
+    const msg = message.toLowerCase();
+
+    // Contextual loading messages based on conversation topic
+    if (msg.includes('recipe') || msg.includes('how do i make') || msg.includes('how to cook')) {
+        const recipes = ['Looking through my recipe collection...', 'Finding the perfect recipe for you...', 'Checking my recipe notes...'];
+        return recipes[Math.floor(Math.random() * recipes.length)];
+    } else if (msg.includes('plan') || msg.includes('week') || msg.includes('meal')) {
+        const planning = ['Planning your meals...', 'Looking at your schedule...', 'Creating your meal plan...'];
+        return planning[Math.floor(Math.random() * planning.length)];
+    } else if (msg.includes('shopping') || msg.includes('grocery') || msg.includes('buy')) {
+        const shopping = ['Preparing your shopping list...', 'Checking what you need...', 'Organizing your groceries...'];
+        return shopping[Math.floor(Math.random() * shopping.length)];
+    } else if (msg.includes('pantry') || msg.includes('ingredient') || msg.includes('have')) {
+        const pantry = ['Looking through your pantry...', 'Checking your ingredients...', 'Seeing what you have...'];
+        return pantry[Math.floor(Math.random() * pantry.length)];
+    } else if (msg.includes('health') || msg.includes('nutrition') || msg.includes('flare') || msg.includes('crohn')) {
+        const health = ['Finding gentle options for you...', 'Checking health-friendly recipes...', 'Looking at nutrition info...'];
+        return health[Math.floor(Math.random() * health.length)];
+    } else if (msg.includes('family') || msg.includes('share')) {
+        const family = ['Thinking about your family favorites...', 'Finding shareable recipes...', 'Looking through family options...'];
+        return family[Math.floor(Math.random() * family.length)];
+    } else {
+        const general = ['Thinking...', 'Let me help you with that...', 'One moment, cara...', 'Checking my notes...'];
+        return general[Math.floor(Math.random() * general.length)];
+    }
+}
+
 async function sendQuickChatMessage() {
     const input = document.getElementById('quick-chat-input');
     if (!input) return;
@@ -9590,12 +9618,12 @@ async function sendQuickChatMessage() {
     saveChatHistory();
     renderQuickChatMessages();
 
-    // Show typing indicator
+    // Show contextual typing indicator
     const container = document.getElementById('quick-chat-messages');
     if (container) {
         container.innerHTML += `
             <div class="quick-chat-message assistant" id="typing-indicator">
-                <div class="message-bubble">Typing...</div>
+                <div class="message-bubble">${getContextualLoadingMessage(message)}</div>
             </div>
         `;
         container.scrollTop = container.scrollHeight;
@@ -10070,13 +10098,13 @@ async function sendNonnaMessage() {
     try {
         state.isProcessing = true;
 
-        // Show typing indicator
+        // Show contextual typing indicator
         const container = document.getElementById('chat-messages-nonna');
         if (container) {
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message message-assistant';
             typingDiv.id = 'typing-indicator-nonna';
-            typingDiv.innerHTML = '<div class="message-bubble">Typing...</div>';
+            typingDiv.innerHTML = `<div class="message-bubble">${getContextualLoadingMessage(message)}</div>`;
             container.appendChild(typingDiv);
             container.scrollTop = container.scrollHeight;
         }
