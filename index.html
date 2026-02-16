@@ -877,6 +877,37 @@
             border-bottom: 2px solid var(--seafoam);
         }
 
+        /* Page Headlines & Subheads */
+        .page-header {
+            max-width: 800px;
+            margin-bottom: 40px;
+        }
+
+        .page-headline {
+            font-family: 'Lora', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--navy);
+            margin: 0 0 8px 0;
+            line-height: 1.3;
+        }
+
+        .page-subhead {
+            font-size: 16px;
+            color: var(--charcoal);
+            margin: 0;
+            line-height: 1.6;
+        }
+
+        @media (max-width: 768px) {
+            .page-headline {
+                font-size: 24px;
+            }
+            .page-subhead {
+                font-size: 14px;
+            }
+        }
+
         /* Views */
         .view { display: none; }
         .view.active { display: block; }
@@ -5314,6 +5345,12 @@
         <div class="container">
             <!-- HOME/DASHBOARD View (NEW) -->
             <div class="view active" id="view-home">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-headline">Welcome back! Let's make something delicious</h1>
+                    <p class="page-subhead" id="home-subhead">Your kitchen awaits</p>
+                </div>
+
                 <!-- Flare Mode Banner (shown when active) -->
                 <div class="flare-banner hidden" id="home-flare-banner">
                     <div class="flare-banner-title"><i data-lucide="thermometer" style="width:18px;height:18px;vertical-align:middle;margin-right:4px"></i> Flare Mode Active</div>
@@ -5428,6 +5465,12 @@
 
             <!-- THIS WEEK View -->
             <div class="view" id="view-week">
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-headline">This week's menu</h1>
+                    <p class="page-subhead">Balance your nutrition, manage your time and actually enjoy what you cook</p>
+                </div>
+
                 <div class="week-header">
                     <div class="week-nav">
                         <button class="week-nav-btn" onclick="changeWeek(-1)"><i data-lucide="chevron-left" style="width:16px;height:16px"></i></button>
@@ -5451,6 +5494,16 @@
 
             <!-- RECIPES LIBRARY View (NEW) -->
             <div class="view" id="view-recipes">
+                <!-- Page Header (changes based on tab) -->
+                <div class="page-header" id="recipes-header-my">
+                    <h1 class="page-headline">Your personal cookbook</h1>
+                    <p class="page-subhead">Save favorites, try new dishes and build your Mediterranean repertoire</p>
+                </div>
+                <div class="page-header" id="recipes-header-family" style="display:none;">
+                    <h1 class="page-headline">Recipes from the people you love</h1>
+                    <p class="page-subhead">Your family's greatest hits, shared traditions and new discoveries—all in one place</p>
+                </div>
+
                 <!-- Tab Bar: My Recipes / Family Tavola -->
                 <div class="recipes-tab-bar">
                     <button class="recipes-tab active" id="tab-my-recipes" onclick="switchRecipesTab('my')"><i data-lucide="book-open" style="width:16px;height:16px;vertical-align:middle"></i> My Recipes</button>
@@ -5582,8 +5635,8 @@
                     <div class="nonna-main-chat">
                         <div class="chat-header-nonna">
                             <div>
-                                <h2><i data-lucide="message-circle" style="width:24px;height:24px;vertical-align:middle"></i> Chat with Nonna</h2>
-                                <p class="text-muted">Your Mediterranean cooking companion</p>
+                                <h2><i data-lucide="message-circle" style="width:24px;height:24px;vertical-align:middle"></i> Your AI sous chef is here</h2>
+                                <p class="text-muted">Ask anything about cooking, meal planning, nutrition or what to make with what you have</p>
                             </div>
                         </div>
                         <div class="chat-messages-nonna" id="chat-messages-nonna">
@@ -5601,7 +5654,11 @@
 
             <!-- WORKOUTS View -->
             <div class="view" id="view-workouts">
-                <h2 class="section-title"><i data-lucide="dumbbell" style="width:20px;height:20px;vertical-align:middle"></i> Workouts</h2>
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-headline">Fuel your fitness</h1>
+                    <p class="page-subhead">Plan meals around your workouts for better recovery, energy and results</p>
+                </div>
 
                 <!-- Calorie Balance -->
                 <div class="calorie-balance" id="calorie-balance">
@@ -5688,7 +5745,11 @@
 
             <!-- MORE View -->
             <div class="view" id="view-more">
-                <h2 class="section-title"><i data-lucide="settings" style="width:20px;height:20px;vertical-align:middle"></i> More</h2>
+                <!-- Page Header -->
+                <div class="page-header">
+                    <h1 class="page-headline">Everything you need to cook well</h1>
+                    <p class="page-subhead">Import recipes, transform leftovers, explore seasonal produce and discover new flavors</p>
+                </div>
 
                 <!-- More Menu Items -->
                 <div class="more-menu" id="more-menu-main">
@@ -5739,7 +5800,13 @@
                 <!-- Kitchen Sub-View -->
                 <div class="hidden" id="more-kitchen">
                     <button class="btn btn-ghost mb-16" onclick="showMoreMenu()">← Back</button>
-                    <h2 class="section-title"><i data-lucide="cooking-pot" style="width:20px;height:20px;vertical-align:middle"></i> Kitchen</h2>
+
+                    <!-- Page Header -->
+                    <div class="page-header">
+                        <h1 class="page-headline">Your kitchen, organized</h1>
+                        <p class="page-subhead">Track what you have, know what you need and never let ingredients go to waste</p>
+                    </div>
+
                     <div class="tabs">
                         <button class="tab active" onclick="switchKitchenTab('pantry')">Pantry</button>
                         <button class="tab" onclick="switchKitchenTab('shopping')">Shopping</button>
@@ -7363,6 +7430,14 @@ function updateDashboard() {
         flareBanner.classList.remove('hidden');
     } else {
         flareBanner.classList.add('hidden');
+    }
+
+    // Update home subhead dynamically
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const percentPlanned = Math.round((plannedCount / 7) * 100);
+    const subhead = document.getElementById('home-subhead');
+    if (subhead) {
+        subhead.textContent = `Your pantry has ${pantry.length} items • ${recipes.length} recipes ready • This week ${percentPlanned}% planned`;
     }
 }
 
@@ -10045,6 +10120,10 @@ function switchRecipesTab(tab) {
     // Update tab buttons
     document.getElementById('tab-my-recipes').classList.toggle('active', tab === 'my');
     document.getElementById('tab-family-recipes').classList.toggle('active', tab === 'family');
+
+    // Show/hide headers
+    document.getElementById('recipes-header-my').style.display = tab === 'my' ? '' : 'none';
+    document.getElementById('recipes-header-family').style.display = tab === 'family' ? '' : 'none';
 
     // Show/hide tab content
     document.getElementById('recipes-tab-my').style.display = tab === 'my' ? '' : 'none';
