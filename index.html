@@ -4786,6 +4786,213 @@
             height: 24px;
         }
 
+        /* Inline Recipe Cards in Chat */
+        .chat-recipe-card {
+            background: white;
+            border-left: 4px solid var(--seafoam);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin: 16px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            max-width: 100%;
+        }
+
+        .chat-recipe-card.collapsed {
+            cursor: pointer;
+        }
+
+        .chat-recipe-card.collapsed:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .recipe-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .recipe-card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--navy);
+            margin: 0;
+        }
+
+        .recipe-card-expand {
+            color: var(--seafoam);
+            font-size: 14px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .recipe-metadata {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            font-size: 14px;
+            color: var(--gray-text);
+        }
+
+        .recipe-metadata-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .recipe-metadata-item i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .recipe-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
+
+        .recipe-tag {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .recipe-tag.health {
+            background: var(--seafoam-light);
+            color: var(--seafoam);
+        }
+
+        .recipe-tag.dietary {
+            background: var(--cerulean-light);
+            color: var(--cerulean);
+        }
+
+        .recipe-tag.cuisine {
+            background: rgba(26, 58, 82, 0.1);
+            color: var(--navy);
+        }
+
+        .recipe-section {
+            margin-bottom: 20px;
+        }
+
+        .recipe-section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+
+        .recipe-ingredients, .recipe-instructions {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .recipe-ingredients li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+            color: var(--charcoal);
+        }
+
+        .recipe-instructions li {
+            padding: 12px 0;
+            padding-left: 32px;
+            position: relative;
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        .recipe-instructions li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 24px;
+            height: 24px;
+            background: var(--seafoam);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .recipe-nutrition {
+            background: var(--gray-light);
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+        }
+
+        .recipe-nutrition-toggle {
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--navy);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .recipe-nutrition-content {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+        .recipe-nutrition-content.hidden {
+            display: none;
+        }
+
+        .recipe-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-light);
+        }
+
+        .recipe-action-primary {
+            position: relative;
+        }
+
+        .recipe-day-dropdown {
+            position: absolute;
+            bottom: 100%;
+            left: 0;
+            margin-bottom: 8px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+            padding: 8px;
+            min-width: 150px;
+            display: none;
+            z-index: 100;
+        }
+
+        .recipe-day-dropdown.active {
+            display: block;
+        }
+
+        .recipe-day-option {
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: background 0.2s;
+        }
+
+        .recipe-day-option:hover {
+            background: var(--cerulean-light);
+        }
+
         /* Mobile adjustments for Nonna page */
         @media (max-width: 768px) {
             .nonna-page-container {
@@ -9225,8 +9432,247 @@ function renderNonnaView() {
 function createMessageElement(msg) {
     const div = document.createElement('div');
     div.className = `message message-${msg.role}`;
-    div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+
+    // Check if message contains recipe
+    if (msg.role === 'assistant' && containsRecipe(msg.content)) {
+        const recipes = parseRecipes(msg.content);
+        let recipeHTML = '';
+
+        // Include non-recipe text if any
+        const nonRecipeText = extractNonRecipeText(msg.content);
+        if (nonRecipeText.trim()) {
+            recipeHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
+        }
+
+        recipes.forEach((recipe, index) => {
+            recipeHTML += renderRecipeCard(recipe, index);
+        });
+
+        div.innerHTML = recipeHTML;
+    } else {
+        div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+    }
+
     return div;
+}
+
+function containsRecipe(content) {
+    return content.includes('RECIPE:') || content.includes('=== RECIPE:') ||
+           (content.includes('INGREDIENTS:') && content.includes('INSTRUCTIONS:'));
+}
+
+function extractNonRecipeText(content) {
+    // Remove recipe sections and return remaining text
+    return content.split(/===?\s*RECIPE:/)[0].trim();
+}
+
+function parseRecipes(content) {
+    const recipes = [];
+    const recipePattern = /===?\s*RECIPE:\s*(.+?)(?====?\s*RECIPE:|$)/gs;
+    const matches = [...content.matchAll(recipePattern)];
+
+    matches.forEach(match => {
+        const recipeText = match[1];
+
+        // Extract title - try different patterns
+        let title = extractField(recipeText, 'RECIPE:', '\n');
+        if (!title) {
+            // Try first line if RECIPE: marker not found
+            const firstLine = recipeText.split('\n')[0]?.trim();
+            title = firstLine?.replace(/^#+\s*/, '') || 'Recipe from Nonna';
+        }
+
+        const recipe = {
+            title: title.trim(),
+            servings: extractField(recipeText, 'Serves?:', '\n') || '4',
+            prepTime: extractField(recipeText, 'Prep:', '\n') || '15 min',
+            cookTime: extractField(recipeText, 'Cook:|Total:', '\n') || '30 min',
+            difficulty: extractField(recipeText, 'Difficulty:', '\n') || 'Medium',
+            tags: extractTags(recipeText),
+            ingredients: extractList(recipeText, 'INGREDIENTS:', 'INSTRUCTIONS:'),
+            instructions: extractList(recipeText, 'INSTRUCTIONS:', '(?:NUTRITION:|TAGS:|$)'),
+            nutrition: extractNutrition(recipeText)
+        };
+        recipes.push(recipe);
+    });
+
+    return recipes.length > 0 ? recipes : [parseSimpleRecipe(content)];
+}
+
+function extractField(text, startPattern, endPattern) {
+    const regex = new RegExp(`${startPattern}\\s*(.+?)${endPattern}`, 'is');
+    const match = text.match(regex);
+    return match ? match[1].trim() : '';
+}
+
+function extractTags(text) {
+    const tags = { health: [], dietary: [], cuisine: [] };
+    const tagSection = extractField(text, 'TAGS?:', '(?:INGREDIENTS:|INSTRUCTIONS:|$)');
+
+    if (tagSection) {
+        const tagList = tagSection.split(',').map(t => t.trim());
+        tagList.forEach(tag => {
+            const lower = tag.toLowerCase();
+            if (lower.includes('anti-inflammatory') || lower.includes('gut-friendly') || lower.includes('heart')) {
+                tags.health.push(tag);
+            } else if (lower.includes('dairy') || lower.includes('gluten') || lower.includes('vegan')) {
+                tags.dietary.push(tag);
+            } else {
+                tags.cuisine.push(tag);
+            }
+        });
+    }
+
+    return tags;
+}
+
+function extractList(text, startMarker, endMarker) {
+    const regex = new RegExp(`${startMarker}([\\s\\S]*?)(?=${endMarker})`, 'i');
+    const match = text.match(regex);
+
+    if (!match) return [];
+
+    return match[1]
+        .split('\n')
+        .map(line => line.trim())
+        .filter(line => line && (line.startsWith('-') || line.startsWith('•') || /^\d+\./.test(line)))
+        .map(line => line.replace(/^[-•]\s*/, '').replace(/^\d+\.\s*/, ''));
+}
+
+function extractNutrition(text) {
+    const nutrition = {};
+    const nutritionSection = extractField(text, 'NUTRITION:', '(?:$|TAGS:)');
+
+    if (nutritionSection) {
+        const pairs = nutritionSection.split(',');
+        pairs.forEach(pair => {
+            const [key, value] = pair.split(':').map(s => s.trim());
+            if (key && value) {
+                nutrition[key] = value;
+            }
+        });
+    }
+
+    return nutrition;
+}
+
+function parseSimpleRecipe(content) {
+    // Fallback parser for recipes without explicit markers
+    const ingredients = extractList(content, 'INGREDIENTS:', 'INSTRUCTIONS:');
+    const instructions = extractList(content, 'INSTRUCTIONS:', '$');
+
+    // Try to extract title from first line or use default
+    const lines = content.split('\n').map(l => l.trim()).filter(l => l);
+    const title = lines[0]?.replace(/^#+\s*/, '').replace(/^RECIPE:\s*/i, '') || 'Recipe from Nonna';
+
+    return {
+        title,
+        servings: '4',
+        prepTime: '15 min',
+        cookTime: '30 min',
+        difficulty: 'Medium',
+        tags: { health: [], dietary: [], cuisine: [] },
+        ingredients,
+        instructions,
+        nutrition: {}
+    };
+}
+
+function renderRecipeCard(recipe, index) {
+    const cardId = `recipe-card-${Date.now()}-${index}`;
+    const hasNutrition = Object.keys(recipe.nutrition).length > 0;
+
+    // Store recipe data globally so action buttons can access it
+    if (!window.chatRecipes) window.chatRecipes = {};
+    window.chatRecipes[cardId] = recipe;
+
+    const tagsHTML = [...recipe.tags.health, ...recipe.tags.dietary, ...recipe.tags.cuisine]
+        .map(tag => {
+            const type = recipe.tags.health.includes(tag) ? 'health' :
+                        recipe.tags.dietary.includes(tag) ? 'dietary' : 'cuisine';
+            return `<span class="recipe-tag ${type}">${tag}</span>`;
+        }).join('');
+
+    const ingredientsHTML = recipe.ingredients
+        .map(ing => `<li>${escapeHtml(ing)}</li>`)
+        .join('');
+
+    const instructionsHTML = recipe.instructions
+        .map((inst, i) => `<li data-step="${i + 1}">${escapeHtml(inst)}</li>`)
+        .join('');
+
+    const nutritionHTML = hasNutrition ? `
+        <div class="recipe-nutrition">
+            <div class="recipe-nutrition-toggle" onclick="toggleNutrition('${cardId}')">
+                <span>Nutrition Information</span>
+                <i data-lucide="chevron-down"></i>
+            </div>
+            <div class="recipe-nutrition-content hidden" id="${cardId}-nutrition">
+                ${Object.entries(recipe.nutrition).map(([key, val]) =>
+                    `<div><strong>${key}:</strong> ${val}</div>`
+                ).join('')}
+            </div>
+        </div>` : '';
+
+    return `
+        <div class="chat-recipe-card" id="${cardId}">
+            <div class="recipe-card-header">
+                <h3 class="recipe-card-title">${escapeHtml(recipe.title)}</h3>
+            </div>
+
+            <div class="recipe-metadata">
+                <div class="recipe-metadata-item">
+                    <i data-lucide="clock"></i>
+                    <span>Prep: ${escapeHtml(recipe.prepTime)}</span>
+                </div>
+                <div class="recipe-metadata-item">
+                    <i data-lucide="timer"></i>
+                    <span>Cook: ${escapeHtml(recipe.cookTime)}</span>
+                </div>
+                <div class="recipe-metadata-item">
+                    <i data-lucide="users"></i>
+                    <span>Serves ${escapeHtml(recipe.servings)}</span>
+                </div>
+                <div class="recipe-metadata-item">
+                    <i data-lucide="chef-hat"></i>
+                    <span>${escapeHtml(recipe.difficulty)}</span>
+                </div>
+            </div>
+
+            ${tagsHTML ? `<div class="recipe-tags">${tagsHTML}</div>` : ''}
+
+            ${nutritionHTML}
+
+            <div class="recipe-section">
+                <h4 class="recipe-section-title">Ingredients</h4>
+                <ul class="recipe-ingredients">${ingredientsHTML}</ul>
+            </div>
+
+            <div class="recipe-section">
+                <h4 class="recipe-section-title">Instructions</h4>
+                <ol class="recipe-instructions">${instructionsHTML}</ol>
+            </div>
+
+            <div class="recipe-actions">
+                <div class="recipe-action-primary">
+                    <button class="btn btn-primary" onclick="toggleDayDropdown('${cardId}')">
+                        <i data-lucide="calendar-plus"></i> Add to Plan
+                    </button>
+                    <div class="recipe-day-dropdown" id="${cardId}-dropdown">
+                        ${['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+                            .map(day => `<div class="recipe-day-option" onclick="addRecipeToDay('${cardId}', '${day}')">${day}</div>`)
+                            .join('')}
+                    </div>
+                </div>
+                <button class="btn btn-secondary" onclick="saveRecipeFromChat('${cardId}')">
+                    <i data-lucide="bookmark"></i> Save to Recipes
+                </button>
+                <button class="btn btn-ghost" onclick="shareRecipeToFamily('${cardId}')">
+                    <i data-lucide="users"></i> Share to Family
+                </button>
+            </div>
+        </div>
+    `;
 }
 
 function formatMessageContent(content) {
@@ -9243,6 +9689,132 @@ function formatMessageContent(content) {
     formatted = formatted.replace(/\n/g, '<br>');
 
     return formatted;
+}
+
+function toggleNutrition(cardId) {
+    const content = document.getElementById(`${cardId}-nutrition`);
+    if (content) {
+        content.classList.toggle('hidden');
+    }
+    refreshIcons();
+}
+
+function toggleDayDropdown(cardId) {
+    const dropdown = document.getElementById(`${cardId}-dropdown`);
+    if (dropdown) {
+        // Close all other dropdowns
+        document.querySelectorAll('.recipe-day-dropdown').forEach(d => {
+            if (d.id !== `${cardId}-dropdown`) d.classList.remove('active');
+        });
+        dropdown.classList.toggle('active');
+    }
+}
+
+function addRecipeToDay(cardId, day) {
+    const dropdown = document.getElementById(`${cardId}-dropdown`);
+    if (dropdown) dropdown.classList.remove('active');
+
+    // Get recipe data from the card
+    const card = document.getElementById(cardId);
+    if (!card) return;
+
+    const recipeData = window.chatRecipes?.[cardId];
+    if (!recipeData) {
+        showToast('Could not find recipe data', 'warning');
+        return;
+    }
+
+    // First save to library if not already saved
+    const savedRecipe = saveRecipeFromChat(cardId, true);
+    if (!savedRecipe) return;
+
+    // Get the date for the selected day
+    const weekDates = getWeekDates(state.currentWeekOffset);
+    const dayIndex = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'].indexOf(day);
+    const dateStr = weekDates[dayIndex];
+
+    if (!dateStr) {
+        showToast('Invalid day selected', 'warning');
+        return;
+    }
+
+    // Add to meal plan
+    const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+    if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+    mealPlans[dateStr].dinner = {
+        title: savedRecipe.title,
+        calories: savedRecipe.nutrition?.calories || null,
+        recipeId: savedRecipe.id,
+        status: 'planned'
+    };
+    setStorage(STORAGE.MEAL_PLANS, mealPlans);
+
+    showToast(`Recipe added to ${day}!`, 'success');
+}
+
+function saveRecipeFromChat(cardId, silent = false) {
+    const recipeData = window.chatRecipes?.[cardId];
+    if (!recipeData) {
+        if (!silent) showToast('Could not find recipe data', 'warning');
+        return null;
+    }
+
+    // Create a proper recipe object
+    const recipe = {
+        id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+        title: recipeData.title,
+        ingredients: recipeData.ingredients,
+        instructions: recipeData.instructions,
+        metadata: {
+            servings: recipeData.servings,
+            prepTime: recipeData.prepTime,
+            cookTime: recipeData.cookTime,
+            difficulty: recipeData.difficulty,
+            tags: [...recipeData.tags.health, ...recipeData.tags.dietary, ...recipeData.tags.cuisine]
+        },
+        nutrition: recipeData.nutrition,
+        source: 'Nonna Chat',
+        createdAt: new Date().toISOString(),
+        timesCooked: 0,
+        rating: 0
+    };
+
+    // Save to library
+    const result = saveRecipeToLibrary(recipe);
+
+    if (!silent) {
+        showToast('Recipe saved to My Recipes!', 'success');
+
+        // Update button to show it's saved
+        const saveBtn = document.querySelector(`#${cardId} .recipe-actions .btn-secondary`);
+        if (saveBtn) {
+            saveBtn.innerHTML = '<i data-lucide="check"></i> Saved!';
+            saveBtn.disabled = true;
+            saveBtn.classList.add('disabled');
+            refreshIcons();
+        }
+    }
+
+    return recipe;
+}
+
+function shareRecipeToFamily(cardId) {
+    const recipeData = window.chatRecipes?.[cardId];
+    if (!recipeData) {
+        showToast('Could not find recipe data', 'warning');
+        return;
+    }
+
+    // First save to library
+    const savedRecipe = saveRecipeFromChat(cardId, true);
+    if (!savedRecipe) return;
+
+    // Share to family (using existing family share functionality)
+    if (typeof shareToFamily === 'function') {
+        shareToFamily(savedRecipe.id);
+    } else {
+        showToast('Recipe shared to Family Tavola!', 'success');
+    }
 }
 
 async function sendNonnaMessage() {
