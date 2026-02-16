@@ -137,9 +137,14 @@
         }
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background-color: var(--page-bg);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cpath d='M0 80Q50 60 100 80T200 70Q250 60 300 80T400 75' fill='none' stroke='%231A3A52' stroke-width='1' opacity='0.08'/%3E%3Cpath d='M0 140Q60 110 120 140T240 130Q300 120 360 140T400 135' fill='none' stroke='%231A3A52' stroke-width='0.8' opacity='0.06'/%3E%3Cpath d='M0 200Q70 180 140 200T280 195Q340 185 400 200' fill='none' stroke='%231A3A52' stroke-width='1' opacity='0.08'/%3E%3Cpath d='M0 260Q80 240 160 265T320 255Q370 245 400 260' fill='none' stroke='%231A3A52' stroke-width='0.8' opacity='0.06'/%3E%3Cpath d='M0 320Q55 300 110 320T220 315Q290 305 360 325T400 320' fill='none' stroke='%231A3A52' stroke-width='1' opacity='0.08'/%3E%3Cpath d='M0 380Q65 360 130 380T260 375Q330 365 400 385' fill='none' stroke='%231A3A52' stroke-width='0.7' opacity='0.05'/%3E%3Cpath d='M0 30Q90 10 180 35T360 25Q390 20 400 30' fill='none' stroke='%231A3A52' stroke-width='0.7' opacity='0.05'/%3E%3C/svg%3E");
-            background-repeat: repeat;
+            background-color: #F0F7FB;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 40px,
+                rgba(26, 58, 82, 0.04) 40px,
+                rgba(26, 58, 82, 0.04) 41px
+            );
             color: var(--navy);
             line-height: 1.6;
             min-height: 100vh;
@@ -153,6 +158,14 @@
         }
         main {
             width: 100%;
+            background-color: #F0F7FB;
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 40px,
+                rgba(26, 58, 82, 0.04) 40px,
+                rgba(26, 58, 82, 0.04) 41px
+            );
         }
         h1, h2, h3 { font-family: 'Lora', serif; font-weight: 500; }
         .logo { font-family: 'Dancing Script', cursive; font-size: 2rem; font-weight: 700; color: var(--cerulean); text-decoration: none; }
