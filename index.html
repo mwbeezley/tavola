@@ -10131,21 +10131,6 @@ async function sendNonnaMessage() {
     }
 }
 
-// CRITICAL: Initialize Enter key listener for Nonna chat input
-document.addEventListener('DOMContentLoaded', function() {
-    const nonnaInput = document.getElementById('chat-input-nonna');
-    if (nonnaInput) {
-        nonnaInput.addEventListener('keydown', function(e) {
-            // Enter sends message (unless Shift is held for new line)
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendNonnaMessage();
-            }
-            // Shift+Enter allows new line (default textarea behavior)
-        });
-    }
-});
-
 function toggleNonnaVoice() {
     const btn = document.getElementById('nonna-voice-btn');
     if (!btn) return;
@@ -10409,7 +10394,7 @@ function escapeHtml(text) {
 document.addEventListener('DOMContentLoaded', function() {
     const quickChatInput = document.getElementById('quick-chat-input');
     if (quickChatInput) {
-        quickChatInput.addEventListener('keypress', function(e) {
+        quickChatInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendQuickChatMessage();
@@ -10419,7 +10404,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const nonnaChatInput = document.getElementById('chat-input-nonna');
     if (nonnaChatInput) {
-        nonnaChatInput.addEventListener('keypress', function(e) {
+        nonnaChatInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendNonnaMessage();
