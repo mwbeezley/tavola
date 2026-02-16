@@ -4758,6 +4758,34 @@
             height: 18px;
         }
 
+        .chat-voice-btn-nonna {
+            background: none;
+            border: none;
+            color: var(--charcoal);
+            padding: 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .chat-voice-btn-nonna:hover {
+            background: var(--gray-light);
+            color: var(--seafoam);
+        }
+
+        .chat-voice-btn-nonna.recording {
+            background: var(--seafoam-light);
+            color: var(--seafoam);
+        }
+
+        .chat-voice-btn-nonna i {
+            width: 24px;
+            height: 24px;
+        }
+
         /* Mobile adjustments for Nonna page */
         @media (max-width: 768px) {
             .nonna-page-container {
@@ -6015,6 +6043,9 @@
                             <!-- Messages will be rendered here -->
                         </div>
                         <div class="chat-input-container-nonna">
+                            <button class="chat-voice-btn-nonna" id="nonna-voice-btn" onclick="toggleNonnaVoice()" title="Voice input">
+                                <i data-lucide="mic"></i>
+                            </button>
                             <textarea class="chat-input-nonna" id="chat-input-nonna" placeholder="Ask Nonna anything..." rows="2"></textarea>
                             <button class="chat-send-btn-nonna" onclick="sendNonnaMessage()">
                                 <i data-lucide="send"></i>
@@ -9267,6 +9298,72 @@ async function sendNonnaMessage() {
     } finally {
         state.isProcessing = false;
     }
+}
+
+function toggleNonnaVoice() {
+    const btn = document.getElementById('nonna-voice-btn');
+    if (!btn) return;
+
+    if (state.isListening) {
+        stopVoiceRecognition();
+        btn.classList.remove('recording');
+    } else {
+        startVoiceRecognition('nonna');
+        btn.classList.add('recording');
+    }
+}
+
+function startVoiceRecognition(context = 'nonna') {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showToast('Voice input not supported in this browser', 'warning');
+        return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const input = document.getElementById('chat-input-nonna');
+        if (input) {
+            input.value = transcript;
+            input.focus();
+        }
+        state.isListening = false;
+        const btn = document.getElementById('nonna-voice-btn');
+        if (btn) btn.classList.remove('recording');
+    };
+
+    recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+        state.isListening = false;
+        const btn = document.getElementById('nonna-voice-btn');
+        if (btn) btn.classList.remove('recording');
+        showToast('Voice recognition error', 'warning');
+    };
+
+    recognition.onend = () => {
+        state.isListening = false;
+        const btn = document.getElementById('nonna-voice-btn');
+        if (btn) btn.classList.remove('recording');
+    };
+
+    try {
+        recognition.start();
+        state.isListening = true;
+        showToast('Listening...', 'info');
+    } catch (error) {
+        console.error('Could not start recognition:', error);
+        state.isListening = false;
+    }
+}
+
+function stopVoiceRecognition() {
+    state.isListening = false;
 }
 
 function renderNonnaConversationList() {
