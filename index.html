@@ -1815,6 +1815,43 @@
             gap: 12px;
         }
 
+        /* Voice Pantry Table */
+        .voice-pantry-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .voice-pantry-table thead {
+            background: var(--gray-light);
+        }
+
+        .voice-pantry-table th {
+            padding: 8px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--navy);
+            border-bottom: 2px solid var(--border-light);
+        }
+
+        .voice-pantry-table td {
+            padding: 8px;
+            border-bottom: 1px solid var(--border-light);
+            vertical-align: middle;
+        }
+
+        .voice-pantry-table .form-input-sm,
+        .voice-pantry-table .form-select-sm {
+            padding: 6px 8px;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        .voice-pantry-table tbody tr:hover {
+            background: var(--gray-light);
+        }
+
         /* Day Picker */
         .day-picker { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 16px 0; }
         .day-picker-item {
@@ -16294,57 +16331,166 @@ function startPantryVoice() {
 }
 
 function parsePantryVoiceInput(text) {
-    let qty = '', unit = '', name = '';
-    const patterns = [
-        /^(?:add\s+)?(\d+\.?\d*)\s+(cups?|tbsp|tsp|oz|lbs?|pounds?|gallons?|liters?|cans?|bottles?|bags?|bunche?s?|heads?|cloves?|pieces?)\s+(?:of\s+)?(.+)/i,
-        /^(?:add\s+)?(\d+\.?\d*)\s+(.+)/i,
-        /^(?:add\s+)?(.+)/i
-    ];
+    // Enhanced multi-item parsing: Split by commas or "and"
+    const rawItems = text.split(/,\s*|\s+and\s+/i);
+    const parsedItems = rawItems.map(item => parseVoiceItem(item.trim())).filter(i => i !== null);
 
-    for (const pattern of patterns) {
-        const match = text.match(pattern);
-        if (match) {
-            if (match.length === 4) { qty = match[1]; unit = match[2]; name = match[3]; }
-            else if (match.length === 3 && !isNaN(match[1])) { qty = match[1]; name = match[2]; }
-            else { name = match[1]; }
-            break;
-        }
+    if (parsedItems.length === 0) {
+        showToast('Could not understand. Try again.', 'warning');
+        return;
     }
 
-    name = name.trim().replace(/\.$/, '');
-    const category = guessCategory(name);
-    const qtyStr = unit ? `${qty} ${unit}` : qty;
+    showVoicePantryReviewModal(text, parsedItems);
+}
+
+function parseVoiceItem(text) {
+    // Normalize fractions and word numbers
+    text = normalizeFractions(text);
+    text = normalizeWordNumbers(text);
+
+    // Pattern 1: qty + unit + name
+    const p1 = /^(?:add\s+)?(\d+\.?\d*)\s+(cups?|tbsp|tsp|oz|lbs?|pounds?|cans?|bottles?|bags?|bunches?|jars?)\s+(?:of\s+)?(.+)/i;
+    let match = text.match(p1);
+    if (match) return { qty: match[1], unit: match[2].toLowerCase(), name: match[3].trim() };
+
+    // Pattern 2: qty + name (no unit)
+    const p2 = /^(?:add\s+)?(\d+\.?\d*)\s+(.+)/i;
+    match = text.match(p2);
+    if (match) return { qty: match[1], unit: 'count', name: match[2].trim() };
+
+    // Pattern 3: name only (default qty 1)
+    const p3 = /^(?:add\s+)?(.+)/i;
+    match = text.match(p3);
+    if (match) return { qty: '1', unit: 'count', name: match[1].trim() };
+
+    return null;
+}
+
+function normalizeFractions(text) {
+    const fractionMap = {
+        'half': '0.5', 'a half': '0.5',
+        'quarter': '0.25', 'a quarter': '0.25',
+        'one and a half': '1.5', 'two and a half': '2.5',
+        'three and a half': '3.5', 'four and a half': '4.5'
+    };
+    for (const [word, num] of Object.entries(fractionMap)) {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        text = text.replace(regex, num);
+    }
+    return text;
+}
+
+function normalizeWordNumbers(text) {
+    const numberMap = {
+        'one': '1', 'two': '2', 'three': '3', 'four': '4', 'five': '5',
+        'six': '6', 'seven': '7', 'eight': '8', 'nine': '9', 'ten': '10'
+    };
+    for (const [word, num] of Object.entries(numberMap)) {
+        const regex = new RegExp(`\\b${word}\\b`, 'gi');
+        text = text.replace(regex, num);
+    }
+    return text;
+}
+
+function showVoicePantryReviewModal(transcript, items) {
+    const tableRows = items.map((item, idx) => {
+        const category = guessCategory(item.name);
+        return `
+            <tr id="voice-row-${idx}">
+                <td><input type="text" class="form-input form-input-sm" value="${item.qty}" id="voice-qty-${idx}" style="width:60px;"></td>
+                <td><select class="form-select form-select-sm" id="voice-unit-${idx}">${getUnitOptions(item.unit)}</select></td>
+                <td><input type="text" class="form-input form-input-sm" value="${escapeHtml(item.name)}" id="voice-name-${idx}"></td>
+                <td><select class="form-select form-select-sm" id="voice-cat-${idx}">${getCategoryOptions(category)}</select></td>
+                <td><button class="btn btn-sm btn-secondary" onclick="removeVoiceRow(${idx})">${icon('x')}</button></td>
+            </tr>
+        `;
+    }).join('');
 
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title" id="modal-title-label">${icon('mic')} Add to Pantry</h2>
-            <button class="modal-close" onclick="closeModal()" aria-label="Close">&times;</button>
+            <h2 class="modal-title">${icon('mic')} Review Items</h2>
+            <button class="modal-close" onclick="closeModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <p class="text-muted" style="margin-bottom:12px;">I heard: "<strong>${text}</strong>"</p>
-            <div class="form-group">
-                <label>Item</label>
-                <input type="text" class="form-input" id="voice-pantry-name" value="${name}">
-            </div>
-            <div class="form-group">
-                <label>Quantity</label>
-                <input type="text" class="form-input" id="voice-pantry-qty" value="${qtyStr}">
-            </div>
-            <div class="form-group">
-                <label>Category</label>
-                <select class="form-select" id="voice-pantry-cat">
-                    ${Object.keys(CATEGORY_ICONS).filter(c => c !== 'other' && c !== 'herbs').map(c =>
-                        `<option value="${c}" ${c === category ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`
-                    ).join('')}
-                </select>
-            </div>
+            <p class="text-muted">I heard: "<strong>${escapeHtml(transcript)}</strong>"</p>
+            <table class="voice-pantry-table">
+                <thead>
+                    <tr>
+                        <th>Qty</th>
+                        <th>Unit</th>
+                        <th>Item</th>
+                        <th>Category</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody id="voice-items-tbody">
+                    ${tableRows}
+                </tbody>
+            </table>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-            <button class="btn btn-primary" onclick="confirmVoicePantryAdd()">${icon('plus')} Add to Pantry</button>
+            <button class="btn btn-primary" onclick="confirmVoicePantryAddAll()">
+                ${icon('plus')} Add ${items.length} Item${items.length > 1 ? 's' : ''}
+            </button>
         </div>
-    `);
+    `, { maxWidth: '800px' });
     refreshIcons();
+}
+
+function getUnitOptions(selected) {
+    const units = ['count', 'cups', 'tbsp', 'tsp', 'oz', 'lbs', 'cans', 'bottles', 'bags', 'jars', 'bunches'];
+    return units.map(u => `<option value="${u}" ${u === selected ? 'selected' : ''}>${u}</option>`).join('');
+}
+
+function getCategoryOptions(selected) {
+    const cats = ['produce', 'proteins', 'dairy', 'grains', 'oils', 'spices', 'canned', 'frozen', 'beverages'];
+    return cats.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
+}
+
+function removeVoiceRow(idx) {
+    const row = document.getElementById(`voice-row-${idx}`);
+    if (row) row.remove();
+
+    const remainingRows = document.querySelectorAll('#voice-items-tbody tr').length;
+    const addButton = document.querySelector('.modal-footer .btn-primary');
+    if (addButton) {
+        addButton.innerHTML = `${icon('plus')} Add ${remainingRows} Item${remainingRows > 1 ? 's' : ''}`;
+        refreshIcons();
+    }
+}
+
+function confirmVoicePantryAddAll() {
+    const rows = document.querySelectorAll('#voice-items-tbody tr');
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    let added = 0;
+
+    rows.forEach((_, idx) => {
+        const nameInput = document.getElementById(`voice-name-${idx}`);
+        if (!nameInput) return;
+
+        const name = nameInput.value.trim();
+        if (!name) return;
+
+        const qty = document.getElementById(`voice-qty-${idx}`)?.value || '1';
+        const unit = document.getElementById(`voice-unit-${idx}`)?.value || 'count';
+        const cat = document.getElementById(`voice-cat-${idx}`)?.value || 'produce';
+
+        pantry.push({
+            name,
+            qty: unit !== 'count' ? `${qty} ${unit}` : qty,
+            category: cat,
+            location: 'pantry',
+            status: 'fresh',
+            addedAt: new Date().toISOString()
+        });
+        added++;
+    });
+
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+    showToast(`${added} item${added > 1 ? 's' : ''} added!`, 'success');
 }
 
 function guessCategory(name) {
