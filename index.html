@@ -3892,6 +3892,413 @@
                 scroll-behavior: auto !important;
             }
         }
+
+        /* Quick Chat Dropdown Styles */
+        .quick-chat-container {
+            position: relative;
+        }
+
+        .quick-chat-btn {
+            background: none;
+            border: none;
+            color: var(--navy);
+            cursor: pointer;
+            padding: 8px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-md);
+        }
+
+        .quick-chat-btn:hover {
+            background: var(--gray-light);
+            color: var(--cerulean);
+        }
+
+        .quick-chat-btn i {
+            width: 20px;
+            height: 20px;
+        }
+
+        .quick-chat-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            width: 350px;
+            max-height: 500px;
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-xl);
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            border: 1px solid var(--border-light);
+        }
+
+        .quick-chat-dropdown.active {
+            display: flex;
+        }
+
+        .quick-chat-header {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--cerulean-light);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .quick-chat-context {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.9rem;
+        }
+
+        .quick-chat-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 0;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .quick-chat-close:hover {
+            color: var(--navy);
+        }
+
+        .quick-chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            max-height: 350px;
+            min-height: 200px;
+        }
+
+        .quick-chat-message {
+            margin-bottom: 12px;
+        }
+
+        .quick-chat-message.user .message-bubble {
+            background: var(--cerulean);
+            color: white;
+            margin-left: auto;
+            max-width: 80%;
+        }
+
+        .quick-chat-message.assistant .message-bubble {
+            background: var(--gray-light);
+            color: var(--text-primary);
+            margin-right: auto;
+            max-width: 80%;
+        }
+
+        .quick-chat-message .message-bubble {
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .quick-chat-input-wrapper {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-top: 1px solid var(--border-light);
+            background: var(--page-bg);
+        }
+
+        .quick-chat-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .quick-chat-input:focus {
+            border-color: var(--cerulean);
+        }
+
+        .quick-chat-send {
+            background: var(--cerulean);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quick-chat-send:hover {
+            background: var(--cerulean-dark);
+        }
+
+        .quick-chat-send i {
+            width: 16px;
+            height: 16px;
+        }
+
+        .quick-chat-footer {
+            padding: 8px 16px;
+            border-top: 1px solid var(--border-light);
+            text-align: center;
+            background: var(--page-bg);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+        }
+
+        .quick-chat-footer a {
+            color: var(--cerulean);
+            text-decoration: none;
+            font-size: 0.85rem;
+            transition: color 0.2s;
+        }
+
+        .quick-chat-footer a:hover {
+            color: var(--cerulean-dark);
+            text-decoration: underline;
+        }
+
+        /* Mobile adjustments for quick chat */
+        @media (max-width: 768px) {
+            .quick-chat-dropdown {
+                width: 90vw;
+                max-width: 350px;
+                right: -20px;
+            }
+        }
+
+        /* Dedicated Nonna Page Styles */
+        .nonna-page-container {
+            display: flex;
+            height: calc(100vh - 120px);
+            gap: 0;
+            background: var(--page-bg);
+        }
+
+        .nonna-sidebar {
+            width: 280px;
+            background: white;
+            border-right: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--cerulean-light);
+        }
+
+        .sidebar-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--navy);
+        }
+
+        .conversation-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .conversation-item {
+            padding: 12px;
+            border-radius: var(--radius-md);
+            margin-bottom: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border-left: 3px solid transparent;
+        }
+
+        .conversation-item:hover {
+            background: var(--gray-light);
+        }
+
+        .conversation-item.active {
+            background: var(--cerulean-light);
+            border-left-color: var(--cerulean);
+        }
+
+        .conversation-item-title {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--navy);
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .conversation-item-preview {
+            font-size: 0.8rem;
+            color: var(--gray-text);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .conversation-item-time {
+            font-size: 0.75rem;
+            color: var(--gray-text);
+            margin-top: 4px;
+        }
+
+        .nonna-main-chat {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            overflow: hidden;
+        }
+
+        .chat-header-nonna {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-light);
+            background: var(--cerulean-light);
+        }
+
+        .chat-header-nonna h2 {
+            margin: 0 0 4px 0;
+            color: var(--navy);
+            font-size: 1.5rem;
+        }
+
+        .chat-header-nonna .text-muted {
+            margin: 0;
+            font-size: 0.9rem;
+        }
+
+        .chat-messages-nonna {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+            background: var(--page-bg);
+        }
+
+        .chat-messages-nonna .message {
+            margin-bottom: 16px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages-nonna .message.message-user {
+            align-items: flex-end;
+        }
+
+        .chat-messages-nonna .message.message-assistant {
+            align-items: flex-start;
+        }
+
+        .chat-messages-nonna .message-bubble {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .chat-messages-nonna .message-user .message-bubble {
+            background: var(--cerulean);
+            color: white;
+        }
+
+        .chat-messages-nonna .message-assistant .message-bubble {
+            background: white;
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .chat-input-container-nonna {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-light);
+            background: white;
+            display: flex;
+            gap: 12px;
+            align-items: flex-end;
+        }
+
+        .chat-input-nonna {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: var(--font-body);
+            resize: none;
+            outline: none;
+            transition: border-color 0.2s;
+            max-height: 120px;
+        }
+
+        .chat-input-nonna:focus {
+            border-color: var(--cerulean);
+        }
+
+        .chat-send-btn-nonna {
+            background: var(--cerulean);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 50px;
+        }
+
+        .chat-send-btn-nonna:hover {
+            background: var(--cerulean-dark);
+        }
+
+        .chat-send-btn-nonna:disabled {
+            background: var(--gray-light);
+            cursor: not-allowed;
+        }
+
+        .chat-send-btn-nonna i {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Mobile adjustments for Nonna page */
+        @media (max-width: 768px) {
+            .nonna-page-container {
+                height: calc(100vh - 140px);
+            }
+
+            .nonna-sidebar {
+                display: none;
+            }
+
+            .chat-messages-nonna .message-bubble {
+                max-width: 85%;
+            }
+
+            .chat-input-container-nonna {
+                padding: 12px 16px;
+            }
+        }
     </style>
 
     <!-- Firebase SDK -->
@@ -3965,6 +4372,27 @@
                 <button class="nav-settings-btn" onclick="navigateTo('more'); switchMoreTab('settings');" title="Settings">
                     <i data-lucide="settings"></i>
                 </button>
+                <div class="quick-chat-container">
+                    <button class="quick-chat-btn" onclick="toggleQuickChat()" title="Quick Chat with Nonna">
+                        <i data-lucide="message-square"></i>
+                    </button>
+                    <div class="quick-chat-dropdown" id="quick-chat-dropdown">
+                        <div class="quick-chat-header">
+                            <div class="quick-chat-context" id="quick-chat-context">Chat with Nonna</div>
+                            <button class="quick-chat-close" onclick="closeQuickChat()">×</button>
+                        </div>
+                        <div class="quick-chat-messages" id="quick-chat-messages"></div>
+                        <div class="quick-chat-input-wrapper">
+                            <input type="text" class="quick-chat-input" id="quick-chat-input" placeholder="Ask Nonna..." />
+                            <button class="quick-chat-send" onclick="sendQuickChatMessage()">
+                                <i data-lucide="send"></i>
+                            </button>
+                        </div>
+                        <div class="quick-chat-footer">
+                            <a href="#" onclick="openFullChat(); return false;">Open full chat →</a>
+                        </div>
+                    </div>
+                </div>
                 <div class="header-search" id="global-search">
                     <span><i data-lucide="search" style="width:16px;height:16px"></i></span>
                     <input type="text" placeholder="Search..." id="global-search-input" onkeyup="handleGlobalSearch(event)">
@@ -4019,6 +4447,11 @@
                         <button class="nav-dropdown-item" onclick="navAction('garden')"><i data-lucide="flower-2"></i> Garden</button>
                         <button class="nav-dropdown-item" onclick="navAction('crohns')"><i data-lucide="shield-plus"></i> Crohn's Care</button>
                     </div>
+                </div>
+                <div class="desktop-nav-group">
+                    <button class="desktop-nav-btn" data-nav="nonna" onclick="navigateTo('nonna'); closeAllDropdowns();">
+                        <i data-lucide="message-circle"></i> Nonna
+                    </button>
                 </div>
                 <div class="desktop-nav-group">
                     <button class="desktop-nav-btn" data-nav="workouts" onclick="navigateTo('workouts'); closeAllDropdowns();">
@@ -4929,6 +5362,44 @@
             </div>
 
             <!-- WORKOUTS View -->
+            <!-- NONNA View -->
+            <div class="view" id="view-nonna">
+                <div class="nonna-page-container">
+                    <!-- Left Sidebar: Conversation List -->
+                    <div class="nonna-sidebar">
+                        <div class="sidebar-header">
+                            <h3>Conversations</h3>
+                            <button class="btn btn-sm btn-primary" onclick="startNewConversation()">
+                                <i data-lucide="plus"></i> New
+                            </button>
+                        </div>
+                        <div class="conversation-list" id="nonna-conversation-list">
+                            <!-- Conversations will be rendered here -->
+                        </div>
+                    </div>
+
+                    <!-- Main Chat Area -->
+                    <div class="nonna-main-chat">
+                        <div class="chat-header-nonna">
+                            <div>
+                                <h2><i data-lucide="message-circle" style="width:24px;height:24px;vertical-align:middle"></i> Chat with Nonna</h2>
+                                <p class="text-muted">Your Mediterranean cooking companion</p>
+                            </div>
+                        </div>
+                        <div class="chat-messages-nonna" id="chat-messages-nonna">
+                            <!-- Messages will be rendered here -->
+                        </div>
+                        <div class="chat-input-container-nonna">
+                            <textarea class="chat-input-nonna" id="chat-input-nonna" placeholder="Ask Nonna anything..." rows="2"></textarea>
+                            <button class="chat-send-btn-nonna" onclick="sendNonnaMessage()">
+                                <i data-lucide="send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WORKOUTS View -->
             <div class="view" id="view-workouts">
                 <h2 class="section-title"><i data-lucide="dumbbell" style="width:20px;height:20px;vertical-align:middle"></i> Workouts</h2>
 
@@ -5503,6 +5974,13 @@
                 <button class="nav-dropdown-item" onclick="navAction('garden')"><i data-lucide="flower-2"></i> Garden</button>
                 <button class="nav-dropdown-item" onclick="navAction('crohns')"><i data-lucide="shield-plus"></i> Crohn's Care</button>
             </div>
+        </div>
+        <!-- Nonna (direct) -->
+        <div class="nav-group">
+            <button class="nav-item" onclick="navigateTo('nonna'); closeAllDropdowns();" data-view="nonna" data-nav="nonna">
+                <i data-lucide="message-circle"></i>
+                <span>Nonna</span>
+            </button>
         </div>
         <!-- Workouts (direct) -->
         <div class="nav-group">
@@ -6390,6 +6868,9 @@ function navigateTo(view) {
         updateActivePlanBar();
         updateConversationTopics();
     }
+    if (view === 'nonna') {
+        renderNonnaView();
+    }
 
     // Refresh Lucide icons after view change
     refreshIcons();
@@ -6410,6 +6891,7 @@ const viewToNavGroup = {
     plan: 'plan',
     more: 'plan', // history, batch go through more
     pantry: 'pantry',
+    nonna: 'nonna',
     workouts: 'workouts'
 };
 
@@ -7776,6 +8258,360 @@ function scrollToChatMessage(timestamp) {
         }
     }
 }
+
+// ===========================================
+// QUICK CHAT & DEDICATED NONNA PAGE FUNCTIONS
+// ===========================================
+
+let quickChatState = { isOpen: false, messageCount: 5 };
+
+function toggleQuickChat() {
+    quickChatState.isOpen ? closeQuickChat() : openQuickChat();
+}
+
+function openQuickChat() {
+    const dropdown = document.getElementById('quick-chat-dropdown');
+    if (!dropdown) return;
+
+    dropdown.classList.add('active');
+    quickChatState.isOpen = true;
+    updateQuickChatContext();
+    renderQuickChatMessages();
+
+    const input = document.getElementById('quick-chat-input');
+    if (input) input.focus();
+
+    // Add outside click listener after a short delay
+    setTimeout(() => document.addEventListener('click', handleQuickChatOutsideClick), 100);
+    refreshIcons();
+}
+
+function closeQuickChat() {
+    const dropdown = document.getElementById('quick-chat-dropdown');
+    if (!dropdown) return;
+
+    dropdown.classList.remove('active');
+    quickChatState.isOpen = false;
+    document.removeEventListener('click', handleQuickChatOutsideClick);
+}
+
+function handleQuickChatOutsideClick(e) {
+    const container = document.querySelector('.quick-chat-container');
+    if (container && !container.contains(e.target)) {
+        closeQuickChat();
+    }
+}
+
+function updateQuickChatContext() {
+    const contextEl = document.getElementById('quick-chat-context');
+    if (!contextEl) return;
+
+    const contextMap = {
+        home: 'What can I cook today?',
+        recipes: 'Questions about this recipe?',
+        week: 'Need help planning your week?',
+        pantry: 'What can I make with these?',
+        workouts: 'Meal ideas for your workout?',
+        nonna: 'Chat with Nonna'
+    };
+
+    contextEl.textContent = contextMap[state.currentView] || 'Chat with Nonna';
+}
+
+function renderQuickChatMessages() {
+    const container = document.getElementById('quick-chat-messages');
+    if (!container) return;
+
+    const recent = state.chatHistory.slice(-quickChatState.messageCount);
+
+    if (recent.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:24px;color:var(--gray-text);">
+                <i data-lucide="message-circle" style="width:32px;height:32px;margin-bottom:8px"></i>
+                <p style="margin:0;">Start a conversation with Nonna</p>
+            </div>
+        `;
+        refreshIcons();
+        return;
+    }
+
+    container.innerHTML = recent.map(msg => {
+        const truncatedContent = msg.content.substring(0, 150);
+        const needsTruncation = msg.content.length > 150;
+        return `
+            <div class="quick-chat-message ${msg.role}">
+                <div class="message-bubble">
+                    ${escapeHtml(truncatedContent)}${needsTruncation ? '...' : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    container.scrollTop = container.scrollHeight;
+}
+
+async function sendQuickChatMessage() {
+    const input = document.getElementById('quick-chat-input');
+    if (!input) return;
+
+    const message = input.value.trim();
+    if (!message || state.isProcessing) return;
+
+    input.value = '';
+
+    // Add user message
+    const userMsg = {
+        role: 'user',
+        content: message,
+        timestamp: new Date().toISOString()
+    };
+    state.chatHistory.push(userMsg);
+    saveChatHistory();
+    renderQuickChatMessages();
+
+    // Show typing indicator
+    const container = document.getElementById('quick-chat-messages');
+    if (container) {
+        container.innerHTML += `
+            <div class="quick-chat-message assistant" id="typing-indicator">
+                <div class="message-bubble">Typing...</div>
+            </div>
+        `;
+        container.scrollTop = container.scrollHeight;
+    }
+
+    try {
+        state.isProcessing = true;
+        const response = await callAPI(message);
+
+        // Remove typing indicator
+        document.getElementById('typing-indicator')?.remove();
+
+        state.chatHistory.push({
+            role: 'assistant',
+            content: response,
+            timestamp: new Date().toISOString()
+        });
+        saveChatHistory();
+        renderQuickChatMessages();
+
+    } catch (error) {
+        console.error('Quick chat error:', error);
+        document.getElementById('typing-indicator')?.remove();
+        showToast('Could not reach Nonna', 'warning');
+    } finally {
+        state.isProcessing = false;
+    }
+}
+
+function openFullChat() {
+    closeQuickChat();
+    navigateTo('nonna');
+}
+
+// Dedicated Nonna Page Functions
+function renderNonnaView() {
+    const container = document.getElementById('chat-messages-nonna');
+    if (!container) return;
+
+    container.innerHTML = '';
+
+    if (state.chatHistory.length === 0) {
+        container.innerHTML = `
+            <div style="text-align:center;padding:48px 24px;color:var(--gray-text);">
+                <i data-lucide="message-circle" style="width:48px;height:48px;margin-bottom:16px;color:var(--cerulean)"></i>
+                <h3 style="margin:0 0 8px 0;color:var(--navy)">Start chatting with Nonna</h3>
+                <p style="margin:0;">Ask about recipes, meal planning, or anything food-related!</p>
+            </div>
+        `;
+        refreshIcons();
+        renderNonnaConversationList();
+        return;
+    }
+
+    state.chatHistory.forEach(msg => {
+        const msgEl = createMessageElement(msg);
+        container.appendChild(msgEl);
+    });
+
+    container.scrollTop = container.scrollHeight;
+    renderNonnaConversationList();
+    refreshIcons();
+}
+
+function createMessageElement(msg) {
+    const div = document.createElement('div');
+    div.className = `message message-${msg.role}`;
+    div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+    return div;
+}
+
+function formatMessageContent(content) {
+    // Basic markdown-like formatting
+    let formatted = escapeHtml(content);
+
+    // Bold: **text**
+    formatted = formatted.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+    // Italic: *text*
+    formatted = formatted.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+    // Line breaks
+    formatted = formatted.replace(/\n/g, '<br>');
+
+    return formatted;
+}
+
+async function sendNonnaMessage() {
+    const input = document.getElementById('chat-input-nonna');
+    if (!input) return;
+
+    const message = input.value.trim();
+    if (!message || state.isProcessing) return;
+
+    input.value = '';
+
+    // Add user message
+    const userMsg = {
+        role: 'user',
+        content: message,
+        timestamp: new Date().toISOString()
+    };
+    state.chatHistory.push(userMsg);
+    saveChatHistory();
+    renderNonnaView();
+
+    try {
+        state.isProcessing = true;
+
+        // Show typing indicator
+        const container = document.getElementById('chat-messages-nonna');
+        if (container) {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message message-assistant';
+            typingDiv.id = 'typing-indicator-nonna';
+            typingDiv.innerHTML = '<div class="message-bubble">Typing...</div>';
+            container.appendChild(typingDiv);
+            container.scrollTop = container.scrollHeight;
+        }
+
+        const response = await callAPI(message);
+
+        // Remove typing indicator
+        document.getElementById('typing-indicator-nonna')?.remove();
+
+        state.chatHistory.push({
+            role: 'assistant',
+            content: response,
+            timestamp: new Date().toISOString()
+        });
+        saveChatHistory();
+        renderNonnaView();
+
+    } catch (error) {
+        console.error('Nonna chat error:', error);
+        document.getElementById('typing-indicator-nonna')?.remove();
+        showToast('Could not reach Nonna', 'warning');
+    } finally {
+        state.isProcessing = false;
+    }
+}
+
+function renderNonnaConversationList() {
+    const listEl = document.getElementById('nonna-conversation-list');
+    if (!listEl) return;
+
+    const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
+
+    if (conversations.length === 0) {
+        listEl.innerHTML = `
+            <div style="padding:24px;text-align:center;color:var(--gray-text);font-size:0.85rem">
+                <p>No saved conversations yet</p>
+            </div>
+        `;
+        return;
+    }
+
+    // Show max 20 conversations
+    const recent = conversations.slice(0, 20);
+
+    listEl.innerHTML = recent.map(conv => {
+        const date = new Date(conv.updatedAt || conv.startedAt);
+        const dateStr = date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        const isActive = conv.id === state.currentConversationId;
+        const preview = conv.messages?.find(m => m.role === 'assistant')?.content?.substring(0, 60) || '';
+
+        return `
+            <div class="conversation-item${isActive ? ' active' : ''}" onclick="loadNonnaConversation('${conv.id}')">
+                <div class="conversation-item-title">${escapeHtml(conv.title.substring(0, 50))}${conv.title.length >= 50 ? '...' : ''}</div>
+                <div class="conversation-item-time">${dateStr}</div>
+                ${preview ? `<div class="conversation-item-preview">${escapeHtml(preview)}...</div>` : ''}
+            </div>
+        `;
+    }).join('');
+}
+
+function loadNonnaConversation(convId) {
+    // Save current conversation first
+    if (state.chatHistory.length > 0 && state.currentConversationId !== convId) {
+        saveCurrentConversation();
+    }
+
+    const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
+    const conv = conversations.find(c => c.id === convId);
+    if (!conv) return;
+
+    state.chatHistory = conv.messages || [];
+    state.currentConversationId = convId;
+    saveChatHistory();
+    renderNonnaView();
+    updateConversationTopics();
+}
+
+function startNewConversation() {
+    // Save current conversation if it has messages
+    if (state.chatHistory.length > 0) {
+        saveCurrentConversation();
+    }
+
+    // Start fresh
+    state.chatHistory = [];
+    state.currentConversationId = 'conv_' + Date.now();
+    saveChatHistory();
+    renderNonnaView();
+
+    showToast('Started new conversation', 'success');
+}
+
+// Helper function for HTML escaping (if not already defined)
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// Add Enter key handler for quick chat
+document.addEventListener('DOMContentLoaded', function() {
+    const quickChatInput = document.getElementById('quick-chat-input');
+    if (quickChatInput) {
+        quickChatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendQuickChatMessage();
+            }
+        });
+    }
+
+    const nonnaChatInput = document.getElementById('chat-input-nonna');
+    if (nonnaChatInput) {
+        nonnaChatInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendNonnaMessage();
+            }
+        });
+    }
+});
 
 // Active Plan Bar
 function updateActivePlanBar() {
