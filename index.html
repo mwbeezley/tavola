@@ -3829,34 +3829,46 @@
             z-index: 1;
         }
 
-        /* Marketing Hero */
+        /* Marketing Hero - REDESIGNED */
         .marketing-hero {
             background: linear-gradient(135deg, var(--navy) 0%, var(--cerulean-dark) 100%);
             color: white;
-            padding: 80px 20px;
+            padding: 120px 20px;
             text-align: center;
         }
         .marketing-hero h1 {
             font-family: var(--font-heading);
-            font-size: 3rem;
-            margin-bottom: 16px;
+            font-size: 56px;
+            margin-bottom: 24px;
             line-height: 1.2;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .marketing-hero .hero-subtitle {
-            font-size: 1.4rem;
-            margin-bottom: 32px;
+            font-size: 20px;
+            margin-bottom: 40px;
             color: rgba(255,255,255,0.95);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
         }
         .hero-cta {
             display: flex;
-            gap: 16px;
+            gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
+        .hero-cta .btn-lg {
+            padding: 16px 48px;
+            font-size: 18px;
+            font-weight: 600;
+        }
 
-        /* Marketing Sections */
+        /* Marketing Sections - REDESIGNED */
         .marketing-section {
-            padding: 60px 20px;
+            padding: 110px 20px;
         }
         .marketing-section.bg-cerulean {
             background: var(--cerulean-light);
@@ -3866,72 +3878,97 @@
         }
         .section-title {
             font-family: var(--font-heading);
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             text-align: center;
-            margin-bottom: 48px;
+            margin-bottom: 60px;
             color: var(--navy);
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
         }
-
-        /* Three Pillars Grid */
-        .pillars-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            max-width: 1000px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
         }
+
+        /* Four Pillars Grid - REDESIGNED 2x2 with Greek key border */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            padding: 40px;
+        }
+
+        .pillars-grid::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border: 3px solid rgba(26, 58, 82, 0.18);
+            border-radius: var(--radius-lg);
+            pointer-events: none;
+            background-image:
+                repeating-linear-gradient(0deg, transparent, transparent 12px, rgba(26, 58, 82, 0.08) 12px, rgba(26, 58, 82, 0.08) 14px),
+                repeating-linear-gradient(90deg, transparent, transparent 12px, rgba(26, 58, 82, 0.08) 12px, rgba(26, 58, 82, 0.08) 14px);
+        }
+
         .pillar-card {
             background: white;
-            padding: 32px;
+            padding: 40px;
             border-radius: var(--radius-lg);
             text-align: center;
             box-shadow: var(--shadow-md);
-            border-top: 4px solid transparent;
+            border-top: 5px solid transparent;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
         }
         .pillar-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-xl);
         }
         .border-top-seafoam { border-top-color: var(--seafoam); }
         .border-top-terracotta { border-top-color: var(--terracotta); }
         .border-top-amber { border-top-color: var(--amber); }
         .border-top-cerulean { border-top-color: var(--cerulean); }
 
-        .pillars-four {
-            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-        }
-
         .pillar-icon {
-            width: 64px;
-            height: 64px;
+            width: 72px;
+            height: 72px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
+            margin: 0 auto 24px;
         }
         .pillar-icon.seafoam { background: var(--seafoam-light); color: var(--seafoam); }
         .pillar-icon.terracotta { background: var(--terracotta-light); color: var(--terracotta); }
         .pillar-icon.amber { background: var(--amber-light); color: var(--amber); }
         .pillar-icon.cerulean { background: var(--cerulean-light); color: var(--cerulean); }
-        .pillar-icon i { width: 32px; height: 32px; }
+        .pillar-icon i { width: 36px; height: 36px; }
 
         .pillar-card h3 {
-            font-size: 1.4rem;
-            margin-bottom: 12px;
+            font-size: 1.5rem;
+            margin-bottom: 16px;
             color: var(--navy);
+            font-weight: 700;
         }
         .pillar-card p {
             color: var(--charcoal);
-            line-height: 1.6;
+            line-height: 1.7;
+            font-size: 1rem;
         }
 
-        /* Steps Grid */
+        /* Steps Grid - REDESIGNED with larger circles */
         .steps-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 32px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 48px;
             max-width: 1200px;
             margin: 0 auto;
         }
@@ -3939,35 +3976,40 @@
             text-align: center;
         }
         .step-number {
-            width: 56px;
-            height: 56px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             background: var(--cerulean);
             color: white;
-            font-size: 1.8rem;
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 16px;
+            margin: 0 auto 20px;
         }
         .step-card h4 {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
+            font-size: 1.3rem;
+            margin-bottom: 12px;
             color: var(--navy);
+            font-weight: 700;
+        }
+        .step-card p {
+            font-size: 1rem;
+            line-height: 1.6;
         }
 
-        /* Features Grid */
+        /* Features Grid - REDESIGNED 2x3 */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 24px;
-            max-width: 1200px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1100px;
             margin: 0 auto;
         }
         .feature-card {
             background: white;
-            padding: 24px;
+            padding: 32px;
             border-radius: var(--radius-md);
             text-align: center;
             box-shadow: var(--shadow);
@@ -3984,8 +4026,14 @@
             margin-bottom: 12px;
         }
         .feature-card h4 {
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             color: var(--navy);
+            font-size: 1.2rem;
+            font-weight: 700;
+        }
+        .feature-card p {
+            color: var(--charcoal);
+            line-height: 1.6;
         }
 
         /* Meet Nonna Section */
@@ -4105,8 +4153,32 @@
         }
 
         /* Marketing Footer */
-        .marketing-footer {
+        /* Final CTA Section */
+        .marketing-cta-final {
             background: var(--navy);
+            color: white;
+            padding: 100px 20px;
+            text-align: center;
+        }
+        .marketing-cta-final h2 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            margin-bottom: 16px;
+            color: white;
+        }
+        .marketing-cta-final p {
+            font-size: 1.2rem;
+            margin-bottom: 32px;
+            color: rgba(255,255,255,0.9);
+        }
+        .btn-xl {
+            padding: 18px 56px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .marketing-footer {
+            background: #0f2333;
             color: rgba(255,255,255,0.8);
             padding: 48px 20px 24px;
         }
@@ -4372,13 +4444,65 @@
             }
         }
 
-        /* Responsive */
+        /* Responsive - Marketing Page */
         @media (max-width: 768px) {
-            .marketing-hero h1 { font-size: 2rem; }
-            .marketing-hero .hero-subtitle { font-size: 1.1rem; }
-            .marketing-nonna { grid-template-columns: 1fr; }
-            .footer-grid { grid-template-columns: 1fr; }
-            .pricing-card.featured { transform: scale(1); }
+            .marketing-hero {
+                padding: 60px 20px;
+            }
+            .marketing-hero h1 {
+                font-size: 2.2rem;
+            }
+            .marketing-hero .hero-subtitle {
+                font-size: 1.1rem;
+            }
+            .hero-cta .btn-lg {
+                padding: 14px 32px;
+                font-size: 16px;
+            }
+            .marketing-section {
+                padding: 60px 20px;
+            }
+            .section-title {
+                font-size: 1.8rem;
+                margin-bottom: 32px;
+            }
+            .pillars-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+                gap: 20px;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .steps-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+            .step-number {
+                width: 64px;
+                height: 64px;
+                font-size: 1.5rem;
+            }
+            .marketing-nonna {
+                grid-template-columns: 1fr;
+            }
+            .marketing-cta-final {
+                padding: 60px 20px;
+            }
+            .marketing-cta-final h2 {
+                font-size: 1.8rem;
+            }
+            .btn-xl {
+                padding: 14px 36px;
+                font-size: 16px;
+            }
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+            .pricing-card.featured {
+                transform: scale(1);
+            }
         }
 
         /* Accessibility: Respect user motion preferences */
@@ -5451,6 +5575,17 @@
                         <button class="btn btn-secondary" onclick="showIntakeForm()">Coming Soon</button>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="marketing-cta-final">
+            <div class="container">
+                <h2>Ready to transform your kitchen?</h2>
+                <p>Join thousands cooking smarter with Mediterranean meal planning</p>
+                <button class="btn btn-primary btn-xl" onclick="showIntakeForm()">
+                    <i data-lucide="chef-hat"></i> Start Free Today
+                </button>
             </div>
         </section>
 
