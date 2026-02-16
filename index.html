@@ -3518,6 +3518,369 @@
             }
         }
 
+        /* ========================================
+           MARKETING & ABOUT PAGES
+           ======================================== */
+
+        .marketing-page, .about-page {
+            display: none;
+            background: var(--page-bg);
+        }
+        .marketing-page.active, .about-page.active {
+            display: block;
+        }
+
+        /* Marketing Hero */
+        .marketing-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, var(--cerulean-dark) 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .marketing-hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            margin-bottom: 16px;
+            line-height: 1.2;
+        }
+        .marketing-hero .hero-subtitle {
+            font-size: 1.4rem;
+            margin-bottom: 32px;
+            color: rgba(255,255,255,0.95);
+        }
+        .hero-cta {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Marketing Sections */
+        .marketing-section {
+            padding: 60px 20px;
+        }
+        .marketing-section.bg-cerulean {
+            background: var(--cerulean-light);
+        }
+        .marketing-section.bg-white {
+            background: white;
+        }
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 48px;
+            color: var(--navy);
+        }
+
+        /* Three Pillars Grid */
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .pillar-card {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border-top: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .pillar-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .border-top-seafoam { border-top-color: var(--seafoam); }
+        .border-top-terracotta { border-top-color: var(--terracotta); }
+        .border-top-amber { border-top-color: var(--amber); }
+
+        .pillar-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+        .pillar-icon.seafoam { background: var(--seafoam-light); color: var(--seafoam); }
+        .pillar-icon.terracotta { background: var(--terracotta-light); color: var(--terracotta); }
+        .pillar-icon.amber { background: var(--amber-light); color: var(--amber); }
+        .pillar-icon i { width: 32px; height: 32px; }
+
+        .pillar-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            color: var(--navy);
+        }
+        .pillar-card p {
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        /* Steps Grid */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .step-card {
+            text-align: center;
+        }
+        .step-number {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            background: var(--cerulean);
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .step-card h4 {
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            color: var(--navy);
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .feature-card {
+            background: white;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+        .feature-card i {
+            width: 40px;
+            height: 40px;
+            color: var(--cerulean);
+            margin-bottom: 12px;
+        }
+        .feature-card h4 {
+            margin-bottom: 8px;
+            color: var(--navy);
+        }
+
+        /* Meet Nonna Section */
+        .marketing-nonna {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 48px;
+            align-items: center;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .nonna-intro {
+            font-size: 1.2rem;
+            color: var(--gray-text);
+            margin-bottom: 24px;
+        }
+        .nonna-features {
+            list-style: none;
+            padding: 0;
+        }
+        .nonna-features li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 1.05rem;
+        }
+        .nonna-features i {
+            color: var(--seafoam);
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+        .chat-preview {
+            background: var(--gray-light);
+            padding: 24px;
+            border-radius: var(--radius-lg);
+        }
+        .chat-bubble {
+            padding: 12px 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+        }
+        .chat-bubble.user {
+            background: var(--cerulean);
+            color: white;
+            margin-left: auto;
+            max-width: 80%;
+        }
+        .chat-bubble.nonna {
+            background: white;
+            border: 1px solid var(--border-light);
+            max-width: 85%;
+        }
+
+        /* Pricing Grid */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .pricing-card {
+            background: white;
+            padding: 32px;
+            border-radius: var(--radius-lg);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+        .pricing-card.featured {
+            border: 2px solid var(--cerulean);
+            transform: scale(1.05);
+        }
+        .pricing-card .badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--cerulean);
+            color: white;
+            padding: 4px 12px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .pricing-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: var(--navy);
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--navy);
+            margin: 16px 0;
+        }
+        .price span {
+            font-size: 1.2rem;
+            color: var(--gray-text);
+        }
+        .pricing-card ul {
+            list-style: none;
+            padding: 0;
+            margin: 24px 0;
+            text-align: left;
+        }
+        .pricing-card ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        /* Marketing Footer */
+        .marketing-footer {
+            background: var(--navy);
+            color: rgba(255,255,255,0.8);
+            padding: 48px 20px 24px;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 32px;
+            max-width: 1200px;
+            margin: 0 auto 32px;
+        }
+        .footer-grid h4 {
+            color: white;
+            margin-bottom: 16px;
+        }
+        .footer-grid h5 {
+            color: white;
+            margin-bottom: 12px;
+        }
+        .footer-grid a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            margin-bottom: 8px;
+            transition: color 0.2s;
+        }
+        .footer-grid a:hover {
+            color: white;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* About Page */
+        .about-header {
+            background: var(--navy);
+            padding: 16px 20px;
+        }
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 48px 20px;
+        }
+        .about-section {
+            margin-bottom: 48px;
+        }
+        .about-section h2 {
+            color: var(--navy);
+            margin-bottom: 16px;
+        }
+        .about-pillars {
+            display: grid;
+            gap: 32px;
+        }
+        .about-pillars > div h3 {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: var(--navy);
+            margin-bottom: 12px;
+        }
+        .about-pillars > div i {
+            width: 24px;
+            height: 24px;
+            color: var(--seafoam);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .marketing-hero h1 { font-size: 2rem; }
+            .marketing-hero .hero-subtitle { font-size: 1.1rem; }
+            .marketing-nonna { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; }
+            .pricing-card.featured { transform: scale(1); }
+        }
+
         /* Accessibility: Respect user motion preferences */
         @media (prefers-reduced-motion: reduce) {
             *,
@@ -3683,6 +4046,241 @@
             </div>
         </div>
     </header>
+
+    <!-- Marketing Homepage (logged-out users) -->
+    <div class="marketing-page" id="view-marketing" style="display:none;">
+        <!-- Hero Section -->
+        <section class="marketing-hero">
+            <div class="container">
+                <h1>Your Mediterranean Kitchen Companion</h1>
+                <p class="hero-subtitle">Gentle, delicious meals designed for your health</p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary btn-lg" onclick="showIntakeForm()">Get Started Free</button>
+                    <button class="btn btn-secondary btn-lg" onclick="showMarketingAbout()">Learn More</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Three Pillars -->
+        <section class="marketing-section bg-cerulean">
+            <div class="container">
+                <h2 class="section-title">Built for You</h2>
+                <div class="pillars-grid">
+                    <div class="pillar-card border-top-seafoam">
+                        <div class="pillar-icon seafoam"><i data-lucide="heart"></i></div>
+                        <h3>For Food Lovers</h3>
+                        <p>Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize and cook with confidence.</p>
+                    </div>
+                    <div class="pillar-card border-top-terracotta">
+                        <div class="pillar-icon terracotta"><i data-lucide="users"></i></div>
+                        <h3>For Families</h3>
+                        <p>Share recipes with loved ones through Family Tavola. Learn from family favorites and build a shared cookbook across generations.</p>
+                    </div>
+                    <div class="pillar-card border-top-amber">
+                        <div class="pillar-icon amber"><i data-lucide="shield-plus"></i></div>
+                        <h3>For Health & Wellness</h3>
+                        <p>Managing digestive health doesn't mean sacrificing flavor. Tavola helps you plan anti-inflammatory, gut-friendly meals that are delicious and healing.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section class="marketing-section bg-white">
+            <div class="container">
+                <h2 class="section-title">How It Works</h2>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-number">1</div>
+                        <h4>Chat with Nonna</h4>
+                        <p>Tell Nonna about your week, dietary needs and what's in your pantry</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">2</div>
+                        <h4>Get Your Plan</h4>
+                        <p>Receive personalized meal plans with recipes, nutrition info and cooking tips</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">3</div>
+                        <h4>Smart Shopping Lists</h4>
+                        <p>Auto-generated lists based on your pantry—only buy what you need</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-number">4</div>
+                        <h4>Cook with Confidence</h4>
+                        <p>Follow recipes, track leftovers, share favorites with family</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Grid -->
+        <section class="marketing-section bg-cerulean">
+            <div class="container">
+                <h2 class="section-title">Everything You Need</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i data-lucide="message-circle"></i>
+                        <h4>Chat with Nonna</h4>
+                        <p>AI cooking companion available 24/7</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="calendar-days"></i>
+                        <h4>Smart Meal Planning</h4>
+                        <p>Weekly plans that adapt to your schedule</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="warehouse"></i>
+                        <h4>Pantry Management</h4>
+                        <p>Track ingredients, reduce waste</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="book-open"></i>
+                        <h4>Recipe Library</h4>
+                        <p>Curated Mediterranean collection</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="sprout"></i>
+                        <h4>Garden Integration</h4>
+                        <p>Cook with what you grow</p>
+                    </div>
+                    <div class="feature-card">
+                        <i data-lucide="heart-pulse"></i>
+                        <h4>Flare Mode</h4>
+                        <p>Gentle meals for difficult days</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meet Nonna -->
+        <section class="marketing-section bg-white">
+            <div class="container">
+                <div class="marketing-nonna">
+                    <div class="nonna-content">
+                        <h2>Meet Nonna</h2>
+                        <p class="nonna-intro">Your wise, patient kitchen companion who understands Mediterranean cooking and digestive wellness.</p>
+                        <ul class="nonna-features">
+                            <li><i data-lucide="check-circle"></i> Answers cooking questions instantly</li>
+                            <li><i data-lucide="check-circle"></i> Suggests recipes based on what you have</li>
+                            <li><i data-lucide="check-circle"></i> Adapts to your health needs</li>
+                            <li><i data-lucide="check-circle"></i> Remembers your preferences</li>
+                        </ul>
+                    </div>
+                    <div class="nonna-visual">
+                        <div class="chat-preview">
+                            <div class="chat-bubble user">What can I make with leftover chicken and spinach?</div>
+                            <div class="chat-bubble nonna">Cara, a beautiful Mediterranean spinach and chicken frittata! Let me guide you...</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Pricing -->
+        <section class="marketing-section bg-cerulean">
+            <div class="container">
+                <h2 class="section-title">Simple Pricing</h2>
+                <div class="pricing-grid">
+                    <div class="pricing-card">
+                        <h3>Free</h3>
+                        <div class="price">$0<span>/month</span></div>
+                        <ul>
+                            <li>Chat with Nonna</li>
+                            <li>Basic meal planning</li>
+                            <li>Recipe library access</li>
+                        </ul>
+                        <button class="btn btn-secondary" onclick="showIntakeForm()">Start Free</button>
+                    </div>
+                    <div class="pricing-card featured">
+                        <div class="badge">Most Popular</div>
+                        <h3>Plus</h3>
+                        <div class="price">$9<span>/month</span></div>
+                        <ul>
+                            <li>Everything in Free</li>
+                            <li>Advanced meal planning</li>
+                            <li>Pantry tracking</li>
+                            <li>Family recipe sharing</li>
+                        </ul>
+                        <button class="btn btn-primary" onclick="showIntakeForm()">Coming Soon</button>
+                    </div>
+                    <div class="pricing-card">
+                        <h3>Family</h3>
+                        <div class="price">$19<span>/month</span></div>
+                        <ul>
+                            <li>Everything in Plus</li>
+                            <li>Up to 5 family members</li>
+                            <li>Shared meal plans</li>
+                            <li>Priority support</li>
+                        </ul>
+                        <button class="btn btn-secondary" onclick="showIntakeForm()">Coming Soon</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="marketing-footer">
+            <div class="container">
+                <div class="footer-grid">
+                    <div>
+                        <h4>Tavola</h4>
+                        <p>Mediterranean meal planning for digestive wellness</p>
+                    </div>
+                    <div>
+                        <h5>Product</h5>
+                        <a href="#" onclick="showMarketingAbout(); return false;">About</a>
+                        <a href="#" onclick="showIntakeForm(); return false;">Get Started</a>
+                    </div>
+                    <div>
+                        <h5>Resources</h5>
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2024 Tavola. Made with <i data-lucide="heart" style="width:14px;height:14px;vertical-align:middle;"></i> for digestive wellness.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- About Page -->
+    <div class="about-page" id="view-about" style="display:none;">
+        <header class="about-header">
+            <div class="container">
+                <button class="btn btn-secondary" onclick="navigateBackFromAbout()"><i data-lucide="arrow-left"></i> Back</button>
+            </div>
+        </header>
+        <div class="about-content">
+            <h1>About Tavola</h1>
+            <section class="about-section">
+                <h2>Our Story</h2>
+                <p>Tavola was born from a simple need: delicious, healthy Mediterranean meals that work for sensitive digestive systems. Living with digestive challenges shouldn't mean sacrificing culinary joy.</p>
+            </section>
+            <section class="about-section">
+                <h2>Three Pillars</h2>
+                <div class="about-pillars">
+                    <div>
+                        <h3><i data-lucide="heart"></i> For Food Lovers</h3>
+                        <p>Mediterranean cuisine is about more than nutrition—it's culture, family and joy. We preserve that while making it accessible for everyone.</p>
+                    </div>
+                    <div>
+                        <h3><i data-lucide="users"></i> For Families</h3>
+                        <p>Share recipes across generations. Preserve family techniques. Build a living cookbook together through Family Tavola.</p>
+                    </div>
+                    <div>
+                        <h3><i data-lucide="shield-plus"></i> For Health</h3>
+                        <p>Designed for IBD, IBS and digestive sensitivities. Flare mode provides gentle options when you need them most.</p>
+                    </div>
+                </div>
+            </section>
+            <section class="about-section">
+                <h2>Meet Nonna</h2>
+                <p>Nonna is your AI cooking companion—patient, knowledgeable and always available. She understands Mediterranean cooking traditions, digestive wellness and how to adapt recipes for your needs.</p>
+            </section>
+        </div>
+    </div>
 
     <!-- Welcome Screen -->
     <main class="welcome-screen" id="welcome-screen">
@@ -4970,6 +5568,7 @@ const STORAGE = {
 // ========================================
 let state = {
     currentView: 'home',
+    previousView: null,
     currentWeekOffset: 0,
     chatHistory: [],
     isProcessing: false,
@@ -5124,6 +5723,23 @@ function updateAuthUI() {
             syncStatus.innerHTML = `${icon('cloud',14)} Sign in to sync`;
             syncStatus.style.display = 'block';
         }
+    }
+
+    // Handle routing based on auth state changes
+    const isOnMarketingPage = document.getElementById('view-marketing')?.classList.contains('active');
+
+    if (state.user && isOnMarketingPage) {
+        // User just logged in from marketing page, transition to app
+        const marketingView = document.getElementById('view-marketing');
+        if (marketingView) {
+            marketingView.style.display = 'none';
+            marketingView.classList.remove('active');
+        }
+        showApp();
+        navigateTo('home');
+    } else if (!state.user && !isOnMarketingPage && !getStorage(STORAGE.PROFILE)) {
+        // User logged out, show marketing
+        showMarketingPage();
     }
 }
 
@@ -5476,21 +6092,78 @@ function initApp() {
     // Initialize Firebase Auth (non-blocking)
     initFirebaseAuth();
 
-    const profile = getStorage(STORAGE.PROFILE);
-    if (profile) {
-        showApp();
-        loadChatHistory();
-        if (state.chatHistory.length === 0) {
-            addWelcomeMessage();
-        }
-        checkOnboarding();
-    } else {
-        showWelcome();
-    }
+    // Check auth state and route to appropriate view
+    checkAuthAndRoute();
+
     initVoiceRecognition();
     initChatInput();
     loadPreferences();
     setDailyTip();
+}
+
+function checkAuthAndRoute() {
+    setTimeout(() => {
+        const hasProfile = getStorage(STORAGE.PROFILE);
+        const isLoggedIn = state.user || hasProfile;
+
+        if (isLoggedIn) {
+            showApp();
+            loadChatHistory();
+            if (state.chatHistory.length === 0) {
+                addWelcomeMessage();
+            }
+            checkOnboarding();
+        } else {
+            showMarketingPage();
+        }
+    }, 300);
+}
+
+function showMarketingPage() {
+    document.getElementById('welcome-screen').style.display = 'none';
+    document.getElementById('intake-form').classList.remove('active');
+    document.getElementById('app-main').classList.remove('active');
+    document.getElementById('app-header').classList.add('hidden');
+    document.getElementById('bottom-nav').classList.add('hidden');
+
+    const marketingView = document.getElementById('view-marketing');
+    if (marketingView) {
+        marketingView.style.display = 'block';
+        marketingView.classList.add('active');
+        refreshIcons();
+    }
+}
+
+function showMarketingAbout() {
+    state.previousView = state.currentView || 'marketing';
+    const marketingView = document.getElementById('view-marketing');
+    const aboutView = document.getElementById('view-about');
+
+    if (marketingView) {
+        marketingView.classList.remove('active');
+        marketingView.style.display = 'none';
+    }
+
+    if (aboutView) {
+        aboutView.style.display = 'block';
+        aboutView.classList.add('active');
+        refreshIcons();
+    }
+}
+
+function navigateBackFromAbout() {
+    const aboutView = document.getElementById('view-about');
+    if (aboutView) {
+        aboutView.classList.remove('active');
+        aboutView.style.display = 'none';
+    }
+
+    if (state.user || getStorage(STORAGE.PROFILE)) {
+        showApp();
+        navigateTo('home');
+    } else {
+        showMarketingPage();
+    }
 }
 
 function cleanupDuplicateRecipes() {
