@@ -3530,7 +3530,6 @@
 
         /* --- Nav Dropdown (shared mobile + desktop) --- */
         .nav-dropdown-menu {
-            display: none;
             position: absolute;
             background: var(--white);
             border-radius: var(--radius);
@@ -3538,8 +3537,16 @@
             min-width: 200px;
             z-index: 200;
             overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            pointer-events: none;
         }
-        .nav-dropdown-menu.open { display: block; }
+        .nav-dropdown-menu.open {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
         .nav-dropdown-item {
             display: flex;
             align-items: center;
@@ -3692,12 +3699,23 @@
                 top: 100%;
                 left: 50%;
                 transform: translateX(-50%);
-                margin-top: 4px;
-                animation: slideDownDropdown 0.18s ease;
+                margin-top: 0;
+                padding-top: 8px;
             }
-            @keyframes slideDownDropdown {
-                from { opacity: 0; transform: translateX(-50%) translateY(-6px); }
-                to { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+            /* Hover bridge - creates safe zone between button and dropdown */
+            .desktop-nav-group {
+                position: relative;
+            }
+
+            .desktop-nav-group::after {
+                content: '';
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                height: 8px;
+                z-index: 199;
             }
 
             /* Desktop header right section */
@@ -6759,6 +6777,43 @@ function initApp() {
     initChatInput();
     loadPreferences();
     setDailyTip();
+    initDesktopDropdownHover();
+}
+
+function initDesktopDropdownHover() {
+    // Initialize hover behavior for desktop navigation dropdowns
+    const navGroups = [
+        { btn: 'desktop-cooking-group', menu: 'desktop-cooking-dropdown' },
+        { btn: 'desktop-plan-group', menu: 'desktop-plan-dropdown' },
+        { btn: 'desktop-pantry-group', menu: 'desktop-pantry-dropdown' }
+    ];
+
+    navGroups.forEach(({ btn, menu }) => {
+        const btnEl = document.getElementById(btn);
+        const menuEl = document.getElementById(menu);
+
+        if (!btnEl || !menuEl) return;
+
+        // Show dropdown on button hover
+        btnEl.addEventListener('mouseenter', () => {
+            showDesktopDropdown(menu);
+        });
+
+        // Hide dropdown when leaving button (with delay)
+        btnEl.addEventListener('mouseleave', () => {
+            hideDesktopDropdown(menu, 300);
+        });
+
+        // Keep dropdown open when hovering over it
+        menuEl.addEventListener('mouseenter', () => {
+            showDesktopDropdown(menu);
+        });
+
+        // Hide dropdown when leaving menu (with delay)
+        menuEl.addEventListener('mouseleave', () => {
+            hideDesktopDropdown(menu, 300);
+        });
+    });
 }
 
 function checkAuthAndRoute() {
@@ -7105,16 +7160,49 @@ function toggleMobileDropdown(menuId, triggerBtn) {
     }
 }
 
-function toggleDesktopDropdown(menuId) {
+// Dropdown hover state management
+let dropdownTimeouts = {};
+
+function showDesktopDropdown(menuId) {
+    // Clear any pending hide timeout for this dropdown
+    if (dropdownTimeouts[menuId]) {
+        clearTimeout(dropdownTimeouts[menuId]);
+        delete dropdownTimeouts[menuId];
+    }
+
     const menu = document.getElementById(menuId);
-    const isOpen = menu.classList.contains('open');
-    closeAllDropdowns();
-    if (!isOpen) {
+    const btn = menu?.parentElement.querySelector('.desktop-nav-btn');
+
+    if (menu && !menu.classList.contains('open')) {
+        closeAllDropdowns();
         menu.classList.add('open');
-        // Mark the button as open for chevron rotation
-        const btn = menu.parentElement.querySelector('.desktop-nav-btn');
         if (btn) btn.classList.add('open');
         refreshIcons();
+    }
+}
+
+function hideDesktopDropdown(menuId, delay = 300) {
+    // Set timeout to hide dropdown after delay
+    dropdownTimeouts[menuId] = setTimeout(() => {
+        const menu = document.getElementById(menuId);
+        const btn = menu?.parentElement.querySelector('.desktop-nav-btn');
+
+        if (menu) {
+            menu.classList.remove('open');
+            if (btn) btn.classList.remove('open');
+        }
+        delete dropdownTimeouts[menuId];
+    }, delay);
+}
+
+function toggleDesktopDropdown(menuId) {
+    const menu = document.getElementById(menuId);
+    const isOpen = menu?.classList.contains('open');
+
+    if (isOpen) {
+        hideDesktopDropdown(menuId, 0); // Hide immediately on click
+    } else {
+        showDesktopDropdown(menuId);
     }
 }
 
