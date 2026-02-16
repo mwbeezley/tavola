@@ -4591,6 +4591,68 @@
             color: var(--navy);
         }
 
+        .conversation-context {
+            padding: 12px 16px;
+            background: var(--seafoam-light);
+            border-bottom: 1px solid var(--border-light);
+            font-size: 0.85rem;
+        }
+
+        .conversation-context.hidden {
+            display: none;
+        }
+
+        .conversation-context-title {
+            font-weight: 600;
+            color: var(--navy);
+            margin-bottom: 6px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .conversation-context-summary {
+            color: var(--charcoal);
+            line-height: 1.4;
+        }
+
+        .conversation-quick-actions {
+            padding: 12px;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .conversation-quick-actions.hidden {
+            display: none;
+        }
+
+        .quick-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.85rem;
+            color: var(--charcoal);
+        }
+
+        .quick-action-btn:hover {
+            background: var(--cerulean-light);
+            border-color: var(--cerulean);
+        }
+
+        .quick-action-btn i {
+            width: 16px;
+            height: 16px;
+            color: var(--seafoam);
+        }
+
         .conversation-list {
             flex: 1;
             overflow-y: auto;
@@ -6233,6 +6295,17 @@
                                 <i data-lucide="plus"></i> New
                             </button>
                         </div>
+
+                        <!-- Context Summary -->
+                        <div class="conversation-context" id="conversation-context">
+                            <!-- Context will be rendered here -->
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="conversation-quick-actions" id="conversation-quick-actions">
+                            <!-- Quick actions will be rendered here -->
+                        </div>
+
                         <div class="conversation-list" id="nonna-conversation-list">
                             <!-- Conversations will be rendered here -->
                         </div>
@@ -9944,6 +10017,10 @@ function renderNonnaConversationList() {
 
     const conversations = getStorage(STORAGE.CONVERSATIONS) || [];
 
+    // Update context and quick actions
+    renderConversationContext();
+    renderConversationQuickActions();
+
     if (conversations.length === 0) {
         listEl.innerHTML = `
             <div style="padding:24px;text-align:center;color:var(--gray-text);font-size:0.85rem">
@@ -9970,6 +10047,122 @@ function renderNonnaConversationList() {
             </div>
         `;
     }).join('');
+
+    refreshIcons();
+}
+
+function renderConversationContext() {
+    const contextEl = document.getElementById('conversation-context');
+    if (!contextEl) return;
+
+    // Only show context if there's an active conversation
+    if (!state.chatHistory || state.chatHistory.length === 0) {
+        contextEl.classList.add('hidden');
+        return;
+    }
+
+    contextEl.classList.remove('hidden');
+
+    // Analyze conversation to determine context
+    const context = analyzeConversationContext();
+
+    contextEl.innerHTML = `
+        <div class="conversation-context-title">Current Topic</div>
+        <div class="conversation-context-summary">
+            <i data-lucide="${context.icon}" style="width:14px;height:14px;vertical-align:middle;margin-right:4px;color:var(--seafoam)"></i>
+            ${context.summary}
+        </div>
+    `;
+
+    refreshIcons();
+}
+
+function analyzeConversationContext() {
+    const userMessages = state.chatHistory.filter(m => m.role === 'user').map(m => m.content.toLowerCase());
+    const allText = userMessages.join(' ');
+
+    // Detect main topics
+    if (allText.includes('recipe') || allText.includes('cook') || allText.includes('make')) {
+        return {
+            icon: 'chef-hat',
+            summary: 'Recipe ideas and cooking tips'
+        };
+    } else if (allText.includes('plan') || allText.includes('week') || allText.includes('meal')) {
+        return {
+            icon: 'calendar',
+            summary: 'Meal planning and weekly menus'
+        };
+    } else if (allText.includes('pantry') || allText.includes('ingredients') || allText.includes('shopping')) {
+        return {
+            icon: 'shopping-bag',
+            summary: 'Pantry and shopping lists'
+        };
+    } else if (allText.includes('health') || allText.includes('nutrition') || allText.includes('flare')) {
+        return {
+            icon: 'heart-pulse',
+            summary: 'Health and nutrition guidance'
+        };
+    } else if (allText.includes('family') || allText.includes('share')) {
+        return {
+            icon: 'users',
+            summary: 'Family recipes and sharing'
+        };
+    } else {
+        return {
+            icon: 'message-circle',
+            summary: 'General cooking conversation'
+        };
+    }
+}
+
+function renderConversationQuickActions() {
+    const actionsEl = document.getElementById('conversation-quick-actions');
+    if (!actionsEl) return;
+
+    // Only show actions if there's an active conversation
+    if (!state.chatHistory || state.chatHistory.length === 0) {
+        actionsEl.classList.add('hidden');
+        return;
+    }
+
+    actionsEl.classList.remove('hidden');
+
+    const context = analyzeConversationContext();
+    const actions = getContextualQuickActions(context);
+
+    actionsEl.innerHTML = actions.map(action => `
+        <button class="quick-action-btn" onclick="${action.onClick}">
+            <i data-lucide="${action.icon}"></i>
+            <span>${action.label}</span>
+        </button>
+    `).join('');
+
+    refreshIcons();
+}
+
+function getContextualQuickActions(context) {
+    const baseActions = [
+        { icon: 'bookmark', label: 'Save conversation', onClick: 'saveCurrentConversation()' }
+    ];
+
+    // Add context-specific actions
+    if (context.summary.includes('Recipe')) {
+        baseActions.unshift({ icon: 'book-open', label: 'View my recipes', onClick: "navigateTo('recipes')" });
+        baseActions.unshift({ icon: 'chef-hat', label: 'Add to meal plan', onClick: "navigateTo('week')" });
+    } else if (context.summary.includes('Meal planning')) {
+        baseActions.unshift({ icon: 'calendar-days', label: 'View week plan', onClick: "navigateTo('week')" });
+        baseActions.unshift({ icon: 'shopping-cart', label: 'Create shopping list', onClick: "navigateTo('pantry'); switchPantryTab('shopping')" });
+    } else if (context.summary.includes('Pantry')) {
+        baseActions.unshift({ icon: 'package', label: 'View pantry', onClick: "navigateTo('pantry')" });
+        baseActions.unshift({ icon: 'shopping-cart', label: 'Shopping list', onClick: "navigateTo('pantry'); switchPantryTab('shopping')" });
+    } else if (context.summary.includes('Health')) {
+        baseActions.unshift({ icon: 'heart', label: 'Flare mode recipes', onClick: "openFlareModeFilter()" });
+        baseActions.unshift({ icon: 'activity', label: 'View workouts', onClick: "navigateTo('workouts')" });
+    } else if (context.summary.includes('Family')) {
+        baseActions.unshift({ icon: 'users', label: 'Family recipes', onClick: "navigateTo('recipes'); showFamilyRecipes()" });
+    }
+
+    return baseActions.slice(0, 3); // Max 3 actions
 }
 
 function loadNonnaConversation(convId) {
