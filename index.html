@@ -4468,7 +4468,7 @@
                         <i data-lucide="chef-hat"></i> Cooking <i data-lucide="chevron-down" class="chevron"></i>
                     </button>
                     <div class="nav-dropdown-menu" id="desktop-cooking-dropdown">
-                        <button class="nav-dropdown-item" onclick="navAction('chat')"><i data-lucide="message-circle"></i> Chat with Nonna</button>
+                        <button class="nav-dropdown-item" onclick="navAction('nonna')"><i data-lucide="message-circle"></i> Chat with Nonna</button>
                         <button class="nav-dropdown-item" onclick="navAction('recipes')"><i data-lucide="book-open"></i> Recipes</button>
                         <button class="nav-dropdown-item" onclick="navAction('favorites')"><i data-lucide="heart"></i> Favorites</button>
                         <button class="nav-dropdown-item" onclick="navAction('family')"><i data-lucide="users"></i> Family Tavola</button>
@@ -5145,7 +5145,7 @@
                         <div class="action-tile-title">View Favorites</div>
                         <div class="action-tile-desc">Browse saved recipes</div>
                     </div>
-                    <div class="action-tile tile-navy" onclick="navigateTo('chat')">
+                    <div class="action-tile tile-navy" onclick="navigateTo('nonna')">
                         <div class="action-tile-icon"><i data-lucide="message-circle"></i></div>
                         <div class="action-tile-title">Chat with Nonna</div>
                         <div class="action-tile-desc">Ask about meals & recipes</div>
@@ -5226,7 +5226,7 @@
                         <div style="margin-bottom: 16px;"><i data-lucide="hand-metal" style="width:48px;height:48px;color:var(--cerulean)"></i></div>
                         <h3 style="color: var(--cerulean); margin-bottom: 8px;">Welcome to Tavola!</h3>
                         <p class="text-muted mb-16">Nonna helps you plan Mediterranean meals tailored to your health needs.</p>
-                        <button class="btn btn-primary" onclick="navigateTo('chat')"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"></i> Start Chatting with Nonna</button>
+                        <button class="btn btn-primary" onclick="navigateTo('nonna')"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle;margin-right:4px"></i> Start Chatting with Nonna</button>
                     </div>
                 </div>
             </div>
@@ -5330,7 +5330,7 @@
                         <div class="empty-state-icon"><i data-lucide="book-open" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
                         <div class="empty-state-title">Your recipe library is empty</div>
                         <p class="empty-state-text">Chat with Nonna to get personalized Mediterranean recipes tailored to your health needs!</p>
-                        <button class="btn btn-primary" onclick="navigateTo('chat')"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle"></i> Ask Nonna for Recipe Ideas</button>
+                        <button class="btn btn-primary" onclick="navigateTo('nonna')"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle"></i> Ask Nonna for Recipe Ideas</button>
                     </div>
                 </div>
 
@@ -5367,51 +5367,6 @@
                 </div>
             </div>
 
-            <!-- CHAT View -->
-            <div class="view" id="view-chat">
-                <div class="chat-header-bar">
-                    <button class="btn-ghost btn-sm" onclick="toggleConversationPanel()">
-                        <i data-lucide="message-square-text" style="width:16px;height:16px;vertical-align:middle"></i> History
-                    </button>
-                    <h3 class="chat-title">Nonna</h3>
-                    <button class="btn-ghost btn-sm" onclick="startNewConversation()">
-                        <i data-lucide="plus" style="width:16px;height:16px;vertical-align:middle"></i> New Chat
-                    </button>
-                </div>
-                <div class="conversation-panel" id="conversation-panel" style="display:none">
-                    <div class="conversation-search">
-                        <input type="text" placeholder="Search conversations..." oninput="filterConversations(this.value)" class="conversation-search-input">
-                    </div>
-                    <div class="conversation-list" id="conversation-list"></div>
-                </div>
-                <div class="active-plan-bar" id="active-plan-bar" style="display:none">
-                    <span class="plan-bar-label"><i data-lucide="calendar-check" style="width:14px;height:14px;vertical-align:middle"></i> This week:</span>
-                    <span class="plan-bar-summary" id="plan-bar-summary"></span>
-                    <button class="btn-ghost btn-sm" onclick="navigateTo('home')">
-                        <i data-lucide="external-link" style="width:14px;height:14px;vertical-align:middle"></i> View
-                    </button>
-                </div>
-                <div class="chat-layout">
-                    <div class="chat-main">
-                        <div class="chat-container">
-                            <div class="chat-messages" id="chat-messages"></div>
-                            <div class="chat-input-area">
-                                <div class="chat-input-wrapper">
-                                    <button class="voice-btn" id="voice-btn" onclick="toggleVoiceInput()" title="Voice input"><i data-lucide="mic"></i></button>
-                                    <textarea class="chat-input" id="chat-input" placeholder="Ask Nonna anything..." rows="1"></textarea>
-                                    <button class="send-btn" id="send-btn" onclick="sendMessage()"><i data-lucide="send-horizontal"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <aside class="chat-sidebar" id="chat-sidebar">
-                        <h4 class="chat-sidebar-title"><i data-lucide="message-circle" style="width:16px;height:16px;vertical-align:middle"></i> Topics</h4>
-                        <div id="conversation-topics"></div>
-                    </aside>
-                </div>
-            </div>
-
-            <!-- WORKOUTS View -->
             <!-- NONNA View -->
             <div class="view" id="view-nonna">
                 <div class="nonna-page-container">
@@ -5991,7 +5946,7 @@
                 <span>Cooking</span>
             </button>
             <div class="nav-dropdown-menu" id="mobile-cooking-dropdown">
-                <button class="nav-dropdown-item" onclick="navAction('chat')"><i data-lucide="message-circle"></i> Chat with Nonna</button>
+                <button class="nav-dropdown-item" onclick="navAction('nonna')"><i data-lucide="message-circle"></i> Chat with Nonna</button>
                 <button class="nav-dropdown-item" onclick="navAction('recipes')"><i data-lucide="book-open"></i> Recipes</button>
                 <button class="nav-dropdown-item" onclick="navAction('favorites')"><i data-lucide="heart"></i> Favorites</button>
                 <button class="nav-dropdown-item" onclick="navAction('family')"><i data-lucide="users"></i> Family Tavola</button>
@@ -6914,10 +6869,6 @@ function navigateTo(view) {
         else renderRecipeLibrary();
     }
     if (view === 'workouts') renderWorkoutsView();
-    if (view === 'chat') {
-        updateActivePlanBar();
-        updateConversationTopics();
-    }
     if (view === 'nonna') {
         renderNonnaView();
     }
@@ -6933,7 +6884,6 @@ function navigateTo(view) {
 // Map views to their parent nav group
 const viewToNavGroup = {
     home: 'home',
-    chat: 'cooking',
     recipes: 'cooking',
     favorites: 'cooking',
     cooking: 'cooking',
@@ -6996,7 +6946,7 @@ function navAction(action) {
     closeAllDropdowns();
     switch (action) {
         case 'chat':
-            navigateTo('chat');
+            navigateTo('nonna');
             break;
         case 'recipes':
             navigateTo('recipes');
@@ -8138,7 +8088,7 @@ async function sendMessage() {
 }
 
 function askNonna(text) {
-    navigateTo('chat');
+    navigateTo('nonna');
     document.getElementById('chat-input').value = text;
     setTimeout(() => sendMessage(), 100);
 }
@@ -10528,7 +10478,7 @@ function openAddMealSlot(dateStr, mealType, dayName) {
 
 function askNonnaForMealSlot(dateStr, mealType, dayName) {
     const mealLabels = { breakfast: 'breakfast', lunch: 'lunch', dinner: 'dinner', snacks: 'snack ideas' };
-    navigateTo('chat');
+    navigateTo('nonna');
     setTimeout(() => {
         const input = document.getElementById('chat-input');
         input.value = `Suggest a healthy ${mealLabels[mealType]} for ${dayName}. Check my pantry and use ingredients I have.`;
@@ -14601,7 +14551,7 @@ function activateFlareMode() {
     setStorage(STORAGE.PREFS, prefs);
     updateFlareUI();
     showToast(`${icon('thermometer',14)} Flare mode activated. Nonna will suggest gentle meals.`);
-    navigateTo('chat');
+    navigateTo('nonna');
     askNonna("I'm having a Crohn's flare. Give me some gentle meal options for today.");
 }
 
