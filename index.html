@@ -10077,13 +10077,31 @@ function shareRecipeToFamily(cardId) {
 }
 
 async function sendNonnaMessage() {
+    console.log('[sendNonnaMessage] Function called');
+
     const input = document.getElementById('chat-input-nonna');
-    if (!input) return;
+    console.log('[sendNonnaMessage] Input element:', input);
+
+    if (!input) {
+        console.error('[sendNonnaMessage] Input element not found!');
+        return;
+    }
+
+    if (!input.value) {
+        console.error('[sendNonnaMessage] Input value is undefined!');
+        return;
+    }
 
     const message = input.value.trim();
-    if (!message || state.isProcessing) return;
+    console.log('[sendNonnaMessage] Message:', message);
+
+    if (!message || state.isProcessing) {
+        console.log('[sendNonnaMessage] Empty message or already processing');
+        return;
+    }
 
     input.value = '';
+    console.log('[sendNonnaMessage] Input cleared, processing message');
 
     // Add user message
     const userMsg = {
@@ -10403,13 +10421,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     const nonnaChatInput = document.getElementById('chat-input-nonna');
+    console.log('[Init] Nonna chat input element:', nonnaChatInput);
+
     if (nonnaChatInput) {
         nonnaChatInput.addEventListener('keydown', function(e) {
+            console.log('[Keydown] Key pressed:', e.key, 'Shift:', e.shiftKey);
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
+                console.log('[Keydown] Enter pressed, sending message');
                 sendNonnaMessage();
             }
         });
+        console.log('[Init] Keydown listener attached to Nonna chat input');
+    } else {
+        console.error('[Init] Nonna chat input element not found!');
     }
 });
 
