@@ -5210,6 +5210,109 @@
             background: var(--cerulean-light);
         }
 
+        /* ── Recipe Card Action Bar (embedded per-card, data-safe) ── */
+        .recipe-action-bar {
+            display: flex;
+            gap: 12px;
+            padding: 16px 24px;
+            background: #F8F9FA;
+            border-top: 1px solid var(--border-light);
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        .save-recipe-btn,
+        .add-plan-toggle,
+        .share-family-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+            line-height: 1.2;
+        }
+
+        .save-recipe-btn {
+            background: var(--cerulean, #2B7FB7);
+            color: white;
+        }
+        .save-recipe-btn:hover { filter: brightness(1.1); }
+        .save-recipe-btn.saved,
+        .save-recipe-btn:disabled {
+            background: var(--seafoam, #5DBAA4);
+            cursor: default;
+            opacity: 0.9;
+        }
+
+        .add-plan-toggle {
+            background: var(--seafoam, #5DBAA4);
+            color: white;
+        }
+        .add-plan-toggle:hover { filter: brightness(1.1); }
+        .add-plan-toggle.saved { background: var(--cerulean, #2B7FB7); }
+
+        .add-to-plan-wrapper {
+            position: relative;
+        }
+
+        .plan-dropdown {
+            position: absolute;
+            bottom: calc(100% + 4px);
+            left: 0;
+            background: white;
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-sm);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 200;
+            min-width: 140px;
+            overflow: hidden;
+        }
+
+        .plan-dropdown.hidden { display: none; }
+
+        .plan-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 10px 16px;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            color: var(--charcoal);
+            transition: background 0.15s;
+        }
+
+        .plan-dropdown button:hover {
+            background: var(--cerulean-light, #D4F1E8);
+            color: var(--navy);
+        }
+
+        .share-family-btn {
+            background: white;
+            color: var(--cerulean, #2B7FB7);
+            border: 1.5px solid var(--cerulean, #2B7FB7) !important;
+        }
+        .share-family-btn:hover { background: var(--cerulean-light, #E8F4FB); }
+        .share-family-btn.saved {
+            background: var(--seafoam-light);
+            border-color: var(--seafoam) !important;
+            color: var(--seafoam);
+        }
+
+        @media (max-width: 640px) {
+            .recipe-action-bar { flex-direction: column; }
+            .save-recipe-btn,
+            .add-plan-toggle,
+            .share-family-btn { width: 100%; justify-content: center; }
+        }
+
         /* Mobile adjustments for Nonna page */
         @media (max-width: 768px) {
             .nonna-page-container {
@@ -9717,19 +9820,20 @@ function createMessageElement(msg) {
         if (recipes.length === 0) {
             div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
         } else {
-            let recipeHTML = '';
-
-            // Include non-recipe text if any
+            // Include non-recipe intro text if any (e.g. "Here's a recipe for you!")
             const nonRecipeText = extractNonRecipeText(msg.content);
             if (nonRecipeText.trim()) {
-                recipeHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
+                const textDiv = document.createElement('div');
+                textDiv.innerHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
+                div.appendChild(textDiv);
             }
 
+            // renderRecipeCard() now returns a DOM element with _recipeData attached
+            // and event listeners wired up — no global ID lookup needed
             recipes.forEach((recipe, index) => {
-                recipeHTML += renderRecipeCard(recipe, index);
+                const cardEl = renderRecipeCard(recipe, index);
+                div.appendChild(cardEl);
             });
-
-            div.innerHTML = recipeHTML;
         }
     } else {
         div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
@@ -9884,19 +9988,16 @@ function parseSimpleRecipe(content) {
 
 function renderRecipeCard(recipe, index) {
     const cardId = `recipe-card-${Date.now()}-${index}`;
-    const hasNutrition = Object.keys(recipe.nutrition).length > 0;
 
-    // Store recipe data globally so action buttons can access it
+    // Backward compat: keep global store for any other callers
     if (!window.chatRecipes) window.chatRecipes = {};
     window.chatRecipes[cardId] = recipe;
 
-    // Use getTagClass() for rich color-coded tags (red for heart-healthy, blue for Mediterranean, etc.)
+    // Build tags HTML — strip ** markdown, use rich color-coded classes
     const allTags = [...recipe.tags.health, ...recipe.tags.dietary, ...recipe.tags.cuisine];
     const tagsHTML = allTags
-        .map(tag => {
-            const tagClass = getTagClass(tag);
-            return `<span class="tag ${tagClass}">${tag}</span>`;
-        }).join('');
+        .map(tag => `<span class="tag ${getTagClass(tag)}">${tag.replace(/\*\*/g, '')}</span>`)
+        .join('');
 
     const ingredientsHTML = recipe.ingredients
         .map(ing => `<li>${escapeHtml(ing)}</li>`)
@@ -9906,6 +10007,8 @@ function renderRecipeCard(recipe, index) {
         .map((inst, i) => `<li data-step="${i + 1}">${escapeHtml(inst)}</li>`)
         .join('');
 
+    // Nutrition: strip ** markdown from keys and values
+    const hasNutrition = Object.keys(recipe.nutrition).length > 0;
     const nutritionHTML = hasNutrition ? `
         <div class="recipe-nutrition">
             <div class="recipe-nutrition-toggle" onclick="toggleNutrition('${cardId}')">
@@ -9914,67 +10017,218 @@ function renderRecipeCard(recipe, index) {
             </div>
             <div class="recipe-nutrition-content hidden" id="${cardId}-nutrition">
                 ${Object.entries(recipe.nutrition).map(([key, val]) =>
-                    `<div><strong>${key}:</strong> ${val}</div>`
+                    `<div><strong>${key.replace(/\*\*/g, '')}:</strong> ${String(val).replace(/\*\*/g, '')}</div>`
                 ).join('')}
             </div>
         </div>` : '';
 
-    return `
-        <div class="chat-recipe-card" id="${cardId}">
-            <div class="recipe-card-header">
-                <h3 class="recipe-card-title">${escapeHtml(recipe.title)}</h3>
+    // Build as DOM element — recipe data stored directly on element,
+    // event listeners attached programmatically (no global ID lookup needed)
+    const card = document.createElement('div');
+    card.className = 'chat-recipe-card';
+    card.id = cardId;
+    card._recipeData = recipe; // KEY: data lives on the element, never gets lost
+
+    card.innerHTML = `
+        <div class="recipe-card-header">
+            <h3 class="recipe-card-title">${escapeHtml(recipe.title)}</h3>
+        </div>
+
+        <div class="recipe-metadata">
+            <div class="recipe-metadata-item">
+                <i data-lucide="clock"></i>
+                <span>Prep: ${escapeHtml(recipe.prepTime)}</span>
             </div>
-
-            <div class="recipe-metadata">
-                <div class="recipe-metadata-item">
-                    <i data-lucide="clock"></i>
-                    <span>Prep: ${escapeHtml(recipe.prepTime)}</span>
-                </div>
-                <div class="recipe-metadata-item">
-                    <i data-lucide="timer"></i>
-                    <span>Cook: ${escapeHtml(recipe.cookTime)}</span>
-                </div>
-                <div class="recipe-metadata-item">
-                    <i data-lucide="users"></i>
-                    <span>Serves ${escapeHtml(recipe.servings)}</span>
-                </div>
-                <div class="recipe-metadata-item">
-                    <i data-lucide="chef-hat"></i>
-                    <span>${escapeHtml(recipe.difficulty)}</span>
-                </div>
+            <div class="recipe-metadata-item">
+                <i data-lucide="timer"></i>
+                <span>Cook: ${escapeHtml(recipe.cookTime)}</span>
             </div>
-
-            ${tagsHTML ? `<div class="recipe-tags">${tagsHTML}</div>` : ''}
-
-            ${nutritionHTML}
-
-            <div class="recipe-section">
-                <h4 class="recipe-section-title">Ingredients</h4>
-                <ul class="recipe-ingredients">${ingredientsHTML}</ul>
+            <div class="recipe-metadata-item">
+                <i data-lucide="users"></i>
+                <span>Serves ${escapeHtml(recipe.servings)}</span>
             </div>
-
-            <div class="recipe-section">
-                <h4 class="recipe-section-title">Instructions</h4>
-                <ol class="recipe-instructions">${instructionsHTML}</ol>
-            </div>
-
-            <div class="recipe-actions">
-                <button class="btn btn-secondary" onclick="saveRecipeFromChat('${cardId}')">
-                    <i data-lucide="bookmark-plus"></i> Save to My Recipes
-                </button>
-                <div class="recipe-action-primary">
-                    <button class="btn btn-primary" onclick="toggleDayDropdown('${cardId}')">
-                        <i data-lucide="calendar"></i> Add to Plan ▾
-                    </button>
-                    <div class="recipe-day-dropdown" id="${cardId}-dropdown">
-                        ${['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-                            .map(day => `<div class="recipe-day-option" onclick="addRecipeToDay('${cardId}', '${day}')">${day}</div>`)
-                            .join('')}
-                    </div>
-                </div>
+            <div class="recipe-metadata-item">
+                <i data-lucide="chef-hat"></i>
+                <span>${escapeHtml(recipe.difficulty)}</span>
             </div>
         </div>
+
+        ${tagsHTML ? `<div class="recipe-tags">${tagsHTML}</div>` : ''}
+
+        ${nutritionHTML}
+
+        <div class="recipe-section">
+            <h4 class="recipe-section-title">Ingredients</h4>
+            <ul class="recipe-ingredients">${ingredientsHTML}</ul>
+        </div>
+
+        <div class="recipe-section">
+            <h4 class="recipe-section-title">Instructions</h4>
+            <ol class="recipe-instructions">${instructionsHTML}</ol>
+        </div>
+
+        <div class="recipe-action-bar">
+            <button class="save-recipe-btn">
+                <i data-lucide="bookmark-plus"></i> Save to My Recipes
+            </button>
+            <div class="add-to-plan-wrapper">
+                <button class="add-plan-toggle">
+                    <i data-lucide="calendar"></i> Add to Plan ▾
+                </button>
+                <div class="plan-dropdown hidden">
+                    <button data-day="Monday">Monday</button>
+                    <button data-day="Tuesday">Tuesday</button>
+                    <button data-day="Wednesday">Wednesday</button>
+                    <button data-day="Thursday">Thursday</button>
+                    <button data-day="Friday">Friday</button>
+                    <button data-day="Saturday">Saturday</button>
+                    <button data-day="Sunday">Sunday</button>
+                </div>
+            </div>
+            <button class="share-family-btn">
+                <i data-lucide="users"></i> Share to Family
+            </button>
+        </div>
     `;
+
+    // ── SAVE BUTTON ──
+    card.querySelector('.save-recipe-btn').addEventListener('click', function() {
+        const r = card._recipeData;
+        const recipeToSave = {
+            id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            title: r.title,
+            ingredients: r.ingredients,
+            instructions: r.instructions,
+            metadata: {
+                servings: r.servings,
+                prepTime: r.prepTime,
+                cookTime: r.cookTime,
+                difficulty: r.difficulty,
+                tags: [...r.tags.health, ...r.tags.dietary, ...r.tags.cuisine]
+            },
+            nutrition: r.nutrition,
+            source: 'Nonna Chat',
+            createdAt: new Date().toISOString(),
+            timesCooked: 0,
+            rating: 0
+        };
+        saveRecipeToLibrary(recipeToSave);
+        this.innerHTML = '<i data-lucide="check"></i> Saved!';
+        this.disabled = true;
+        this.classList.add('saved');
+        showToast('Recipe saved to My Recipes!', 'success');
+        refreshIcons();
+    });
+
+    // ── ADD TO PLAN TOGGLE ──
+    card.querySelector('.add-plan-toggle').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const dropdown = card.querySelector('.plan-dropdown');
+        // Close all other open dropdowns first
+        document.querySelectorAll('.plan-dropdown:not(.hidden)').forEach(d => {
+            if (d !== dropdown) d.classList.add('hidden');
+        });
+        dropdown.classList.toggle('hidden');
+    });
+
+    // ── DAY SELECTION ──
+    card.querySelectorAll('.plan-dropdown [data-day]').forEach(dayBtn => {
+        dayBtn.addEventListener('click', function() {
+            const r = card._recipeData;
+            const day = this.dataset.day;
+
+            // Compute date string for the selected day in current week
+            const weekDates = getWeekDates(state.currentWeekOffset);
+            const dayIndex = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'].indexOf(day);
+            const dateStr = weekDates[dayIndex];
+
+            if (!dateStr) { showToast('Invalid day selected', 'warning'); return; }
+
+            // Auto-save to library first so plan has a recipeId
+            const recipeToSave = {
+                id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                title: r.title,
+                ingredients: r.ingredients,
+                instructions: r.instructions,
+                metadata: {
+                    servings: r.servings,
+                    prepTime: r.prepTime,
+                    cookTime: r.cookTime,
+                    difficulty: r.difficulty,
+                    tags: [...r.tags.health, ...r.tags.dietary, ...r.tags.cuisine]
+                },
+                nutrition: r.nutrition,
+                source: 'Nonna Chat',
+                createdAt: new Date().toISOString(),
+                timesCooked: 0,
+                rating: 0
+            };
+            const result = saveRecipeToLibrary(recipeToSave);
+            const savedId = result?.id || recipeToSave.id;
+
+            // Write to meal plan localStorage
+            const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
+            if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
+            mealPlans[dateStr].dinner = {
+                title: r.title,
+                calories: r.nutrition?.calories || null,
+                recipeId: savedId,
+                status: 'planned'
+            };
+            setStorage(STORAGE.MEAL_PLANS, mealPlans);
+
+            // Update button + close dropdown
+            card.querySelector('.plan-dropdown').classList.add('hidden');
+            card.querySelector('.add-plan-toggle').innerHTML =
+                `<i data-lucide="check"></i> Added to ${day}`;
+            card.querySelector('.add-plan-toggle').classList.add('saved');
+            refreshIcons();
+            showToast(`Recipe added to ${day}!`, 'success');
+        });
+    });
+
+    // ── SHARE TO FAMILY ──
+    card.querySelector('.share-family-btn').addEventListener('click', function() {
+        const r = card._recipeData;
+        const recipeToShare = {
+            id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+            title: r.title,
+            ingredients: r.ingredients,
+            instructions: r.instructions,
+            metadata: {
+                servings: r.servings,
+                prepTime: r.prepTime,
+                cookTime: r.cookTime,
+                difficulty: r.difficulty,
+                tags: [...r.tags.health, ...r.tags.dietary, ...r.tags.cuisine]
+            },
+            nutrition: r.nutrition,
+            source: 'Nonna Chat',
+            createdAt: new Date().toISOString(),
+            privacy: 'family',
+            timesCooked: 0,
+            rating: 0
+        };
+        saveRecipeToLibrary(recipeToShare);
+        if (typeof syncRecipeToFamily === 'function') {
+            syncRecipeToFamily(recipeToShare);
+        }
+        this.innerHTML = '<i data-lucide="check"></i> Shared!';
+        this.disabled = true;
+        this.classList.add('saved');
+        showToast('Recipe shared to Family Tavola!', 'success');
+        refreshIcons();
+    });
+
+    // Close plan dropdown when clicking anywhere outside the wrapper
+    document.addEventListener('click', function(e) {
+        const wrapper = card.querySelector('.add-to-plan-wrapper');
+        if (wrapper && !wrapper.contains(e.target)) {
+            card.querySelector('.plan-dropdown')?.classList.add('hidden');
+        }
+    });
+
+    return card; // Returns DOM element (not HTML string)
 }
 
 function formatMessageContent(content) {
