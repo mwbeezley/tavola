@@ -9919,7 +9919,8 @@ function createMessageElement(msg) {
             div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
         } else {
             // Include non-recipe intro text if any (e.g. "Here's a recipe for you!")
-            const nonRecipeText = extractNonRecipeText(msg.content);
+            // cleanNonRecipeText strips metadata lines (Prep:, Cook:, etc.) already shown in the recipe card
+            const nonRecipeText = cleanNonRecipeText(extractNonRecipeText(msg.content));
             if (nonRecipeText.trim()) {
                 const textDiv = document.createElement('div');
                 textDiv.innerHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
@@ -9948,6 +9949,24 @@ function containsRecipe(content) {
 function extractNonRecipeText(content) {
     // Remove recipe sections and return remaining text
     return content.split(/===?\s*RECIPE:/)[0].trim();
+}
+
+function cleanNonRecipeText(text) {
+    // Strip standalone metadata lines (Prep:, Cook:, Serves:, Difficulty:, etc.)
+    // that are already shown in the structured recipe card metadata section
+    if (!text || !text.trim()) return '';
+    return text
+        .split('\n')
+        .filter(line => {
+            const l = line.trim();
+            // Remove lines that are purely metadata labels (with optional ** markdown or | pipe prefix)
+            return !(
+                /^\**\s*(Prep|Cook|Total|Serves?|Difficulty|Timing|Time)\s*:/i.test(l) ||
+                /^\|\s*(Prep|Cook|Total|Serves?|Difficulty|Timing|Time)\s*:/i.test(l)
+            );
+        })
+        .join('\n')
+        .trim();
 }
 
 function parseRecipes(content) {
@@ -10192,6 +10211,13 @@ function renderRecipeCard(recipe, index) {
     // ── SAVE BUTTON ──
     card.querySelector('.save-recipe-btn').addEventListener('click', function() {
         const r = card._recipeData;
+        // Normalize nutrition keys to lowercase so week planner can reliably find 'calories'
+        const normalizedNutrition = {};
+        if (r.nutrition) {
+            Object.entries(r.nutrition).forEach(([k, v]) => {
+                normalizedNutrition[k.toLowerCase()] = v;
+            });
+        }
         const recipeToSave = {
             id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             title: r.title,
@@ -10204,7 +10230,7 @@ function renderRecipeCard(recipe, index) {
                 difficulty: r.difficulty,
                 tags: [...r.tags.health, ...r.tags.dietary, ...r.tags.cuisine]
             },
-            nutrition: r.nutrition,
+            nutrition: normalizedNutrition,
             source: 'Nonna Chat',
             createdAt: new Date().toISOString(),
             timesCooked: 0,
@@ -10242,6 +10268,14 @@ function renderRecipeCard(recipe, index) {
 
             if (!dateStr) { showToast('Invalid day selected', 'warning'); return; }
 
+            // Normalize nutrition keys to lowercase so week planner can reliably find 'calories'
+            const normalizedNutrition = {};
+            if (r.nutrition) {
+                Object.entries(r.nutrition).forEach(([k, v]) => {
+                    normalizedNutrition[k.toLowerCase()] = v;
+                });
+            }
+
             // Auto-save to library first so plan has a recipeId
             const recipeToSave = {
                 id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
@@ -10255,7 +10289,7 @@ function renderRecipeCard(recipe, index) {
                     difficulty: r.difficulty,
                     tags: [...r.tags.health, ...r.tags.dietary, ...r.tags.cuisine]
                 },
-                nutrition: r.nutrition,
+                nutrition: normalizedNutrition,
                 source: 'Nonna Chat',
                 createdAt: new Date().toISOString(),
                 timesCooked: 0,
@@ -10264,12 +10298,12 @@ function renderRecipeCard(recipe, index) {
             const result = saveRecipeToLibrary(recipeToSave);
             const savedId = result?.id || recipeToSave.id;
 
-            // Write to meal plan localStorage
+            // Write to meal plan localStorage (calories stored with lowercase key from normalized nutrition)
             const mealPlans = getStorage(STORAGE.MEAL_PLANS) || {};
             if (!mealPlans[dateStr]) mealPlans[dateStr] = {};
             mealPlans[dateStr].dinner = {
                 title: r.title,
-                calories: r.nutrition?.calories || null,
+                calories: parseInt(normalizedNutrition.calories) || null,
                 recipeId: savedId,
                 status: 'planned'
             };
@@ -10292,6 +10326,13 @@ function renderRecipeCard(recipe, index) {
     // ── SHARE TO FAMILY ──
     card.querySelector('.share-family-btn').addEventListener('click', function() {
         const r = card._recipeData;
+        // Normalize nutrition keys to lowercase for consistent storage
+        const normalizedNutrition = {};
+        if (r.nutrition) {
+            Object.entries(r.nutrition).forEach(([k, v]) => {
+                normalizedNutrition[k.toLowerCase()] = v;
+            });
+        }
         const recipeToShare = {
             id: `recipe_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
             title: r.title,
@@ -10304,7 +10345,7 @@ function renderRecipeCard(recipe, index) {
                 difficulty: r.difficulty,
                 tags: [...r.tags.health, ...r.tags.dietary, ...r.tags.cuisine]
             },
-            nutrition: r.nutrition,
+            nutrition: normalizedNutrition,
             source: 'Nonna Chat',
             createdAt: new Date().toISOString(),
             privacy: 'family',
