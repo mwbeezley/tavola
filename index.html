@@ -3075,6 +3075,104 @@
             .toast-item { min-width: auto; max-width: 100%; }
         }
 
+        /* ── Smart Pantry Update Notification ── */
+        .pantry-update-notification {
+            position: fixed;
+            bottom: 80px; /* sits above bottom nav */
+            right: 20px;
+            width: 320px;
+            background: white;
+            border-radius: var(--radius-md, 12px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+            border-left: 4px solid var(--seafoam, #5DBAA4);
+            z-index: 9998;
+            transform: translateY(24px);
+            opacity: 0;
+            transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+            overflow: hidden;
+        }
+        .pantry-update-notification.pun-visible {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .pun-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px 8px;
+            border-bottom: 1px solid var(--border-light, #eee);
+            background: var(--seafoam-light, #E0F7F1);
+        }
+        .pun-title {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--navy, #1A3A52);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .pun-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-text, #888);
+            font-size: 15px;
+            line-height: 1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            transition: background 0.15s;
+        }
+        .pun-close:hover { background: rgba(0,0,0,0.08); }
+        .pun-body { padding: 12px 16px 10px; }
+        .pun-context {
+            font-size: 12px;
+            color: var(--gray-text, #888);
+            margin: 0 0 10px 0;
+        }
+        .pun-section {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .pun-icon { flex-shrink: 0; margin-top: 1px; }
+        .pun-deducted .pun-icon { color: var(--seafoam, #5DBAA4); }
+        .pun-missing .pun-icon { color: var(--amber, #E5A62B); }
+        .pun-section strong {
+            font-size: 13px;
+            color: var(--charcoal, #3A3A3A);
+            display: block;
+            margin-bottom: 2px;
+        }
+        .pun-items { font-size: 12px; color: var(--gray-text, #888); }
+        .pun-footer {
+            padding: 8px 16px 12px;
+            border-top: 1px solid var(--border-light, #eee);
+        }
+        .pun-action-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--seafoam-light, #E0F7F1);
+            color: var(--seafoam, #5DBAA4);
+            border: none;
+            padding: 7px 14px;
+            border-radius: var(--radius-sm, 6px);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+        }
+        .pun-action-btn:hover { background: var(--seafoam, #5DBAA4); color: white; }
+        @media (max-width: 480px) {
+            .pantry-update-notification {
+                right: 12px;
+                left: 12px;
+                width: auto;
+                bottom: 72px;
+            }
+        }
+
         /* ========================================
            BADGE & CHIP UTILITIES
            ======================================== */
@@ -10177,6 +10275,10 @@ function renderRecipeCard(recipe, index) {
             };
             setStorage(STORAGE.MEAL_PLANS, mealPlans);
 
+            // Deduct matching ingredients from Smart Pantry and show notification
+            const { deducted, missing } = deductRecipeFromPantry(r.ingredients);
+            showPantryUpdateNotification(deducted, missing, day);
+
             // Update button + close dropdown
             card.querySelector('.plan-dropdown').classList.add('hidden');
             card.querySelector('.add-plan-toggle').innerHTML =
@@ -13083,6 +13185,131 @@ function parseIngredient(ingredientStr) {
     }
 
     return { qty: '', unit: '', name: ingredientStr.trim() };
+}
+
+// Deducts recipe ingredients from the Smart Pantry.
+// Called when user adds a recipe to their weekly meal plan (not on Save).
+// Returns { deducted: [pantryItemName, ...], missing: [ingredientName, ...] }
+function deductRecipeFromPantry(ingredients) {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const deducted = [];
+    const missing = [];
+
+    ingredients.forEach(ingredientStr => {
+        if (!ingredientStr || !ingredientStr.trim()) return;
+        const parsed = parseIngredient(ingredientStr);
+        const name = (parsed.name || '').toLowerCase().trim();
+        if (!name) return;
+
+        // Fuzzy match: pantry item name contains ingredient name OR vice versa
+        const pantryIdx = pantry.findIndex(p =>
+            p.name && (
+                p.name.toLowerCase().includes(name) ||
+                name.includes(p.name.toLowerCase())
+            )
+        );
+
+        if (pantryIdx >= 0) {
+            const item = pantry[pantryIdx];
+            const currentQty = parseInt(item.qty) || 0;
+
+            if (currentQty > 1) {
+                // Decrement and mark low
+                pantry[pantryIdx] = { ...item, qty: String(currentQty - 1), status: 'low', updatedAt: new Date().toISOString() };
+            } else if (currentQty === 1) {
+                // Last one — mark out
+                pantry[pantryIdx] = { ...item, qty: '0', status: 'out', updatedAt: new Date().toISOString() };
+            } else {
+                // qty is text (e.g. "2 cups") or numeric 0 — step down the status
+                const nextStatus = item.status === 'fresh' ? 'low' :
+                                   item.status === 'low'   ? 'out' : 'out';
+                pantry[pantryIdx] = { ...item, status: nextStatus, updatedAt: new Date().toISOString() };
+            }
+            deducted.push(item.name);
+        } else {
+            missing.push(parsed.name || ingredientStr);
+        }
+    });
+
+    setStorage(STORAGE.PANTRY, pantry);
+
+    // Refresh pantry display if the pantry view is currently active
+    const pantryView = document.getElementById('view-pantry');
+    if (pantryView && (pantryView.classList.contains('active') || pantryView.style.display !== 'none')) {
+        if (typeof renderPantry === 'function') renderPantry();
+    }
+
+    return { deducted, missing };
+}
+
+// Shows a slide-up notification card after pantry deduction.
+// Displays which ingredients were found/updated and which are missing.
+function showPantryUpdateNotification(deducted, missing, day) {
+    // Remove any existing notification so we never stack them
+    document.getElementById('pantry-update-notification')?.remove();
+
+    // Build deducted section
+    const deductedHTML = deducted.length > 0
+        ? `<div class="pun-section pun-deducted">
+               <span class="pun-icon">${icon('package-check', 16)}</span>
+               <div>
+                   <strong>${deducted.length} item${deducted.length !== 1 ? 's' : ''} updated in pantry</strong>
+                   <div class="pun-items">${deducted.slice(0, 4).join(', ')}${deducted.length > 4 ? ` +${deducted.length - 4} more` : ''}</div>
+               </div>
+           </div>`
+        : '';
+
+    // Build missing section
+    const missingHTML = missing.length > 0
+        ? `<div class="pun-section pun-missing">
+               <span class="pun-icon">${icon('shopping-cart', 16)}</span>
+               <div>
+                   <strong>${missing.length} ingredient${missing.length !== 1 ? 's' : ''} not in pantry</strong>
+                   <div class="pun-items">${missing.slice(0, 3).join(', ')}${missing.length > 3 ? ` +${missing.length - 3} more` : ''}</div>
+               </div>
+           </div>`
+        : '';
+
+    // Nothing to show — skip
+    if (!deductedHTML && !missingHTML) return;
+
+    const notification = document.createElement('div');
+    notification.id = 'pantry-update-notification';
+    notification.className = 'pantry-update-notification';
+    notification.innerHTML = `
+        <div class="pun-header">
+            <span class="pun-title">${icon('shopping-basket', 18)} Smart Pantry Updated</span>
+            <button class="pun-close" onclick="document.getElementById('pantry-update-notification')?.remove()">✕</button>
+        </div>
+        <div class="pun-body">
+            <p class="pun-context">Ingredients checked for <strong>${day}</strong>'s dinner</p>
+            ${deductedHTML}
+            ${missingHTML}
+        </div>
+        ${missing.length > 0 ? `
+        <div class="pun-footer">
+            <button class="pun-action-btn" onclick="navigateTo('pantry'); document.getElementById('pantry-update-notification')?.remove();">
+                ${icon('package', 14)} View Pantry
+            </button>
+        </div>` : ''}
+    `;
+    document.body.appendChild(notification);
+
+    // Animate in (slight delay for DOM paint)
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => notification.classList.add('pun-visible'));
+    });
+
+    // Auto-dismiss after 6 seconds
+    const dismissTimer = setTimeout(() => {
+        notification.classList.remove('pun-visible');
+        setTimeout(() => notification.remove(), 400);
+    }, 6000);
+
+    // Cancel timer if user manually closes
+    notification.querySelector('.pun-close').addEventListener('click', () => clearTimeout(dismissTimer));
+
+    refreshIcons();
 }
 
 function executeMealConfirmation(dateStr, mealType, recipeId) {
