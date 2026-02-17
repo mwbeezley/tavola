@@ -9832,7 +9832,7 @@ function parseSimpleRecipe(content) {
 
     // Try to extract title from first line or use default
     const lines = content.split('\n').map(l => l.trim()).filter(l => l);
-    const title = lines[0]?.replace(/^#+\s*/, '').replace(/^RECIPE:\s*/i, '') || 'Recipe from Nonna';
+    const title = lines[0]?.replace(/===/g, '').replace(/^#+\s*/, '').replace(/^RECIPE:\s*/i, '').trim() || 'Recipe from Nonna';
 
     return {
         title,
@@ -10022,9 +10022,15 @@ function addRecipeToDay(cardId, day) {
 }
 
 function saveRecipeFromChat(cardId, silent = false) {
+    console.log('[saveRecipeFromChat] cardId:', cardId);
+    console.log('[saveRecipeFromChat] window.chatRecipes:', window.chatRecipes);
+
     const recipeData = window.chatRecipes?.[cardId];
+    console.log('[saveRecipeFromChat] recipeData:', recipeData);
+
     if (!recipeData) {
-        if (!silent) showToast('Could not find recipe data', 'warning');
+        console.error('[saveRecipeFromChat] Recipe data not found for cardId:', cardId);
+        if (!silent) showToast('Could not find recipe data. Please try asking Nonna for the recipe again.', 'warning');
         return null;
     }
 
