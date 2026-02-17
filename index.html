@@ -9939,9 +9939,6 @@ function renderRecipeCard(recipe, index) {
                             .join('')}
                     </div>
                 </div>
-                <button class="btn btn-ghost" onclick="printRecipe('${cardId}')">
-                    <i data-lucide="printer"></i> Print
-                </button>
             </div>
         </div>
     `;
@@ -10096,71 +10093,8 @@ function shareRecipeToFamily(cardId) {
 }
 
 function printRecipe(cardId) {
-    const recipeData = window.chatRecipes?.[cardId];
-    if (!recipeData) {
-        showToast('Could not find recipe data', 'warning');
-        return;
-    }
-
-    // Create a print-friendly version
-    const printWindow = window.open('', '_blank');
-    const printContent = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <title>${recipeData.title}</title>
-            <style>
-                body { font-family: 'Georgia', serif; max-width: 800px; margin: 40px auto; padding: 20px; }
-                h1 { color: #1A3A52; border-bottom: 2px solid #5DBAA4; padding-bottom: 10px; }
-                .metadata { display: flex; gap: 20px; margin: 20px 0; color: #666; }
-                .tags { display: flex; gap: 8px; flex-wrap: wrap; margin: 20px 0; }
-                .tag { background: #D4F1E8; padding: 4px 12px; border-radius: 12px; font-size: 14px; }
-                h2 { color: #1A3A52; margin-top: 30px; }
-                ul, ol { line-height: 1.8; }
-                .nutrition { background: #F5F5F5; padding: 15px; border-radius: 8px; margin: 20px 0; }
-                @media print { body { margin: 0; } }
-            </style>
-        </head>
-        <body>
-            <h1>${recipeData.title}</h1>
-            <div class="metadata">
-                <div><strong>Prep:</strong> ${recipeData.prepTime}</div>
-                <div><strong>Cook:</strong> ${recipeData.cookTime}</div>
-                <div><strong>Servings:</strong> ${recipeData.servings}</div>
-                <div><strong>Difficulty:</strong> ${recipeData.difficulty}</div>
-            </div>
-            ${[...recipeData.tags.health, ...recipeData.tags.dietary, ...recipeData.tags.cuisine].length > 0 ? `
-                <div class="tags">
-                    ${[...recipeData.tags.health, ...recipeData.tags.dietary, ...recipeData.tags.cuisine].map(tag => `<span class="tag">${tag}</span>`).join('')}
-                </div>
-            ` : ''}
-            ${Object.keys(recipeData.nutrition).length > 0 ? `
-                <div class="nutrition">
-                    <strong>Nutrition:</strong>
-                    ${Object.entries(recipeData.nutrition).map(([key, val]) => `${key}: ${val}`).join(', ')}
-                </div>
-            ` : ''}
-            <h2>Ingredients</h2>
-            <ul>
-                ${recipeData.ingredients.map(ing => `<li>${ing}</li>`).join('')}
-            </ul>
-            <h2>Instructions</h2>
-            <ol>
-                ${recipeData.instructions.map(inst => `<li>${inst}</li>`).join('')}
-            </ol>
-            <p style="margin-top: 40px; color: #999; font-size: 14px;">Recipe from Tavola - Mediterranean Meal Planning</p>
-        </body>
-        </html>
-    `;
-
-    printWindow.document.write(printContent);
-    printWindow.document.close();
-    printWindow.focus();
-
-    // Wait for content to load, then print
-    setTimeout(() => {
-        printWindow.print();
-    }, 250);
+    // Simple print using browser's native print dialog
+    window.print();
 }
 
 async function sendNonnaMessage() {
