@@ -67,18 +67,18 @@
             --info: #2B7FB7;
 
             /* Shadows (coastal tones) */
-            --shadow-sm: 0 1px 2px rgba(26, 58, 82, 0.05);
-            --shadow: 0 2px 8px rgba(26, 58, 82, 0.08);
-            --shadow-md: 0 4px 6px rgba(26, 58, 82, 0.1);
-            --shadow-lg: 0 10px 15px rgba(26, 58, 82, 0.12);
+            --shadow-sm: 0 1px 3px rgba(26, 58, 82, 0.04);
+            --shadow: 0 2px 12px rgba(26, 58, 82, 0.06);
+            --shadow-md: 0 4px 12px rgba(26, 58, 82, 0.08);
+            --shadow-lg: 0 12px 24px rgba(26, 58, 82, 0.10);
             --shadow-xl: 0 20px 25px rgba(26, 58, 82, 0.15);
 
             /* Border Radius */
-            --radius-sm: 4px;
-            --radius: 8px;
-            --radius-md: 8px;
-            --radius-lg: 12px;
-            --radius-xl: 16px;
+            --radius-sm: 8px;
+            --radius: 16px;
+            --radius-md: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
             --radius-full: 9999px;
 
             /* Spacing */
@@ -940,7 +940,7 @@
         .message-user .message-bubble {
             background: var(--seafoam-light);
             color: var(--charcoal);
-            border-radius: var(--radius-lg) var(--radius-lg) 4px var(--radius-lg);
+            border-radius: var(--radius-lg) var(--radius-lg) var(--radius-sm) var(--radius-lg);
             max-width: 85%;
             padding: var(--space-md) var(--space-lg);
             box-shadow: var(--shadow-sm);
@@ -5032,8 +5032,9 @@
             font-family: var(--font-body);
             resize: none;
             outline: none;
-            transition: border-color 0.2s;
-            max-height: 120px;
+            transition: border-color 0.2s, height 0.15s ease;
+            min-height: 72px;
+            max-height: 200px;
         }
 
         .chat-input-nonna:focus {
@@ -5061,6 +5062,13 @@
         .chat-send-btn-nonna:disabled {
             background: var(--gray-light);
             cursor: not-allowed;
+        }
+
+        .chat-send-btn-nonna.stop-mode {
+            background: var(--danger);
+        }
+        .chat-send-btn-nonna.stop-mode:hover {
+            background: #DC2626;
         }
 
         .chat-send-btn-nonna i {
@@ -6693,8 +6701,8 @@
                             <button class="chat-voice-btn-nonna" id="nonna-voice-btn" onclick="toggleNonnaVoice()" title="Voice input">
                                 <i data-lucide="mic"></i>
                             </button>
-                            <textarea class="chat-input-nonna" id="chat-input-nonna" placeholder="Ask Nonna anything..." rows="2"></textarea>
-                            <button class="chat-send-btn-nonna" onclick="sendNonnaMessage()">
+                            <textarea class="chat-input-nonna" id="chat-input-nonna" placeholder="Ask Nonna anything..." rows="3"></textarea>
+                            <button class="chat-send-btn-nonna" id="chat-send-btn-nonna" onclick="sendNonnaMessage()">
                                 <i data-lucide="send"></i>
                             </button>
                         </div>
@@ -9472,6 +9480,44 @@ function stopGeneration() {
     updateConversationTopics();
 }
 
+function updateNonnaSendStopButton(isProcessing) {
+    const btn = document.getElementById('chat-send-btn-nonna');
+    if (!btn) return;
+    if (isProcessing) {
+        btn.innerHTML = icon('square', 18);
+        btn.onclick = stopNonnaGeneration;
+        btn.disabled = false;
+        btn.classList.add('stop-mode');
+    } else {
+        btn.innerHTML = icon('send', 18);
+        btn.onclick = sendNonnaMessage;
+        btn.disabled = false;
+        btn.classList.remove('stop-mode');
+    }
+    refreshIcons();
+}
+
+function stopNonnaGeneration() {
+    if (state.abortController) {
+        state.abortController.abort();
+        state.abortController = null;
+    }
+    // Remove Nonna typing indicator
+    document.getElementById('typing-indicator-nonna')?.remove();
+    state.isProcessing = false;
+    updateNonnaSendStopButton(false);
+
+    // Add abort acknowledgment to chat
+    const abortMsg = {
+        role: 'assistant',
+        content: 'Va bene, I stopped. What else can I help with, cara?',
+        timestamp: new Date().toISOString()
+    };
+    state.chatHistory.push(abortMsg);
+    saveChatHistory();
+    renderNonnaView();
+}
+
 async function sendMessage() {
     if (state.isProcessing) return;
 
@@ -10552,6 +10598,7 @@ async function sendNonnaMessage() {
     }
 
     input.value = '';
+    input.style.height = 'auto';
     console.log('[sendNonnaMessage] Input cleared, processing message');
 
     // Add user message
@@ -10566,6 +10613,7 @@ async function sendNonnaMessage() {
 
     try {
         state.isProcessing = true;
+        updateNonnaSendStopButton(true);
 
         // Show contextual typing indicator
         const container = document.getElementById('chat-messages-nonna');
@@ -10597,6 +10645,7 @@ async function sendNonnaMessage() {
         showToast('Could not reach Nonna', 'warning');
     } finally {
         state.isProcessing = false;
+        updateNonnaSendStopButton(false);
     }
 }
 
@@ -10882,6 +10931,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('[Keydown] Enter pressed, sending message');
                 sendNonnaMessage();
             }
+        });
+        // Auto-expand textarea as user types
+        nonnaChatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 200) + 'px';
         });
         console.log('[Init] Keydown listener attached to Nonna chat input');
     } else {
