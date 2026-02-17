@@ -8982,32 +8982,41 @@ function processRecipeTags(rawTags, content, totalTime, proteinType) {
 }
 
 function getTagClass(tag) {
-    const tagClasses = {
-        "Crohn's-Friendly": 'tag-crohns',
-        'Heart-Healthy': 'tag-heart',
-        'BP-Friendly': 'tag-bp',
-        'Diabetic-Friendly': 'tag-diabetic',
-        'Anti-Inflammatory': 'tag-anti-inflammatory',
-        'Low-Sodium': 'tag-low-sodium',
-        'Low-Carb': 'tag-low-carb',
-        'Gut-Friendly': 'tag-gut-friendly',
-        'Gluten-Free': 'tag-gluten-free',
-        'Quick': 'tag-quick',
-        'Meal Prep': 'tag-meal-prep',
-        'Freezer-Friendly': 'tag-freezer',
-        'One-Pot': 'tag-one-pot',
-        'Mediterranean': 'tag-mediterranean',
-        'Citrus': 'tag-citrus',
-        'Garlic': 'tag-garlic',
-        'Spicy': 'tag-spicy',
-        'Comfort': 'tag-comfort',
-        'Fresh': 'tag-fresh',
-        'Fish': 'tag-fish',
-        'Chicken': 'tag-chicken',
-        'Vegetarian': 'tag-vegetarian',
-        'High-Protein': 'tag-high-protein'
-    };
-    return tagClasses[tag] || 'tag-mediterranean';
+    // Normalize: strip ** markdown, lowercase for case-insensitive matching
+    const normalized = tag.replace(/\*\*/g, '').toLowerCase().trim();
+
+    // Regex-based matching handles capitalization variants and partial matches
+    // (e.g. "Heart-Healthy", "heart healthy", "Heart Smart" all → tag-heart)
+    const tagClassMap = [
+        [/crohn|ibd/,                   'tag-crohns'],
+        [/heart/,                        'tag-heart'],
+        [/\bbp\b|blood.?pressure/,       'tag-bp'],
+        [/diabetic|blood.?sugar/,        'tag-diabetic'],
+        [/anti.?inflam/,                 'tag-anti-inflammatory'],
+        [/low.?sodium/,                  'tag-low-sodium'],
+        [/low.?carb|keto/,               'tag-low-carb'],
+        [/gut.?friend|gut.?conscious|digestive/, 'tag-gut-friendly'],
+        [/gluten/,                       'tag-gluten-free'],
+        [/\bquick\b|\bfast\b/,           'tag-quick'],
+        [/meal.?prep|batch/,             'tag-meal-prep'],
+        [/freezer/,                      'tag-freezer'],
+        [/one.?pot|sheet.?pan/,          'tag-one-pot'],
+        [/mediterranean/,                'tag-mediterranean'],
+        [/citrus|lemon|orange/,          'tag-citrus'],
+        [/\bgarlic\b/,                   'tag-garlic'],
+        [/spicy|heat/,                   'tag-spicy'],
+        [/comfort/,                      'tag-comfort'],
+        [/\bfresh\b/,                    'tag-fresh'],
+        [/\bfish\b|salmon|tuna|cod|halibut|tilapia/, 'tag-fish'],
+        [/chicken|poultry/,              'tag-chicken'],
+        [/vegetarian|vegan|plant.?based/, 'tag-vegetarian'],
+        [/high.?protein|\bprotein.?rich/, 'tag-high-protein'],
+    ];
+
+    for (const [pattern, cls] of tagClassMap) {
+        if (pattern.test(normalized)) return cls;
+    }
+    return 'tag-mediterranean'; // default: blue Mediterranean style
 }
 
 function parseWeekPlanToCard(content) {
@@ -9703,19 +9712,25 @@ function createMessageElement(msg) {
     // Check if message contains recipe
     if (msg.role === 'assistant' && containsRecipe(msg.content)) {
         const recipes = parseRecipes(msg.content);
-        let recipeHTML = '';
 
-        // Include non-recipe text if any
-        const nonRecipeText = extractNonRecipeText(msg.content);
-        if (nonRecipeText.trim()) {
-            recipeHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
+        // If parseRecipes returned empty (non-substantive / conversational), render as plain text
+        if (recipes.length === 0) {
+            div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+        } else {
+            let recipeHTML = '';
+
+            // Include non-recipe text if any
+            const nonRecipeText = extractNonRecipeText(msg.content);
+            if (nonRecipeText.trim()) {
+                recipeHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
+            }
+
+            recipes.forEach((recipe, index) => {
+                recipeHTML += renderRecipeCard(recipe, index);
+            });
+
+            div.innerHTML = recipeHTML;
         }
-
-        recipes.forEach((recipe, index) => {
-            recipeHTML += renderRecipeCard(recipe, index);
-        });
-
-        div.innerHTML = recipeHTML;
     } else {
         div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
     }
@@ -9766,7 +9781,13 @@ function parseRecipes(content) {
         recipes.push(recipe);
     });
 
-    return recipes.length > 0 ? recipes : [parseSimpleRecipe(content)];
+    if (recipes.length > 0) return recipes;
+    const simple = parseSimpleRecipe(content);
+    // Only show a recipe card if the fallback parse found substantive content
+    // (prevents action buttons appearing on conversational non-recipe responses)
+    const hasIngredients = simple.ingredients.length >= 2;
+    const hasInstructions = simple.instructions.length >= 2;
+    return (hasIngredients && hasInstructions) ? [simple] : [];
 }
 
 function extractField(text, startPattern, endPattern) {
@@ -9781,13 +9802,24 @@ function extractTags(text) {
     const tagSection = extractField(text, 'TAGS?:', '(?:INGREDIENTS:|INSTRUCTIONS:|$)');
 
     if (tagSection) {
-        const tagList = tagSection.split(',').map(t => t.trim());
+        // Strip ** markdown bold markers Nonna sometimes includes
+        const tagList = tagSection.split(',').map(t => t.replace(/\*\*/g, '').trim()).filter(t => t.length > 0);
         tagList.forEach(tag => {
             const lower = tag.toLowerCase();
-            if (lower.includes('anti-inflammatory') || lower.includes('gut-friendly') || lower.includes('heart')) {
+            // Health-related tags (red/green/teal colors)
+            if (lower.includes('anti-inflammatory') || lower.includes('gut') ||
+                lower.includes('heart') || lower.includes('low-sodium') ||
+                lower.includes('low-carb') || lower.includes('diabetic') ||
+                lower.includes('high-protein') || lower.includes('crohn') ||
+                lower.includes('bp-friendly') || lower.includes('blood pressure')) {
                 tags.health.push(tag);
-            } else if (lower.includes('dairy') || lower.includes('gluten') || lower.includes('vegan')) {
+            // Dietary restriction tags (orange/yellow colors)
+            } else if (lower.includes('dairy') || lower.includes('gluten') ||
+                       lower.includes('vegan') || lower.includes('vegetarian') ||
+                       lower.includes('keto') || lower.includes('paleo') ||
+                       lower.includes('plant-based')) {
                 tags.dietary.push(tag);
+            // Cuisine/style tags (blue/purple colors)
             } else {
                 tags.cuisine.push(tag);
             }
@@ -9858,11 +9890,12 @@ function renderRecipeCard(recipe, index) {
     if (!window.chatRecipes) window.chatRecipes = {};
     window.chatRecipes[cardId] = recipe;
 
-    const tagsHTML = [...recipe.tags.health, ...recipe.tags.dietary, ...recipe.tags.cuisine]
+    // Use getTagClass() for rich color-coded tags (red for heart-healthy, blue for Mediterranean, etc.)
+    const allTags = [...recipe.tags.health, ...recipe.tags.dietary, ...recipe.tags.cuisine];
+    const tagsHTML = allTags
         .map(tag => {
-            const type = recipe.tags.health.includes(tag) ? 'health' :
-                        recipe.tags.dietary.includes(tag) ? 'dietary' : 'cuisine';
-            return `<span class="recipe-tag ${type}">${tag}</span>`;
+            const tagClass = getTagClass(tag);
+            return `<span class="tag ${tagClass}">${tag}</span>`;
         }).join('');
 
     const ingredientsHTML = recipe.ingredients
