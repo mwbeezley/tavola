@@ -2728,6 +2728,73 @@
         }
         .scan-category-header:first-child { margin-top: 0; }
 
+        /* Receipt Scan Extras */
+        .receipt-item-price {
+            font-weight: 600;
+            color: var(--cerulean);
+            font-size: 0.9rem;
+            white-space: nowrap;
+            min-width: 50px;
+            text-align: right;
+            padding: 0 8px;
+        }
+        .receipt-total-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: var(--seafoam-light);
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            margin-top: 16px;
+            color: var(--navy);
+        }
+
+        /* Recipe Card Expand Button */
+        .recipe-expand-btn {
+            background: none;
+            border: none;
+            color: var(--gray-text);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .recipe-expand-btn:hover {
+            color: var(--cerulean);
+            background: var(--cerulean-light);
+        }
+        .recipe-expand-btn i { width: 18px; height: 18px; }
+
+        /* Recipe Carousel */
+        .carousel-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .carousel-dots {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+        .carousel-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--gray-medium);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            padding: 0;
+        }
+        .carousel-dot.active {
+            background: var(--cerulean);
+            transform: scale(1.3);
+        }
+        .carousel-dot:hover { background: var(--seafoam); }
+
         /* Toast */
         .toast {
             position: fixed;
@@ -6877,6 +6944,7 @@
                             <span class="text-muted">Track your ingredients</span>
                             <div class="flex gap-8">
                                 <button class="btn btn-sm btn-secondary" onclick="openPantryScanModal()"><i data-lucide="camera" style="width:14px;height:14px;vertical-align:middle"></i> Scan</button>
+                                <button class="btn btn-sm btn-secondary" onclick="openReceiptScanModal()"><i data-lucide="scan-line" style="width:14px;height:14px;vertical-align:middle"></i> Receipt</button>
                                 <button class="btn btn-sm btn-secondary" id="pantry-voice-btn" onclick="startPantryVoice()"><i data-lucide="mic" style="width:14px;height:14px;vertical-align:middle"></i> Voice</button>
                                 <button class="btn btn-sm btn-primary" onclick="openAddPantryModal()">+ Add</button>
                             </div>
@@ -9588,6 +9656,8 @@ function startNewConversation() {
     }
     state.chatHistory = [];
     state.currentConversationId = 'conv_' + Date.now();
+    window.chatRecipesList = [];
+    window.chatRecipes = {};
     saveChatHistory();
     renderChatHistory();
     renderQuickActions();
@@ -10156,6 +10226,10 @@ function renderRecipeCard(recipe, index) {
     if (!window.chatRecipes) window.chatRecipes = {};
     window.chatRecipes[cardId] = recipe;
 
+    // Track ordered list of recipes for carousel navigation
+    if (!window.chatRecipesList) window.chatRecipesList = [];
+    window.chatRecipesList.push({ cardId, recipe });
+
     // Build tags HTML — strip ** markdown, use rich color-coded classes
     const allTags = [...recipe.tags.health, ...recipe.tags.dietary, ...recipe.tags.cuisine];
     const tagsHTML = allTags
@@ -10195,6 +10269,9 @@ function renderRecipeCard(recipe, index) {
     card.innerHTML = `
         <div class="recipe-card-header">
             <h3 class="recipe-card-title">${escapeHtml(recipe.title)}</h3>
+            <button class="recipe-expand-btn" title="View full screen">
+                <i data-lucide="maximize-2"></i>
+            </button>
         </div>
 
         <div class="recipe-metadata">
@@ -10417,7 +10494,141 @@ function renderRecipeCard(recipe, index) {
         }
     });
 
+    // ── EXPAND / CAROUSEL BUTTON ──
+    card.querySelector('.recipe-expand-btn').addEventListener('click', function(e) {
+        e.stopPropagation();
+        const idx = (window.chatRecipesList || []).findIndex(r => r.cardId === cardId);
+        openRecipeCarousel(idx >= 0 ? idx : 0);
+    });
+
     return card; // Returns DOM element (not HTML string)
+}
+
+// ========================================
+// RECIPE CAROUSEL
+// ========================================
+let carouselState = {
+    currentIndex: 0,
+    isOpen: false
+};
+
+let _carouselKeyHandler = null;
+
+function openRecipeCarousel(startIndex) {
+    const recipes = window.chatRecipesList || [];
+    if (recipes.length === 0) {
+        showToast('No recipes in this conversation yet', 'info');
+        return;
+    }
+
+    carouselState.currentIndex = Math.min(startIndex, recipes.length - 1);
+    carouselState.isOpen = true;
+
+    const total = recipes.length;
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Recipe <span id="carousel-index">${carouselState.currentIndex + 1}</span> of <span id="carousel-total">${total}</span></h2>
+            <button class="modal-close" onclick="closeRecipeCarousel()">×</button>
+        </div>
+        <div class="modal-body" id="carousel-body" style="padding: 0;"></div>
+        <div class="modal-footer carousel-footer">
+            <button class="btn btn-secondary" id="carousel-prev" onclick="carouselPrev()">
+                ${icon('chevron-left',16)} Previous
+            </button>
+            <div class="carousel-dots" id="carousel-dots"></div>
+            <button class="btn btn-secondary" id="carousel-next" onclick="carouselNext()">
+                Next ${icon('chevron-right',16)}
+            </button>
+        </div>
+    `, { maxWidth: '700px' });
+
+    // Render the first recipe after modal is open
+    setTimeout(() => {
+        renderCarouselRecipe(carouselState.currentIndex);
+    }, 50);
+
+    // Add arrow key navigation
+    _carouselKeyHandler = function(e) {
+        if (!carouselState.isOpen) return;
+        if (e.key === 'ArrowLeft') carouselPrev();
+        if (e.key === 'ArrowRight') carouselNext();
+    };
+    document.addEventListener('keydown', _carouselKeyHandler);
+}
+
+function closeRecipeCarousel() {
+    carouselState.isOpen = false;
+    if (_carouselKeyHandler) {
+        document.removeEventListener('keydown', _carouselKeyHandler);
+        _carouselKeyHandler = null;
+    }
+    closeModal();
+}
+
+function renderCarouselRecipe(index) {
+    const recipes = window.chatRecipesList || [];
+    if (index < 0 || index >= recipes.length) return;
+
+    const body = document.getElementById('carousel-body');
+    if (!body) return;
+
+    body.innerHTML = '';
+
+    const { recipe } = recipes[index];
+    // Use renderRecipeCard to get a fully wired DOM element (save/plan/share listeners included)
+    const cardEl = renderRecipeCard(recipe, index);
+    // Remove card-level styling since we're inside a modal
+    cardEl.style.boxShadow = 'none';
+    cardEl.style.borderLeft = 'none';
+    cardEl.style.margin = '0';
+    cardEl.style.borderRadius = '0';
+    body.appendChild(cardEl);
+
+    // Update index display
+    const indexEl = document.getElementById('carousel-index');
+    const totalEl = document.getElementById('carousel-total');
+    if (indexEl) indexEl.textContent = index + 1;
+    if (totalEl) totalEl.textContent = recipes.length;
+
+    // Update prev/next button states
+    const prevBtn = document.getElementById('carousel-prev');
+    const nextBtn = document.getElementById('carousel-next');
+    if (prevBtn) prevBtn.disabled = (index === 0);
+    if (nextBtn) nextBtn.disabled = (index === recipes.length - 1);
+
+    // Update dots
+    renderCarouselDots(index);
+
+    carouselState.currentIndex = index;
+    refreshIcons();
+}
+
+function carouselPrev() {
+    if (carouselState.currentIndex > 0) {
+        renderCarouselRecipe(carouselState.currentIndex - 1);
+    }
+}
+
+function carouselNext() {
+    const recipes = window.chatRecipesList || [];
+    if (carouselState.currentIndex < recipes.length - 1) {
+        renderCarouselRecipe(carouselState.currentIndex + 1);
+    }
+}
+
+function renderCarouselDots(activeIndex) {
+    const container = document.getElementById('carousel-dots');
+    if (!container) return;
+    const total = (window.chatRecipesList || []).length;
+    // Only show dots for 10 or fewer recipes
+    if (total > 10 || total <= 1) {
+        container.innerHTML = '';
+        return;
+    }
+    container.innerHTML = Array.from({ length: total }, (_, i) =>
+        `<button class="carousel-dot ${i === activeIndex ? 'active' : ''}" onclick="renderCarouselRecipe(${i})" aria-label="Recipe ${i + 1}"></button>`
+    ).join('');
 }
 
 function formatMessageContent(content) {
@@ -10895,6 +11106,8 @@ function startNewConversation() {
     // Start fresh
     state.chatHistory = [];
     state.currentConversationId = 'conv_' + Date.now();
+    window.chatRecipesList = [];
+    window.chatRecipes = {};
     saveChatHistory();
     renderNonnaView();
 
@@ -15424,6 +15637,540 @@ function addScannedItemsToPantry() {
 
     // Show confirmation
     let message = `${icon('check-circle',14)} ${addedCount} items added to pantry!`;
+    if (duplicateCount > 0) {
+        message += ` (${duplicateCount} updated)`;
+    }
+    showToast(message);
+}
+
+// ========================================
+// RECEIPT SCANNING
+// ========================================
+let receiptScanState = {
+    imageData: null,
+    imageType: null,
+    detectedItems: [],
+    selectedItems: new Set()
+};
+
+function openReceiptScanModal() {
+    receiptScanState = {
+        imageData: null,
+        imageType: null,
+        detectedItems: [],
+        selectedItems: new Set()
+    };
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon('scan-line',14)} Scan Receipt</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="receipt-modal-body">
+            <p class="text-muted mb-16">Take a photo of your grocery receipt. Nonna will extract the items and add them to your pantry!</p>
+
+            <div class="scan-upload-area" id="receipt-upload-area" onclick="document.getElementById('receipt-image-input').click()">
+                <div class="scan-upload-icon">${icon('scan-line',14)}</div>
+                <div class="scan-upload-text">Tap to photograph receipt</div>
+                <div class="scan-upload-hint">Supports: JPG, PNG, WebP</div>
+            </div>
+
+            <input type="file" id="receipt-image-input" accept="image/*" capture="environment" style="display: none;" onchange="handleReceiptImageSelect(event)">
+
+            <img id="receipt-preview" class="scan-preview hidden" alt="Receipt Preview">
+
+            <div class="nonna-tip mt-16">
+                <div class="nonna-tip-header">${icon('lightbulb',14)} Tips for best results</div>
+                <div class="nonna-tip-text">
+                    • Flatten the receipt on a surface<br>
+                    • Use good lighting — avoid shadows<br>
+                    • Capture the full list of items<br>
+                    • Digital receipts / screenshots work too!
+                </div>
+            </div>
+
+            <p class="text-muted mt-16" style="font-size: 0.8rem;">${icon('lock',14)} Photos are analyzed securely and not stored.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" id="receipt-analyze-btn" onclick="analyzeReceiptImage()" disabled>Read Receipt</button>
+        </div>
+    `);
+
+    // Set up drag and drop
+    setTimeout(() => {
+        const uploadArea = document.getElementById('receipt-upload-area');
+        if (uploadArea) {
+            uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); e.currentTarget.classList.add('dragover'); });
+            uploadArea.addEventListener('dragleave', (e) => { e.currentTarget.classList.remove('dragover'); });
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                e.currentTarget.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0 && files[0].type.startsWith('image/')) {
+                    processReceiptImageFile(files[0]);
+                }
+            });
+        }
+    }, 100);
+}
+
+function handleReceiptImageSelect(event) {
+    const file = event.target.files[0];
+    if (file) {
+        processReceiptImageFile(file);
+    }
+}
+
+function processReceiptImageFile(file) {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+        showToast('Please use JPG, PNG, or WebP images');
+        return;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+        showToast('Image too large. Max 10MB.');
+        return;
+    }
+
+    receiptScanState.imageType = file.type;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const base64Full = e.target.result;
+        receiptScanState.imageData = base64Full.split(',')[1];
+
+        const preview = document.getElementById('receipt-preview');
+        if (preview) {
+            preview.src = base64Full;
+            preview.classList.remove('hidden');
+        }
+
+        const uploadArea = document.getElementById('receipt-upload-area');
+        if (uploadArea) {
+            uploadArea.innerHTML = `
+                <div class="scan-upload-icon">${icon('check-circle',14)}</div>
+                <div class="scan-upload-text">Receipt ready!</div>
+                <div class="scan-upload-hint">Tap to change photo</div>
+            `;
+        }
+
+        const btn = document.getElementById('receipt-analyze-btn');
+        if (btn) btn.disabled = false;
+    };
+    reader.readAsDataURL(file);
+}
+
+async function analyzeReceiptImage() {
+    if (!receiptScanState.imageData) {
+        showToast('Please select an image first');
+        return;
+    }
+
+    const modalBody = document.getElementById('receipt-modal-body');
+    modalBody.innerHTML = `
+        <div class="scan-loading">
+            <div class="scan-loading-icon">${icon('scan-line',14)}</div>
+            <div class="scan-loading-text">
+                <strong>Nonna is reading your receipt...</strong><br>
+                <span class="text-muted">Extracting items and prices</span>
+            </div>
+        </div>
+    `;
+
+    const analyzeBtn = document.getElementById('receipt-analyze-btn');
+    if (analyzeBtn) analyzeBtn.disabled = true;
+
+    try {
+        const response = await fetch('/.netlify/functions/analyze-receipt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                image: receiptScanState.imageData,
+                imageType: receiptScanState.imageType
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to analyze receipt');
+        }
+
+        if (data.items && data.items.length > 0) {
+            receiptScanState.detectedItems = data.items;
+            receiptScanState.selectedItems = new Set(data.items.map((_, i) => i));
+            showReceiptResults();
+        } else {
+            showReceiptError(data.message || 'No items detected. Try a clearer photo with the full receipt visible.');
+        }
+
+    } catch (error) {
+        console.error('Receipt scan error:', error);
+        showReceiptError(error.message || 'Failed to read receipt. Please try again.');
+    }
+}
+
+function showReceiptError(message) {
+    const modalBody = document.getElementById('receipt-modal-body');
+    modalBody.innerHTML = `
+        <div class="scan-error">
+            <div class="scan-error-icon">${icon('alert-triangle',14)}</div>
+            <div class="scan-error-text">${message}</div>
+        </div>
+    `;
+
+    const modal = document.querySelector('.modal');
+    const footer = modal.querySelector('.modal-footer');
+    if (footer) {
+        footer.innerHTML = `
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="openReceiptScanModal()">Try Again</button>
+        `;
+    }
+}
+
+function showReceiptResults() {
+    const items = receiptScanState.detectedItems;
+
+    const categories = {};
+    items.forEach((item, index) => {
+        const cat = item.category || 'Other';
+        if (!categories[cat]) categories[cat] = [];
+        categories[cat].push({ ...item, index });
+    });
+
+    const categoryIcons = {
+        'Produce': icon('leaf',14),
+        'Proteins': icon('beef',14),
+        'Dairy': icon('milk',14),
+        'Grains': icon('wheat',14),
+        'Canned Goods': icon('package',14),
+        'Spices': icon('flask-round',14),
+        'Condiments': icon('flask-round',14),
+        'Frozen': icon('snowflake',14),
+        'Beverages': icon('cup-soda',14),
+        'Snacks': icon('cookie',14),
+        'Other': icon('package',14)
+    };
+
+    // Calculate total for selected items
+    const selectedTotal = Array.from(receiptScanState.selectedItems).reduce((sum, idx) => {
+        const item = items[idx];
+        return sum + (item.totalPrice || 0);
+    }, 0);
+
+    let html = `
+        <div class="scan-results-header">
+            <span class="scan-results-count">✓ Found ${items.length} items!</span>
+            <div>
+                <button class="btn btn-sm btn-ghost" onclick="selectAllReceiptItems(true)">Select All</button>
+                <button class="btn btn-sm btn-ghost" onclick="selectAllReceiptItems(false)">Deselect All</button>
+            </div>
+        </div>
+        <p class="text-muted mb-16">Review items from your receipt. Uncheck anything you don't want to add.</p>
+    `;
+
+    Object.keys(categories).sort().forEach(cat => {
+        const catItems = categories[cat];
+        html += `<div class="scan-category-header">${categoryIcons[cat] || icon('package',14)} ${cat} (${catItems.length})</div>`;
+
+        catItems.forEach(item => {
+            const checked = receiptScanState.selectedItems.has(item.index) ? 'checked' : '';
+            const priceStr = item.totalPrice != null ? `$${item.totalPrice.toFixed(2)}` : '';
+            html += `
+                <div class="scan-item" id="receipt-item-${item.index}">
+                    <input type="checkbox" class="scan-item-checkbox" ${checked} onchange="toggleReceiptItem(${item.index})">
+                    <div class="scan-item-info">
+                        <div class="scan-item-name">${item.name}</div>
+                        <div class="scan-item-details">
+                            Qty: ${item.quantity} · ${item.location || 'Pantry'}
+                            ${item.confidence === 'low' ? `<span class="scan-item-badge">${icon('help-circle',12)} Verify</span>` : ''}
+                        </div>
+                    </div>
+                    ${priceStr ? `<div class="receipt-item-price">${priceStr}</div>` : ''}
+                    <div class="scan-item-actions">
+                        <button class="icon-btn" onclick="editReceiptItem(${item.index})" title="Edit">${icon('pencil',14)}</button>
+                        <button class="icon-btn" onclick="removeReceiptItem(${item.index})" title="Remove">${icon('trash-2',14)}</button>
+                    </div>
+                </div>
+            `;
+        });
+    });
+
+    if (selectedTotal > 0) {
+        html += `
+            <div class="receipt-total-bar">
+                <span>Selected Items Total</span>
+                <span>$${selectedTotal.toFixed(2)}</span>
+            </div>
+        `;
+    }
+
+    html += `<button class="btn btn-ghost btn-block mt-16" onclick="addManualReceiptItem()">+ Add item manually</button>`;
+
+    const modalBody = document.getElementById('receipt-modal-body');
+    modalBody.innerHTML = html;
+
+    const modal = document.querySelector('.modal');
+    const footer = modal.querySelector('.modal-footer');
+    if (footer) {
+        footer.innerHTML = `
+            <button class="btn btn-secondary" onclick="openReceiptScanModal()">Scan Another</button>
+            <button class="btn btn-primary" onclick="addReceiptItemsToPantry()">Add ${receiptScanState.selectedItems.size} Items</button>
+        `;
+    }
+}
+
+function toggleReceiptItem(index) {
+    if (receiptScanState.selectedItems.has(index)) {
+        receiptScanState.selectedItems.delete(index);
+    } else {
+        receiptScanState.selectedItems.add(index);
+    }
+    updateReceiptFooter();
+}
+
+function selectAllReceiptItems(selectAll) {
+    if (selectAll) {
+        receiptScanState.detectedItems.forEach((_, i) => receiptScanState.selectedItems.add(i));
+    } else {
+        receiptScanState.selectedItems.clear();
+    }
+    document.querySelectorAll('.scan-item-checkbox').forEach((cb, i) => {
+        cb.checked = selectAll;
+    });
+    updateReceiptFooter();
+}
+
+function updateReceiptFooter() {
+    const addBtn = document.querySelector('.modal-footer .btn-primary');
+    if (addBtn) {
+        addBtn.textContent = `Add ${receiptScanState.selectedItems.size} Items`;
+        addBtn.disabled = receiptScanState.selectedItems.size === 0;
+    }
+}
+
+function editReceiptItem(index) {
+    const item = receiptScanState.detectedItems[index];
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Edit Item</h2>
+            <button class="modal-close" onclick="showReceiptResultsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-input" id="edit-receipt-name" value="${item.name}">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" class="form-input" id="edit-receipt-qty" value="${item.quantity}">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-select" id="edit-receipt-category">
+                    <option value="Produce" ${item.category === 'Produce' ? 'selected' : ''}>Produce</option>
+                    <option value="Proteins" ${item.category === 'Proteins' ? 'selected' : ''}>Proteins</option>
+                    <option value="Dairy" ${item.category === 'Dairy' ? 'selected' : ''}>Dairy</option>
+                    <option value="Grains" ${item.category === 'Grains' ? 'selected' : ''}>Grains</option>
+                    <option value="Canned Goods" ${item.category === 'Canned Goods' ? 'selected' : ''}>Canned Goods</option>
+                    <option value="Spices" ${item.category === 'Spices' ? 'selected' : ''}>Spices</option>
+                    <option value="Condiments" ${item.category === 'Condiments' ? 'selected' : ''}>Condiments</option>
+                    <option value="Frozen" ${item.category === 'Frozen' ? 'selected' : ''}>Frozen</option>
+                    <option value="Beverages" ${item.category === 'Beverages' ? 'selected' : ''}>Beverages</option>
+                    <option value="Snacks" ${item.category === 'Snacks' ? 'selected' : ''}>Snacks</option>
+                    <option value="Other" ${item.category === 'Other' ? 'selected' : ''}>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <select class="form-select" id="edit-receipt-location">
+                    <option value="Fridge" ${item.location === 'Fridge' ? 'selected' : ''}>Fridge</option>
+                    <option value="Pantry" ${item.location === 'Pantry' ? 'selected' : ''}>Pantry</option>
+                    <option value="Freezer" ${item.location === 'Freezer' ? 'selected' : ''}>Freezer</option>
+                    <option value="Spice Rack" ${item.location === 'Spice Rack' ? 'selected' : ''}>Spice Rack</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="showReceiptResultsModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveReceiptItemEdit(${index})">Save</button>
+        </div>
+    `);
+}
+
+function saveReceiptItemEdit(index) {
+    const item = receiptScanState.detectedItems[index];
+    item.name = document.getElementById('edit-receipt-name').value.trim();
+    item.quantity = document.getElementById('edit-receipt-qty').value.trim();
+    item.category = document.getElementById('edit-receipt-category').value;
+    item.location = document.getElementById('edit-receipt-location').value;
+    showReceiptResultsModal();
+}
+
+function removeReceiptItem(index) {
+    receiptScanState.detectedItems.splice(index, 1);
+    receiptScanState.selectedItems.delete(index);
+
+    const newSelected = new Set();
+    receiptScanState.selectedItems.forEach(i => {
+        if (i < index) newSelected.add(i);
+        else if (i > index) newSelected.add(i - 1);
+    });
+    receiptScanState.selectedItems = newSelected;
+
+    if (receiptScanState.detectedItems.length === 0) {
+        showReceiptError('All items removed. Scan another receipt or add manually.');
+    } else {
+        showReceiptResults();
+    }
+}
+
+function addManualReceiptItem() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">Add Item</h2>
+            <button class="modal-close" onclick="showReceiptResultsModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Name</label>
+                <input type="text" class="form-input" id="add-receipt-name" placeholder="e.g., Organic Olive Oil">
+            </div>
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="text" class="form-input" id="add-receipt-qty" placeholder="e.g., 1 bottle">
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select class="form-select" id="add-receipt-category">
+                    <option value="Produce">Produce</option>
+                    <option value="Proteins">Proteins</option>
+                    <option value="Dairy">Dairy</option>
+                    <option value="Grains">Grains</option>
+                    <option value="Canned Goods">Canned Goods</option>
+                    <option value="Spices">Spices</option>
+                    <option value="Condiments">Condiments</option>
+                    <option value="Frozen">Frozen</option>
+                    <option value="Beverages">Beverages</option>
+                    <option value="Snacks">Snacks</option>
+                    <option value="Other" selected>Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Location</label>
+                <select class="form-select" id="add-receipt-location">
+                    <option value="Pantry" selected>Pantry</option>
+                    <option value="Fridge">Fridge</option>
+                    <option value="Freezer">Freezer</option>
+                    <option value="Spice Rack">Spice Rack</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="showReceiptResultsModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveManualReceiptItem()">Add</button>
+        </div>
+    `);
+}
+
+function saveManualReceiptItem() {
+    const name = document.getElementById('add-receipt-name').value.trim();
+    const qty = document.getElementById('add-receipt-qty').value.trim() || '1';
+    const category = document.getElementById('add-receipt-category').value;
+    const location = document.getElementById('add-receipt-location').value;
+
+    if (!name) {
+        showToast('Please enter an item name');
+        return;
+    }
+
+    const newIndex = receiptScanState.detectedItems.length;
+    receiptScanState.detectedItems.push({
+        name,
+        quantity: qty,
+        category,
+        location,
+        totalPrice: null,
+        confidence: 'high'
+    });
+    receiptScanState.selectedItems.add(newIndex);
+    showReceiptResultsModal();
+}
+
+function showReceiptResultsModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon('scan-line',14)} Receipt Items</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" id="receipt-modal-body"></div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="openReceiptScanModal()">Scan Another</button>
+            <button class="btn btn-primary" onclick="addReceiptItemsToPantry()">Add ${receiptScanState.selectedItems.size} Items</button>
+        </div>
+    `);
+    setTimeout(() => showReceiptResults(), 50);
+}
+
+function addReceiptItemsToPantry() {
+    if (receiptScanState.selectedItems.size === 0) {
+        showToast('No items selected');
+        return;
+    }
+
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+
+    const categoryIcons = {
+        'Produce': icon('leaf',14),
+        'Proteins': icon('beef',14),
+        'Dairy': icon('milk',14),
+        'Grains': icon('wheat',14),
+        'Canned Goods': icon('package',14),
+        'Spices': icon('flask-round',14),
+        'Condiments': icon('flask-round',14),
+        'Frozen': icon('snowflake',14),
+        'Beverages': icon('cup-soda',14),
+        'Snacks': icon('cookie',14),
+        'Other': icon('package',14)
+    };
+
+    let addedCount = 0;
+    let duplicateCount = 0;
+
+    receiptScanState.selectedItems.forEach(index => {
+        const item = receiptScanState.detectedItems[index];
+
+        const existingIndex = pantry.findIndex(p =>
+            p.name.toLowerCase() === item.name.toLowerCase()
+        );
+
+        if (existingIndex >= 0) {
+            pantry[existingIndex].qty = item.quantity;
+            pantry[existingIndex].status = 'fresh';
+            pantry[existingIndex].updatedAt = new Date().toISOString();
+            duplicateCount++;
+        } else {
+            pantry.push({
+                name: item.name,
+                qty: item.quantity,
+                icon: categoryIcons[item.category] || icon('package',14),
+                status: 'fresh',
+                category: item.category,
+                location: item.location,
+                addedAt: new Date().toISOString()
+            });
+            addedCount++;
+        }
+    });
+
+    setStorage(STORAGE.PANTRY, pantry);
+    closeModal();
+    renderPantry();
+
+    let message = `${icon('check-circle',14)} ${addedCount} items added from receipt!`;
     if (duplicateCount > 0) {
         message += ` (${duplicateCount} updated)`;
     }
