@@ -4877,7 +4877,7 @@
         /* Dedicated Nonna Page Styles */
         .nonna-page-container {
             display: flex;
-            height: calc(100vh - 120px);
+            height: calc(100vh - 64px);
             gap: 0;
             background: var(--page-bg);
         }
@@ -4886,14 +4886,18 @@
             width: 280px;
             background: white;
             border-right: 1px solid var(--border-light);
+            border-top-right-radius: var(--radius-lg);
+            border-bottom-right-radius: var(--radius-lg);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            box-shadow: inset -1px 0 0 var(--border-light);
         }
 
         .sidebar-header {
             padding: 16px;
             border-bottom: 1px solid var(--border-light);
+            border-top-right-radius: var(--radius-lg);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -5043,6 +5047,7 @@
 
         .chat-messages-nonna {
             flex: 1;
+            min-height: 0;
             overflow-y: auto;
             padding: 24px;
             background: var(--page-bg);
@@ -5489,7 +5494,7 @@
         /* Mobile adjustments for Nonna page */
         @media (max-width: 768px) {
             .nonna-page-container {
-                height: calc(100vh - 140px);
+                height: calc(100vh - 60px);
             }
 
             .nonna-sidebar {
@@ -5503,6 +5508,145 @@
             .chat-input-container-nonna {
                 padding: 12px 16px;
             }
+
+            .nonna-avatar {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+            }
+        }
+
+        /* Nonna Avatar Styles */
+        .nonna-avatar {
+            width: 40px;
+            height: 40px;
+            min-width: 40px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 2px solid var(--seafoam);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            flex-shrink: 0;
+        }
+
+        .nonna-avatar svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        .chat-messages-nonna .message.message-assistant {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .nonna-msg-content {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* Pantry update badge on Nonna messages */
+        .pantry-update-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--seafoam-light);
+            color: var(--navy);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+
+        /* Family member list styles */
+        .family-member-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border-light);
+        }
+
+        .family-member-item:last-child {
+            border-bottom: none;
+        }
+
+        .family-member-avatar {
+            width: 36px;
+            height: 36px;
+            min-width: 36px;
+            border-radius: 50%;
+            background: var(--cerulean-light);
+            color: var(--cerulean);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .family-member-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .family-member-name {
+            font-weight: 600;
+            color: var(--navy);
+            font-size: 0.9rem;
+        }
+
+        .family-member-email {
+            color: var(--gray-text);
+            font-size: 0.8rem;
+        }
+
+        .family-member-badge {
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .family-member-badge.creator {
+            background: var(--seafoam-light);
+            color: var(--seafoam-dark, #1a6b5a);
+        }
+
+        .family-member-badge.member {
+            background: var(--cerulean-light);
+            color: var(--cerulean);
+        }
+
+        .family-member-badge.pending {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .invite-link-container {
+            background: var(--page-bg);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .invite-link-container input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            outline: none;
         }
     </style>
 
@@ -6732,7 +6876,10 @@
                     <!-- Left Sidebar: Conversation List -->
                     <div class="nonna-sidebar">
                         <div class="sidebar-header">
-                            <h3>Conversations</h3>
+                            <div style="display:flex;align-items:center;gap:8px;">
+                                <div class="nonna-avatar" style="width:24px;height:24px;min-width:24px;border-width:1.5px;" id="sidebar-nonna-avatar"></div>
+                                <h3>Conversations</h3>
+                            </div>
                             <button class="btn btn-sm btn-primary" onclick="startNewConversation()">
                                 <i data-lucide="plus"></i> New
                             </button>
@@ -6756,9 +6903,12 @@
                     <!-- Main Chat Area -->
                     <div class="nonna-main-chat">
                         <div class="chat-header-nonna">
-                            <div>
-                                <h2><i data-lucide="message-circle" style="width:24px;height:24px;vertical-align:middle"></i> Your AI sous chef is here</h2>
-                                <p class="text-muted">Ask anything about cooking, meal planning, nutrition or what to make with what you have</p>
+                            <div style="display:flex;align-items:center;gap:16px;">
+                                <div class="nonna-avatar" style="width:48px;height:48px;min-width:48px;" id="chat-header-nonna-avatar"></div>
+                                <div>
+                                    <h2>Your AI sous chef is here</h2>
+                                    <p class="text-muted">Ask anything about cooking, meal planning, nutrition or what to make with what you have</p>
+                                </div>
                             </div>
                         </div>
                         <div class="chat-messages-nonna" id="chat-messages-nonna">
@@ -7241,6 +7391,14 @@
                         </div>
                     </div>
                     <div class="card">
+                        <h3 class="card-title"><i data-lucide="users" style="width:16px;height:16px;vertical-align:middle"></i> Family Tavola</h3>
+                        <p class="text-muted mb-8">Invite family members to share recipes and meal plans</p>
+                        <div id="family-members-list"></div>
+                        <button class="btn btn-secondary btn-block" onclick="openFamilyInviteModal()">
+                            <i data-lucide="user-plus" style="width:14px;height:14px;vertical-align:middle"></i> Invite Family Member
+                        </button>
+                    </div>
+                    <div class="card">
                         <h3 class="card-title"><i data-lucide="info" style="width:16px;height:16px;vertical-align:middle"></i> About</h3>
                         <p class="text-muted">Tavola v3.0</p>
                         <p class="text-muted" style="font-size: 0.85rem;">Made with love for chronic illness warriors</p>
@@ -7431,7 +7589,9 @@ const STORAGE = {
     PREFS: 'tavola_preferences',
     ONBOARDING: 'tavola_onboarding_done',
     WORKOUTS: 'tavola_workouts',
-    CONVERSATIONS: 'tavola_conversations'
+    CONVERSATIONS: 'tavola_conversations',
+    FAMILY_INVITES: 'tavola_family_invites',
+    FAMILY_MEMBERS: 'tavola_family_members'
 };
 
 // ========================================
@@ -7971,6 +8131,7 @@ function initApp() {
     loadPreferences();
     setDailyTip();
     initDesktopDropdownHover();
+    checkForFamilyInvite();
 }
 
 function initDesktopDropdownHover() {
@@ -8553,6 +8714,7 @@ function switchMoreTab(tab) {
     if (tab === 'garden') renderGarden();
     if (tab === 'history') renderHistory();
     if (tab === 'crohns') updateFlareUI();
+    if (tab === 'settings') renderFamilyMembers();
 }
 
 // ========================================
@@ -9997,12 +10159,24 @@ function renderNonnaView() {
     const container = document.getElementById('chat-messages-nonna');
     if (!container) return;
 
+    // Inject Nonna avatars into static HTML elements
+    const headerAvatar = document.getElementById('chat-header-nonna-avatar');
+    if (headerAvatar && !headerAvatar.innerHTML.trim()) {
+        headerAvatar.innerHTML = getNonnaAvatarSVG(48);
+    }
+    const sidebarAvatar = document.getElementById('sidebar-nonna-avatar');
+    if (sidebarAvatar && !sidebarAvatar.innerHTML.trim()) {
+        sidebarAvatar.innerHTML = getNonnaAvatarSVG(24);
+    }
+
     container.innerHTML = '';
 
     if (state.chatHistory.length === 0) {
         container.innerHTML = `
-            <div style="text-align:center;padding:48px 24px;color:var(--gray-text);">
-                <i data-lucide="message-circle" style="width:48px;height:48px;margin-bottom:16px;color:var(--cerulean)"></i>
+            <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:48px 24px;color:var(--gray-text);">
+                <div class="nonna-avatar" style="width:64px;height:64px;min-width:64px;margin-bottom:16px;border-width:3px;">
+                    ${getNonnaAvatarSVG(64)}
+                </div>
                 <h3 style="margin:0 0 8px 0;color:var(--navy)">Start chatting with Nonna</h3>
                 <p style="margin:0;">Ask about recipes, meal planning, or anything food-related!</p>
             </div>
@@ -10026,13 +10200,24 @@ function createMessageElement(msg) {
     const div = document.createElement('div');
     div.className = `message message-${msg.role}`;
 
+    // For assistant messages, add Nonna avatar and wrap content
+    const contentTarget = (msg.role === 'assistant') ? document.createElement('div') : div;
+    if (msg.role === 'assistant') {
+        contentTarget.className = 'nonna-msg-content';
+        const avatarDiv = document.createElement('div');
+        avatarDiv.className = 'nonna-avatar';
+        avatarDiv.innerHTML = getNonnaAvatarSVG(40);
+        div.appendChild(avatarDiv);
+        div.appendChild(contentTarget);
+    }
+
     // Check if message contains recipe
     if (msg.role === 'assistant' && containsRecipe(msg.content)) {
         const recipes = parseRecipes(msg.content);
 
         // If parseRecipes returned empty (non-substantive / conversational), render as plain text
         if (recipes.length === 0) {
-            div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+            contentTarget.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
         } else {
             // Include non-recipe intro text if any (e.g. "Here's a recipe for you!")
             // cleanNonRecipeText strips metadata lines (Prep:, Cook:, etc.) already shown in the recipe card
@@ -10040,18 +10225,26 @@ function createMessageElement(msg) {
             if (nonRecipeText.trim()) {
                 const textDiv = document.createElement('div');
                 textDiv.innerHTML = `<div class="message-bubble">${formatMessageContent(nonRecipeText)}</div>`;
-                div.appendChild(textDiv);
+                contentTarget.appendChild(textDiv);
             }
 
             // renderRecipeCard() now returns a DOM element with _recipeData attached
             // and event listeners wired up — no global ID lookup needed
             recipes.forEach((recipe, index) => {
                 const cardEl = renderRecipeCard(recipe, index);
-                div.appendChild(cardEl);
+                contentTarget.appendChild(cardEl);
             });
         }
     } else {
-        div.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+        contentTarget.innerHTML = `<div class="message-bubble">${formatMessageContent(msg.content)}</div>`;
+    }
+
+    // Add pantry update badge if Nonna made pantry changes
+    if (msg.role === 'assistant' && msg.hasPantryUpdate) {
+        const badge = document.createElement('div');
+        badge.className = 'pantry-update-badge';
+        badge.innerHTML = `${icon('package',12)} Pantry updated`;
+        contentTarget.appendChild(badge);
     }
 
     return div;
@@ -10826,27 +11019,37 @@ async function sendNonnaMessage() {
         state.isProcessing = true;
         updateNonnaSendStopButton(true);
 
-        // Show contextual typing indicator
+        // Show contextual typing indicator with Nonna avatar
         const container = document.getElementById('chat-messages-nonna');
         if (container) {
             const typingDiv = document.createElement('div');
             typingDiv.className = 'message message-assistant';
             typingDiv.id = 'typing-indicator-nonna';
-            typingDiv.innerHTML = `<div class="message-bubble">${getContextualLoadingMessage(message)}</div>`;
+            typingDiv.innerHTML = `<div class="nonna-avatar">${getNonnaAvatarSVG(40)}</div><div class="nonna-msg-content"><div class="message-bubble">${getContextualLoadingMessage(message)}</div></div>`;
             container.appendChild(typingDiv);
             container.scrollTop = container.scrollHeight;
         }
 
         const response = await callAPI(message);
 
+        // Extract pantry update commands before displaying
+        const { cleanResponse, pantryUpdates } = extractPantryUpdates(response);
+
         // Remove typing indicator
         document.getElementById('typing-indicator-nonna')?.remove();
 
-        state.chatHistory.push({
+        const assistantMsg = {
             role: 'assistant',
-            content: response,
+            content: cleanResponse,
             timestamp: new Date().toISOString()
-        });
+        };
+
+        // Process pantry updates if any were detected
+        if (pantryUpdates.length > 0) {
+            applyPantryUpdatesFromChat(pantryUpdates);
+            assistantMsg.hasPantryUpdate = true;
+        }
+        state.chatHistory.push(assistantMsg);
         saveChatHistory();
         renderNonnaView();
 
@@ -11425,6 +11628,97 @@ function formatGardenForAPI() {
     }
 
     return text || 'No garden data available.';
+}
+
+// ========================================
+// PANTRY UPDATES FROM NONNA CHAT
+// ========================================
+
+function extractPantryUpdates(responseText) {
+    const pantryUpdates = [];
+    const regex = /\[PANTRY_UPDATE:\s*action=(\w+),\s*item=([^,\]]+)(?:,\s*quantity=([^\]]+))?\]/gi;
+    let match;
+
+    while ((match = regex.exec(responseText)) !== null) {
+        pantryUpdates.push({
+            action: match[1].toLowerCase().trim(),
+            item: match[2].trim(),
+            quantity: match[3] ? match[3].trim() : null
+        });
+    }
+
+    // Remove the [PANTRY_UPDATE] lines from the displayed response
+    const cleanResponse = responseText.replace(/\n?\[PANTRY_UPDATE:[^\]]*\]/gi, '').trim();
+
+    return { cleanResponse, pantryUpdates };
+}
+
+function findPantryItemMatch(itemName, pantry) {
+    const lower = itemName.toLowerCase();
+    // Try exact match first
+    let idx = pantry.findIndex(p => p.name.toLowerCase() === lower);
+    if (idx !== -1) return idx;
+    // Try includes-based partial match
+    idx = pantry.findIndex(p => p.name.toLowerCase().includes(lower) || lower.includes(p.name.toLowerCase()));
+    return idx;
+}
+
+function applyPantryUpdatesFromChat(updates) {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    const actions = [];
+
+    updates.forEach(update => {
+        switch (update.action) {
+            case 'used':
+            case 'removed': {
+                const idx = findPantryItemMatch(update.item, pantry);
+                if (idx !== -1) {
+                    const itemName = pantry[idx].name;
+                    pantry.splice(idx, 1);
+                    actions.push(`removed ${itemName}`);
+                }
+                break;
+            }
+            case 'added': {
+                const existing = findPantryItemMatch(update.item, pantry);
+                if (existing !== -1) {
+                    // Update quantity if item already exists
+                    if (update.quantity) pantry[existing].quantity = update.quantity;
+                    pantry[existing].status = 'fresh';
+                    pantry[existing].expirationConcern = null;
+                    actions.push(`updated ${pantry[existing].name}`);
+                } else {
+                    const category = categorizeIngredient(update.item);
+                    const location = (['Produce','Dairy','Proteins'].includes(category)) ? 'Fridge' :
+                                     (category === 'Frozen') ? 'Freezer' : 'Pantry';
+                    pantry.push({
+                        name: update.item,
+                        quantity: update.quantity || '1',
+                        category: category,
+                        location: location,
+                        status: 'fresh',
+                        addedAt: new Date().toISOString(),
+                        source: 'nonna-chat'
+                    });
+                    actions.push(`added ${update.item}`);
+                }
+                break;
+            }
+            case 'low': {
+                const idx = findPantryItemMatch(update.item, pantry);
+                if (idx !== -1) {
+                    pantry[idx].expirationConcern = 'Use Soon';
+                    actions.push(`${pantry[idx].name} marked Use Soon`);
+                }
+                break;
+            }
+        }
+    });
+
+    if (actions.length > 0) {
+        setStorage(STORAGE.PANTRY, pantry);
+        showToast(`Pantry updated: ${actions.join(', ')}`);
+    }
 }
 
 // ========================================
@@ -18356,6 +18650,275 @@ function clearAllData() {
 }
 
 // ========================================
+// FAMILY TAVOLA INVITE SYSTEM
+// ========================================
+
+function generateInviteToken() {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
+    // Fallback for older browsers
+    return 'xxxx-xxxx-xxxx'.replace(/x/g, () => Math.floor(Math.random() * 16).toString(16));
+}
+
+function getCurrentUserName() {
+    const profile = getStorage(STORAGE.PROFILE);
+    if (profile?.name) return profile.name;
+    // Try Firebase auth
+    if (window.firebaseAuth?.currentUser?.displayName) return window.firebaseAuth.currentUser.displayName;
+    if (window.firebaseAuth?.currentUser?.email) return window.firebaseAuth.currentUser.email;
+    return 'You';
+}
+
+function getCurrentUserEmail() {
+    if (window.firebaseAuth?.currentUser?.email) return window.firebaseAuth.currentUser.email;
+    const profile = getStorage(STORAGE.PROFILE);
+    return profile?.email || '';
+}
+
+function openFamilyInviteModal() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon('user-plus',20)} Invite Family Member</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p style="margin-bottom:16px;color:var(--charcoal);">Enter your family member's email and share the invite link with them. They'll be able to join your Family Tavola to share recipes and meal plans.</p>
+            <div class="form-group" style="margin-bottom:16px;">
+                <label style="font-weight:600;color:var(--navy);display:block;margin-bottom:6px;">Email Address</label>
+                <input type="email" id="family-invite-email" class="form-input" placeholder="family@example.com" style="width:100%;padding:10px 14px;border:1px solid var(--border-light);border-radius:var(--radius-md);font-size:1rem;">
+            </div>
+            <div id="family-invite-result" style="display:none;"></div>
+            <button class="btn btn-primary btn-block" onclick="generateFamilyInvite()">
+                ${icon('link',14)} Generate Invite Link
+            </button>
+        </div>
+    `);
+    refreshIcons();
+    setTimeout(() => document.getElementById('family-invite-email')?.focus(), 100);
+}
+
+function generateFamilyInvite() {
+    const emailInput = document.getElementById('family-invite-email');
+    const resultDiv = document.getElementById('family-invite-result');
+    const email = emailInput?.value?.trim();
+
+    if (!email || !email.includes('@')) {
+        showToast('Please enter a valid email address', 'warning');
+        return;
+    }
+
+    const token = generateInviteToken();
+    const invite = {
+        token: token,
+        email: email,
+        createdBy: getCurrentUserName(),
+        createdByEmail: getCurrentUserEmail(),
+        createdAt: new Date().toISOString(),
+        status: 'pending'
+    };
+
+    // Store invite
+    const invites = getStorage(STORAGE.FAMILY_INVITES) || [];
+    invites.push(invite);
+    setStorage(STORAGE.FAMILY_INVITES, invites);
+
+    // Generate shareable link
+    const inviteUrl = `${window.location.origin}${window.location.pathname}?invite=${token}`;
+
+    // Show the link
+    resultDiv.style.display = 'block';
+    resultDiv.innerHTML = `
+        <div style="margin-bottom:16px;">
+            <p style="color:var(--seafoam-dark,#1a6b5a);font-weight:600;margin-bottom:8px;">${icon('check-circle',14)} Invite created for ${escapeHtml(email)}</p>
+            <div class="invite-link-container">
+                <input type="text" value="${inviteUrl}" readonly id="invite-link-input" onclick="this.select()">
+                <button class="btn btn-sm btn-primary" onclick="copyInviteLink()">
+                    ${icon('copy',14)} Copy
+                </button>
+            </div>
+            <p style="font-size:0.8rem;color:var(--gray-text);margin-top:8px;">Share this link with ${escapeHtml(email)}. They'll need to open it on this same device for the localStorage MVP.</p>
+        </div>
+    `;
+    refreshIcons();
+
+    // Update the members list in settings
+    renderFamilyMembers();
+}
+
+function copyInviteLink() {
+    const input = document.getElementById('invite-link-input');
+    if (!input) return;
+    input.select();
+    try {
+        navigator.clipboard.writeText(input.value);
+        showToast('Invite link copied!');
+    } catch(e) {
+        document.execCommand('copy');
+        showToast('Invite link copied!');
+    }
+}
+
+function renderFamilyMembers() {
+    const listEl = document.getElementById('family-members-list');
+    if (!listEl) return;
+
+    const members = getStorage(STORAGE.FAMILY_MEMBERS) || [];
+    const invites = getStorage(STORAGE.FAMILY_INVITES) || [];
+    const pendingInvites = invites.filter(i => i.status === 'pending');
+
+    if (members.length === 0 && pendingInvites.length === 0) {
+        listEl.innerHTML = '<p class="text-muted" style="font-size:0.85rem;margin-bottom:12px;">No family members yet. Send an invite to get started!</p>';
+        return;
+    }
+
+    let html = '';
+
+    // Show current user as creator
+    const userName = getCurrentUserName();
+    html += `
+        <div class="family-member-item">
+            <div class="family-member-avatar">${userName.charAt(0).toUpperCase()}</div>
+            <div class="family-member-info">
+                <div class="family-member-name">${escapeHtml(userName)}</div>
+                <div class="family-member-email">${escapeHtml(getCurrentUserEmail() || 'You')}</div>
+            </div>
+            <span class="family-member-badge creator">Creator</span>
+        </div>
+    `;
+
+    // Show accepted members
+    members.forEach(member => {
+        html += `
+            <div class="family-member-item">
+                <div class="family-member-avatar">${(member.name || member.email || '?').charAt(0).toUpperCase()}</div>
+                <div class="family-member-info">
+                    <div class="family-member-name">${escapeHtml(member.name || 'Family Member')}</div>
+                    <div class="family-member-email">${escapeHtml(member.email)}</div>
+                </div>
+                <span class="family-member-badge member">Member</span>
+            </div>
+        `;
+    });
+
+    // Show pending invites
+    pendingInvites.forEach(invite => {
+        html += `
+            <div class="family-member-item">
+                <div class="family-member-avatar" style="background:#fff3e0;color:#e65100;">${icon('mail',16)}</div>
+                <div class="family-member-info">
+                    <div class="family-member-name">${escapeHtml(invite.email)}</div>
+                    <div class="family-member-email">Invited ${new Date(invite.createdAt).toLocaleDateString()}</div>
+                </div>
+                <span class="family-member-badge pending">Pending</span>
+            </div>
+        `;
+    });
+
+    listEl.innerHTML = html;
+    refreshIcons();
+}
+
+function handleFamilyInvite(token) {
+    const invites = getStorage(STORAGE.FAMILY_INVITES) || [];
+    const invite = invites.find(i => i.token === token);
+
+    if (!invite) {
+        // Token not found on this device
+        openModal(`
+            <div class="modal-header">
+                <h2 class="modal-title">${icon('users',20)} Family Invite</h2>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body" style="text-align:center;padding:24px;">
+                <div style="font-size:48px;margin-bottom:16px;">🍝</div>
+                <h3 style="color:var(--navy);margin-bottom:8px;">Invite Not Found</h3>
+                <p style="color:var(--gray-text);">This invite link wasn't found. It may have expired or needs to be opened on the same device where it was created.</p>
+                <p style="color:var(--gray-text);font-size:0.85rem;margin-top:12px;">Ask your family member to send a new invite from their device.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeModal()">Got It</button>
+            </div>
+        `);
+        refreshIcons();
+        return;
+    }
+
+    if (invite.status === 'accepted') {
+        showToast('You\'ve already accepted this invite!');
+        return;
+    }
+
+    // Show accept/decline modal
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon('users',20)} Family Tavola Invite</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body" style="text-align:center;padding:24px;">
+            <div style="font-size:48px;margin-bottom:16px;">🍅</div>
+            <h3 style="color:var(--navy);margin-bottom:8px;">You're Invited!</h3>
+            <p style="color:var(--charcoal);margin-bottom:4px;"><strong>${escapeHtml(invite.createdBy)}</strong> invited you to join their Family Tavola.</p>
+            <p style="color:var(--gray-text);font-size:0.85rem;">Join to share recipes, meal plans, and cooking ideas with your family.</p>
+        </div>
+        <div class="modal-footer" style="justify-content:center;gap:12px;">
+            <button class="btn btn-secondary" onclick="declineFamilyInvite('${token}')">Decline</button>
+            <button class="btn btn-primary" onclick="acceptFamilyInvite('${token}')">
+                ${icon('check',14)} Join Family
+            </button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+function acceptFamilyInvite(token) {
+    const invites = getStorage(STORAGE.FAMILY_INVITES) || [];
+    const inviteIdx = invites.findIndex(i => i.token === token);
+    if (inviteIdx === -1) return;
+
+    // Update invite status
+    invites[inviteIdx].status = 'accepted';
+    invites[inviteIdx].acceptedAt = new Date().toISOString();
+    setStorage(STORAGE.FAMILY_INVITES, invites);
+
+    // Add member
+    const members = getStorage(STORAGE.FAMILY_MEMBERS) || [];
+    members.push({
+        email: invites[inviteIdx].email,
+        name: getCurrentUserName(),
+        joinedAt: new Date().toISOString(),
+        inviteToken: token
+    });
+    setStorage(STORAGE.FAMILY_MEMBERS, members);
+
+    closeModal();
+    showToast('Welcome to the family! 🍝');
+    renderFamilyMembers();
+}
+
+function declineFamilyInvite(token) {
+    const invites = getStorage(STORAGE.FAMILY_INVITES) || [];
+    const inviteIdx = invites.findIndex(i => i.token === token);
+    if (inviteIdx !== -1) {
+        invites[inviteIdx].status = 'declined';
+        setStorage(STORAGE.FAMILY_INVITES, invites);
+    }
+    closeModal();
+    showToast('Invite declined');
+}
+
+function checkForFamilyInvite() {
+    const params = new URLSearchParams(window.location.search);
+    const inviteToken = params.get('invite');
+    if (inviteToken) {
+        // Clean URL to remove invite parameter
+        window.history.replaceState({}, '', window.location.pathname);
+        // Small delay to let app initialize first
+        setTimeout(() => handleFamilyInvite(inviteToken), 500);
+    }
+}
+
+// ========================================
 // ONBOARDING
 // ========================================
 const onboardingSteps = [
@@ -19368,6 +19931,45 @@ function refreshIcons() {
     if (window.lucide) {
         try { lucide.createIcons(); } catch(e) {}
     }
+}
+
+// Nonna avatar — inline SVG of a warm Italian grandmother
+function getNonnaAvatarSVG(size = 40) {
+    return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="${size}" height="${size}">
+  <circle cx="50" cy="50" r="50" fill="#F5E6D3"/>
+  <!-- Hair (silver-gray bun) -->
+  <ellipse cx="50" cy="28" rx="30" ry="22" fill="#B8B0A8"/>
+  <circle cx="50" cy="18" r="14" fill="#C4BBB3"/>
+  <ellipse cx="50" cy="14" rx="10" ry="8" fill="#D1C9C1"/>
+  <!-- Face -->
+  <ellipse cx="50" cy="48" rx="26" ry="28" fill="#E8C9A0"/>
+  <!-- Cheeks (warm rosy) -->
+  <circle cx="36" cy="54" r="6" fill="#E8A0A0" opacity="0.4"/>
+  <circle cx="64" cy="54" r="6" fill="#E8A0A0" opacity="0.4"/>
+  <!-- Eyes -->
+  <ellipse cx="40" cy="46" rx="3.5" ry="2.5" fill="#5C4033"/>
+  <ellipse cx="60" cy="46" rx="3.5" ry="2.5" fill="#5C4033"/>
+  <circle cx="41" cy="45.5" r="1" fill="white" opacity="0.7"/>
+  <circle cx="61" cy="45.5" r="1" fill="white" opacity="0.7"/>
+  <!-- Eyebrows -->
+  <path d="M34 41 Q40 38 46 41" stroke="#8C7B6B" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M54 41 Q60 38 66 41" stroke="#8C7B6B" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <!-- Glasses -->
+  <circle cx="40" cy="46" r="8" stroke="#7B6B5D" stroke-width="1.5" fill="none"/>
+  <circle cx="60" cy="46" r="8" stroke="#7B6B5D" stroke-width="1.5" fill="none"/>
+  <line x1="48" y1="46" x2="52" y2="46" stroke="#7B6B5D" stroke-width="1.5"/>
+  <line x1="32" y1="44" x2="28" y2="42" stroke="#7B6B5D" stroke-width="1.5"/>
+  <line x1="68" y1="44" x2="72" y2="42" stroke="#7B6B5D" stroke-width="1.5"/>
+  <!-- Nose -->
+  <path d="M48 50 Q50 55 52 50" stroke="#D4A574" stroke-width="1.2" fill="none"/>
+  <!-- Warm smile -->
+  <path d="M39 59 Q50 68 61 59" stroke="#C47A5A" stroke-width="2" fill="none" stroke-linecap="round"/>
+  <!-- Smile highlight / lip -->
+  <path d="M42 60 Q50 65 58 60" fill="#D4887A" opacity="0.5"/>
+  <!-- Apron/collar hint at bottom -->
+  <path d="M30 72 Q50 80 70 72 L74 100 L26 100 Z" fill="#6BB8A0"/>
+  <path d="M38 74 Q50 82 62 74" stroke="white" stroke-width="1.5" fill="none" opacity="0.6"/>
+</svg>`;
 }
 
 // ========================================

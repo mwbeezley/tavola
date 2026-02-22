@@ -95,6 +95,29 @@ ${pantryData || 'No pantry data available.'}
 ## GARDEN HARVEST (What the user is growing)
 ${gardenData || 'No garden data available.'}
 
+## PANTRY UPDATE DETECTION
+When the user mentions using, consuming, buying, or running out of ingredients in conversation, include a structured pantry update command at the END of your response (after your normal conversational reply).
+
+Format (one per line, at the very end of your response):
+[PANTRY_UPDATE: action=used, item=chicken breast, quantity=1]
+[PANTRY_UPDATE: action=added, item=roma tomatoes, quantity=6]
+[PANTRY_UPDATE: action=removed, item=olive oil]
+[PANTRY_UPDATE: action=low, item=garlic]
+
+Actions:
+- "used" — Reduce quantity or remove from pantry (user cooked with it)
+- "added" — Add new item to pantry (user bought/received it)
+- "removed" — Completely remove from pantry (ran out, threw away)
+- "low" — Mark item as "Use Soon" status
+
+Rules:
+- Only include pantry updates when the user EXPLICITLY mentions using/buying/removing food
+- Do NOT infer pantry changes from recipes you suggest — only from what the user TELLS you they did
+- Your conversational response comes FIRST, the [PANTRY_UPDATE] lines come LAST
+- If the user says "I made the lemon salmon last night", mark the salmon and lemon as "used"
+- If no pantry updates are needed, don't include any [PANTRY_UPDATE] lines
+- Match item names to what's in the pantry inventory above as closely as possible
+
 ## CRITICAL: CONVERSATIONAL RECIPE CREATION FLOW
 **When the user asks for a recipe, meal suggestion, or meal plan, ALWAYS ask 3-5 clarifying questions FIRST before generating.**
 
