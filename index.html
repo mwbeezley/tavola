@@ -14691,15 +14691,48 @@ function getItemsForSection(sectionKey) {
 
 function getSmartDefault(item) {
     const name = (item.name || '').toLowerCase();
-    if (name.includes('oil') || name.includes('vinegar') || name.includes('syrup')) return 'bottle';
-    if (name.includes('rice') || name.includes('flour') || name.includes('quinoa') || name.includes('oat') || name.includes('lentil')) return 'bag';
-    if (name.includes('can')) return 'can';
-    if (name.includes('bread') || name.includes('pita') || name.includes('tortilla')) return 'pack';
-    if (name.includes('milk') || name.includes('cream') || name.includes('yogurt')) return 'container';
-    if (name.includes('cheese')) return 'block';
+    const cat = (item.category || '').toLowerCase();
+    // Liquids & oils
+    if (name.includes('oil') || name.includes('vinegar') || name.includes('syrup') || name.includes('sauce') || name.includes('honey')) return 'bottle';
+    // Grains & dry goods
+    if (name.includes('rice') || name.includes('flour') || name.includes('quinoa') || name.includes('oat') || name.includes('lentil') || name.includes('sugar') || name.includes('couscous')) return 'bag';
+    // Canned
+    if (name.includes('can ') || name.includes('canned') || name.includes('chickpea') || name.includes('beans') || name.includes('tomato sauce') || name.includes('diced tomato') || name.includes('broth') || name.includes('stock')) return 'can';
+    // Bakery & bread
+    if (name.includes('bread') || name.includes('pita') || name.includes('tortilla') || name.includes('wrap') || name.includes('naan')) return 'pack';
+    // Dairy liquids
+    if (name.includes('milk') || name.includes('cream') || name.includes('yogurt') || name.includes('kefir')) return 'container';
+    // Cheese
+    if (name.includes('cheese') || name.includes('feta') || name.includes('mozzarella') || name.includes('parmesan') || name.includes('ricotta')) return 'block/wedge';
+    // Eggs
     if (name.includes('egg')) return 'dozen';
+    // Butter
     if (name.includes('butter')) return 'stick';
-    return 'unit';
+    // Pasta & noodles
+    if (name.includes('pasta') || name.includes('noodle') || name.includes('spaghetti') || name.includes('penne') || name.includes('orzo')) return 'box';
+    // Jars
+    if (name.includes('tahini') || name.includes('pesto') || name.includes('jam') || name.includes('mustard') || name.includes('mayo') || name.includes('hummus') || name.includes('olives') || name.includes('capers') || name.includes('pickl')) return 'jar';
+    // Spices
+    if (cat.includes('spice') || name.includes('cumin') || name.includes('paprika') || name.includes('oregano') || name.includes('cinnamon') || name.includes('turmeric') || name.includes('pepper') || name.includes('chili flake')) return 'jar/shaker';
+    // Nuts & seeds
+    if (name.includes('nut') || name.includes('almond') || name.includes('walnut') || name.includes('pistachio') || name.includes('seed') || name.includes('pine nut') || name.includes('cashew')) return 'bag';
+    // Produce — fruits & veggies use count
+    if (cat.includes('produce')) {
+        if (name.includes('spinach') || name.includes('arugula') || name.includes('kale') || name.includes('lettuce') || name.includes('herb') || name.includes('basil') || name.includes('cilantro') || name.includes('parsley') || name.includes('mint')) return 'bunch';
+        return 'count';
+    }
+    // Proteins
+    if (cat.includes('protein')) {
+        if (name.includes('ground') || name.includes('mince')) return 'lb';
+        if (name.includes('fillet') || name.includes('breast') || name.includes('thigh') || name.includes('steak') || name.includes('chop')) return 'pieces';
+        return 'lb';
+    }
+    // Frozen
+    if (cat.includes('frozen')) return 'bag';
+    // If the item already has a quantity with a recognizable unit, don't show a hint
+    const qty = (item.quantity || item.qty || '').toLowerCase();
+    if (qty && /\d/.test(qty)) return '';
+    return 'qty';
 }
 
 function renderReviewSection() {
@@ -14740,9 +14773,9 @@ function renderReviewSection() {
                     ${!isRemoved ? `<div style="margin-top:6px;display:flex;gap:6px;align-items:center;">
                         <input type="text" value="${escapeHtml(String(currentQty))}"
                             class="review-qty-input" data-idx="${globalIdx}"
-                            style="width:80px;padding:4px 8px;border:1px solid var(--border-light);border-radius:var(--radius-sm);font-size:0.85rem;"
-                            placeholder="${defaultUnit}">
-                        <span style="font-size:0.75rem;color:var(--gray-text);">${defaultUnit}</span>
+                            style="width:100px;padding:4px 8px;border:1px solid var(--border-light);border-radius:var(--radius-sm);font-size:0.85rem;"
+                            placeholder="${defaultUnit || 'amount'}">
+                        ${defaultUnit ? `<span style="font-size:0.75rem;color:var(--gray-text);">${defaultUnit}</span>` : ''}
                     </div>` : '<div style="font-size:0.8rem;color:var(--danger);margin-top:4px;">Will be removed</div>'}
                 </div>
                 <button class="btn btn-sm ${isRemoved ? 'btn-secondary' : ''}"
