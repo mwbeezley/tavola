@@ -250,8 +250,19 @@ Difficulty: [Easy/Medium]
 - [amount] [ingredient]
 
 **INSTRUCTIONS:**
-1. [Clear step]
-2. [Clear step]
+
+**PREP:**
+1. [Preparation step - measuring, chopping, marinating]
+2. [More prep steps]
+
+**COOK:**
+1. [Cooking step - sauteing, baking, simmering]
+2. [More cooking steps]
+
+**PLATE:**
+1. [Plating, garnishing, serving]
+
+Note: Group steps into logical phases. Typical phases: PREP, COOK, PLATE. For complex recipes, add component phases like THE SAUCE, THE RICE, THE FILLING, etc. Always start each phase with a bold header like **PHASE NAME:** followed by numbered steps.
 
 **WHY THIS HELPS YOUR HEALTH:**
 [Brief explanation of how this recipe supports the user's specific health conditions]

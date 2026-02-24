@@ -4059,77 +4059,60 @@
             margin: 0 auto;
         }
 
-        /* Four Pillars Grid - REDESIGNED 2x2 with Greek key border */
+        /* Four Pillars Grid - clean 2x2 with accent accents */
         .pillars-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 32px;
-            max-width: 1000px;
+            gap: 28px;
+            max-width: 960px;
             margin: 0 auto;
-            position: relative;
-            padding: 40px;
-        }
-
-        .pillars-grid::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border: 3px solid rgba(26, 58, 82, 0.18);
-            border-radius: var(--radius-lg);
-            pointer-events: none;
-            background-image:
-                repeating-linear-gradient(0deg, transparent, transparent 12px, rgba(26, 58, 82, 0.08) 12px, rgba(26, 58, 82, 0.08) 14px),
-                repeating-linear-gradient(90deg, transparent, transparent 12px, rgba(26, 58, 82, 0.08) 12px, rgba(26, 58, 82, 0.08) 14px);
         }
 
         .pillar-card {
             background: white;
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            text-align: center;
-            box-shadow: var(--shadow-md);
-            border-top: 5px solid transparent;
-            transition: all 0.3s ease;
+            padding: 36px 32px;
+            border-radius: var(--radius-xl);
+            text-align: left;
+            box-shadow: var(--shadow);
+            border-left: 4px solid transparent;
+            transition: all 0.25s ease;
             position: relative;
-            z-index: 1;
         }
         .pillar-card:hover {
-            transform: translateY(-6px);
-            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
         }
-        .border-top-seafoam { border-top-color: var(--seafoam); }
-        .border-top-terracotta { border-top-color: var(--terracotta); }
-        .border-top-amber { border-top-color: var(--amber); }
-        .border-top-cerulean { border-top-color: var(--cerulean); }
+        .border-top-seafoam { border-left-color: var(--seafoam); }
+        .border-top-terracotta { border-left-color: var(--terracotta); }
+        .border-top-amber { border-left-color: var(--amber); }
+        .border-top-cerulean { border-left-color: var(--cerulean); }
 
         .pillar-icon {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
+            width: 52px;
+            height: 52px;
+            border-radius: var(--radius-md);
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 24px;
+            margin-bottom: 20px;
         }
         .pillar-icon.seafoam { background: var(--seafoam-light); color: var(--seafoam); }
         .pillar-icon.terracotta { background: var(--terracotta-light); color: var(--terracotta); }
         .pillar-icon.amber { background: var(--amber-light); color: var(--amber); }
         .pillar-icon.cerulean { background: var(--cerulean-light); color: var(--cerulean); }
-        .pillar-icon i { width: 36px; height: 36px; }
+        .pillar-icon i { width: 28px; height: 28px; }
 
         .pillar-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 16px;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
             color: var(--navy);
             font-weight: 700;
+            letter-spacing: -0.01em;
         }
         .pillar-card p {
             color: var(--charcoal);
-            line-height: 1.7;
-            font-size: 1rem;
+            line-height: 1.65;
+            font-size: 0.95rem;
         }
 
         /* Steps Grid - REDESIGNED with larger circles */
@@ -4411,55 +4394,67 @@
             color: var(--cerulean);
         }
         .about-story {
-            margin-bottom: 48px;
+            margin-bottom: 64px;
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
         }
         .about-story h2 {
             font-family: var(--font-heading);
-            font-size: 2rem;
+            font-size: 2.4rem;
             color: var(--navy);
-            margin-bottom: 32px;
+            margin-bottom: 40px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
         }
         .about-story h3 {
             font-family: var(--font-heading);
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             color: var(--navy);
-            margin: 48px 0 24px;
+            margin: 56px 0 28px;
+            letter-spacing: -0.01em;
         }
         .about-story p {
-            font-size: 18px;
-            line-height: 1.8;
+            font-size: 1.1rem;
+            line-height: 1.85;
             color: var(--charcoal);
-            margin-bottom: 24px;
+            margin-bottom: 28px;
+        }
+        .about-story p em {
+            color: var(--navy);
+            font-style: italic;
         }
         .pullquote {
-            font-size: 20px;
+            font-size: 1.25rem;
             line-height: 1.7;
-            color: var(--seafoam);
+            color: var(--navy);
             font-weight: 500;
-            padding: 24px;
-            background: white;
+            padding: 28px 32px;
+            background: var(--cerulean-light);
             border-left: 4px solid var(--seafoam);
-            margin: 32px 0;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            margin: 40px 0;
             font-style: italic;
         }
         .founder-signature {
             font-family: var(--font-script);
             font-size: 1.5rem;
             color: var(--navy);
-            margin-top: 48px;
+            margin-top: 56px;
             text-align: right;
         }
         .about-four-pillars {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 24px;
-            margin: 32px 0;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin: 36px 0;
         }
         .about-four-pillars .pillar-card {
             background: white;
             padding: 24px;
             border-radius: var(--radius-lg);
-            border-top: 4px solid var(--seafoam);
+            border-left: 4px solid var(--seafoam);
+            text-align: left;
             box-shadow: var(--shadow-md);
         }
         .about-four-pillars .pillar-icon {
@@ -4636,8 +4631,10 @@
             }
             .pillars-grid {
                 grid-template-columns: 1fr;
-                padding: 20px;
-                gap: 20px;
+                gap: 16px;
+            }
+            .about-four-pillars {
+                grid-template-columns: 1fr;
             }
             .features-grid {
                 grid-template-columns: 1fr;
@@ -5313,6 +5310,23 @@
             font-weight: 600;
         }
 
+        /* Instruction phase headers */
+        .recipe-phase-header {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--cerulean);
+            padding: 10px 0 4px;
+            margin-top: 12px;
+            border-top: 1px dashed var(--border-light);
+        }
+
+        .recipe-phase-header:first-child {
+            margin-top: 0;
+            border-top: none;
+        }
+
         .recipe-nutrition {
             background: var(--gray-light);
             padding: 16px;
@@ -5402,7 +5416,8 @@
 
         .save-recipe-btn,
         .add-plan-toggle,
-        .share-family-btn {
+        .share-family-btn,
+        .mark-cooked-btn {
             display: inline-flex;
             align-items: center;
             gap: 6px;
@@ -5484,11 +5499,26 @@
             color: var(--seafoam);
         }
 
+        .mark-cooked-btn {
+            background: var(--amber-light, #FFF3E0);
+            color: var(--amber, #E67E22);
+            border: 1.5px solid var(--amber, #E67E22) !important;
+        }
+        .mark-cooked-btn:hover { filter: brightness(0.97); }
+        .mark-cooked-btn.saved,
+        .mark-cooked-btn:disabled {
+            background: var(--seafoam-light);
+            border-color: var(--seafoam) !important;
+            color: var(--seafoam);
+            cursor: default;
+        }
+
         @media (max-width: 640px) {
             .recipe-action-bar { flex-direction: column; }
             .save-recipe-btn,
             .add-plan-toggle,
-            .share-family-btn { width: 100%; justify-content: center; }
+            .share-family-btn,
+            .mark-cooked-btn { width: 100%; justify-content: center; }
         }
 
         /* Mobile adjustments for Nonna page */
@@ -5788,10 +5818,10 @@
                 </div>
                 <div class="desktop-nav-group" id="desktop-pantry-group">
                     <button class="desktop-nav-btn" data-nav="pantry" onclick="toggleDesktopDropdown('desktop-pantry-dropdown')">
-                        <i data-lucide="warehouse"></i> Pantry <i data-lucide="chevron-down" class="chevron"></i>
+                        <i data-lucide="warehouse"></i> Smart Pantry <i data-lucide="chevron-down" class="chevron"></i>
                     </button>
                     <div class="nav-dropdown-menu" id="desktop-pantry-dropdown">
-                        <button class="nav-dropdown-item" onclick="navAction('pantry')"><i data-lucide="package"></i> My Pantry</button>
+                        <button class="nav-dropdown-item" onclick="navAction('pantry')"><i data-lucide="package"></i> Smart Pantry</button>
                         <button class="nav-dropdown-item" onclick="navAction('shopping')"><i data-lucide="shopping-cart"></i> Shopping List</button>
                         <button class="nav-dropdown-item" onclick="navAction('garden')"><i data-lucide="flower-2"></i> Garden</button>
                         <button class="nav-dropdown-item" onclick="navAction('crohns')"><i data-lucide="shield-plus"></i> Crohn's Care</button>
@@ -5982,11 +6012,11 @@
                     <div class="pricing-card featured">
                         <div class="badge">Most Popular</div>
                         <h3>Plus</h3>
-                        <div class="price">$9<span>/month</span></div>
+                        <div class="price">$12<span>/month</span></div>
                         <ul>
                             <li>Everything in Free</li>
                             <li>Advanced meal planning</li>
-                            <li>Pantry tracking</li>
+                            <li>Smart Pantry tracking</li>
                             <li>Family recipe sharing</li>
                         </ul>
                         <button class="btn btn-primary" onclick="showIntakeForm()">Coming Soon</button>
@@ -6093,22 +6123,25 @@
                 <h3>Tavola is for four kinds of people:</h3>
 
                 <div class="about-four-pillars">
-                    <div class="pillar-card">
-                        <div class="pillar-icon"><i data-lucide="heart"></i></div>
+                    <div class="pillar-card border-top-seafoam">
+                        <div class="pillar-icon seafoam"><i data-lucide="heart"></i></div>
                         <h4>Food Lovers</h4>
-                        <p>Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize and cook with confidence. Your personal AI sous chef, Nonna, is always ready to help.</p>
+                        <p>Whether you're batch-cooking Mediterranean feasts or experimenting with new cuisines, Tavola helps you plan, organize and cook with confidence.</p>
                     </div>
-                    <div class="pillar-card">
-                        <h4><i data-lucide="users"></i> Families & Community</h4>
-                        <p>Share recipes with loved ones through Family Tavola. Learn from your mom's favorites, swap cooking tips with your sister and build a shared family cookbook that spans generations.</p>
+                    <div class="pillar-card border-top-terracotta">
+                        <div class="pillar-icon terracotta"><i data-lucide="users"></i></div>
+                        <h4>Families & Community</h4>
+                        <p>Share recipes with loved ones through Family Tavola. Build a shared family cookbook that spans generations.</p>
                     </div>
-                    <div class="pillar-card">
-                        <h4><i data-lucide="shield-plus"></i> Chronic Illness Warriors</h4>
-                        <p>Managing Crohn's, UC, IBS or other digestive conditions? Tavola filters recipes by health tags, tracks trigger foods and provides gentle meal options during flares. Nutrition as medicine.</p>
+                    <div class="pillar-card border-top-amber">
+                        <div class="pillar-icon amber"><i data-lucide="shield-plus"></i></div>
+                        <h4>Chronic Illness Warriors</h4>
+                        <p>Managing Crohn's, UC, IBS or other conditions? Tavola tracks trigger foods and provides gentle options during flares.</p>
                     </div>
-                    <div class="pillar-card">
-                        <h4><i data-lucide="target"></i> Health-Conscious Eaters</h4>
-                        <p>Weight loss, heart health, diabetes management: whatever your goals, Tavola helps you eat well without sacrificing flavor. Mediterranean patterns that naturally support wellness.</p>
+                    <div class="pillar-card border-top-cerulean">
+                        <div class="pillar-icon cerulean"><i data-lucide="target"></i></div>
+                        <h4>Health-Conscious Eaters</h4>
+                        <p>Whatever your goals, Tavola helps you eat well without sacrificing flavor. Mediterranean patterns that naturally support wellness.</p>
                     </div>
                 </div>
 
@@ -6179,7 +6212,7 @@
                         <i data-lucide="chevron-down" class="faq-arrow"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Three things: (1) Nonna is context-aware: she knows what's in your pantry, your health needs and your cooking style. (2) Family Tavola lets you share recipes with loved ones and build a shared family cookbook. (3) We're built specifically for Mediterranean eating patterns, which are naturally anti-inflammatory and gut-friendly.</p>
+                        <p>Three things: (1) Nonna is context-aware: she knows what's in your Smart Pantry, your health needs and your cooking style. (2) Family Tavola lets you share recipes with loved ones and build a shared family cookbook. (3) We're built specifically for Mediterranean eating patterns, which are naturally anti-inflammatory and gut-friendly.</p>
                     </div>
                 </div>
 
@@ -6195,11 +6228,11 @@
 
                 <div class="faq-item">
                     <div class="faq-question" onclick="toggleFAQ(this)">
-                        <span>How does the smart pantry work?</span>
+                        <span>How does the Smart Pantry work?</span>
                         <i data-lucide="chevron-down" class="faq-arrow"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Add ingredients to your digital pantry once and Tavola tracks what you have. When you mark a meal as cooked, Tavola automatically deducts ingredients from your pantry. You'll get low-stock alerts and shopping lists that only include what you need to buy. No more duplicate purchases or forgotten ingredients.</p>
+                        <p>Add ingredients to your Smart Pantry once and Tavola tracks what you have. When you mark a meal as cooked, Tavola automatically deducts ingredients. You'll get low-stock alerts and shopping lists that only include what you need to buy. No more duplicate purchases or forgotten ingredients.</p>
                     </div>
                 </div>
 
@@ -6219,7 +6252,7 @@
                         <i data-lucide="chevron-down" class="faq-arrow"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>We offer a free tier that includes limited Nonna chats and basic meal planning. Premium plans start at $12/month (or $100/year) for unlimited access to Nonna, Family Tavola, smart pantry and all features. Family plans for up to 5 users are $20/month.</p>
+                        <p>We offer a free tier that includes limited Nonna chats and basic meal planning. Premium plans start at $12/month (or $100/year) for unlimited access to Nonna, Family Tavola, Smart Pantry and all features. Family plans for up to 5 users are $20/month.</p>
                     </div>
                 </div>
 
@@ -6239,7 +6272,7 @@
                         <i data-lucide="chevron-down" class="faq-arrow"></i>
                     </div>
                     <div class="faq-answer">
-                        <p>Absolutely! While Tavola specializes in Mediterranean cuisine (Greek, Italian, Spanish, Levantine, North African), Nonna can help with any cooking style. The smart pantry, family sharing and meal planning features work for all types of cooking.</p>
+                        <p>Absolutely! While Tavola specializes in Mediterranean cuisine (Greek, Italian, Spanish, Levantine, North African), Nonna can help with any cooking style. The Smart Pantry, family sharing and meal planning features work for all types of cooking.</p>
                     </div>
                 </div>
             </div>
@@ -7032,7 +7065,7 @@
                         <span class="icon"><i data-lucide="cooking-pot"></i></span>
                         <div class="more-menu-item-content">
                             <div class="more-menu-item-title">Kitchen Tools</div>
-                            <div class="more-menu-item-desc">Pantry, shopping lists, batch cooking</div>
+                            <div class="more-menu-item-desc">Smart Pantry, shopping lists, batch cooking</div>
                         </div>
                     </button>
                     <button class="more-menu-item" onclick="switchMoreTab('garden')">
@@ -7083,7 +7116,7 @@
                     </div>
 
                     <div class="tabs">
-                        <button class="tab active" onclick="switchKitchenTab('pantry')">Pantry</button>
+                        <button class="tab active" onclick="switchKitchenTab('pantry')">Smart Pantry</button>
                         <button class="tab" onclick="switchKitchenTab('shopping')">Shopping</button>
                         <button class="tab" onclick="switchKitchenTab('batch')">Batch Prep</button>
                         <button class="tab" onclick="switchKitchenTab('subs')">Substitutions</button>
@@ -7104,6 +7137,16 @@
                         <button class="btn btn-primary btn-block mb-16" onclick="openWhatCanIMakeModal()" style="padding: 14px; font-size: 1rem;">
                             <i data-lucide="cooking-pot" style="width:16px;height:16px;vertical-align:middle"></i> What Can I Make Right Now?
                         </button>
+
+                        <!-- Pantry Management Actions -->
+                        <div class="flex gap-8 mb-16" style="flex-wrap:wrap;">
+                            <button class="btn btn-sm btn-secondary" onclick="openReviewPantryWizard()" style="flex:1;">
+                                <i data-lucide="clipboard-check" style="width:14px;height:14px;vertical-align:middle"></i> Review Pantry
+                            </button>
+                            <button class="btn btn-sm" onclick="confirmResetPantry()" style="flex:0;background:var(--danger);color:white;">
+                                <i data-lucide="trash-2" style="width:14px;height:14px;vertical-align:middle"></i> Reset
+                            </button>
+                        </div>
 
                         <!-- Pantry Alerts Section -->
                         <div class="pantry-alerts" id="pantry-alerts"></div>
@@ -7137,12 +7180,12 @@
                             </div>
                         </div>
 
-                        <div class="divider-label mb-16 mt-16">Pantry Inventory</div>
+                        <div class="divider-label mb-16 mt-16">Smart Pantry Inventory</div>
 
                         <div id="pantry-list"></div>
                         <div class="empty-state" id="pantry-empty">
                             <div class="empty-state-icon"><i data-lucide="package" style="width:32px;height:32px;color:var(--gray-text)"></i></div>
-                            <div class="empty-state-title">Pantry is empty</div>
+                            <div class="empty-state-title">Smart Pantry is empty</div>
                             <p>Add items manually or scan with your camera.</p>
                         </div>
                     </div>
@@ -7517,10 +7560,10 @@
         <div class="nav-group" id="mobile-pantry-group">
             <button class="nav-item" data-nav="pantry" onclick="toggleMobileDropdown('mobile-pantry-dropdown', this)">
                 <i data-lucide="warehouse"></i>
-                <span>Pantry</span>
+                <span>Smart Pantry</span>
             </button>
             <div class="nav-dropdown-menu" id="mobile-pantry-dropdown">
-                <button class="nav-dropdown-item" onclick="navAction('pantry')"><i data-lucide="package"></i> My Pantry</button>
+                <button class="nav-dropdown-item" onclick="navAction('pantry')"><i data-lucide="package"></i> Smart Pantry</button>
                 <button class="nav-dropdown-item" onclick="navAction('shopping')"><i data-lucide="shopping-cart"></i> Shopping List</button>
                 <button class="nav-dropdown-item" onclick="navAction('garden')"><i data-lucide="flower-2"></i> Garden</button>
                 <button class="nav-dropdown-item" onclick="navAction('crohns')"><i data-lucide="shield-plus"></i> Crohn's Care</button>
@@ -9566,8 +9609,8 @@ function getContextualPrompts() {
 
     // Pantry-aware
     if (pantry.length > 0) {
-        prompts.push({ icon: 'package', label: 'Use My Pantry', text: "What can I make with what's in my pantry?" });
-        prompts.push({ icon: 'clipboard', label: 'Plan Around Pantry', text: "Plan this week's meals using what I already have. Minimize new purchases." });
+        prompts.push({ icon: 'package', label: 'Use My Smart Pantry', text: "What can I make with what's in my pantry?" });
+        prompts.push({ icon: 'clipboard', label: 'Plan Around Smart Pantry', text: "Plan this week's meals using what I already have. Minimize new purchases." });
     } else {
         prompts.push({ icon: 'shopping-cart', label: 'What Should I Buy?', text: 'What should I buy at the store this week for healthy Mediterranean meals?' });
     }
@@ -9948,7 +9991,7 @@ function updateConversationTopics() {
 
     const contextLabels = {
         planning: 'Meal Planning', recipe: 'Recipes', shopping: 'Shopping',
-        health: 'Health', family: 'Family', pantry: 'Pantry', general: 'General'
+        health: 'Health', family: 'Family', pantry: 'Smart Pantry', general: 'General'
     };
 
     topicsEl.innerHTML = topics.slice(-10).reverse().map(t =>
@@ -10305,7 +10348,8 @@ function parseRecipes(content) {
             difficulty: extractField(recipeText, 'Difficulty:', '\n') || 'Medium',
             tags: extractTags(recipeText),
             ingredients: extractList(recipeText, 'INGREDIENTS:', 'INSTRUCTIONS:'),
-            instructions: extractList(recipeText, 'INSTRUCTIONS:', '(?:NUTRITION:|TAGS:|$)'),
+            instructions: extractList(recipeText, 'INSTRUCTIONS:', '(?:NUTRITION:|TAGS:|WHY THIS|MODIFICATIONS:|GARDEN|STORAGE:|$)'),
+            instructionPhases: extractGroupedInstructions(recipeText, 'INSTRUCTIONS:', '(?:NUTRITION:|TAGS:|WHY THIS|MODIFICATIONS:|GARDEN|STORAGE:|$)'),
             nutrition: extractNutrition(recipeText)
         };
         recipes.push(recipe);
@@ -10373,6 +10417,91 @@ function extractList(text, startMarker, endMarker) {
         .map(line => line.replace(/^[-•]\s*/, '').replace(/^\d+\.\s*/, ''));
 }
 
+// Parse instructions into grouped phases: [{phase: "Prep", steps: ["step1", ...]}, ...]
+function extractGroupedInstructions(text, startMarker, endMarker) {
+    if (!text) return [];
+    const regex = new RegExp(`${startMarker}([\\s\\S]*?)(?=${endMarker})`, 'i');
+    const match = text.match(regex);
+    if (!match || !match[1]) return [];
+
+    const rawLines = match[1].split('\n').map(l => l.trim()).filter(l => l);
+    const phases = [];
+    let currentPhase = null;
+
+    for (const line of rawLines) {
+        // Detect phase header: **PHASE:** or **PHASE** or ## PHASE or PHASE:
+        const phaseMatch = line.match(/^\*{0,2}\s*([A-Z][A-Za-z &']+?)\s*:?\s*\*{0,2}\s*$/);
+        const isStep = line.startsWith('-') || line.startsWith('•') || /^\d+\./.test(line);
+
+        if (phaseMatch && !isStep) {
+            const phaseName = phaseMatch[1].replace(/\*+/g, '').trim();
+            // Ignore very short labels that are likely not phases
+            if (phaseName.length >= 3) {
+                currentPhase = { phase: phaseName, steps: [] };
+                phases.push(currentPhase);
+                continue;
+            }
+        }
+
+        if (isStep) {
+            const stepText = line.replace(/^[-•]\s*/, '').replace(/^\d+\.\s*/, '');
+            if (!currentPhase) {
+                currentPhase = { phase: 'Steps', steps: [] };
+                phases.push(currentPhase);
+            }
+            currentPhase.steps.push(stepText);
+        }
+    }
+
+    // If only one phase with default name "Steps", try to infer phases from step content
+    if (phases.length === 1 && phases[0].phase === 'Steps' && phases[0].steps.length > 4) {
+        return inferPhases(phases[0].steps);
+    }
+
+    // If no phases found, return flat as single group
+    if (phases.length === 0) return [];
+    return phases;
+}
+
+// Auto-infer phases from flat instruction steps based on content keywords
+function inferPhases(steps) {
+    const phases = [];
+    let current = { phase: 'Prep', steps: [] };
+    phases.push(current);
+    let inCook = false;
+    let inPlate = false;
+
+    for (const step of steps) {
+        const lower = step.toLowerCase();
+        // Detect transition to cooking
+        if (!inCook && !inPlate && (
+            lower.includes('heat') || lower.includes('saut') || lower.includes('boil') ||
+            lower.includes('bake') || lower.includes('roast') || lower.includes('grill') ||
+            lower.includes('simmer') || lower.includes('fry') || lower.includes('cook') ||
+            lower.includes('place in oven') || lower.includes('put in oven') ||
+            lower.includes('bring to')
+        )) {
+            inCook = true;
+            current = { phase: 'Cook', steps: [] };
+            phases.push(current);
+        }
+        // Detect transition to plating
+        if (inCook && !inPlate && (
+            lower.includes('plate') || lower.includes('serve') || lower.includes('garnish') ||
+            lower.includes('top with') || lower.includes('drizzle') || lower.includes('arrange')
+        ) && steps.indexOf(step) > steps.length * 0.6) {
+            inPlate = true;
+            current = { phase: 'Plate', steps: [] };
+            phases.push(current);
+        }
+        current.steps.push(step);
+    }
+
+    // If everything ended up in Prep, just return as-is
+    if (phases.length === 1) return phases;
+    return phases;
+}
+
 function extractNutrition(text) {
     const nutrition = {};
     const nutritionSection = extractField(text, 'NUTRITION:', '(?:$|TAGS:)');
@@ -10408,6 +10537,7 @@ function parseSimpleRecipe(content) {
         tags: { health: [], dietary: [], cuisine: [] },
         ingredients,
         instructions,
+        instructionPhases: extractGroupedInstructions(content, 'INSTRUCTIONS:', '$'),
         nutrition: {}
     };
 }
@@ -10433,9 +10563,19 @@ function renderRecipeCard(recipe, index) {
         .map(ing => `<li>${escapeHtml(ing)}</li>`)
         .join('');
 
-    const instructionsHTML = recipe.instructions
-        .map((inst, i) => `<li data-step="${i + 1}">${escapeHtml(inst)}</li>`)
-        .join('');
+    // Build instruction phases HTML
+    const phases = recipe.instructionPhases && recipe.instructionPhases.length > 0
+        ? recipe.instructionPhases
+        : [{ phase: 'Steps', steps: recipe.instructions || [] }];
+
+    const instructionsHTML = phases.map(phase => {
+        const stepsHTML = phase.steps.map((inst, i) =>
+            `<li data-step="${i + 1}">${escapeHtml(inst)}</li>`
+        ).join('');
+        const showHeader = phases.length > 1 || phase.phase !== 'Steps';
+        return `${showHeader ? `<div class="recipe-phase-header">${escapeHtml(phase.phase)}</div>` : ''}
+            <ol class="recipe-instructions">${stepsHTML}</ol>`;
+    }).join('');
 
     // Nutrition: strip ** markdown from keys and values
     const hasNutrition = Object.keys(recipe.nutrition).length > 0;
@@ -10497,7 +10637,7 @@ function renderRecipeCard(recipe, index) {
 
         <div class="recipe-section">
             <h4 class="recipe-section-title">Instructions</h4>
-            <ol class="recipe-instructions">${instructionsHTML}</ol>
+            ${instructionsHTML}
         </div>
 
         <div class="recipe-action-bar">
@@ -10520,6 +10660,9 @@ function renderRecipeCard(recipe, index) {
             </div>
             <button class="share-family-btn">
                 <i data-lucide="users"></i> Share to Family
+            </button>
+            <button class="mark-cooked-btn">
+                <i data-lucide="check-circle"></i> Mark as Cooked
             </button>
         </div>
     `;
@@ -10685,6 +10828,29 @@ function renderRecipeCard(recipe, index) {
         if (wrapper && !wrapper.contains(e.target)) {
             card.querySelector('.plan-dropdown')?.classList.add('hidden');
         }
+    });
+
+    // ── MARK AS COOKED BUTTON ──
+    card.querySelector('.mark-cooked-btn').addEventListener('click', function() {
+        const r = card._recipeData;
+        if (!r || !r.ingredients) {
+            showToast('No recipe data available', 'warning');
+            return;
+        }
+        deductRecipeFromPantry(r.ingredients);
+        // Log to meal history
+        const history = getStorage(STORAGE.HISTORY) || [];
+        history.unshift({
+            title: r.title,
+            date: new Date().toISOString(),
+            source: 'marked-cooked'
+        });
+        setStorage(STORAGE.HISTORY, history.slice(0, 50));
+        this.innerHTML = `${icon('check',14)} Cooked!`;
+        this.classList.add('saved');
+        this.disabled = true;
+        showToast(`Marked as cooked! Smart Pantry updated.`, 'success');
+        refreshIcons();
     });
 
     // ── EXPAND / CAROUSEL BUTTON ──
@@ -11213,7 +11379,7 @@ function analyzeConversationContext() {
     } else if (allText.includes('pantry') || allText.includes('ingredients') || allText.includes('shopping')) {
         return {
             icon: 'shopping-bag',
-            summary: 'Pantry and shopping lists'
+            summary: 'Smart Pantry and shopping lists'
         };
     } else if (allText.includes('health') || allText.includes('nutrition') || allText.includes('flare')) {
         return {
@@ -11270,8 +11436,8 @@ function getContextualQuickActions(context) {
     } else if (context.summary.includes('Meal planning')) {
         baseActions.unshift({ icon: 'calendar-days', label: 'View week plan', onClick: "navigateTo('week')" });
         baseActions.unshift({ icon: 'shopping-cart', label: 'Create shopping list', onClick: "navigateTo('pantry'); switchPantryTab('shopping')" });
-    } else if (context.summary.includes('Pantry')) {
-        baseActions.unshift({ icon: 'package', label: 'View pantry', onClick: "navigateTo('pantry')" });
+    } else if (context.summary.includes('Smart Pantry')) {
+        baseActions.unshift({ icon: 'package', label: 'View Smart Pantry', onClick: "navigateTo('pantry')" });
         baseActions.unshift({ icon: 'shopping-cart', label: 'Shopping list', onClick: "navigateTo('pantry'); switchPantryTab('shopping')" });
     } else if (context.summary.includes('Health')) {
         baseActions.unshift({ icon: 'heart', label: 'Flare mode recipes', onClick: "openFlareModeFilter()" });
@@ -13891,7 +14057,7 @@ function showPantryUpdateNotification(deducted, missing, day) {
         ${missing.length > 0 ? `
         <div class="pun-footer">
             <button class="pun-action-btn" onclick="navigateTo('pantry'); document.getElementById('pantry-update-notification')?.remove();">
-                ${icon('package', 14)} View Pantry
+                ${icon('package', 14)} View Smart Pantry
             </button>
         </div>` : ''}
     `;
@@ -14442,6 +14608,248 @@ function showPrepChecklist() {
 // ========================================
 // KITCHEN - PANTRY
 // ========================================
+// ========================================
+// RESET PANTRY
+// ========================================
+function confirmResetPantry() {
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon('alert-triangle',20)} Reset Smart Pantry?</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p>This will remove <strong>all items</strong> from your Smart Pantry. This cannot be undone.</p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn" style="background:var(--danger);color:white;" onclick="resetPantry()">Reset Pantry</button>
+        </div>
+    `);
+    refreshIcons();
+}
+
+function resetPantry() {
+    setStorage(STORAGE.PANTRY, []);
+    closeModal();
+    renderPantry();
+    showToast('Smart Pantry has been reset');
+}
+
+// ========================================
+// REVIEW PANTRY WIZARD
+// ========================================
+const REVIEW_SECTIONS = [
+    { key: 'produce', label: 'Produce', icon: 'leaf' },
+    { key: 'proteins', label: 'Proteins', icon: 'drumstick' },
+    { key: 'grains', label: 'Grains & Legumes', icon: 'wheat' },
+    { key: 'oils', label: 'Oils & Condiments', icon: 'droplets' },
+    { key: 'dairy', label: 'Dairy', icon: 'milk' },
+    { key: 'spices', label: 'Nuts, Spices & Dried', icon: 'sparkles' },
+    { key: 'canned', label: 'Jarred & Canned', icon: 'package' }
+];
+
+let reviewState = {
+    sectionIndex: 0,
+    pantry: [],
+    removals: new Set(),
+    quantityUpdates: {}
+};
+
+function openReviewPantryWizard() {
+    const pantry = getStorage(STORAGE.PANTRY) || [];
+    if (pantry.length === 0) {
+        showToast('Smart Pantry is empty — nothing to review', 'warning');
+        return;
+    }
+
+    reviewState = {
+        sectionIndex: 0,
+        pantry: JSON.parse(JSON.stringify(pantry)),
+        removals: new Set(),
+        quantityUpdates: {}
+    };
+
+    renderReviewSection();
+}
+
+function getItemsForSection(sectionKey) {
+    const map = {
+        produce: ['produce'],
+        proteins: ['proteins'],
+        grains: ['grains', 'baking'],
+        oils: ['oils', 'condiments'],
+        dairy: ['dairy'],
+        spices: ['spices', 'snacks', 'herbs'],
+        canned: ['canned', 'frozen', 'beverages', 'other']
+    };
+    const categories = map[sectionKey] || [sectionKey];
+    return reviewState.pantry.filter(item => {
+        const cat = (item.category || 'other').toLowerCase();
+        return categories.some(c => cat.includes(c));
+    });
+}
+
+function getSmartDefault(item) {
+    const name = (item.name || '').toLowerCase();
+    if (name.includes('oil') || name.includes('vinegar') || name.includes('syrup')) return 'bottle';
+    if (name.includes('rice') || name.includes('flour') || name.includes('quinoa') || name.includes('oat') || name.includes('lentil')) return 'bag';
+    if (name.includes('can')) return 'can';
+    if (name.includes('bread') || name.includes('pita') || name.includes('tortilla')) return 'pack';
+    if (name.includes('milk') || name.includes('cream') || name.includes('yogurt')) return 'container';
+    if (name.includes('cheese')) return 'block';
+    if (name.includes('egg')) return 'dozen';
+    if (name.includes('butter')) return 'stick';
+    return 'unit';
+}
+
+function renderReviewSection() {
+    const section = REVIEW_SECTIONS[reviewState.sectionIndex];
+    const items = getItemsForSection(section.key);
+    const totalSections = REVIEW_SECTIONS.length;
+    const progress = ((reviewState.sectionIndex) / totalSections) * 100;
+
+    // Skip empty sections
+    if (items.length === 0 && reviewState.sectionIndex < totalSections - 1) {
+        reviewState.sectionIndex++;
+        renderReviewSection();
+        return;
+    }
+    if (items.length === 0 && reviewState.sectionIndex >= totalSections - 1) {
+        finishReviewWizard();
+        return;
+    }
+
+    const progressDots = REVIEW_SECTIONS.map((s, i) => {
+        const hasItems = getItemsForSection(s.key).length > 0;
+        const isCurrent = i === reviewState.sectionIndex;
+        const isDone = i < reviewState.sectionIndex;
+        if (!hasItems) return '';
+        return `<span style="display:inline-block;width:${isCurrent ? 28 : 10}px;height:10px;border-radius:5px;background:${isDone ? 'var(--seafoam)' : isCurrent ? 'var(--cerulean)' : 'var(--border-light)'};transition:all 0.2s;"></span>`;
+    }).join('');
+
+    const itemsHTML = items.map((item, idx) => {
+        const globalIdx = reviewState.pantry.indexOf(item);
+        const isRemoved = reviewState.removals.has(globalIdx);
+        const currentQty = reviewState.quantityUpdates[globalIdx] || item.quantity || item.qty || '1';
+        const defaultUnit = getSmartDefault(item);
+
+        return `
+            <div class="review-item" style="opacity:${isRemoved ? 0.4 : 1};padding:12px 0;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:12px;">
+                <div style="flex:1;min-width:0;">
+                    <div style="font-weight:600;color:${isRemoved ? 'var(--gray-text)' : 'var(--navy)'};${isRemoved ? 'text-decoration:line-through;' : ''}">${escapeHtml(item.name)}</div>
+                    ${!isRemoved ? `<div style="margin-top:6px;display:flex;gap:6px;align-items:center;">
+                        <input type="text" value="${escapeHtml(String(currentQty))}"
+                            class="review-qty-input" data-idx="${globalIdx}"
+                            style="width:80px;padding:4px 8px;border:1px solid var(--border-light);border-radius:var(--radius-sm);font-size:0.85rem;"
+                            placeholder="${defaultUnit}">
+                        <span style="font-size:0.75rem;color:var(--gray-text);">${defaultUnit}</span>
+                    </div>` : '<div style="font-size:0.8rem;color:var(--danger);margin-top:4px;">Will be removed</div>'}
+                </div>
+                <button class="btn btn-sm ${isRemoved ? 'btn-secondary' : ''}"
+                    style="${!isRemoved ? 'background:var(--danger);color:white;' : ''}"
+                    onclick="toggleReviewRemoval(${globalIdx})">
+                    ${isRemoved ? 'Undo' : 'No'}
+                </button>
+            </div>
+        `;
+    }).join('');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon(section.icon, 20)} ${section.label}</h2>
+            <button class="modal-close" onclick="closeModal()">×</button>
+        </div>
+        <div style="padding:0 24px;display:flex;gap:6px;justify-content:center;align-items:center;">
+            ${progressDots}
+        </div>
+        <div style="padding:4px 24px 0;text-align:center;">
+            <span style="font-size:0.75rem;color:var(--gray-text);">Section ${reviewState.sectionIndex + 1} of ${totalSections} — Still have these?</span>
+        </div>
+        <div class="modal-body" style="max-height:50vh;overflow-y:auto;">
+            ${itemsHTML}
+        </div>
+        <div class="modal-footer" style="justify-content:space-between;">
+            ${reviewState.sectionIndex > 0 ? '<button class="btn btn-secondary" onclick="reviewPrevSection()">Back</button>' : '<span></span>'}
+            <button class="btn btn-primary" onclick="reviewNextSection()">
+                ${reviewState.sectionIndex < totalSections - 1 ? 'Next Section' : 'Finish Review'}
+            </button>
+        </div>
+    `, { maxWidth: '500px' });
+    refreshIcons();
+
+    // Wire up quantity input handlers
+    document.querySelectorAll('.review-qty-input').forEach(input => {
+        input.addEventListener('change', function() {
+            reviewState.quantityUpdates[parseInt(this.dataset.idx)] = this.value.trim();
+        });
+    });
+}
+
+function toggleReviewRemoval(globalIdx) {
+    if (reviewState.removals.has(globalIdx)) {
+        reviewState.removals.delete(globalIdx);
+    } else {
+        reviewState.removals.add(globalIdx);
+    }
+    renderReviewSection();
+}
+
+function reviewPrevSection() {
+    if (reviewState.sectionIndex > 0) {
+        reviewState.sectionIndex--;
+        renderReviewSection();
+    }
+}
+
+function reviewNextSection() {
+    // Save current quantity edits
+    document.querySelectorAll('.review-qty-input').forEach(input => {
+        const idx = parseInt(input.dataset.idx);
+        if (input.value.trim()) {
+            reviewState.quantityUpdates[idx] = input.value.trim();
+        }
+    });
+
+    if (reviewState.sectionIndex < REVIEW_SECTIONS.length - 1) {
+        reviewState.sectionIndex++;
+        renderReviewSection();
+    } else {
+        finishReviewWizard();
+    }
+}
+
+function finishReviewWizard() {
+    // Apply removals and quantity updates
+    let removed = 0;
+    let updated = 0;
+    const newPantry = reviewState.pantry.filter((item, idx) => {
+        if (reviewState.removals.has(idx)) {
+            removed++;
+            return false;
+        }
+        return true;
+    });
+
+    // Apply quantity updates to remaining items
+    newPantry.forEach(item => {
+        const originalIdx = reviewState.pantry.indexOf(item);
+        if (reviewState.quantityUpdates[originalIdx]) {
+            item.quantity = reviewState.quantityUpdates[originalIdx];
+            item.qty = reviewState.quantityUpdates[originalIdx];
+            updated++;
+        }
+    });
+
+    setStorage(STORAGE.PANTRY, newPantry);
+    closeModal();
+    renderPantry();
+
+    const parts = [];
+    if (removed > 0) parts.push(`${removed} item${removed > 1 ? 's' : ''} removed`);
+    if (updated > 0) parts.push(`${updated} quantit${updated > 1 ? 'ies' : 'y'} updated`);
+    showToast(parts.length > 0 ? `Pantry review complete: ${parts.join(', ')}` : 'Pantry review complete — no changes');
+}
+
 function renderPantry() {
     const pantry = getStorage(STORAGE.PANTRY) || [];
     const container = document.getElementById('pantry-list');
