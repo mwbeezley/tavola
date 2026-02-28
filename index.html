@@ -2768,22 +2768,25 @@
 
         /* Recipe Card Expand Button */
         .recipe-expand-btn {
-            background: none;
-            border: none;
-            color: var(--gray-text);
+            background: var(--cerulean-light);
+            border: 1px solid var(--cerulean);
+            color: var(--cerulean);
             cursor: pointer;
-            padding: 6px;
+            padding: 6px 10px;
             border-radius: var(--radius-sm);
             transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
+            gap: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
         }
         .recipe-expand-btn:hover {
-            color: var(--cerulean);
-            background: var(--cerulean-light);
+            color: white;
+            background: var(--cerulean);
         }
-        .recipe-expand-btn i { width: 18px; height: 18px; }
+        .recipe-expand-btn i { width: 14px; height: 14px; }
 
         /* Recipe Carousel */
         .carousel-footer {
@@ -10688,7 +10691,7 @@ function renderRecipeCard(recipe, index) {
         <div class="recipe-card-header">
             <h3 class="recipe-card-title">${escapeHtml(recipe.title)}</h3>
             <button class="recipe-expand-btn" title="View full screen">
-                <i data-lucide="maximize-2"></i>
+                <i data-lucide="maximize-2"></i> View
             </button>
         </div>
 
@@ -12562,6 +12565,9 @@ function viewRecipeDetail(recipeId) {
             ${renderRecipeDetailContent(recipe)}
         </div>
         <div class="recipe-detail-footer">
+            <button class="btn btn-ghost btn-sm" onclick="openEditRecipeModal('${recipeId}')">
+                <i data-lucide="pencil"></i> Edit
+            </button>
             <button class="btn btn-ghost btn-sm" onclick="printRecipe('${recipeId}')">
                 <i data-lucide="printer"></i> Print
             </button>
@@ -12581,6 +12587,147 @@ function viewRecipeDetail(recipeId) {
             ` : ''}
         </div>
     `, { maxWidth: '700px' });
+}
+
+function openEditRecipeModal(recipeId) {
+    const library = getRecipeLibrary();
+    const recipe = library.find(r => r.id === recipeId);
+    if (!recipe) return;
+
+    const meta = recipe.metadata || {};
+    const ingredients = recipe.ingredients || [];
+    const instructions = recipe.instructions || [];
+    const tags = meta.tags || [];
+    const nutrition = recipe.nutrition || {};
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title" id="modal-title-label">${icon('pencil',18)} Edit Recipe</h2>
+            <button class="modal-close" onclick="closeModal()" aria-label="Close">×</button>
+        </div>
+        <div class="modal-body" style="max-height:65vh;overflow-y:auto;padding:20px;">
+            <div class="form-group">
+                <label>Recipe Title</label>
+                <input type="text" class="form-input" id="edit-recipe-title" value="${escapeHtml(recipe.title)}">
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Prep Time</label>
+                    <input type="text" class="form-input" id="edit-recipe-prep" value="${meta.prepTime || ''}" placeholder="e.g. 15 min">
+                </div>
+                <div class="form-group">
+                    <label>Cook Time</label>
+                    <input type="text" class="form-input" id="edit-recipe-cook" value="${meta.cookTime || ''}" placeholder="e.g. 30 min">
+                </div>
+                <div class="form-group">
+                    <label>Serves</label>
+                    <input type="text" class="form-input" id="edit-recipe-serves" value="${meta.serves || meta.servings || recipe.servings || ''}" placeholder="e.g. 4">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Ingredients <small style="color:var(--gray-text)">(one per line)</small></label>
+                <textarea class="form-input" id="edit-recipe-ingredients" rows="8" style="font-family:var(--font-body);resize:vertical;">${ingredients.map(i => typeof i === 'object' ? (i.amount || '') + ' ' + (i.unit || '') + ' ' + (i.name || '') : i).join('\n')}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Instructions <small style="color:var(--gray-text)">(one step per line)</small></label>
+                <textarea class="form-input" id="edit-recipe-instructions" rows="10" style="font-family:var(--font-body);resize:vertical;">${instructions.join('\n')}</textarea>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Calories</label>
+                    <input type="text" class="form-input" id="edit-recipe-calories" value="${nutrition.calories || ''}" placeholder="e.g. 450">
+                </div>
+                <div class="form-group">
+                    <label>Protein</label>
+                    <input type="text" class="form-input" id="edit-recipe-protein" value="${nutrition.protein || ''}" placeholder="e.g. 28">
+                </div>
+                <div class="form-group">
+                    <label>Carbs</label>
+                    <input type="text" class="form-input" id="edit-recipe-carbs" value="${nutrition.carbs || ''}" placeholder="e.g. 35">
+                </div>
+                <div class="form-group">
+                    <label>Fat</label>
+                    <input type="text" class="form-input" id="edit-recipe-fat" value="${nutrition.fat || ''}" placeholder="e.g. 12">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Personal Notes <small style="color:var(--gray-text)">(your tweaks, substitutions, tips)</small></label>
+                <textarea class="form-input" id="edit-recipe-notes" rows="3" style="font-family:var(--font-body);resize:vertical;" placeholder="e.g. Used smoked paprika instead of regular — much better!">${recipe.notes || ''}</textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveRecipeEdits('${recipeId}')">
+                <i data-lucide="save"></i> Save Changes
+            </button>
+        </div>
+    `, { maxWidth: '640px' });
+}
+
+function saveRecipeEdits(recipeId) {
+    const library = getRecipeLibrary();
+    const idx = library.findIndex(r => r.id === recipeId);
+    if (idx < 0) { showToast('Recipe not found', 'warning'); return; }
+
+    const recipe = library[idx];
+    const meta = recipe.metadata || {};
+
+    // Read form values
+    const title = document.getElementById('edit-recipe-title')?.value?.trim();
+    const prepTime = document.getElementById('edit-recipe-prep')?.value?.trim();
+    const cookTime = document.getElementById('edit-recipe-cook')?.value?.trim();
+    const serves = document.getElementById('edit-recipe-serves')?.value?.trim();
+    const ingredientsRaw = document.getElementById('edit-recipe-ingredients')?.value || '';
+    const instructionsRaw = document.getElementById('edit-recipe-instructions')?.value || '';
+    const calories = document.getElementById('edit-recipe-calories')?.value?.trim();
+    const protein = document.getElementById('edit-recipe-protein')?.value?.trim();
+    const carbs = document.getElementById('edit-recipe-carbs')?.value?.trim();
+    const fat = document.getElementById('edit-recipe-fat')?.value?.trim();
+    const notes = document.getElementById('edit-recipe-notes')?.value?.trim();
+
+    // Parse ingredients and instructions from text
+    const ingredients = ingredientsRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+    const instructions = instructionsRaw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+    // Compute totalTime
+    const prepMin = parseInt(prepTime) || 0;
+    const cookMin = parseInt(cookTime) || 0;
+
+    // Update recipe object
+    library[idx] = {
+        ...recipe,
+        title: title || recipe.title,
+        ingredients,
+        instructions,
+        servings: serves || recipe.servings,
+        notes: notes || '',
+        nutrition: {
+            ...recipe.nutrition,
+            calories: calories || recipe.nutrition?.calories,
+            protein: protein || recipe.nutrition?.protein,
+            carbs: carbs || recipe.nutrition?.carbs,
+            fat: fat || recipe.nutrition?.fat
+        },
+        metadata: {
+            ...meta,
+            prepTime: prepMin || meta.prepTime,
+            cookTime: cookMin || meta.cookTime,
+            totalTime: (prepMin + cookMin) || meta.totalTime || 30,
+            serves: serves || meta.serves,
+            servings: serves || meta.servings
+        },
+        updatedAt: new Date().toISOString()
+    };
+
+    setStorage(STORAGE.RECIPES, library);
+    closeModal();
+    renderRecipeLibrary();
+    showToast('Recipe updated!', 'success');
 }
 
 // Render the inner content of a recipe detail modal
