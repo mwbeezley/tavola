@@ -1399,19 +1399,35 @@
         }
         .library-card:hover { transform: scale(1.03) translateY(-2px); box-shadow: 0 6px 20px rgba(26, 58, 82, 0.12); }
         .library-card-banner {
-            height: 80px;
+            height: 100px;
             background: linear-gradient(135deg, var(--cerulean) 0%, var(--seafoam-dark) 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 2rem;
             position: relative;
+            overflow: hidden;
+        }
+        .library-card-banner.has-photo {
+            height: 140px;
+        }
+        .library-card-photo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         .library-card-favorite {
             position: absolute;
             top: 8px;
             right: 8px;
             font-size: 1.2rem;
+            background: rgba(255,255,255,0.85);
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         .library-card-body { padding: 12px; }
         .library-card-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 4px; color: var(--navy); }
@@ -3370,6 +3386,17 @@
         /* ========================================
            ENHANCED RECIPE DETAIL MODAL
            ======================================== */
+        .recipe-detail-photo-wrap {
+            max-height: 220px;
+            overflow: hidden;
+            border-bottom: 1px solid var(--border-light);
+        }
+        .recipe-detail-photo {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+        }
         .recipe-detail-body {
             max-height: 70vh;
             overflow-y: auto;
@@ -5354,9 +5381,13 @@
             text-transform: uppercase;
             letter-spacing: 0.08em;
             color: var(--cerulean);
-            padding: 10px 0 4px;
-            margin-top: 12px;
-            border-top: 1px dashed var(--border-light);
+            padding: 8px 12px;
+            margin-top: 14px;
+            background: var(--cerulean-light);
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         .recipe-phase-header:first-child {
@@ -10648,7 +10679,7 @@ function renderRecipeCard(recipe, index) {
         .join('');
 
     const ingredientsHTML = recipe.ingredients
-        .map(ing => `<li>${escapeHtml(ing)}</li>`)
+        .map(ing => `<li>${cleanMd(ing)}</li>`)
         .join('');
 
     // Build instruction phases HTML
@@ -10658,10 +10689,11 @@ function renderRecipeCard(recipe, index) {
 
     const instructionsHTML = phases.map(phase => {
         const stepsHTML = phase.steps.map((inst, i) =>
-            `<li data-step="${i + 1}">${escapeHtml(inst)}</li>`
+            `<li data-step="${i + 1}">${cleanMd(inst)}</li>`
         ).join('');
         const showHeader = phases.length > 1 || phase.phase !== 'Steps';
-        return `${showHeader ? `<div class="recipe-phase-header">${escapeHtml(phase.phase)}</div>` : ''}
+        const phaseIcon = getPhaseIcon(phase.phase);
+        return `${showHeader ? `<div class="recipe-phase-header">${phaseIcon} ${cleanMd(phase.phase, false)}</div>` : ''}
             <ol class="recipe-instructions">${stepsHTML}</ol>`;
     }).join('');
 
@@ -11600,6 +11632,51 @@ function escapeHtml(text) {
     return div.innerHTML;
 }
 
+// Map phase headers to contextual icons for visual flair
+function getPhaseIcon(phaseName) {
+    const p = (phaseName || '').toLowerCase().replace(/\*\*/g, '').trim();
+
+    // Exact common phases
+    if (/^prep/i.test(p)) return icon('scissors', 14);
+    if (/^cook/i.test(p)) return icon('flame', 14);
+    if (/^plate|^serve|^finish|^assemble/i.test(p)) return icon('utensils-crossed', 14);
+    if (/^bake|^roast/i.test(p)) return icon('thermometer', 14);
+    if (/^grill|^sear/i.test(p)) return icon('flame', 14);
+    if (/^marinate|^brine|^soak/i.test(p)) return icon('timer', 14);
+    if (/^sauce|^dressing|^glaze/i.test(p)) return icon('droplets', 14);
+    if (/^garnish|^top/i.test(p)) return icon('sparkles', 14);
+
+    // Ingredient-themed headers ("The Pork", "The Aromatics", "The Vegetables")
+    if (/pork|beef|lamb|chicken|meat|protein|steak|ribs/i.test(p)) return icon('beef', 14);
+    if (/fish|salmon|shrimp|seafood|tuna|cod/i.test(p)) return icon('fish', 14);
+    if (/aromatic|spice|seasoning|herb/i.test(p)) return icon('flame', 14);
+    if (/vegetable|veggie|greens|salad|produce/i.test(p)) return icon('salad', 14);
+    if (/pasta|noodle|grain|rice|couscous/i.test(p)) return icon('wheat', 14);
+    if (/dough|bread|crust/i.test(p)) return icon('croissant', 14);
+    if (/cheese|dairy|cream/i.test(p)) return icon('milk', 14);
+    if (/broth|stock|soup|stew/i.test(p)) return icon('soup', 14);
+    if (/egg/i.test(p)) return icon('egg', 14);
+
+    // Generic fallback
+    return icon('chef-hat', 14);
+}
+
+// Strip markdown formatting and optionally convert **bold** → <strong>
+function cleanMd(text, allowHtml = true) {
+    if (!text) return '';
+    let cleaned = String(text);
+    if (allowHtml) {
+        // Convert **bold** to <strong>
+        cleaned = cleaned.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    } else {
+        // Just strip the asterisks
+        cleaned = cleaned.replace(/\*\*/g, '');
+    }
+    // Strip remaining single * used as emphasis
+    cleaned = cleaned.replace(/(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)/g, '<em>$1</em>');
+    return cleaned;
+}
+
 // Add Enter key handler for quick chat
 document.addEventListener('DOMContentLoaded', function() {
     const quickChatInput = document.getElementById('quick-chat-input');
@@ -12214,10 +12291,14 @@ function renderLibraryCard(recipe) {
     const selectedClass = isSelected ? 'selected' : '';
     const clickHandler = isEditMode ? `toggleRecipeSelection('${recipe.id}')` : `viewRecipeDetail('${recipe.id}')`;
 
+    const hasPhoto = recipe.photo;
     return `
         <div class="library-card ${editModeClass} ${selectedClass}" onclick="${clickHandler}" data-recipe-id="${recipe.id}">
-            <div class="library-card-banner">
-                ${icon('utensils',14)}
+            <div class="library-card-banner ${hasPhoto ? 'has-photo' : ''}">
+                ${hasPhoto
+                    ? `<img class="library-card-photo" src="${recipe.photo}" alt="${escapeHtml(recipe.title)}" loading="lazy">`
+                    : icon('utensils',14)
+                }
                 ${recipe.favorited ? `<span class="library-card-favorite">${icon('heart',14,'color:var(--accent-warm);fill:var(--accent-warm)')}</span>` : ''}
                 ${caloriesHtml}
             </div>
@@ -12561,10 +12642,18 @@ function viewRecipeDetail(recipeId) {
             </div>
             <button class="modal-close" onclick="closeModal()" aria-label="Close modal">×</button>
         </div>
+        ${recipe.photo ? `
+            <div class="recipe-detail-photo-wrap">
+                <img src="${recipe.photo}" alt="${escapeHtml(recipe.title)}" class="recipe-detail-photo">
+            </div>
+        ` : ''}
         <div class="recipe-detail-body" id="recipe-print-area">
             ${renderRecipeDetailContent(recipe)}
         </div>
         <div class="recipe-detail-footer">
+            <button class="btn btn-ghost btn-sm" onclick="addRecipePhoto('${recipeId}')">
+                <i data-lucide="camera"></i> ${recipe.photo ? 'Change Photo' : 'Add Photo'}
+            </button>
             <button class="btn btn-ghost btn-sm" onclick="openEditRecipeModal('${recipeId}')">
                 <i data-lucide="pencil"></i> Edit
             </button>
@@ -12730,6 +12819,58 @@ function saveRecipeEdits(recipeId) {
     showToast('Recipe updated!', 'success');
 }
 
+function addRecipePhoto(recipeId) {
+    // Create a hidden file input and trigger it
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.capture = 'environment'; // prefer camera on mobile
+    input.onchange = function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // Validate file size (max 2MB for localStorage)
+        if (file.size > 2 * 1024 * 1024) {
+            showToast('Photo is too large — please use an image under 2MB', 'warning');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+            // Resize to save localStorage space
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const MAX_WIDTH = 600;
+                const scale = Math.min(1, MAX_WIDTH / img.width);
+                canvas.width = img.width * scale;
+                canvas.height = img.height * scale;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                const compressed = canvas.toDataURL('image/jpeg', 0.7);
+
+                // Save to recipe
+                const library = getRecipeLibrary();
+                const idx = library.findIndex(r => r.id === recipeId);
+                if (idx >= 0) {
+                    library[idx].photo = compressed;
+                    library[idx].updatedAt = new Date().toISOString();
+                    setStorage(STORAGE.RECIPES, library);
+
+                    // Refresh views
+                    closeModal();
+                    viewRecipeDetail(recipeId);
+                    showToast('Photo added!', 'success');
+                }
+            };
+            img.src = evt.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
+    input.click();
+}
+
 // Render the inner content of a recipe detail modal
 function renderRecipeDetailContent(recipe) {
     const meta = recipe.metadata || {};
@@ -12781,7 +12922,7 @@ function renderRecipeDetailContent(recipe) {
         <div class="recipe-detail-section">
             <h3 class="section-title"><i data-lucide="shopping-basket"></i> Ingredients</h3>
             <ul class="ingredients-list">
-                ${ingredients.map(ing => `<li>${typeof ing === 'object' ? `${ing.amount || ''} ${ing.unit || ''} ${ing.name || ing}`.trim() : ing}</li>`).join('')}
+                ${ingredients.map(ing => `<li>${cleanMd(typeof ing === 'object' ? `${ing.amount || ''} ${ing.unit || ''} ${ing.name || ing}`.trim() : ing)}</li>`).join('')}
             </ul>
         </div>
     ` : '';
@@ -12796,9 +12937,10 @@ function renderRecipeDetailContent(recipe) {
             <h3 class="section-title"><i data-lucide="list-ordered"></i> Instructions</h3>
             ${phases.map(phase => {
                 const showHeader = phases.length > 1 || phase.phase !== 'Steps';
-                return `${showHeader ? `<div class="recipe-phase-header">${phase.phase}</div>` : ''}
+                const phaseIcon = getPhaseIcon(phase.phase);
+                return `${showHeader ? `<div class="recipe-phase-header">${phaseIcon} ${cleanMd(phase.phase, false)}</div>` : ''}
                     <ol class="instructions-list">
-                        ${phase.steps.map(step => `<li>${step}</li>`).join('')}
+                        ${phase.steps.map(step => `<li>${cleanMd(step)}</li>`).join('')}
                     </ol>`;
             }).join('')}
         </div>
@@ -13259,8 +13401,11 @@ function renderFamilyRecipeCard(recipe) {
 
     return `
         <div class="library-card" onclick="viewFamilyRecipeDetail('${recipe.id}')" style="cursor:pointer">
-            <div class="library-card-banner">
-                ${icon('utensils',14)}
+            <div class="library-card-banner ${recipe.photo ? 'has-photo' : ''}">
+                ${recipe.photo
+                    ? `<img class="library-card-photo" src="${recipe.photo}" alt="${escapeHtml(recipe.title)}" loading="lazy">`
+                    : icon('utensils',14)
+                }
                 <span class="card-calories">${nutrition.calories ? icon('flame',14) + ' ' + nutrition.calories + ' cal' : icon('users',14) + ' Family'}</span>
             </div>
             <div class="library-card-body">
