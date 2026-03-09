@@ -1907,6 +1907,89 @@
             background: var(--gray-light);
         }
 
+        /* Voice action badges */
+        .voice-action-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            padding: 3px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+        .voice-action-add {
+            background: #D4F1E8;
+            color: #2A7B5B;
+        }
+        .voice-action-remove {
+            background: #FDE8E8;
+            color: #C0392B;
+        }
+
+        /* Voice recording modal */
+        .voice-recording-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 64px;
+            height: 64px;
+            margin: 24px auto 0;
+        }
+        .voice-pulse-dot {
+            width: 24px;
+            height: 24px;
+            background: var(--terracotta);
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+        }
+        .voice-pulse-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 48px;
+            height: 48px;
+            margin-top: -24px;
+            margin-left: -24px;
+            border-radius: 50%;
+            border: 3px solid var(--terracotta);
+            opacity: 0.5;
+            animation: voicePulseRing 1.5s ease-out infinite;
+            z-index: 1;
+        }
+        @keyframes voicePulseRing {
+            0% { transform: scale(0.8); opacity: 0.6; }
+            100% { transform: scale(1.6); opacity: 0; }
+        }
+
+        .voice-transcript-box {
+            background: var(--gray-light);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            min-height: 80px;
+            max-height: 180px;
+            overflow-y: auto;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--navy);
+        }
+        .voice-transcript-placeholder {
+            color: var(--gray-text);
+            font-style: italic;
+        }
+        .voice-final-text {
+            color: var(--navy);
+        }
+        .voice-interim-text {
+            color: var(--gray-text);
+            opacity: 0.7;
+            font-style: italic;
+        }
+
         /* Day Picker */
         .day-picker { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin: 16px 0; }
         .day-picker-item {
@@ -21131,7 +21214,21 @@ function askNonnaWithSeasonal() {
 // ========================================
 // PHASE 5: VOICE INPUT FOR PANTRY
 // ========================================
+// ── CONTINUOUS VOICE DICTATION FOR PANTRY ──
+let pantryVoiceState = {
+    recognition: null,
+    isRecording: false,
+    transcript: '',
+    interimText: ''
+};
+
 function startPantryVoice() {
+    // If already recording, stop
+    if (pantryVoiceState.isRecording) {
+        stopPantryVoice();
+        return;
+    }
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SpeechRecognition) {
         showToast('Voice input not supported in this browser', 'warning');
@@ -21139,40 +21236,174 @@ function startPantryVoice() {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.continuous = false;
-    recognition.interimResults = false;
+    recognition.continuous = true;
+    recognition.interimResults = true;
     recognition.lang = 'en-US';
+    recognition.maxAlternatives = 1;
 
-    const btn = document.getElementById('pantry-voice-btn');
-    if (btn) btn.classList.add('recording');
-    showToast('Listening... speak now', 'info');
+    pantryVoiceState.recognition = recognition;
+    pantryVoiceState.isRecording = true;
+    pantryVoiceState.transcript = '';
+    pantryVoiceState.interimText = '';
+
+    // Show the live transcript modal
+    openPantryVoiceModal();
 
     recognition.onresult = function(event) {
-        const text = event.results[0][0].transcript;
-        if (btn) btn.classList.remove('recording');
-        parsePantryVoiceInput(text);
+        let finalText = '';
+        let interimText = '';
+
+        for (let i = 0; i < event.results.length; i++) {
+            const result = event.results[i];
+            if (result.isFinal) {
+                finalText += result[0].transcript;
+            } else {
+                interimText += result[0].transcript;
+            }
+        }
+
+        pantryVoiceState.transcript = finalText;
+        pantryVoiceState.interimText = interimText;
+        updatePantryVoiceTranscript();
     };
-    recognition.onerror = function() {
-        if (btn) btn.classList.remove('recording');
-        showToast('Could not understand. Try again.', 'warning');
+
+    recognition.onerror = function(e) {
+        console.error('Voice error:', e.error);
+        if (e.error === 'no-speech') {
+            // Just keep listening, don't show error
+            return;
+        }
+        if (e.error !== 'aborted') {
+            showToast('Microphone error: ' + e.error, 'warning');
+        }
     };
+
     recognition.onend = function() {
-        if (btn) btn.classList.remove('recording');
+        // Auto-restart if still in recording mode (handles browser auto-stop)
+        if (pantryVoiceState.isRecording) {
+            try { recognition.start(); } catch(e) { /* already started */ }
+        }
     };
-    recognition.start();
+
+    try {
+        recognition.start();
+    } catch(e) {
+        showToast('Could not start microphone', 'warning');
+        pantryVoiceState.isRecording = false;
+    }
 }
 
-function parsePantryVoiceInput(text) {
-    // Enhanced multi-item parsing: Split by commas or "and"
-    const rawItems = text.split(/,\s*|\s+and\s+/i);
-    const parsedItems = rawItems.map(item => parseVoiceItem(item.trim())).filter(i => i !== null);
+function stopPantryVoice() {
+    pantryVoiceState.isRecording = false;
+    if (pantryVoiceState.recognition) {
+        try { pantryVoiceState.recognition.stop(); } catch(e) {}
+        pantryVoiceState.recognition = null;
+    }
 
-    if (parsedItems.length === 0) {
-        showToast('Could not understand. Try again.', 'warning');
+    const btn = document.getElementById('pantry-voice-btn');
+    if (btn) btn.classList.remove('recording');
+
+    // Process the full transcript
+    const fullText = (pantryVoiceState.transcript + ' ' + pantryVoiceState.interimText).trim();
+    if (fullText) {
+        parsePantryVoiceInput(fullText);
+    } else {
+        closeModal();
+        showToast('No speech detected. Try again.', 'warning');
+    }
+}
+
+function openPantryVoiceModal() {
+    const btn = document.getElementById('pantry-voice-btn');
+    if (btn) btn.classList.add('recording');
+
+    openModal(`
+        <div class="modal-header">
+            <h2 class="modal-title">${icon('mic',18)} Voice Pantry Update</h2>
+            <button class="modal-close" onclick="cancelPantryVoice()">&times;</button>
+        </div>
+        <div class="modal-body" style="min-height:200px;">
+            <div class="voice-recording-indicator">
+                <div class="voice-pulse-ring"></div>
+                <div class="voice-pulse-dot"></div>
+            </div>
+            <p style="text-align:center;margin:16px 0 8px;font-weight:600;color:var(--navy);">Listening...</p>
+            <p style="text-align:center;margin:0 0 16px;font-size:0.85rem;color:var(--gray-text);">
+                Rattle off your items naturally — I'll keep listening until you stop.<br>
+                <em>"Two pounds of chicken, a bag of spinach, remove the old milk, three cans of tomatoes..."</em>
+            </p>
+            <div class="voice-transcript-box" id="voice-transcript-box">
+                <span class="voice-transcript-placeholder">Your words will appear here as you speak...</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="cancelPantryVoice()">Cancel</button>
+            <button class="btn btn-primary" onclick="stopPantryVoice()" style="background:var(--terracotta);">
+                ${icon('mic-off',14)} Done — Process Items
+            </button>
+        </div>
+    `, { maxWidth: '600px' });
+}
+
+function cancelPantryVoice() {
+    pantryVoiceState.isRecording = false;
+    if (pantryVoiceState.recognition) {
+        try { pantryVoiceState.recognition.stop(); } catch(e) {}
+        pantryVoiceState.recognition = null;
+    }
+    const btn = document.getElementById('pantry-voice-btn');
+    if (btn) btn.classList.remove('recording');
+    closeModal();
+}
+
+function updatePantryVoiceTranscript() {
+    const box = document.getElementById('voice-transcript-box');
+    if (!box) return;
+
+    const final = pantryVoiceState.transcript;
+    const interim = pantryVoiceState.interimText;
+
+    if (!final && !interim) {
+        box.innerHTML = '<span class="voice-transcript-placeholder">Your words will appear here as you speak...</span>';
         return;
     }
 
-    showVoicePantryReviewModal(text, parsedItems);
+    box.innerHTML = `<span class="voice-final-text">${escapeHtml(final)}</span>`
+        + (interim ? `<span class="voice-interim-text">${escapeHtml(interim)}</span>` : '');
+
+    // Auto-scroll to bottom
+    box.scrollTop = box.scrollHeight;
+}
+
+function parsePantryVoiceInput(text) {
+    // Split transcript into phrases by commas, "and", periods, newlines
+    const rawPhrases = text.split(/[,.\n]+|\s+and\s+/i).map(s => s.trim()).filter(s => s.length > 1);
+
+    const adds = [];
+    const removes = [];
+
+    rawPhrases.forEach(phrase => {
+        // Detect remove intent
+        const removeMatch = phrase.match(/^(?:remove|delete|take out|toss|used up|finished|threw out|get rid of|no more)\s+(?:the\s+)?(.+)/i);
+        if (removeMatch) {
+            removes.push({ name: removeMatch[1].trim(), action: 'remove' });
+            return;
+        }
+
+        // Otherwise it's an add
+        const item = parseVoiceItem(phrase);
+        if (item) {
+            item.action = 'add';
+            adds.push(item);
+        }
+    });
+
+    if (adds.length === 0 && removes.length === 0) {
+        showToast('Could not parse any items from that. Try again.', 'warning');
+        return;
+    }
+
+    showVoicePantryReviewModal(text, adds, removes);
 }
 
 function parseVoiceItem(text) {
@@ -21180,20 +21411,23 @@ function parseVoiceItem(text) {
     text = normalizeFractions(text);
     text = normalizeWordNumbers(text);
 
+    // Strip leading "add" / "I have" / "got" / "bought"
+    text = text.replace(/^(?:add|i have|i got|i bought|got|bought|picked up|grabbed)\s+/i, '');
+
     // Pattern 1: qty + unit + name
-    const p1 = /^(?:add\s+)?(\d+\.?\d*)\s+(cups?|tbsp|tsp|oz|lbs?|pounds?|cans?|bottles?|bags?|bunches?|jars?)\s+(?:of\s+)?(.+)/i;
+    const p1 = /^(\d+\.?\d*)\s+(cups?|tbsp|tsp|oz|lbs?|pounds?|cans?|bottles?|bags?|bunches?|jars?|gallons?|packs?|boxes?|cartons?|containers?|dozen)\s+(?:of\s+)?(.+)/i;
     let match = text.match(p1);
     if (match) return { qty: match[1], unit: match[2].toLowerCase(), name: match[3].trim() };
 
     // Pattern 2: qty + name (no unit)
-    const p2 = /^(?:add\s+)?(\d+\.?\d*)\s+(.+)/i;
+    const p2 = /^(\d+\.?\d*)\s+(.+)/i;
     match = text.match(p2);
     if (match) return { qty: match[1], unit: 'count', name: match[2].trim() };
 
     // Pattern 3: name only (default qty 1)
-    const p3 = /^(?:add\s+)?(.+)/i;
-    match = text.match(p3);
-    if (match) return { qty: '1', unit: 'count', name: match[1].trim() };
+    if (text.trim().length > 0) {
+        return { qty: '1', unit: 'count', name: text.trim() };
+    }
 
     return null;
 }
@@ -21224,49 +21458,71 @@ function normalizeWordNumbers(text) {
     return text;
 }
 
-function showVoicePantryReviewModal(transcript, items) {
-    const tableRows = items.map((item, idx) => {
+function showVoicePantryReviewModal(transcript, adds, removes) {
+    // Build add rows
+    const addRows = adds.map((item, idx) => {
         const category = guessCategory(item.name);
         return `
-            <tr id="voice-row-${idx}">
+            <tr id="voice-row-add-${idx}" data-action="add">
+                <td><span class="voice-action-badge voice-action-add">${icon('plus',12)} Add</span></td>
                 <td><input type="text" class="form-input form-input-sm" value="${item.qty}" id="voice-qty-${idx}" style="width:60px;"></td>
                 <td><select class="form-select form-select-sm" id="voice-unit-${idx}">${getUnitOptions(item.unit)}</select></td>
                 <td><input type="text" class="form-input form-input-sm" value="${escapeHtml(item.name)}" id="voice-name-${idx}"></td>
                 <td><select class="form-select form-select-sm" id="voice-cat-${idx}">${getCategoryOptions(category)}</select></td>
-                <td><button class="btn btn-sm btn-secondary" onclick="removeVoiceRow(${idx})">${icon('x')}</button></td>
+                <td><button class="btn btn-sm btn-secondary" onclick="removeVoiceRow('add-${idx}')">${icon('x',14)}</button></td>
             </tr>
         `;
     }).join('');
 
+    // Build remove rows
+    const removeRows = removes.map((item, idx) => {
+        return `
+            <tr id="voice-row-rem-${idx}" data-action="remove">
+                <td><span class="voice-action-badge voice-action-remove">${icon('minus',12)} Remove</span></td>
+                <td colspan="2" style="text-align:center;color:var(--gray-text);">—</td>
+                <td><input type="text" class="form-input form-input-sm" value="${escapeHtml(item.name)}" id="voice-rem-name-${idx}"></td>
+                <td style="color:var(--gray-text);font-size:0.8rem;">Auto-match</td>
+                <td><button class="btn btn-sm btn-secondary" onclick="removeVoiceRow('rem-${idx}')">${icon('x',14)}</button></td>
+            </tr>
+        `;
+    }).join('');
+
+    const totalItems = adds.length + removes.length;
+    const actionSummary = [];
+    if (adds.length > 0) actionSummary.push(`${adds.length} to add`);
+    if (removes.length > 0) actionSummary.push(`${removes.length} to remove`);
+
     openModal(`
         <div class="modal-header">
-            <h2 class="modal-title">${icon('mic')} Review Items</h2>
+            <h2 class="modal-title">${icon('mic',18)} Review Pantry Updates</h2>
             <button class="modal-close" onclick="closeModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <p class="text-muted">I heard: "<strong>${escapeHtml(transcript)}</strong>"</p>
+            <p class="text-muted" style="margin-bottom:12px;">I heard: "<strong>${escapeHtml(transcript.length > 200 ? transcript.substring(0, 200) + '...' : transcript)}</strong>"</p>
             <table class="voice-pantry-table">
                 <thead>
                     <tr>
-                        <th>Qty</th>
-                        <th>Unit</th>
+                        <th style="width:80px;">Action</th>
+                        <th style="width:60px;">Qty</th>
+                        <th style="width:90px;">Unit</th>
                         <th>Item</th>
-                        <th>Category</th>
-                        <th></th>
+                        <th style="width:100px;">Category</th>
+                        <th style="width:40px;"></th>
                     </tr>
                 </thead>
                 <tbody id="voice-items-tbody">
-                    ${tableRows}
+                    ${addRows}
+                    ${removeRows}
                 </tbody>
             </table>
         </div>
         <div class="modal-footer">
             <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
             <button class="btn btn-primary" onclick="confirmVoicePantryAddAll()">
-                ${icon('plus')} Add ${items.length} Item${items.length > 1 ? 's' : ''}
+                ${icon('check',14)} Apply ${totalItems} Update${totalItems > 1 ? 's' : ''} <span style="font-weight:400;opacity:0.8;margin-left:4px;">(${actionSummary.join(', ')})</span>
             </button>
         </div>
-    `, { maxWidth: '800px' });
+    `, { maxWidth: '850px' });
     refreshIcons();
 }
 
@@ -21280,24 +21536,39 @@ function getCategoryOptions(selected) {
     return cats.map(c => `<option value="${c}" ${c === selected ? 'selected' : ''}>${c.charAt(0).toUpperCase() + c.slice(1)}</option>`).join('');
 }
 
-function removeVoiceRow(idx) {
-    const row = document.getElementById(`voice-row-${idx}`);
+function removeVoiceRow(id) {
+    const row = document.getElementById(`voice-row-${id}`);
     if (row) row.remove();
 
-    const remainingRows = document.querySelectorAll('#voice-items-tbody tr').length;
-    const addButton = document.querySelector('.modal-footer .btn-primary');
-    if (addButton) {
-        addButton.innerHTML = `${icon('plus')} Add ${remainingRows} Item${remainingRows > 1 ? 's' : ''}`;
+    const addRows = document.querySelectorAll('#voice-items-tbody tr[data-action="add"]').length;
+    const remRows = document.querySelectorAll('#voice-items-tbody tr[data-action="remove"]').length;
+    const total = addRows + remRows;
+    const parts = [];
+    if (addRows > 0) parts.push(`${addRows} to add`);
+    if (remRows > 0) parts.push(`${remRows} to remove`);
+
+    const confirmBtn = document.querySelector('.modal-footer .btn-primary');
+    if (confirmBtn) {
+        if (total === 0) {
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = `${icon('check',14)} No Items`;
+        } else {
+            confirmBtn.disabled = false;
+            confirmBtn.innerHTML = `${icon('check',14)} Apply ${total} Update${total > 1 ? 's' : ''} <span style="font-weight:400;opacity:0.8;margin-left:4px;">(${parts.join(', ')})</span>`;
+        }
         refreshIcons();
     }
 }
 
 function confirmVoicePantryAddAll() {
-    const rows = document.querySelectorAll('#voice-items-tbody tr');
-    const pantry = getStorage(STORAGE.PANTRY) || [];
+    let pantry = getStorage(STORAGE.PANTRY) || [];
     let added = 0;
+    let removed = 0;
 
-    rows.forEach((_, idx) => {
+    // Process ADD rows
+    const addRows = document.querySelectorAll('#voice-items-tbody tr[data-action="add"]');
+    addRows.forEach((row) => {
+        const idx = row.id.replace('voice-row-add-', '');
         const nameInput = document.getElementById(`voice-name-${idx}`);
         if (!nameInput) return;
 
@@ -21319,10 +21590,41 @@ function confirmVoicePantryAddAll() {
         added++;
     });
 
+    // Process REMOVE rows
+    const remRows = document.querySelectorAll('#voice-items-tbody tr[data-action="remove"]');
+    remRows.forEach((row) => {
+        const idx = row.id.replace('voice-row-rem-', '');
+        const nameInput = document.getElementById(`voice-rem-name-${idx}`);
+        if (!nameInput) return;
+
+        const searchName = nameInput.value.trim().toLowerCase();
+        if (!searchName) return;
+
+        // Find matching item in pantry (case-insensitive, partial match)
+        const matchIdx = pantry.findIndex(p => {
+            const pName = (p.name || '').toLowerCase();
+            return pName === searchName || pName.includes(searchName) || searchName.includes(pName);
+        });
+
+        if (matchIdx !== -1) {
+            pantry.splice(matchIdx, 1);
+            removed++;
+        }
+    });
+
     setStorage(STORAGE.PANTRY, pantry);
     closeModal();
     renderPantry();
-    showToast(`${added} item${added > 1 ? 's' : ''} added!`, 'success');
+
+    // Build toast message
+    const parts = [];
+    if (added > 0) parts.push(`${added} added`);
+    if (removed > 0) parts.push(`${removed} removed`);
+    if (parts.length > 0) {
+        showToast(`Pantry updated: ${parts.join(', ')}`, 'success');
+    } else {
+        showToast('No changes made', 'warning');
+    }
 }
 
 function guessCategory(name) {
