@@ -16954,30 +16954,49 @@ function processReceiptImageFile(file) {
         return;
     }
 
-    receiptScanState.imageType = file.type;
-
     const reader = new FileReader();
     reader.onload = (e) => {
         const base64Full = e.target.result;
-        receiptScanState.imageData = base64Full.split(',')[1];
 
-        const preview = document.getElementById('receipt-preview');
-        if (preview) {
-            preview.src = base64Full;
-            preview.classList.remove('hidden');
-        }
+        // Compress and resize the image to keep API payload manageable
+        const img = new Image();
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const MAX_DIM = 1200; // Enough resolution for text OCR
+            let w = img.width, h = img.height;
+            if (w > MAX_DIM || h > MAX_DIM) {
+                const scale = MAX_DIM / Math.max(w, h);
+                w = Math.round(w * scale);
+                h = Math.round(h * scale);
+            }
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
 
-        const uploadArea = document.getElementById('receipt-upload-area');
-        if (uploadArea) {
-            uploadArea.innerHTML = `
-                <div class="scan-upload-icon">${icon('check-circle',14)}</div>
-                <div class="scan-upload-text">Receipt ready!</div>
-                <div class="scan-upload-hint">Tap to change photo</div>
-            `;
-        }
+            const compressed = canvas.toDataURL('image/jpeg', 0.85);
+            receiptScanState.imageData = compressed.split(',')[1];
+            receiptScanState.imageType = 'image/jpeg';
 
-        const btn = document.getElementById('receipt-analyze-btn');
-        if (btn) btn.disabled = false;
+            const preview = document.getElementById('receipt-preview');
+            if (preview) {
+                preview.src = compressed;
+                preview.classList.remove('hidden');
+            }
+
+            const uploadArea = document.getElementById('receipt-upload-area');
+            if (uploadArea) {
+                uploadArea.innerHTML = `
+                    <div class="scan-upload-icon">${icon('check-circle',14)}</div>
+                    <div class="scan-upload-text">Receipt ready!</div>
+                    <div class="scan-upload-hint">Tap to change photo</div>
+                `;
+            }
+
+            const btn = document.getElementById('receipt-analyze-btn');
+            if (btn) btn.disabled = false;
+        };
+        img.src = base64Full;
     };
     reader.readAsDataURL(file);
 }
@@ -17003,14 +17022,22 @@ async function analyzeReceiptImage() {
     if (analyzeBtn) analyzeBtn.disabled = true;
 
     try {
+        const payload = JSON.stringify({
+            image: receiptScanState.imageData,
+            imageType: receiptScanState.imageType
+        });
+        console.log(`Receipt scan: sending ${(payload.length / 1024).toFixed(0)}KB payload`);
+
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 30000); // 30s timeout
+
         const response = await fetch('/.netlify/functions/analyze-receipt', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                image: receiptScanState.imageData,
-                imageType: receiptScanState.imageType
-            })
+            body: payload,
+            signal: controller.signal
         });
+        clearTimeout(timeoutId);
 
         const data = await response.json();
 
@@ -17028,7 +17055,20 @@ async function analyzeReceiptImage() {
 
     } catch (error) {
         console.error('Receipt scan error:', error);
-        showReceiptError(error.message || 'Failed to read receipt. Please try again.');
+        // Provide more helpful error messages
+        let msg = error.message || 'Failed to read receipt.';
+        if (error.name === 'AbortError') {
+            msg = 'The request timed out after 30 seconds. Try a smaller or clearer receipt photo.';
+        } else if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('Load failed')) {
+            msg = 'Network error — the request may have timed out. Try a smaller or clearer photo.';
+        } else if (msg.includes('API key')) {
+            msg = 'The receipt scanner is not configured. Please check your Anthropic API key in Netlify settings.';
+        } else if (msg.includes('413') || msg.includes('too large')) {
+            msg = 'The image is too large for the server. Try a smaller photo.';
+        } else if (msg.includes('429')) {
+            msg = 'Too many requests — please wait a moment and try again.';
+        }
+        showReceiptError(msg);
     }
 }
 

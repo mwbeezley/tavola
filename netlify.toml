@@ -5,5 +5,9 @@
 [functions]
   node_bundler = "esbuild"
 
+# Extend timeout for Vision API calls (receipt scanning, etc.)
+[functions."analyze-receipt"]
+  timeout = 26
+
 # The ANTHROPIC_API_KEY environment variable is used by the serverless function
 # Set it in Netlify's environment variables UI (Site settings > Environment variables)
